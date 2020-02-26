@@ -6,6 +6,7 @@ import VueAxios from 'vue-axios'
 import axios from 'axios';
 import VueLazyload from 'vue-lazyload'
 import VueBus from 'vue-bus'
+import Vue2TouchEvents from 'vue2-touch-events'
 import './plugins/element.js'
 import './styles/main.less';
 
@@ -30,6 +31,9 @@ Vue.use(VueBus)
 
 // Set up lazyload
 Vue.use(VueLazyload)
+
+// Mobile events
+Vue.use(Vue2TouchEvents)
 
 new Vue({
   router,

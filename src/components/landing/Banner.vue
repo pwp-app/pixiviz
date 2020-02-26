@@ -1,5 +1,5 @@
 <template>
-    <div :class="['banner-wrapper', expanded ? 'banner-expanded' : '', clearMarginBottom ? 'clear-margin-bottom' : '']" v-on:dblclick="handleDblClick" v-lazy:background-image="bannerBG">
+    <div :class="['banner-wrapper', expanded ? 'banner-expanded' : '', clearMarginBottom ? 'clear-margin-bottom' : '']" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap" v-lazy:background-image="bannerBG">
         <div class="banner">
             <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
                 <span>Pixiv C</span>
@@ -88,6 +88,9 @@ export default {
                     }, 350)
                 }
             }
+        },
+        handleDoubleTap() {
+            handleDblClick()
         }
     }
 }

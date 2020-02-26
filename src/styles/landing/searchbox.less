@@ -67,6 +67,8 @@
     }
 }
 
+/* Desktop */
+
 @media(max-height: 754px) {
     .searchbox-wrapper {
         width: 100%;
@@ -81,6 +83,23 @@
             width: 42px;
             height: 42px;
             font-size: 16px;
+        }
+    }
+}
+
+/* Mobile */
+
+@media(max-width: 768px) {
+    .searchbox {
+        padding: 24px 8px;
+        &-title {
+            font-size: 23px;
+        }
+        &-input {
+            padding: 6px 20px 16px 20px;
+            .el-input {
+                max-width: 960px;
+            }
         }
     }
 }
