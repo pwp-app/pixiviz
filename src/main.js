@@ -5,6 +5,7 @@ import qs from "qs"
 import VueAxios from 'vue-axios'
 import axios from 'axios';
 import VueLazyload from 'vue-lazyload'
+import VueBus from 'vue-bus'
 import './plugins/element.js'
 import './styles/main.less';
 
@@ -23,6 +24,9 @@ axios.defaults.transformRequest = [function (data) {
 }]
 
 Vue.use(VueAxios, axios)
+
+// Set up vue-bus
+Vue.use(VueBus)
 
 // Set up lazyload
 Vue.use(VueLazyload)

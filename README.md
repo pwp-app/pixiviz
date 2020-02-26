@@ -23,3 +23,7 @@ npm run serve
 ```
 
 推荐使用 Vue-cli 的 GUI 来管理本项目。
+
+## 许可
+
+跟随[Pixivic.com](https://pixivic.com)相关项目使用Apache License 2.0

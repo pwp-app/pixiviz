@@ -15,6 +15,11 @@ import Rank from '../components/landing/Rank';
 
 export default {
     name: 'Landing',
+    data() {
+        return {
+            bannerExpanded: false
+        }
+    },
     components: {
         Banner,
         SearchBox,
