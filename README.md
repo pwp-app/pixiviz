@@ -1,19 +1,25 @@
-# pixiv_c
+<h1 align="center">Pixiv C</h1>
 
-## Project setup
+尝试共享[Pixivic.com](https://pixivic.com)的接口，做一个替代版的清新画风，支持一定程度响应式的前端。
+
+项目使用 Vue-cli 建立，配合 Element UI 编写。
+
+## 开发目标
+
+- [ ] 完成Landing界面
+- [ ] 完成排行榜界面
+- [ ] 完成搜索界面
+
+## 使用方式
+
+安装依赖：
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+运行本地服务器，实时编译 & 热重载：
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+推荐使用 Vue-cli 的 GUI 来管理本项目。
