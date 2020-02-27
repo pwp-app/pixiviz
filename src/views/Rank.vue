@@ -14,10 +14,11 @@
             </div>
             <div class="rank-body-content">
                 <div class="waterfall-wrapper">
-                    <Waterfall ref="waterfall" @load="loadData" :images="images"/>
+                    <Waterfall ref="waterfall" :images="images"/>
                 </div>
             </div>
         </div>
+        <infinite-loading @infinite="infiniteHandler" spinner="spiral"></infinite-loading>
     </div>
 </template>
 
@@ -32,6 +33,8 @@ export default {
     },
     data() {
         return {
+            page: 1,
+            pageSize: 30,
             date: dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
             mode: this.$cookies.get('rank-mode') ? this.$cookies.get('rank-mode') : 'day',
             images: []
@@ -49,7 +52,7 @@ export default {
                 return '月排行榜';
             }
         },
-        loadData(page, pageSize) {
+        infiniteHandler($state) {
             this.axios.get('https://api.pixivic.com/ranks', {
                 params: {
                     mode: this.mode,
@@ -57,13 +60,17 @@ export default {
                     page: this.page,
                     pageSize: this.pageSize
                 }
-            }).then(response => {
+            }).then((response, state) => {
                 if (!response.data.data) {
                     // 加载失败
+                    $state.completed();
                 }
-                this.images = response.data.data;
+                this.images = this.images.concat(response.data.data);
                 // 设置瀑布流的 firstLoad 为 false
                 this.$refs.waterfall.firstLoad = false;
+                // Page + 1
+                this.page = this.page + 1
+                $state.loaded();
             })
         }
     }

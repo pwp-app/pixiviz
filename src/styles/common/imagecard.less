@@ -4,7 +4,36 @@
 .image-card {
     width: @image-card-width;
     margin: @image-card-margin;
-    img {
-        width: @image-card-width;
+    position: relative;
+    border-radius: 16px;
+    box-shadow: @shadow-small;
+    &-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transition: 200ms;
+    }
+    &-image:hover {
+        cursor: pointer;
+        filter: brightness(0.875);
+    }
+    &-title {
+        width: calc(100% - 32px);
+        height: 48px;
+        background: rgba(0,0,0, .25);
+        position: absolute;
+        bottom: 0;
+        border-radius: 0 0 16px 16px;
+        padding: 0 16px;
+        font-weight: 600;
+        letter-spacing: 0.025rem;
+        color: @color-text-accent;
+        text-shadow: 0 0 6px rgba(0,0,0, .15);
+        span {
+            line-height: 48px;
+            font-size: 16px;
+        }
     }
 }
