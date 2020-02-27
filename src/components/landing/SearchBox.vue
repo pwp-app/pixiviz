@@ -25,20 +25,17 @@ export default {
             bannerExpanded: false
         }
     },
-    mounted() {
-        this.$bus.on('banner-changed', this.bannerChanged);
-    },
-    methods: {
-        bannerChanged(status) {
-            if (status) {
-                this.bannerExpanded = status;
+    watch: {
+        "$store.state.landingBanner.expanded": function(expanded) {
+            if (expanded) {
+                this.bannerExpanded = expanded;
                 setTimeout(() => {
                     this.show = false;
                 }, 500);
             } else {
                 this.show = true;
                 setTimeout(() => {
-                    this.bannerExpanded = status;
+                    this.bannerExpanded = expanded;
                 }, 150);
             }
         }

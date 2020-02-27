@@ -3,7 +3,7 @@
         <div class="landing">
             <Banner class="landing-card"/>
             <SearchBox class="landing-card"/>
-            <Rank/>
+            <RankBox/>
         </div>
     </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
 import Banner from '../components/landing/Banner';
 import SearchBox from '../components/landing/SearchBox';
-import Rank from '../components/landing/Rank';
+import RankBox from '../components/landing/RankBox';
 
 export default {
     name: 'Landing',
@@ -23,7 +23,7 @@ export default {
     components: {
         Banner,
         SearchBox,
-        Rank
+        RankBox
     }
 }
 </script>

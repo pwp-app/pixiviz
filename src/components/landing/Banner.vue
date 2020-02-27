@@ -18,9 +18,9 @@
                 </div>
                 <div class="about-copyright">
                     <div class="about-copyright-item">
-                        <span>Copyright &copy; 2020 pwp.app. Developed by BackRunner.</span>
+                        <span>Copyright &copy; 2020 pwp.app.<span class="mobile-hide" style="margin-right: 0.375rem;"></span><br class="desktop-hide">Developed by BackRunner.</span>
                     </div>
-                    <div class="about-copyright-item">
+                    <div class="about-copyright-item mobile-hide">
                         <span>Frontend based on Vue</span>
                     </div>
                     <div class="about-copyright-item">
@@ -54,7 +54,7 @@ export default {
                     this.expanded = true;
                     // Hide scrollbar
                     document.body.className += ' no-scrollbar';
-                    this.$bus.emit('banner-changed', this.expanded);
+                    this.$store.commit('landingBanner/setExpanded', this.expanded);
                     setTimeout(() => {
                         this.clearMarginBottom = true;
                     }, 200);
@@ -78,7 +78,7 @@ export default {
                         this.titleUp = false;
                         setTimeout(() => {
                             this.expanded = false;
-                            this.$bus.emit('banner-changed', this.expanded);
+                            this.$store.commit('landingBanner/setExpanded', this.expanded);
                             setTimeout(() => {
                                 this.expandLock = false;
                                 // Reverse hiding scrollbar

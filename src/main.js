@@ -1,14 +1,26 @@
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+
+// Import dependencies
 import qs from "qs"
 import VueAxios from 'vue-axios'
 import axios from 'axios';
+import VueCookies from 'vue-cookies';
 import VueLazyload from 'vue-lazyload'
-import VueBus from 'vue-bus'
 import Vue2TouchEvents from 'vue2-touch-events'
+import {VueMasonryPlugin} from 'vue-masonry';
+import InfiniteLoading from 'vue-infinite-loading';
+
+// Import element ui and styles
+
 import './plugins/element.js'
 import './styles/main.less';
+
+// Import store
+import store from './store';
+
+// Import view and router
+import App from './App.vue'
+import router from './router'
 
 Vue.config.productionTip = false
 
@@ -26,16 +38,26 @@ axios.defaults.transformRequest = [function (data) {
 
 Vue.use(VueAxios, axios)
 
-// Set up vue-bus
-Vue.use(VueBus)
-
 // Set up lazyload
 Vue.use(VueLazyload)
 
 // Mobile events
 Vue.use(Vue2TouchEvents)
 
+// Set up things for waterfall
+Vue.use(VueMasonryPlugin)
+Vue.use(InfiniteLoading, {
+    slots: {
+        noMore: '没有更多图片了...'
+    },
+})
+
+// Set up vue cookies
+Vue.use(VueCookies)
+Vue.$cookies.config('7d');
+
 new Vue({
-  router,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')
