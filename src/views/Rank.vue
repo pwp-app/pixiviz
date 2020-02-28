@@ -40,17 +40,20 @@
             </div>
         </div>
         <infinite-loading @infinite="infiniteHandler" spinner="spiral"></infinite-loading>
+        <BackToTop/>
     </div>
 </template>
 
 <script>
 import Waterfall from "../components/common/Waterfall";
+import BackToTop from '../components/common/BackToTop';
 import dayjs from "dayjs";
 
 export default {
     name: "Rank",
     components: {
-        Waterfall
+        Waterfall,
+        BackToTop
     },
     data() {
         return {
