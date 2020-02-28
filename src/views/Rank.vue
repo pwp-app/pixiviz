@@ -7,10 +7,11 @@
                     <span>{{modeText}}</span>
                     <el-popover
                         placement="bottom"
-                        class="rank-category-popover"
-                        width="380"
+                        popper-class="rank-category-popover"
+                        width="440"
                         trigger="click"
                     >
+                        <ModeSwitcher :mode="mode" @mode-changed="handleModeChanged"/>
                         <i class="el-icon-refresh" slot="reference"></i>
                     </el-popover>
                 </div>
@@ -21,53 +22,68 @@
         </div>
         <div class="rank-body">
             <div class="rank-body-date">
-                <div class="rank-body-date-item rank-body-date-back">
+                <div class="rank-body-date-item rank-body-date-back" @click="handleDateChanged(-1)">
                     <i class="el-icon-arrow-left"></i>
                     <span>{{backDateText}}{{dateUnit}}</span>
                 </div>
-                <div class="rank-body-date-item rank-body-date-date">
-                    <span>{{displayDate}}</span>
-                </div>
-                <div class="rank-body-date-item rank-body-date-next">
+                <el-popover
+                        placement="bottom"
+                        popper-class="rank-category-popover"
+                        width="320"
+                        trigger="click"
+                    >
+                    <DateSwitcher ref="dateSwitcher" :date="dateObject" @date-selected="handleDateSelected"/>
+                    <div slot="reference" class="rank-body-date-item rank-body-date-date">
+                        <span>{{displayDate}}</span>
+                    </div>
+                </el-popover>
+                <div class="rank-body-date-item rank-body-date-next" @click="handleDateChanged(1)" v-show="showDateNext">
                     <span>{{nextDateText}}{{dateUnit}}</span>
                     <i class="el-icon-arrow-right"></i>
                 </div>
             </div>
             <div class="rank-body-content">
                 <div class="waterfall-wrapper">
-                    <Waterfall ref="waterfall" :images="images" />
+                    <Waterfall ref="waterfall" :images="images"/>
                 </div>
             </div>
         </div>
-        <infinite-loading @infinite="infiniteHandler" spinner="spiral"></infinite-loading>
+        <infinite-loading :identifier="waterfallIdentifier" @infinite="infiniteHandler" spinner="spiral"></infinite-loading>
         <BackToTop/>
     </div>
 </template>
 
 <script>
-import Waterfall from "../components/common/Waterfall";
+import dayjs from 'dayjs';
+// Common components
+import Waterfall from '../components/common/Waterfall';
 import BackToTop from '../components/common/BackToTop';
-import dayjs from "dayjs";
+// Rank components
+import ModeSwitcher from '../components/rank/ModeSwitcher';
+import DateSwitcher from '../components/rank/DateSwitcher';
 
 export default {
     name: "Rank",
     components: {
         Waterfall,
-        BackToTop
+        BackToTop,
+        ModeSwitcher,
+        DateSwitcher
     },
     data() {
         return {
             // Waterfall Data
             page: this.$store.state.rank.page ? this.$store.state.rank.page : 1,
             pageSize: 30,
-            dateObject: this.$store.state.rank.date ? this.$store.state.rank.date : dayjs().subtract(3, "day"),
+            dateObject: this.$store.state.rank.date ? this.$store.state.rank.date : dayjs().set('hour', 0).set('minute', 0).set('second', 0).subtract(3, "day"),
             mode: this.$store.state.rank.mode ? this.$store.state.rank.mode : this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day",
             images: this.$store.state.rank.images ? this.$store.state.rank.images : [],
             // Time
             backDateText: "前一",
             nextDateText: "后一",
             // Misc
-            routeFrom: ''
+            routeFrom: '',
+            waterfallIdentifier: Math.round(Math.random() * 100)
         };
     },
     computed: {
@@ -75,13 +91,16 @@ export default {
             return this.dateObject.format("YYYY-MM-DD");
         },
         modeText: function() {
-            if (this.mode == "day") {
-                return "日排行榜";
-            } else if (this.mode == "week") {
-                return "周排行榜";
-            } else if (this.mode == "month") {
-                return "月排行榜";
+            const mode2text = {
+                day: '日排行榜',
+                week: '周排行榜',
+                month: '月排行榜',
+                day_manga: '漫画日排行榜',
+                week_manga: '漫画周排行榜',
+                month_manga: '漫画月排行榜',
+                week_rookie_manga: '新秀周排行榜'
             }
+            return mode2text[this.mode];
         },
         dateUnit: function() {
             if (this.mode.indexOf("day") != -1) {
@@ -96,17 +115,17 @@ export default {
             if (this.mode.indexOf("day") != -1) {
                 return this.dateObject.format("YYYY-MM-DD");
             } else if (this.mode.indexOf("week") != -1) {
-                return this.dateObject.format("YYYY-MM") + " 第" + Math.round(this.dateObject.date() / 7) + " 周";
+                return this.dateObject.format("YYYY-MM") + " 第 " + Math.round(this.dateObject.date() / 7) + " 周";
             } else if (this.mode.indexOf("month") != -1) {
                 return this.dateObject.format("YYYY-MM");
             }
+        },
+        showDateNext: function() {
+            return ((dayjs().set('hour', 0).set('minute', 0).set('second', 0).unix() - this.dateObject.unix()) / 86400) > 3;
         }
     },
     watch: {
         /* If changed, then cache it */
-        images() {
-            this.$store.commit('rank/setImages', this.images);
-        },
         dateObject() {
             this.$store.commit('rank/setDate', this.dateObject);
         },
@@ -141,17 +160,49 @@ export default {
                         $state.complete();
                     }
                     this.images = this.images.concat(response.data.data);
-                    // 设置瀑布流的 firstLoad 为 false
+                    // 缓存 images
+                    this.$store.commit('rank/setImages', this.images);
+                    // 设置 Load 状态为 false
                     this.$refs.waterfall.firstLoad = false;
                     // Page + 1
                     this.page = this.page + 1;
                     $state.loaded();
                 });
         },
+        refreshWaterfall() {
+            // 提前清空 dom
+            this.$refs.waterfall.$el.innerHTML = '';
+            this.$nextTick(() => {
+                // 重置瀑布流参数
+                this.page = 1;
+                this.images = [];
+                this.waterfallIdentifier = this.waterfallIdentifier + 1;
+            });
+        },
+        handleModeChanged(mode) {
+            this.mode = mode;
+            this.refreshWaterfall();
+        },
         handleBack() {
             this.$router.push({
                 name: this.routeFrom
             })
+        },
+        // 日期事件
+        handleDateChanged(toward) {
+            if (this.dateUnit == '天') {
+                this.dateObject = this.dateObject.add(toward * 1, 'day');
+            } else if (this.dateUnit == '周') {
+                this.dateObject = this.dateObject.add(toward * 1, 'week');
+            } else if (this.dateUnit == '月') {
+                this.dateObject = this.dateObject.add(toward * 1, 'month');
+            }
+            this.$refs.dateSwitcher.selectDate = this.dateObject.toDate()
+            this.refreshWaterfall();
+        },
+        handleDateSelected(date) {
+            this.dateObject = dayjs(date);
+            this.refreshWaterfall();
         }
     }
 };

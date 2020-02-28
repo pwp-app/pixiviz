@@ -1,0 +1,40 @@
+.rank-mode-switcher {
+    span {
+        color: @color-text-primary;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        .no-select();
+    }
+}
+.rank-mode-item-row {
+    margin-bottom: 8px;
+}
+.rank-mode-item-tag {
+    margin-bottom: 8px;
+    font-size: 17px;
+}
+.rank-mode-item {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 15px;
+    span {
+        transition: 100ms;
+    }
+}
+.rank-mode-item:hover {
+    cursor: pointer;
+    span {
+        color: lighten(@color-primary, 10%);
+    }
+}
+.rank-mode-item-picked {
+    span {
+        color: lighten(@color-primary, 17.5%);
+    }
+}
+.rank-mode-item-picked:hover {
+    cursor: no-drop;
+    span {
+        color: lighten(@color-primary, 17.5%);
+    }
+}

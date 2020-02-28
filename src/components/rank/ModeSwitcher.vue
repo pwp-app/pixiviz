@@ -1,43 +1,34 @@
 <template>
     <div class="rank-mode-switcher">
-        <div class="rank-mode-switcher-title">
-            <span>选择排行榜</span>
-        </div>
         <div class="rank-mode-switcher-body">
             <div class="rank-mode-item-row">
                 <div class="rank-mode-item-tag">
                     <span>综合</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'month' ? 'rank-mode-item-picked' : null]" @click="handleClick('month')">
                     <span>月排行榜</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'week' ? 'rank-mode-item-picked' : null]" @click="handleClick('week')">
                     <span>周排行榜</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'day' ? 'rank-mode-item-picked' : null]" @click="handleClick('day')">
                     <span>日排行榜</span>
-                </div>
-                <div class="rank-mode-item">
-                    <span>男性日排行榜</span>
-                </div>
-                <div class="rank-mode-item">
-                    <span>女性日排行榜</span>
                 </div>
             </div>
             <div class="rank-mode-item-row">
                 <div class="rank-mode-item-tag">
                     <span>漫画</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'month_manga' ? 'rank-mode-item-picked' : null]">
                     <span>月排行榜</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'week_manga' ? 'rank-mode-item-picked' : null]">
                     <span>周排行榜</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'day_manga' ? 'rank-mode-item-picked' : null]">
                     <span>日排行榜</span>
                 </div>
-                <div class="rank-mode-item">
+                <div :class="['rank-mode-item', mode === 'week_rookie_manga' ? 'rank-mode-item-picked' : null]">
                     <span>新秀周排行榜</span>
                 </div>
             </div>
@@ -48,6 +39,11 @@
 <script>
 export default {
     name: 'Rank.ModeSwitcher',
-    props: ['mode']
+    props: ['mode'],
+    methods: {
+        handleClick(mode) {
+            this.$emit('mode-changed', mode);
+        }
+    }
 }
 </script>
