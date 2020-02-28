@@ -1,16 +1,20 @@
 @image-card-width: 280px;
 @image-card-margin: 8px;
+@image-card-corner: 16px;
 
 .image-card {
     width: @image-card-width;
     margin: @image-card-margin;
     position: relative;
-    border-radius: 16px;
+    border-radius: @image-card-corner;
     box-shadow: @shadow-small;
+    .el-loading-mask {
+        border-radius: @image-card-corner;
+    }
     &-image {
         width: 100%;
         height: 100%;
-        border-radius: 16px;
+        border-radius: @image-card-corner;
         background-repeat: no-repeat;
         background-size: cover;
         transition: 200ms;
@@ -25,7 +29,7 @@
         background: rgba(0,0,0, .25);
         position: absolute;
         bottom: 0;
-        border-radius: 0 0 16px 16px;
+        border-radius: 0 0 @image-card-corner @image-card-corner;
         padding: 0 16px;
         font-weight: 600;
         letter-spacing: 0.025rem;
@@ -34,6 +38,59 @@
         span {
             line-height: 48px;
             font-size: 16px;
+            .no-select();
+        }
+    }
+    &-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: @image-card-corner;
+        background: lighten(@color-primary, 25%);
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        span, i {
+            .no-select();
+        }
+        &-icon {
+            color: @color-text-primary;
+            font-size: 40px;
+        }
+        &-tip {
+            color: @color-text-primary;
+            font-size: 24px;
+            font-weight: 600;
+        }
+    }
+    &-count {
+        background: rgba(0,0,0, .375);
+        width: max-content;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        border-radius: 8px;
+        height: 32px;
+        display: flex;
+        padding: 0 6px;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        .no-select();
+        img {
+            width: 18px;
+            height: 18px;
+            margin-right: 4px;
+        }
+        span {
+            color: @color-text-accent;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
         }
     }
 }

@@ -10,11 +10,13 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'Landing',
-    component: Landing
+    component: Landing,
+    meta: { keepAlive: false }
 }, {
     path: '/rank',
     name: 'Rank',
-    component: Rank
+    component: Rank,
+    meta: { keepAlive: true }
 }]
 
 const router = new VueRouter({
