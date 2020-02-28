@@ -37,7 +37,7 @@ export default {
     name: "Landing.Banner",
     data() {
         return {
-            bannerBG: require('@/assets/images/landing.jpg'),
+            bannerBG: document.body.clientWidth <= 768 ? require('@/assets/images/banner.jpg') : require('@/assets/images/landing.jpg'),
             expanded: false,
             expandLock: false,
             titleUp: false,

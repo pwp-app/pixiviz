@@ -50,7 +50,7 @@ export default {
         torankbox(mode) {
             this.$cookies.set('rankbox-mode', mode, '1h');
             this.$router.push({
-                name: 'rankbox'
+                name: 'Rank'
             });
         }
     }
