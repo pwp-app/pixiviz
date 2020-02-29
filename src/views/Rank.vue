@@ -163,6 +163,7 @@ export default {
                     if (!response.data.data) {
                         // 加载失败
                         $state.complete();
+                        return;
                     }
                     this.images = this.images.concat(response.data.data);
                     // 缓存 images
