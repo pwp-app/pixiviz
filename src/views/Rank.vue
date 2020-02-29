@@ -75,7 +75,7 @@ export default {
             // Waterfall Data
             page: this.$store.state.rank.page ? this.$store.state.rank.page : 1,
             pageSize: 30,
-            dateObject: this.$store.state.rank.date ? this.$store.state.rank.date : dayjs().set('hour', 0).set('minute', 0).set('second', 0).subtract(3, "day"),
+            dateObject: this.$store.state.rank.date ? this.$store.state.rank.date : dayjs().startOf('day').subtract(3, "day"),
             mode: this.$store.state.rank.mode ? this.$store.state.rank.mode : this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day",
             images: this.$store.state.rank.images ? this.$store.state.rank.images : [],
             // Time
@@ -121,7 +121,7 @@ export default {
             }
         },
         showDateNext: function() {
-            return ((dayjs().set('hour', 0).set('minute', 0).set('second', 0).unix() - this.dateObject.unix()) / 86400) > 3;
+            return ((dayjs().startOf('day').unix() - this.dateObject.unix()) / 86400) > 3;
         }
     },
     watch: {
@@ -141,6 +141,11 @@ export default {
         this.routeFrom = this.$cookies.get('rank-from');
         if (!this.routeFrom) {
             this.routeFrom = 'Landing'
+        }
+        // Check reset flag
+        if (this.$store.state.rank.reset) {
+            this.reset();
+            this.$store.commit('rank/setReset', false);
         }
     },
     methods: {
@@ -175,6 +180,18 @@ export default {
             this.$nextTick(() => {
                 // 重置瀑布流参数
                 this.page = 1;
+                this.images = [];
+                this.waterfallIdentifier = this.waterfallIdentifier + 1;
+            });
+        },
+        reset() {
+            // 提前清空 dom
+            this.$refs.waterfall.$el.innerHTML = '';
+            this.$nextTick(() => {
+                // 重置参数
+                this.page = 1;
+                this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
+                this.dateObject = dayjs().startOf('day').subtract(3, 'day');
                 this.images = [];
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });

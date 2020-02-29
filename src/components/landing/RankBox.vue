@@ -48,8 +48,12 @@ export default {
     },
     methods: {
         torankbox(mode) {
-            this.$cookies.set('rankbox-mode', mode, '30m');
+            this.$cookies.set('rank-mode', mode, '30m');
             this.$cookies.set('rank-from', 'Landing', '30m');
+            // 如果是返回到主界面再重新打开排行榜，且与缓存非同一排行榜，则重置相关缓存
+            if (this.$store.state.rank.mode && this.$store.state.rank.mode != mode) {
+                this.$store.commit('rank/setReset', true);
+            }
             this.$router.push({
                 name: 'Rank'
             });
