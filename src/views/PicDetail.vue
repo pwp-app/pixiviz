@@ -6,6 +6,7 @@
             </div>
             <div class="pic-side">
                 <Author :author="image.artistPreView"></Author>
+                <Related :images="relatedImages"></Related>
             </div>
         </div>
         <Overlay text="图片无法展示" v-if="block"/>
@@ -16,6 +17,7 @@
 <script>
 import Presentation from '../components/pic/Presentation';
 import Author from '../components/pic/Author';
+import Related from '../components/pic/Related';
 import Overlay from '../components/pic/Overlay';
 
 export default {
@@ -26,20 +28,23 @@ export default {
             image: {},
             infoLoading: true,
             loadFailed: false,
-            block: false
+            block: false,
+            relatedImages: [],
+            relatedLoadFailed: false
         }
     },
     components: {
         Presentation,
         Author,
-        Overlay
+        Overlay,
+        Related
     },
     mounted() {
         this.fetchInfo();
     },
     methods: {
         fetchInfo() {
-            this.axios.get('https://api.pixivic.com/illusts/' + this.imageId).then(response => {
+            this.axios.get(`https://api.pixivic.com/illusts/${this.imageId}`).then(response => {
                 if (!response.data.data) {
                     this.infoLoading = false;
                     this.loadFailed = true;
@@ -50,6 +55,21 @@ export default {
                 if (this.image.xrestrict == 1 || this.image.sanityLevel > 5) {
                     this.block = true;
                 }
+                // fetch related
+                this.fetchRelated()
+            });
+        },
+        fetchRelated() {
+            this.axios.get(`https://api.pixivic.com/illusts/${this.image.id}/related`, {
+                params: {
+                    page: 1,
+                    pageSize: Math.round((document.body.clientHeight - 400) / 200) * 2
+                }
+            }).then(response => {
+                if (!response.data.data) {
+                    this.relatedLoadFailed = true;
+                }
+                this.relatedImages = response.data.data;
             });
         }
     }

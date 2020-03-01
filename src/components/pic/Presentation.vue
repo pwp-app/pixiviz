@@ -22,6 +22,19 @@
             <div class="pic-presentation-info-caption">
                 <span v-html="image.caption"></span>
             </div>
+            <div class="pic-presentation-info-tags">
+                <div class="pic-tag" v-for="tag in tags" :key="tag.id">
+                    <span>#{{tag.name}}</span>
+                </div>
+            </div>
+            <div class="pic-presentation-info-stat">
+                <div class="pic-stat">
+                    <i class="el-icon-view"></i><span>{{views}}</span>
+                </div>
+                <div class="pic-stat">
+                    <i class="el-icon-star-on"></i><span>{{bookmarks}}</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -40,8 +53,8 @@ export default {
     data() {
         return {
             sizeCache: {},
-            screenWidth: 0,
-            screenHeight: 0,
+            limitWidth: 1152,
+            limitHeight: 796,
             imageWidth: 0,
             imageHeight: 0,
             imageLoading: true,
@@ -89,21 +102,42 @@ export default {
             } else {
                 return '';
             }
+        },
+        tags() {
+            if (this.image) {
+                return this.image.tags;
+            } else {
+                return [];
+            }
+        },
+        views() {
+            if (this.image) {
+                return this.image.totalView;
+            } else {
+                return 0;
+            }
+        },
+        bookmarks() {
+            if (this.image) {
+                return this.image.totalBookmarks;
+            } else {
+                return 0;
+            }
         }
     },
     methods: {
         computeWidth(o_width, o_height) {
-            let height = o_height / (o_width / 1280);
-            if (height > 796) {
-                return o_width / (o_height / 796);
+            let height = o_height / (o_width / this.limitWidth);
+            if (height > this.limitHeight) {
+                return o_width / (o_height / this.limitHeight);
             } else {
-                return 1280;
+                return this.limitWidth;
             }
         },
         computeHeight(o_width, o_height) {
-            let height = o_height / (o_width / 1280);
-            if (height > 796) {
-                return 796;
+            let height = o_height / (o_width / this.limitWidth);
+            if (height > this.limitHeight) {
+                return this.limitHeight;
             } else {
                 return height;
             }

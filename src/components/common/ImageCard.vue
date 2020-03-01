@@ -1,5 +1,5 @@
 <template>
-    <div class="image-card" @click="handleClick" :style="{width: cardWidth + 'px',height: this.loadHeight + 'px'}">
+    <div class="image-card" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
         <div class="image-card-overlay image-card-block" v-if="block">
             <div class="image-card-overlay-icon">
                 <i class="el-icon-warning-outline"/>
@@ -21,7 +21,7 @@
         </div>
         <div ref="image" class="image-card-image" v-if="!block" v-loading="loading" v-lazy:background-image="source"></div>
         <div class="image-card-title">
-            <span>{{formattedTitle}}</span>
+            <span>{{image.title}}</span>
         </div>
     </div>
 </template>
@@ -40,12 +40,15 @@ export default {
         },
         imageType: {
             type: String
+        },
+        squaredImage: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
-            loadHeight: this.image.height / (this.image.width / this.cardWidth),
-            formattedTitle: this.image.title.length > 12 ? this.image.title.substring(0, 13) + '...' : this.image.title,
+            loadHeight: this.squaredImage ? this.cardWidth : this.image.height / (this.image.width / this.cardWidth),
             loading: true,
             loadError: false,
             block: this.image.xrestrict ? true : this.image.sanityLevel > 5 ? true : false,

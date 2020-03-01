@@ -26,9 +26,9 @@ export default {
         },
         authorName() {
             if (this.author){
-                return ''
-            } else {
                 return this.author.name;
+            } else {
+                return '';
             }
         }
     }

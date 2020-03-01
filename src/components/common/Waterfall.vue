@@ -2,7 +2,7 @@
     <div class="waterfall-container" v-masonry transition-duration="200ms" item-selector=".waterfall-item">
         <ImageCard v-masonry-tile class="waterfall-item"
             v-for="item in images" :key="item.id" :image="item"
-            :cardWidth="cardWidth" :imageType="imageType"
+            :cardWidth="cardWidth" :imageType="imageType" :squaredImage="squaredImage"
             @clicked="handleCardClicked"/>
     </div>
 </template>
@@ -21,6 +21,10 @@ export default {
         },
         imageType: {
             type: String
+        },
+        squaredImage: {
+            type: Boolean,
+            default: false
         }
     },
     components: {

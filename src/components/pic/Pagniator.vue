@@ -5,7 +5,7 @@
             <span>前一页</span>
         </div>
         <div class="pic-presentation-page-number">
-            <span>{{page}}</span>
+            <span>{{page}} / {{pageCount}}</span>
         </div>
         <div class="pic-presentation-page-next" v-if="page < pageCount" @click="handleGo(1)">
             <span>下一页</span>

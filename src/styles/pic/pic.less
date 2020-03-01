@@ -1,13 +1,15 @@
 .pic-container {
-    width: 100%;
+    width: calc(100% - 128px);
+    padding: 0 64px;
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
     .el-loading-mask {
         background-color: #fff;
     }
 }
 
 .pic {
-    width: max-content;
     height: max-content;
     margin: 0 auto;
     display: flex;
@@ -16,8 +18,8 @@
         flex: 0 0 auto;
     }
     &-side {
-        padding-top: 32px;
-        width: 380px;
+        padding-top: 24px;
+        width: 432px;
         margin-left: 48px;
         flex: 0 0 auto;
     }
@@ -28,3 +30,4 @@
 @import './overlay.less';
 @import './presentation.less';
 @import './author.less';
+@import './related.less';
