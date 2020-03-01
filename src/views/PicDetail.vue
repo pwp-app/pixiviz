@@ -6,7 +6,7 @@
             </div>
             <div class="pic-side">
                 <Author :author="image.artistPreView"></Author>
-                <Related :images="relatedImages"></Related>
+                <Related :images="relatedImages" :page="relatedPage" @go="handleRelatedPageChanged"></Related>
             </div>
         </div>
         <Overlay text="图片无法展示" v-if="block"/>
@@ -24,13 +24,14 @@ export default {
     name: 'Pic',
     data() {
         return {
-            imageId: this.$route.params.id,
             image: {},
             infoLoading: true,
             loadFailed: false,
             block: false,
             relatedImages: [],
-            relatedLoadFailed: false
+            relatedLoading: false,
+            relatedLoadFailed: false,
+            relatedPage: 1
         }
     },
     components: {
@@ -39,8 +40,16 @@ export default {
         Overlay,
         Related
     },
+    computed: {
+        imageId() {
+            return this.$route.params.id;
+        }
+    },
     mounted() {
         this.fetchInfo();
+    },
+    watch: {
+        '$route.params.id': 'handleIdChanged'
     },
     methods: {
         fetchInfo() {
@@ -60,17 +69,31 @@ export default {
             });
         },
         fetchRelated() {
+            this.relatedLoading = true;
             this.axios.get(`https://api.pixivic.com/illusts/${this.image.id}/related`, {
                 params: {
-                    page: 1,
+                    page: this.relatedPage,
                     pageSize: 6
                 }
             }).then(response => {
                 if (!response.data.data) {
                     this.relatedLoadFailed = true;
+                    this.relatedLoading = false;
+                    return;
                 }
                 this.relatedImages = response.data.data;
+                this.relatedLoading = false;
             });
+        },
+        handleIdChanged() {
+            this.infoLoading = true;
+            this.fetchInfo();
+        },
+        handleRelatedPageChanged(toward) {
+            if (!this.relatedLoading) {
+                this.relatedPage = this.relatedPage + toward * 1;
+                this.fetchRelated();
+            }
         }
     }
 }

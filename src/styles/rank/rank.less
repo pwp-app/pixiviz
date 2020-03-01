@@ -16,7 +16,7 @@
     padding: 32px 0 24px 0;
     margin: 0 auto;
     .rank-component-width-mixin(6);
-    .rank-component-width-reactive-mixin(5, 2, 72px);
+    .rank-component-width-responsive-mixin(5, 2, 72px);
     span, i {
         .no-select();
     }
@@ -54,7 +54,7 @@
     &-date {
         margin: 0 auto;
         .rank-component-width-mixin(6);
-        .rank-component-width-reactive-mixin(5, 2, 72px);
+        .rank-component-width-responsive-mixin(5, 2, 72px);
         position: relative;
         span, i {
             color: @color-text-primary;
@@ -96,7 +96,7 @@
         overflow-x: hidden;
         .waterfall-wrapper {
             .waterfall-wrapper-mixin(6);
-            .waterfall-reactive-mixin(5, 2, 72px);
+            .waterfall-responsive-mixin(5, 2, 72px);
         }
     }
 }
@@ -120,11 +120,11 @@
     width: @container-width - 8px;
 }
 
-.rank-component-width-reactive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
+.rank-component-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
     @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
     @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
     @media(max-width: @trigger-width) {
         width: @container-width - 8px !important;
     }
-    .rank-component-width-reactive-mixin(@col - 1, @min-col, @margin);
+    .rank-component-width-responsive-mixin(@col - 1, @min-col, @margin);
 }

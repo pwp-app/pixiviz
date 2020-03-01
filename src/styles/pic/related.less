@@ -5,9 +5,41 @@
         color: @color-primary;
         font-weight: 600;
         letter-spacing: 0.05em;
+        .pic-related-paginator {
+            float: right;
+            margin-right: -8px;
+            &-item {
+                display: inline-block;
+                margin-right: 8px;
+                transition: 200ms;
+            }
+            &-item:hover {
+                cursor: pointer;
+                color: lighten(@color-text-primary, 10%);
+            }
+        }
     }
     &-content {
         margin-top: 16px;
         margin-left: -8px;
+    }
+}
+
+/* Responsive */
+@media(max-width: 1024px) {
+    .pic-related {
+        &-title {
+            font-size: 24px;
+        }
+    }
+}
+
+/* Mobile */
+@media(max-width: 768px) {
+    .pic-related {
+        margin-top: 28px;
+        &-title {
+            font-size: 22px;
+        }
     }
 }

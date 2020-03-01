@@ -1,10 +1,9 @@
 <template>
-    <div class="pic-presentation-image-wrapper" :style="{width: (sizeCache[this.page] ? sizeCache[page].x : imageWidth)+ 'px'}">
+    <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
         <div v-loading="imageLoading" class="pic-presentation-image"
-            :style="{width: (sizeCache[this.page] ? sizeCache[page].x : imageWidth) + 'px', height: (sizeCache[this.page] ? sizeCache[page].y : imageHeight) + 'px'}">
+            :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
             <img v-lazy="source"
-                :style="{width: (sizeCache[page] ? sizeCache[page].x : imageWidth) + 'px',
-                height: (sizeCache[page] ? sizeCache[page].y : imageHeight) + 'px !important'}">
+                :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
             <div class="pic-presentation-image-error" v-if="imageLoadError">
                 <div class="pic-presentation-image-error-icon">
                     <i class="el-icon-warning-outline"/>
@@ -55,6 +54,8 @@ export default {
             sizeCache: {},
             limitWidth: 1152,
             limitHeight: 796,
+            screenWidth: document.documentElement.clientWidth,
+            imageSize: {},
             imageWidth: 0,
             imageHeight: 0,
             imageLoading: true,
@@ -68,9 +69,13 @@ export default {
                 this.imageLoading = false;
                 if (!this.sizeCache[this.page]) {
                     this.sizeCache[this.page] = {};
-                    this.sizeCache[this.page]['x'] = this.computeWidth(el.naturalWidth, el.naturalHeight);
-                    this.sizeCache[this.page]['y'] = this.computeHeight(el.naturalWidth, el.naturalHeight);
+                    this.sizeCache[this.page] = {
+                        x: el.naturalWidth,
+                        y: el.naturalHeight
+                    }
                 }
+                this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+                this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
             }
         });
         this.$Lazyload.$on('error', ({el, src}) => {
@@ -79,6 +84,13 @@ export default {
                 this.imageLoadError = true;
             }
         });
+        // 绑定 Resize
+        window.addEventListener('resize', this.windowResized, false);
+        // 设定初始大小限制
+        this.setLimitWidth(this.screenWidth);
+    },
+    destroyed() {
+        window.removeEventListener('resize', this.windowResized, false);
     },
     watch: {
         image: {
@@ -86,10 +98,18 @@ export default {
             handler(image) {
                 this.imageLoading = true;
                 this.imageLoadError = false;
+                this.imageSize.x = image.width;
+                this.imageSize.y = image.height;
                 this.imageWidth = this.computeWidth(image.width, image.height);
                 this.imageHeight = this.computeHeight(image.width, image.height);
             }
-        }
+        },
+        screenWidth(width) {
+            this.setLimitWidth(width);
+            this.$nextTick(() => {
+                this.updateDisplaySize();
+            });
+        },
     },
     computed: {
         source() {
@@ -126,6 +146,33 @@ export default {
         }
     },
     methods: {
+        setLimitWidth(width) {
+            if (width > 1680 && width <= 1920) {
+                this.limitWidth = 1152;
+                this.limitHeight = 796;
+            } else if (width > 1430 && width <= 1680) {
+                this.limitWidth = 920;
+                this.limitHeight = 640;
+            } else if (width > 1024 && width <= 1430) {
+                this.limitWidth = 802;
+                this.limitHeight = 580;
+            } else if (width <= 1024) {
+                this.limitWidth = 600;
+                this.limitHeight = 480;
+            }
+        },
+        windowResized() {
+            this.screenWidth = document.documentElement.clientWidth;
+        },
+        updateDisplaySize() {
+            if (this.sizeCache[this.page]) {
+                this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+                this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+            } else {
+                this.imageWidth = this.computeWidth(this.imageSize.x, this.imageSize.y);
+                this.imageHeight = this.computeHeight(this.imageSize.x, this.imageSize.y);
+            }
+        },
         computeWidth(o_width, o_height) {
             let height = o_height / (o_width / this.limitWidth);
             if (height > this.limitHeight) {

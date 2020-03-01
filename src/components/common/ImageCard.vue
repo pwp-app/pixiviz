@@ -48,7 +48,6 @@ export default {
     },
     data() {
         return {
-            loadHeight: this.squaredImage ? this.cardWidth : this.image.height / (this.image.width / this.cardWidth),
             loading: true,
             loadError: false,
             block: this.image.xrestrict ? true : this.image.sanityLevel > 5 ? true : false,
@@ -56,6 +55,13 @@ export default {
         }
     },
     computed: {
+        loadHeight() {
+            if (this.squaredImage) {
+                return this.cardWidth
+            } else {
+                return this.image.height / (this.image.width / this.cardWidth);
+            }
+        },
         source() {
             if (this.block || !this.image) {
                 return '';
