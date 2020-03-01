@@ -21,7 +21,7 @@
         </div>
         <div ref="image" class="image-card-image" v-if="!block" v-loading="loading" v-lazy:background-image="source"></div>
         <div class="image-card-title">
-            <span>{{image.title}}</span>
+            {{image.title}}
         </div>
     </div>
 </template>

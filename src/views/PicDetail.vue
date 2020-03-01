@@ -63,7 +63,7 @@ export default {
             this.axios.get(`https://api.pixivic.com/illusts/${this.image.id}/related`, {
                 params: {
                     page: 1,
-                    pageSize: Math.round((document.body.clientHeight - 400) / 200) * 2
+                    pageSize: 6
                 }
             }).then(response => {
                 if (!response.data.data) {

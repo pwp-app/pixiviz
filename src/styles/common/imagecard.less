@@ -10,6 +10,7 @@
     box-shadow: @shadow-small;
     .el-loading-mask {
         border-radius: @image-card-corner;
+        z-index: 9999;
     }
     &-image {
         width: 100%;
@@ -36,11 +37,9 @@
         color: @color-text-accent;
         text-shadow: 0 0 6px rgba(0,0,0, .15);
         text-overflow: ellipsis;
-        span {
-            line-height: 48px;
-            font-size: 16px;
-            .no-select();
-        }
+        overflow: hidden;
+        white-space: nowrap;
+        line-height: 48px;
     }
     &-overlay {
         position: absolute;
