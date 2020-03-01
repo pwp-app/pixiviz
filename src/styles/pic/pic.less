@@ -1,0 +1,30 @@
+.pic-container {
+    width: 100%;
+    min-height: 100vh;
+    .el-loading-mask {
+        background-color: #fff;
+    }
+}
+
+.pic {
+    width: max-content;
+    height: max-content;
+    margin: 0 auto;
+    display: flex;
+    &-presentation {
+        width: max-content;
+        flex: 0 0 auto;
+    }
+    &-side {
+        padding-top: 32px;
+        width: 380px;
+        margin-left: 48px;
+        flex: 0 0 auto;
+    }
+}
+
+/* Overlay */
+
+@import './overlay.less';
+@import './presentation.less';
+@import './author.less';

@@ -39,7 +39,10 @@ axios.defaults.transformRequest = [function (data) {
 Vue.use(VueAxios, axios)
 
 // Set up lazyload
-Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+    // set observer to true
+    observer: true
+})
 
 // Mobile events
 Vue.use(Vue2TouchEvents)

@@ -1,5 +1,5 @@
 <template>
-    <div class="image-card" :style="{height: this.loadHeight + 'px'}">
+    <div class="image-card" @click="handleClick" :style="{width: cardWidth + 'px',height: this.loadHeight + 'px'}">
         <div class="image-card-overlay image-card-block" v-if="block">
             <div class="image-card-overlay-icon">
                 <i class="el-icon-warning-outline"/>
@@ -34,11 +34,17 @@ export default {
     props: {
         image: {
             type: Object
+        },
+        cardWidth: {
+            type: Number
+        },
+        imageType: {
+            type: String
         }
     },
     data() {
         return {
-            loadHeight: this.image.height / (this.image.width / 280),
+            loadHeight: this.image.height / (this.image.width / this.cardWidth),
             formattedTitle: this.image.title.length > 12 ? this.image.title.substring(0, 13) + '...' : this.image.title,
             loading: true,
             loadError: false,
@@ -48,10 +54,10 @@ export default {
     },
     computed: {
         source() {
-            if (this.block) {
+            if (this.block || !this.image) {
                 return '';
             } else {
-                return this.image.imageUrls[0].medium.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                return this.image.imageUrls[0][this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
             }
         }
     },
@@ -67,6 +73,11 @@ export default {
                 this.loadError = true;
             }
         });
+    },
+    methods: {
+        handleClick() {
+            this.$emit('clicked', this.image.id);
+        }
     }
 }
 </script>

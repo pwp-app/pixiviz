@@ -44,7 +44,10 @@
             </div>
             <div class="rank-body-content">
                 <div class="waterfall-wrapper">
-                    <Waterfall ref="waterfall" :images="images"/>
+                    <Waterfall ref="waterfall"
+                        :images="images" @card-clicked="handleCardClicked"
+                        :cardWidth="280" imageType="medium"
+                        />
                 </div>
             </div>
         </div>
@@ -221,6 +224,12 @@ export default {
         handleDateSelected(date) {
             this.dateObject = dayjs(date);
             this.refreshWaterfall();
+        },
+        // 跳转
+        handleCardClicked(imageId) {
+            this.$cookies.set('rank-scroll', window.pageYOffset, '30min');
+            this.$cookies.set('pic-from', 'rank', '30min');
+            this.$router.push('/pic/' + imageId);
         }
     }
 };

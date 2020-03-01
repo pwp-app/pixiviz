@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 // Import views
 import Landing from '../views/Landing.vue'
 import Rank from '../views/Rank.vue'
+import Pic from '../views/PicDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,11 @@ const routes = [{
     name: 'Rank',
     component: Rank,
     meta: { keepAlive: true }
+}, {
+    path: '/pic/:id',
+    name: 'Pic',
+    component: Pic,
+    meta: { keepAlive: false }
 }]
 
 const router = new VueRouter({
