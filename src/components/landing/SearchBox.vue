@@ -8,7 +8,7 @@
                 <el-input v-model="search" spellcheck="false"></el-input>
             </div>
             <div class="searchbox-button">
-                <button><i class="el-icon-search"></i></button>
+                <button @click="handleSearchClick"><i class="el-icon-search"></i></button>
             </div>
         </div>
     </div>
@@ -38,6 +38,12 @@ export default {
                     this.bannerExpanded = expanded;
                 }, 150);
             }
+        }
+    },
+    methods: {
+        handleSearchClick() {
+            this.$cookies.set('search-from', 'Landing', '20min');
+            this.$router.push(`/search?keyword=${this.search}`);
         }
     }
 }

@@ -7,6 +7,18 @@
     .el-loading-mask {
         background-color: #fff;
     }
+    .pic-close {
+        position: absolute;
+        right: 36px;
+        top: 24px;
+        font-size: 28px;
+        color: @color-text-primary;
+        transition: 200ms ease-in-out;
+    }
+    .pic-close:hover {
+        cursor: pointer;
+        color: lighten(@color-text-primary, 10%);
+    }
 }
 
 .pic {
@@ -55,6 +67,9 @@
     .pic-container {
         width: auto;
         padding: 0 24px;
+        .pic-close {
+            display: none;
+        }
     }
     .pic {
         width: 100%;

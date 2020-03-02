@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Landing from '../views/Landing.vue'
 import Rank from '../views/Rank.vue'
 import Pic from '../views/PicDetail.vue'
+import Search from '../views/Search.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ const routes = [{
     name: 'Pic',
     component: Pic,
     meta: { keepAlive: false }
+}, {
+    path: '/search',
+    name: 'Search',
+    component: Search,
+    meta: { keepAlive: true }
 }]
 
 const router = new VueRouter({

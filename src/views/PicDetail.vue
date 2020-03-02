@@ -11,6 +11,9 @@
         </div>
         <Overlay text="图片无法展示" v-if="block"/>
         <Overlay text="图片信息加载失败" v-if="loadFailed"/>
+        <div class="pic-close" v-if="from" @click="handleClose">
+            <i class="el-icon-close"></i>
+        </div>
     </div>
 </template>
 
@@ -31,7 +34,8 @@ export default {
             relatedImages: [],
             relatedLoading: false,
             relatedLoadFailed: false,
-            relatedPage: 1
+            relatedPage: 1,
+            from: this.$cookies.get('pic-from')
         }
     },
     components: {
@@ -94,6 +98,9 @@ export default {
                 this.relatedPage = this.relatedPage + toward * 1;
                 this.fetchRelated();
             }
+        },
+        handleClose(){
+            this.$router.push('/' + this.from);
         }
     }
 }

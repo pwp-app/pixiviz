@@ -149,7 +149,15 @@ export default {
         if (this.$store.state.rank.reset) {
             this.reset();
             this.$store.commit('rank/setReset', false);
+        } else {
+            // Do scroll when reset is not set
+            let scrollTop = this.$cookies.get('rank-scroll');
+            if (scrollTop) {
+                window.scrollTo(0, scrollTop);
+            }
         }
+        // Add scroll event listener
+        window.addEventListener('scroll', this.handleScroll, false);
     },
     methods: {
         infiniteHandler($state) {
@@ -227,9 +235,11 @@ export default {
         },
         // 跳转
         handleCardClicked(imageId) {
-            this.$cookies.set('rank-scroll', window.pageYOffset, '30min');
-            this.$cookies.set('pic-from', 'rank', '30min');
+            this.$cookies.set('pic-from', 'rank', '20min');
             this.$router.push('/pic/' + imageId);
+        },
+        handleScroll(value) {
+            this.$cookies.set('rank-scroll', value, '20min');
         }
     }
 };

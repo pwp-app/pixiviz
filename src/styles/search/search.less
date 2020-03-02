@@ -1,0 +1,145 @@
+@search-side-padding: 78px;
+
+.search-container {
+    .infinite-loading-container {
+        .infinite-status-prompt {
+            padding: 42px 0 !important;
+            color: @color-text-primary !important;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            .no-select();
+        }
+    }
+
+    .search-header {
+        padding: 32px 0 24px 0;
+        margin: 0 auto;
+        .search-component-width-mixin(6);
+        .search-component-width-responsive-mixin(5, 2, 72px);
+        span, i {
+            .no-select();
+        }
+        &-title {
+            font-size: 38px;
+            color: @color-text-primary;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            display: inline-block;
+        }
+        &-input {
+            width: 480px;
+            margin-left: 24px;
+            height: max-content;
+            display: inline-block;
+            transform: translateY(-8px);
+            input {
+                padding-left: 42px;
+                border-radius: 32px;
+                color: @color-text-primary;
+                font-weight: 600;
+                font-size: 15px;
+                background: @color-accent;
+                border: 1px solid lighten(@color-text-primary, 10%);
+                transition: 200ms ease-in-out;
+            }
+            input:focus {
+                background: #fff;
+                border: 1px solid @color-text-primary;
+            }
+            i {
+                padding-left: 6px;
+                font-weight: 600;
+                color: @color-text-primary;
+            }
+        }
+        &-close {
+            float: right;
+            transition: 200ms ease-in-out;
+            color: @color-primary;
+            font-size: 36px;
+            margin-top: 4px;
+        }
+        &-close:hover {
+            color: lighten(@color-text-primary, 10%);
+            cursor: pointer;
+        }
+    }
+
+    .search-suggestion {
+        margin: 0 auto;
+        .search-component-width-mixin(6);
+        .search-component-width-responsive-mixin(5, 2, 72px);
+        white-space: nowrap;
+        overflow-x: scroll;
+        padding-bottom: 12px;
+        &-item {
+            background: @color-primary;
+            display: inline-block;
+            padding: 8px 18px;
+            color: @color-text-accent;
+            box-shadow: @shadow-small;
+            margin-right: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 24px;
+            transition: 200ms ease-in-out;
+            .no-select();
+        }
+        &-item:hover {
+            background: lighten(@color-primary, 7.5%);
+            cursor: pointer;
+        }
+        &-item:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .search-suggestion::-webkit-scrollbar {
+        height: 4px;
+    }
+    .search-suggestion::-webkit-scrollbar-button {
+        display: none;
+    }
+    .search-suggestion::-webkit-scrollbar-thumb {
+        width: @scrollbar-width;
+        border-radius: @scrollbar-width;
+        background: @color-primary;
+    }
+    .search-suggestion::-webkit-scrollbar-track {
+        background: @color-background-primary;
+    }
+
+    .search-content {
+        width: 100%;
+        overflow-x: hidden;
+        padding-top: 8px;
+        .waterfall-wrapper {
+            .waterfall-wrapper-mixin(6);
+            .waterfall-responsive-mixin(5, 2, 72px);
+        }
+    }
+}
+
+.search-component-width-mixin(@col) {
+    @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+    width: @container-width - 8px;
+}
+
+.search-component-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
+    @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
+    @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+    @media(max-width: @trigger-width) {
+        width: @container-width - 8px !important;
+    }
+    .rank-component-width-responsive-mixin(@col - 1, @min-col, @margin);
+}
+
+@media(max-width: 1031px) {
+    .search-container {
+        .search-header {
+            &-input {
+                width: 360px;
+            }
+        }
+    }
+}
