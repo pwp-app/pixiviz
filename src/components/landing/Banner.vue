@@ -13,7 +13,10 @@
                         <span>API: <a target="_blank" class="about-borrow-link" href="https://pixivic.com">Pixivic.com (CheerFun)</a></span>
                     </div>
                     <div class="about-borrow-item">
-                        <span>主页背景: <a>Pixiv - 63139897</a></span>
+                        <span>Proxy: <a target="_blank" class="about-borrow-link" href="https://pixiv.cat">Pixivcat</a></span>
+                    </div>
+                    <div class="about-borrow-item">
+                        <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixivc.pwp.app/pic/63139897">Pixiv - 63139897</a></span>
                     </div>
                 </div>
                 <div class="about-copyright">

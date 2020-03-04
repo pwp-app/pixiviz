@@ -1,5 +1,5 @@
 <template>
-    <div class="image-card" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
+    <div :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
         <div class="image-card-overlay image-card-block" v-if="block">
             <div class="image-card-overlay-icon">
                 <i class="el-icon-warning-outline"/>
@@ -85,7 +85,9 @@ export default {
     },
     methods: {
         handleClick() {
-            this.$emit('clicked', this.image.id);
+            if (!this.block && !this.loadError) {
+                this.$emit('clicked', this.image.id);
+            }
         }
     }
 }
