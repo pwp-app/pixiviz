@@ -98,6 +98,8 @@ export default {
             handler(image) {
                 this.imageLoading = true;
                 this.imageLoadError = false;
+                this.page = 1;
+                this.sizeCache = {};
                 this.imageSize.x = image.width;
                 this.imageSize.y = image.height;
                 this.imageWidth = this.computeWidth(image.width, image.height);
@@ -110,6 +112,7 @@ export default {
                 this.updateDisplaySize();
             });
         },
+        '$route.params.id': 'handleIdChanged'
     },
     computed: {
         source() {

@@ -5,19 +5,22 @@
                 <span>搜索</span>
             </div>
             <div class="search-header-input">
-                <el-input placeholder="输入搜索关键词" v-model="keyworkInput" spellcheck="false">
+                <el-input placeholder="输入搜索关键词" v-model="keywordInput" spellcheck="false" @keyup.enter.native="submitSearch">
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 </el-input>
             </div>
-            <div class="search-header-close" v-if="from">
+            <div class="search-header-close">
                 <i class="el-icon-close" @click="handleBack"></i>
              </div>
         </div>
-        <div class="search-suggestion" v-if="suggestions.length > 0">
+        <div class="search-suggestion" ref="suggestions"
+            @mouseenter="enterSuggesion" @mouseleave="leaveSuggestion"
+            v-if="suggestions.length > 0">
             <div
                 class="search-suggestion-item"
                 v-for="suggestion in suggestions"
                 :key="suggestion.keyword"
+                @click="handleSuggestionClick(suggestion.keyword)"
             >
                 <span>{{suggestion.keyword}}</span>
             </div>
@@ -60,9 +63,10 @@ export default {
             images: [],
             suggestions: [],
             keyword: this.$route.query.keyword,
-            keyworkInput: this.$route.query.keyword,
+            keywordInput: this.$route.query.keyword,
             waterfallIdentifier: Math.round(Math.random() * 100),
-            from: this.$cookies.get('search-from')
+            from: this.$cookies.get('search-from'),
+            suggestionScrollLock: false
         };
     },
     watch: {
@@ -70,6 +74,10 @@ export default {
     },
     mounted() {
         this.fetchSuggestion();
+    },
+    destroyed() {
+        // 清除监听器
+        this.leaveSuggestion();
     },
     methods: {
         infiniteHandler($state) {
@@ -119,16 +127,58 @@ export default {
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });
         },
+        submitSearch() {
+            this.keywordInput = this.keywordInput.trim();
+            if (!this.keywordInput) {
+                this.$message.error('搜索内容不可以为空');
+                return;
+            }
+            this.$router.push(`/search?keyword=${this.keywordInput}`);
+            // 清除监听器
+            this.leaveSuggestion();
+        },
         handleKeywordChanged(keyword) {
-            this.keyword = keyword
+            this.keyword = keyword;
+            this.keyworkInput = keyword;
             this.refreshWaterfall();
         },
         handleCardClicked(imageId) {
             this.$cookies.set('pic-from', `search?keyword=${this.$route.query.keyword}`, '20min');
             this.$router.push(`/pic/${imageId}`);
         },
+        handleSuggestionClick(word) {
+            this.$router.push(`/search?keyword=${word}`);
+            // 清除监听器
+            this.leaveSuggestion();
+        },
         handleBack() {
-            
+            if (this.from) {
+                this.$router.push('/'+this.from);
+            } else {
+                this.$router.push({
+                    name: 'Landing'
+                });
+            }
+        },
+        scrollSuggesion(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!this.suggestionScrollLock) {
+                this.suggestionScrollLock = true
+                this.$refs.suggestions.scrollTo({
+                    left: this.$refs.suggestions.scrollLeft + e.deltaY * 4,
+                    behavior: "smooth"
+                });
+                setTimeout(() => {
+                    this.suggestionScrollLock = false;
+                }, 75);
+            }
+        },
+        enterSuggesion() {
+            window.addEventListener('mousewheel', this.scrollSuggesion, { passive: false });
+        },
+        leaveSuggestion() {
+            window.removeEventListener('mousewheel', this.scrollSuggesion, { passive: false });
         }
     }
 };

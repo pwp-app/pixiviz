@@ -10,7 +10,7 @@
     box-shadow: @shadow-small;
     .el-loading-mask {
         border-radius: @image-card-corner;
-        z-index: 9999;
+        z-index: 999;
     }
     &-image {
         width: 100%;
@@ -19,6 +19,8 @@
         background-repeat: no-repeat;
         background-size: cover;
         transition: 200ms;
+        position: relative;
+        z-index: 10;
     }
     &-image:hover {
         cursor: pointer;
@@ -40,6 +42,7 @@
         overflow: hidden;
         white-space: nowrap;
         line-height: 48px;
+        z-index: 10;
         .no-select();
     }
     &-overlay {

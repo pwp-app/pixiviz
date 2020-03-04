@@ -42,7 +42,6 @@ export default {
     },
     methods: {
         handleSearchClick() {
-            this.$cookies.set('search-from', 'Landing', '20min');
             this.$router.push(`/search?keyword=${this.search}`);
         }
     }
