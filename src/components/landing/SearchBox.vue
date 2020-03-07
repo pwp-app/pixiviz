@@ -5,7 +5,7 @@
                 <span>寻找你想要的图片</span>
             </div>
             <div class="searchbox-input">
-                <el-input v-model="search" spellcheck="false"></el-input>
+                <el-input v-model="search" spellcheck="false" @keyup.enter.native="submitSearch"></el-input>
             </div>
             <div class="searchbox-button">
                 <button @click="handleSearchClick"><i class="el-icon-search"></i></button>
@@ -41,8 +41,11 @@ export default {
         }
     },
     methods: {
-        handleSearchClick() {
+        submitSearch() {
             this.$router.push(`/search?keyword=${this.search}`);
+        },
+        handleSearchClick() {
+            this.submitSearch();
         }
     }
 }
