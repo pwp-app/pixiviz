@@ -139,7 +139,7 @@ export default {
         },
         handleKeywordChanged(keyword) {
             this.keyword = keyword;
-            this.keyworkInput = keyword;
+            this.keywordInput = keyword;
             this.refreshWaterfall();
         },
         handleCardClicked(imageId) {
