@@ -28,7 +28,7 @@
                 </div>
                 <el-popover
                         placement="bottom"
-                        popper-class="rank-category-popover"
+                        popper-class="rank-date-popover"
                         width="320"
                         trigger="click"
                     >
@@ -46,7 +46,7 @@
                 <div class="waterfall-wrapper">
                     <Waterfall ref="waterfall"
                         :images="images" @card-clicked="handleCardClicked"
-                        :cardWidth="280" imageType="medium"
+                        :cardWidth="cardWidth" imageType="medium"
                         />
                 </div>
             </div>
@@ -86,7 +86,9 @@ export default {
             nextDateText: "后一",
             // Misc
             routeFrom: '',
-            waterfallIdentifier: Math.round(Math.random() * 100)
+            waterfallIdentifier: Math.round(Math.random() * 100),
+            screenWidth: document.documentElement.clientWidth,
+            cardWidth: this.getCardWidth(document.documentElement.clientWidth)
         };
     },
     computed: {
@@ -137,6 +139,13 @@ export default {
         },
         mode() {
             this.$store.commit('rank/setMode', this.mode);
+        },
+        /* Watch screen width */
+        screenWidth(width) {
+            this.screenWidth = width;
+            this.$nextTick(() => {
+                this.cardWidth = this.getCardWidth(this.screenWidth);
+            });
         }
     },
     mounted() {
@@ -158,6 +167,14 @@ export default {
         }
         // Add scroll event listener
         window.addEventListener('scroll', this.handleScroll, false);
+        // Add resize event listener
+        this.$nextTick(() => {
+            window.addEventListener("resize", this.windowResized, false);
+        });
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll, false);
+        window.removeEventListener("resize", this.windowResized, false);
     },
     methods: {
         infiniteHandler($state) {
@@ -238,8 +255,23 @@ export default {
             this.$cookies.set('pic-from', 'rank', '20min');
             this.$router.push('/pic/' + imageId);
         },
+        // 窗口事件
         handleScroll(value) {
             this.$cookies.set('rank-scroll', value, '20min');
+        },
+        windowResized() {
+            this.screenWidth = document.documentElement.clientWidth;
+        },
+        getCardWidth(width) {
+            if (width > 768) {
+                return 280;
+            } else if (width > 375 && width <= 768) {
+                return 170;
+            } else if (width > 360 && width <= 375) {
+                return 154;
+            } else if (width <= 360) {
+                return 144;
+            }
         }
     }
 };

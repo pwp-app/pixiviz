@@ -82,6 +82,7 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            letter-spacing: 0.05em;
         }
         &-next {
             float: right;
@@ -103,6 +104,11 @@
 
 /* Popover */
 
+.rank-date-popover {
+    border-radius: 16px;
+    padding: 18px;
+}
+
 .rank-category-popover {
     border-radius: 16px;
     padding: 18px;
@@ -112,6 +118,70 @@
 
 @import './modeswitcher.less';
 @import './dateswitcher.less';
+
+/* Mobile */
+
+@media(max-width: 768px) {
+    .rank-header {
+        width: auto !important;
+        padding: 28px 24px 18px 24px;
+        &-title {
+            font-size: 28px;
+            &-category {
+                font-size: 19px;
+                margin-left: 14px;
+                i {
+                    margin-left: 8px;
+                }
+            }
+        }
+    }
+    .rank-body {
+        padding: 0 16px;
+    }
+    .rank-body {
+        &-date {
+            width: auto !important;
+            padding: 0 4px;
+            span, i {
+                font-size: 16px;
+            }
+            &-back {
+                i {
+                    margin-right: 4px;
+                }
+            }
+            &-next {
+                i {
+                    margin-left: 4px;
+                }
+            }
+        }
+        &-content {
+            .waterfall-wrapper {
+                width: auto !important;
+                .waterfall-container {
+                    width: auto !important;
+                }
+            }
+        }
+    }
+    /* Popover */
+    .rank-category-popover {
+        width: 240px !important;
+    }
+    .rank-date-popover {
+        padding: 12px;
+        border-radius: 12px;
+        width: 240px !important;
+        input {
+            border-radius: 8px;
+        }
+        i {
+            margin-left: 4px;
+        }
+    }
+}
 
 /* Mixin */
 

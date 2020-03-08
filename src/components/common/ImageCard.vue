@@ -36,7 +36,8 @@ export default {
             type: Object
         },
         cardWidth: {
-            type: Number
+            type: Number,
+            default: 280
         },
         imageType: {
             type: String

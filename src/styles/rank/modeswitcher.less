@@ -9,6 +9,9 @@
 .rank-mode-item-row {
     margin-bottom: 8px;
 }
+.rank-mode-item-row:last-child {
+    margin-bottom: 0px;
+}
 .rank-mode-item-tag {
     margin-bottom: 8px;
     font-size: 17px;
@@ -36,5 +39,16 @@
     cursor: no-drop;
     span {
         color: lighten(@color-primary, 17.5%);
+    }
+}
+
+/* Mobile */
+
+@media(max-width: 768px) {
+    .rank-mode-item-tag {
+        margin-bottom: 2px;
+    }
+    .rank-mode-item {
+        line-height: 28px;
     }
 }
