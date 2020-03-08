@@ -58,6 +58,7 @@
             color: @color-primary;
             font-size: 36px;
             margin-top: 4px;
+            transform: translateX(8px); // 对齐下方内容
         }
         &-close:hover {
             color: lighten(@color-text-primary, 10%);
@@ -83,6 +84,7 @@
             font-weight: 600;
             border-radius: 24px;
             transition: 200ms ease-in-out;
+            letter-spacing: 0.05em;
             .no-select();
         }
         &-item:hover {
@@ -134,11 +136,70 @@
     .rank-component-width-responsive-mixin(@col - 1, @min-col, @margin);
 }
 
+/* Responsive */
+
 @media(max-width: 1031px) {
     .search-container {
         .search-header {
             &-input {
                 width: 360px;
+            }
+        }
+    }
+}
+
+/* Mobile */
+@media(max-width: 767px) {
+    .search-container {
+        .search-header {
+            width: auto !important;
+            height: 48px;
+            padding: 18px 24px 8px 24px;
+            display: flex;
+            align-items: center;
+            &-title {
+                font-size: 28px;
+            }
+            &-input {
+                width: 52.5vw;
+                margin-left: 12px;
+                margin-top: 0;
+                transform: translateY(0px);
+                input {
+                    height: 36px;
+                    padding-top: 3px;
+                    padding-left: 36px;
+                }
+                i {
+                    padding-left: 4px;
+                    transform: translateY(-1px);
+                }
+            }
+            &-close {
+                position: absolute;
+                right: 24px;
+                transform: translate(4px, -6px);
+            }
+        }
+        .search-suggestion {
+            width: auto !important;
+            margin: 0 24px;
+            padding-bottom: 8px;
+            &-item {
+                background: @color-primary;
+                display: inline-block;
+                padding: 6px 16px;
+                font-size: 14px;
+            }
+        }
+        .search-content{
+            width: auto !important;
+            padding: 8px 16px;
+            .waterfall-wrapper {
+                width: auto !important;
+                .waterfall-container {
+                    width: auto !important;
+                }
             }
         }
     }

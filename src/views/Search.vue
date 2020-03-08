@@ -31,7 +31,7 @@
                     ref="waterfall"
                     :images="images"
                     @card-clicked="handleCardClicked"
-                    :cardWidth="280"
+                    :cardWidth="cardWidth"
                     imageType="medium"
                 />
             </div>
@@ -49,6 +49,8 @@
 // Common components
 import Waterfall from "../components/common/Waterfall";
 import BackToTop from "../components/common/BackToTop";
+// Util
+import MobileResponsive from '../util/MobileResponsive';
 
 export default {
     name: "Search",
@@ -66,7 +68,10 @@ export default {
             keywordInput: this.$route.query.keyword,
             waterfallIdentifier: Math.round(Math.random() * 100),
             from: this.$cookies.get('search-from'),
-            suggestionScrollLock: false
+            suggestionScrollLock: false,
+            // Misc
+            screenWidth: document.documentElement.clientWidth,
+            cardWidth: this.getCardWidth(document.documentElement.clientWidth)
         };
     },
     watch: {
@@ -74,10 +79,15 @@ export default {
     },
     mounted() {
         this.fetchSuggestion();
+        // Add resize event listener
+        this.$nextTick(() => {
+            window.addEventListener("resize", this.windowResized, false);
+        });
     },
     destroyed() {
         // 清除监听器
         this.leaveSuggestion();
+        window.removeEventListener("resize", this.windowResized, false);
     },
     methods: {
         infiniteHandler($state) {
@@ -179,6 +189,13 @@ export default {
         },
         leaveSuggestion() {
             window.removeEventListener('mousewheel', this.scrollSuggesion, { passive: false });
+        },
+        // 窗口事件
+        windowResized() {
+            this.screenWidth = document.documentElement.clientWidth;
+        },
+        getCardWidth(width) {
+            return MobileResponsive.getCardWidth(width);
         }
     }
 };

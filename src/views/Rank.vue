@@ -64,6 +64,8 @@ import BackToTop from '../components/common/BackToTop';
 // Rank components
 import ModeSwitcher from '../components/rank/ModeSwitcher';
 import DateSwitcher from '../components/rank/DateSwitcher';
+// Util
+import MobileResponsive from '../util/MobileResponsive';
 
 export default {
     name: "Rank",
@@ -263,15 +265,7 @@ export default {
             this.screenWidth = document.documentElement.clientWidth;
         },
         getCardWidth(width) {
-            if (width > 768) {
-                return 280;
-            } else if (width > 375 && width <= 768) {
-                return 170;
-            } else if (width > 360 && width <= 375) {
-                return 154;
-            } else if (width <= 360) {
-                return 144;
-            }
+            return MobileResponsive.getCardWidth(width);
         }
     }
 };
