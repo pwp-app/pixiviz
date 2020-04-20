@@ -67,18 +67,22 @@ export default {
             if (this.block || !this.image) {
                 return '';
             } else {
-                return this.image.imageUrls[0][this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                let url = this.image.imageUrls[0][this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                if (window.isSafari) {
+                    url = url.replace("10_webp", "70");
+                }
+                return url;
             }
         }
     },
-    mounted() {
+    created() {
         this.$Lazyload.$on('loaded', ({el, src}) => {
-            if (src == this.source) {
+            if (src === this.source) {
                 this.loading = false;
             }
         });
         this.$Lazyload.$on('error', ({el, src}) => {
-            if (src == this.source) {
+            if (src === this.source) {
                 this.loading = false;
                 this.loadError = true;
             }

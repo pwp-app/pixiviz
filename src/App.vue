@@ -13,6 +13,10 @@
 
 export default {
     name: "app",
+    created() {
+        // 检测Safari
+        window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    }
 }
 </script>
 
