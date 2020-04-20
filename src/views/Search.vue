@@ -181,11 +181,13 @@ export default {
                 });
                 setTimeout(() => {
                     this.suggestionScrollLock = false;
-                }, 75);
+                }, 125);
             }
         },
         enterSuggesion() {
-            window.addEventListener('mousewheel', this.scrollSuggesion, { passive: false });
+            if (this.$refs.suggestions.scrollWidth > this.$refs.suggestions.clientWidth) {
+                window.addEventListener('mousewheel', this.scrollSuggesion, { passive: false });
+            }
         },
         leaveSuggestion() {
             window.removeEventListener('mousewheel', this.scrollSuggesion, { passive: false });
