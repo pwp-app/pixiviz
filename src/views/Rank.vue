@@ -4,14 +4,17 @@
             <div class="rank-header-title">
                 <span>排行榜</span>
                 <div class="rank-header-title-category">
-                    <span>{{modeText}}</span>
+                    <span>{{ modeText }}</span>
                     <el-popover
                         placement="bottom"
                         popper-class="rank-category-popover"
                         width="440"
                         trigger="click"
                     >
-                        <ModeSwitcher :mode="mode" @mode-changed="handleModeChanged"/>
+                        <ModeSwitcher
+                            :mode="mode"
+                            @mode-changed="handleModeChanged"
+                        />
                         <i class="el-icon-refresh" slot="reference"></i>
                     </el-popover>
                 </div>
@@ -22,50 +25,83 @@
         </div>
         <div class="rank-body">
             <div class="rank-body-date">
-                <div class="rank-body-date-item rank-body-date-back" @click="handleDateChanged(-1)">
+                <div
+                    class="rank-body-date-item rank-body-date-back"
+                    @click="handleDateChanged(-1)"
+                >
                     <i class="el-icon-arrow-left"></i>
-                    <span>{{backDateText}}{{dateUnit}}</span>
+                    <span>{{ backDateText }}{{ dateUnit }}</span>
                 </div>
                 <el-popover
-                        placement="bottom"
-                        popper-class="rank-date-popover"
-                        width="320"
-                        trigger="click"
+                    placement="bottom"
+                    popper-class="rank-date-popover"
+                    width="320"
+                    trigger="click"
+                >
+                    <DateSwitcher
+                        ref="dateSwitcher"
+                        :date="dateObject"
+                        @date-selected="handleDateSelected"
+                    />
+                    <div
+                        slot="reference"
+                        class="rank-body-date-item rank-body-date-date"
                     >
-                    <DateSwitcher ref="dateSwitcher" :date="dateObject" @date-selected="handleDateSelected"/>
-                    <div slot="reference" class="rank-body-date-item rank-body-date-date">
-                        <span>{{displayDate}}</span>
+                        <span>{{ displayDate }}</span>
                     </div>
                 </el-popover>
-                <div class="rank-body-date-item rank-body-date-next" @click="handleDateChanged(1)" v-show="showDateNext">
-                    <span>{{nextDateText}}{{dateUnit}}</span>
+                <div
+                    class="rank-body-date-item rank-body-date-next"
+                    @click="handleDateChanged(1)"
+                    v-show="showDateNext"
+                >
+                    <span>{{ nextDateText }}{{ dateUnit }}</span>
                     <i class="el-icon-arrow-right"></i>
                 </div>
             </div>
             <div class="rank-body-content">
-                <div class="waterfall-wrapper">
-                    <Waterfall ref="waterfall"
-                        :images="images" @card-clicked="handleCardClicked"
-                        :cardWidth="cardWidth" imageType="medium"
+                <div class="waterfall-wrapper" :key="waterfallKey" v-if="waterfallResponsive">
+                        <Waterfall
+                            class="waterfall waterfall-responsive"
+                            ref="waterfall"
+                            :images="images"
+                            @card-clicked="handleCardClicked"
+                            :cardWidth="cardWidth"
+                            imageType="medium"/>
+                </div>
+                <!-- 针对移动端渲染一个不同的组件 -->
+                <div class="waterfall-wrapper" v-if="!waterfallResponsive">
+                    <Waterfall
+                            class="waterfall"
+                            ref="waterfall"
+                            :images="images"
+                            @card-clicked="handleCardClicked"
+                            :cardWidth="cardWidth"
+                            imageType="medium"
+                            fit-width="true"
                         />
                 </div>
             </div>
         </div>
-        <infinite-loading :identifier="waterfallIdentifier" @infinite="infiniteHandler" spinner="spiral"></infinite-loading>
-        <BackToTop/>
+        <infinite-loading
+            :identifier="waterfallIdentifier"
+            @infinite="infiniteHandler"
+            spinner="spiral"
+        ></infinite-loading>
+        <BackToTop />
     </div>
 </template>
 
 <script>
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 // Common components
-import Waterfall from '../components/common/Waterfall';
-import BackToTop from '../components/common/BackToTop';
+import Waterfall from "../components/common/Waterfall";
+import BackToTop from "../components/common/BackToTop";
 // Rank components
-import ModeSwitcher from '../components/rank/ModeSwitcher';
-import DateSwitcher from '../components/rank/DateSwitcher';
+import ModeSwitcher from "../components/rank/ModeSwitcher";
+import DateSwitcher from "../components/rank/DateSwitcher";
 // Util
-import MobileResponsive from '../util/MobileResponsive';
+import MobileResponsive from "../util/MobileResponsive";
 
 export default {
     name: "Rank",
@@ -80,17 +116,29 @@ export default {
             // Waterfall Data
             page: this.$store.state.rank.page ? this.$store.state.rank.page : 1,
             pageSize: 30,
-            dateObject: this.$store.state.rank.date ? this.$store.state.rank.date : dayjs().startOf('day').subtract(3, "day"),
-            mode: this.$store.state.rank.mode ? this.$store.state.rank.mode : this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day",
-            images: this.$store.state.rank.images ? this.$store.state.rank.images : [],
+            dateObject: this.$store.state.rank.date
+                ? this.$store.state.rank.date
+                : dayjs()
+                      .startOf("day")
+                      .subtract(3, "day"),
+            mode: this.$store.state.rank.mode
+                ? this.$store.state.rank.mode
+                : this.$cookies.get("rank-mode")
+                ? this.$cookies.get("rank-mode")
+                : "day",
+            images: this.$store.state.rank.images
+                ? this.$store.state.rank.images
+                : [],
             // Time
             backDateText: "前一",
             nextDateText: "后一",
             // Misc
-            routeFrom: '',
+            routeFrom: "",
             waterfallIdentifier: Math.round(Math.random() * 100),
             screenWidth: document.documentElement.clientWidth,
-            cardWidth: this.getCardWidth(document.documentElement.clientWidth)
+            cardWidth: this.getCardWidth(document.documentElement.clientWidth),
+            waterfallResponsive: true,
+            waterfallKey: Math.random()
         };
     },
     computed: {
@@ -99,14 +147,14 @@ export default {
         },
         modeText: function() {
             const mode2text = {
-                day: '日排行榜',
-                week: '周排行榜',
-                month: '月排行榜',
-                day_manga: '漫画日排行榜',
-                week_manga: '漫画周排行榜',
-                month_manga: '漫画月排行榜',
-                week_rookie_manga: '新秀周排行榜'
-            }
+                day: "日排行榜",
+                week: "周排行榜",
+                month: "月排行榜",
+                day_manga: "漫画日排行榜",
+                week_manga: "漫画周排行榜",
+                month_manga: "漫画月排行榜",
+                week_rookie_manga: "新秀周排行榜"
+            };
             return mode2text[this.mode];
         },
         dateUnit: function() {
@@ -122,60 +170,82 @@ export default {
             if (this.mode.indexOf("day") != -1) {
                 return this.dateObject.format("YYYY-MM-DD");
             } else if (this.mode.indexOf("week") != -1) {
-                return this.dateObject.format("YYYY-MM") + " 第 " + Math.round(this.dateObject.date() / 7) + " 周";
+                return (
+                    this.dateObject.format("YYYY-MM") +
+                    " 第 " +
+                    Math.round(this.dateObject.date() / 7) +
+                    " 周"
+                );
             } else if (this.mode.indexOf("month") != -1) {
                 return this.dateObject.format("YYYY-MM");
             }
         },
         showDateNext: function() {
-            return ((dayjs().startOf('day').unix() - this.dateObject.unix()) / 86400) > 3;
+            return (
+                (dayjs()
+                    .startOf("day")
+                    .unix() -
+                    this.dateObject.unix()) /
+                    86400 >
+                3
+            );
         }
     },
     watch: {
         /* If changed, then cache it */
         dateObject() {
-            this.$store.commit('rank/setDate', this.dateObject);
+            this.$store.commit("rank/setDate", this.dateObject);
         },
         page() {
-            this.$store.commit('rank/setPage', this.page);
+            this.$store.commit("rank/setPage", this.page);
         },
         mode() {
-            this.$store.commit('rank/setMode', this.mode);
+            this.$store.commit("rank/setMode", this.mode);
         },
         /* Watch screen width */
         screenWidth(width) {
             this.screenWidth = width;
+            if (this.screenWidth <= 767) {
+                this.waterfallResponsive = false;
+                this.waterfallKey = this.waterfallKey + 1;
+            } else {
+                this.waterfallResponsive = true;
+                this.waterfallKey = this.waterfallKey + 1;
+            }
             this.$nextTick(() => {
                 this.cardWidth = this.getCardWidth(this.screenWidth);
             });
         }
     },
-    mounted() {
+    created() {
         // Get cookies
-        this.routeFrom = this.$cookies.get('rank-from');
+        this.routeFrom = this.$cookies.get("rank-from");
         if (!this.routeFrom) {
-            this.routeFrom = 'Landing'
+            this.routeFrom = "Landing";
         }
         // Check reset flag
+        console.log(this.$store.state.rank.reset);
         if (this.$store.state.rank.reset) {
             this.reset();
-            this.$store.commit('rank/setReset', false);
+            this.$store.commit("rank/setReset", false);
         } else {
             // Do scroll when reset is not set
-            let scrollTop = this.$cookies.get('rank-scroll');
+            let scrollTop = this.$cookies.get("rank-scroll");
             if (scrollTop) {
                 window.scrollTo(0, scrollTop);
             }
         }
+    },
+    mounted() {
         // Add scroll event listener
-        window.addEventListener('scroll', this.handleScroll, false);
+        window.addEventListener("scroll", this.handleScroll, false);
         // Add resize event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
         });
     },
     destroyed() {
-        window.removeEventListener('scroll', this.handleScroll, false);
+        window.removeEventListener("scroll", this.handleScroll, false);
         window.removeEventListener("resize", this.windowResized, false);
     },
     methods: {
@@ -197,7 +267,7 @@ export default {
                     }
                     this.images = this.images.concat(response.data.data);
                     // 缓存 images
-                    this.$store.commit('rank/setImages', this.images);
+                    this.$store.commit("rank/setImages", this.images);
                     // 设置 Load 状态为 false
                     this.$refs.waterfall.firstLoad = false;
                     // Page + 1
@@ -207,7 +277,7 @@ export default {
         },
         refreshWaterfall() {
             // 提前清空 dom
-            this.$refs.waterfall.$el.innerHTML = '';
+            this.$refs.waterfall.$el.innerHTML = "";
             this.$nextTick(() => {
                 // 重置瀑布流参数
                 this.page = 1;
@@ -217,12 +287,16 @@ export default {
         },
         reset() {
             // 提前清空 dom
-            this.$refs.waterfall.$el.innerHTML = '';
+            this.$refs.waterfall.$el.innerHTML = "";
             this.$nextTick(() => {
                 // 重置参数
                 this.page = 1;
-                this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
-                this.dateObject = dayjs().startOf('day').subtract(3, 'day');
+                this.mode = this.$cookies.get("rank-mode")
+                    ? this.$cookies.get("rank-mode")
+                    : "day";
+                this.dateObject = dayjs()
+                    .startOf("day")
+                    .subtract(3, "day");
                 this.images = [];
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });
@@ -234,18 +308,18 @@ export default {
         handleBack() {
             this.$router.push({
                 name: this.routeFrom
-            })
+            });
         },
         // 日期事件
         handleDateChanged(toward) {
-            if (this.dateUnit == '天') {
-                this.dateObject = this.dateObject.add(toward * 1, 'day');
-            } else if (this.dateUnit == '周') {
-                this.dateObject = this.dateObject.add(toward * 1, 'week');
-            } else if (this.dateUnit == '月') {
-                this.dateObject = this.dateObject.add(toward * 1, 'month');
+            if (this.dateUnit == "天") {
+                this.dateObject = this.dateObject.add(toward * 1, "day");
+            } else if (this.dateUnit == "周") {
+                this.dateObject = this.dateObject.add(toward * 1, "week");
+            } else if (this.dateUnit == "月") {
+                this.dateObject = this.dateObject.add(toward * 1, "month");
             }
-            this.$refs.dateSwitcher.selectDate = this.dateObject.toDate()
+            this.$refs.dateSwitcher.selectDate = this.dateObject.toDate();
             this.refreshWaterfall();
         },
         handleDateSelected(date) {
@@ -254,12 +328,12 @@ export default {
         },
         // 跳转
         handleCardClicked(imageId) {
-            this.$cookies.set('pic-from', 'rank', '20min');
-            this.$router.push('/pic/' + imageId);
+            this.$cookies.set("pic-from", "rank", "20min");
+            this.$router.push("/pic/" + imageId);
         },
         // 窗口事件
         handleScroll(value) {
-            this.$cookies.set('rank-scroll', value, '20min');
+            this.$cookies.set("rank-scroll", value, "20min");
         },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;

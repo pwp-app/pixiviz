@@ -5,30 +5,43 @@
                 <span>搜索</span>
             </div>
             <div class="search-header-input">
-                <el-input placeholder="输入搜索关键词" v-model="keywordInput" spellcheck="false" @keyup.enter.native="submitSearch">
+                <el-input
+                    placeholder="输入搜索关键词"
+                    v-model="keywordInput"
+                    spellcheck="false"
+                    @keyup.enter.native="submitSearch"
+                >
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 </el-input>
             </div>
             <div class="search-header-close">
                 <i class="el-icon-close" @click="handleBack"></i>
-             </div>
+            </div>
         </div>
-        <div class="search-suggestion" ref="suggestions"
-            @mouseenter="enterSuggesion" @mouseleave="leaveSuggestion"
-            v-if="suggestions.length > 0">
+        <div
+            class="search-suggestion"
+            ref="suggestions"
+            @mouseenter="enterSuggesion"
+            @mouseleave="leaveSuggestion"
+            v-if="suggestions.length > 0"
+        >
             <div
                 class="search-suggestion-item"
                 v-for="suggestion in suggestions"
                 :key="suggestion.keyword"
                 @click="handleSuggestionClick(suggestion.keyword)"
             >
-                <span>{{suggestion.keyword}}</span>
+                <span>{{ suggestion.keyword }}</span>
             </div>
         </div>
         <div class="search-content">
-            <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
+            <div
+                class="waterfall-wrapper"
+                :key="waterfallKey"
+                v-if="waterfallResponsive"
+            >
                 <Waterfall
-                class="waterfall waterfall-responsive"
+                    class="waterfall waterfall-responsive"
                     ref="waterfall"
                     :images="images"
                     @card-clicked="handleCardClicked"
@@ -37,16 +50,16 @@
                 />
             </div>
             <div class="waterfall-wrapper" v-if="!waterfallResponsive">
-                    <Waterfall
-                            class="waterfall"
-                            ref="waterfall"
-                            :images="images"
-                            @card-clicked="handleCardClicked"
-                            :cardWidth="cardWidth"
-                            imageType="medium"
-                            fit-width="true"
-                        />
-                </div>
+                <Waterfall
+                    class="waterfall"
+                    ref="waterfall"
+                    :images="images"
+                    @card-clicked="handleCardClicked"
+                    :cardWidth="cardWidth"
+                    imageType="medium"
+                    fit-width="true"
+                />
+            </div>
         </div>
         <infinite-loading
             :identifier="waterfallIdentifier"
@@ -62,7 +75,7 @@
 import Waterfall from "../components/common/Waterfall";
 import BackToTop from "../components/common/BackToTop";
 // Util
-import MobileResponsive from '../util/MobileResponsive';
+import MobileResponsive from "../util/MobileResponsive";
 
 export default {
     name: "Search",
@@ -76,15 +89,16 @@ export default {
             pageSize: 30,
             images: [],
             suggestions: [],
-            keyword: this.$route.query.keyword,
-            keywordInput: this.$route.query.keyword,
+            keyword: this.$route.params.keyword,
+            keywordInput: this.$route.params.keyword,
             waterfallIdentifier: Math.round(Math.random() * 100),
-            from: this.$cookies.get('search-from'),
+            from: this.$cookies.get("search-from"),
             suggestionScrollLock: false,
             // Misc
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true
+            waterfallResponsive: true,
+            waterfallKey: Math.random()
         };
     },
     watch: {
@@ -94,8 +108,10 @@ export default {
             this.screenWidth = width;
             if (this.screenWidth <= 767) {
                 this.waterfallResponsive = false;
+                this.waterfallKey = this.waterfallKey + 1;
             } else {
                 this.waterfallResponsive = true;
+                this.waterfallKey = this.waterfallKey + 1;
             }
             this.$nextTick(() => {
                 this.cardWidth = this.getCardWidth(this.screenWidth);
@@ -154,7 +170,7 @@ export default {
         },
         refreshWaterfall() {
             // 提前清空 dom
-            this.$refs.waterfall.$el.innerHTML = '';
+            this.$refs.waterfall.$el.innerHTML = "";
             this.$nextTick(() => {
                 // 重置瀑布流参数
                 this.page = 1;
@@ -165,7 +181,7 @@ export default {
         submitSearch() {
             this.keywordInput = this.keywordInput.trim();
             if (!this.keywordInput) {
-                this.$message.error('搜索内容不可以为空');
+                this.$message.error("搜索内容不可以为空");
                 return;
             }
             this.$router.push(`/search?keyword=${this.keywordInput}`);
@@ -178,7 +194,11 @@ export default {
             this.refreshWaterfall();
         },
         handleCardClicked(imageId) {
-            this.$cookies.set('pic-from', `search?keyword=${this.$route.query.keyword}`, '20min');
+            this.$cookies.set(
+                "pic-from",
+                `search?keyword=${this.$route.query.keyword}`,
+                "20min"
+            );
             this.$router.push(`/pic/${imageId}`);
         },
         handleSuggestionClick(word) {
@@ -188,10 +208,10 @@ export default {
         },
         handleBack() {
             if (this.from) {
-                this.$router.push('/'+this.from);
+                this.$router.push("/" + this.from);
             } else {
                 this.$router.push({
-                    name: 'Landing'
+                    name: "Landing"
                 });
             }
         },
@@ -199,7 +219,7 @@ export default {
             e.preventDefault();
             e.stopPropagation();
             if (!this.suggestionScrollLock) {
-                this.suggestionScrollLock = true
+                this.suggestionScrollLock = true;
                 this.$refs.suggestions.scrollTo({
                     left: this.$refs.suggestions.scrollLeft + e.deltaY * 4,
                     behavior: "smooth"
@@ -210,12 +230,19 @@ export default {
             }
         },
         enterSuggesion() {
-            if (this.$refs.suggestions.scrollWidth > this.$refs.suggestions.clientWidth) {
-                window.addEventListener('mousewheel', this.scrollSuggesion, { passive: false });
+            if (
+                this.$refs.suggestions.scrollWidth >
+                this.$refs.suggestions.clientWidth
+            ) {
+                window.addEventListener("mousewheel", this.scrollSuggesion, {
+                    passive: false
+                });
             }
         },
         leaveSuggestion() {
-            window.removeEventListener('mousewheel', this.scrollSuggesion, { passive: false });
+            window.removeEventListener("mousewheel", this.scrollSuggesion, {
+                passive: false
+            });
         },
         // 窗口事件
         windowResized() {
