@@ -72,6 +72,9 @@
             font-weight: 600;
             margin-bottom: 8px;
         }
+        &-tip-xs {
+            margin-bottom: 0;
+        }
     }
     &-count {
         background: rgba(0,0,0, .375);
@@ -115,6 +118,19 @@
             }
             &-tip {
                 font-size: 18px;
+            }
+        }
+    }
+}
+
+@media(max-width: 520px) {
+    .image-card {
+        &-overlay {
+            &-icon {
+                font-size: 32px;
+            }
+            &-tip {
+                font-size: 16px;
             }
         }
     }

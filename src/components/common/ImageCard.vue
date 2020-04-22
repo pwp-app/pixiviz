@@ -1,15 +1,15 @@
 <template>
     <div :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
         <div class="image-card-overlay image-card-block" v-if="block">
-            <div class="image-card-overlay-icon">
+            <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
                 <i class="el-icon-warning-outline"/>
             </div>
-            <div class="image-card-overlay-tip">
+            <div :class="['image-card-overlay-tip', loadHeight < 128 ? 'image-card-overlay-tip-xs': null]">
                 <span>该图片无法展示</span>
             </div>
         </div>
         <div class="image-card-overlay image-card-error" v-if="loadError">
-            <div class="image-card-overlay-icon">
+            <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
                 <i class="el-icon-warning-outline"/>
             </div>
             <div class="image-card-overlay-tip">
