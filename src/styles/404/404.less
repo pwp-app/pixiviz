@@ -1,0 +1,40 @@
+.container-notfound {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.notfound-wrapper {
+    margin-bottom: 2.5rem;
+}
+
+.notfound-title {
+    font-size: 32px;
+    color: @color-text-primary;
+    letter-spacing: 0.05rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+}
+
+.notfound-button {
+    text-align: center;
+    button {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.05rem;
+    }
+}
+
+@media (max-width: 667px) {
+    .notfound-wrapper {
+        margin-bottom: 3.75rem;
+    }
+    .notfound-title {
+        font-size: 28px;
+        margin-bottom: 2rem;
+    }
+}

@@ -1,40 +1,55 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
 // Import views
-import Landing from '../views/Landing.vue'
-import Rank from '../views/Rank.vue'
-import Pic from '../views/PicDetail.vue'
-import Search from '../views/Search.vue'
+import Landing from "../views/Landing.vue";
+import Rank from "../views/Rank.vue";
+import Pic from "../views/PicDetail.vue";
+import Search from "../views/Search.vue";
+import NotFoundPage from '../views/404.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-const routes = [{
-    path: '/',
-    name: 'Landing',
-    component: Landing,
-    meta: { keepAlive: false }
-}, {
-    path: '/rank',
-    name: 'Rank',
-    component: Rank,
-    meta: { keepAlive: true }
-}, {
-    path: '/pic/:id',
-    name: 'Pic',
-    component: Pic,
-    meta: { keepAlive: false }
-}, {
-    path: '/search/:keyword',
-    name: 'Search',
-    component: Search,
-    meta: { keepAlive: true }
-}]
+const routes = [
+    {
+        path: "/",
+        name: "Landing",
+        component: Landing,
+        meta: { keepAlive: false },
+    },
+    {
+        path: "/rank",
+        name: "Rank",
+        component: Rank,
+        meta: { keepAlive: true },
+    },
+    {
+        path: "/pic/:id",
+        name: "Pic",
+        component: Pic,
+        meta: { keepAlive: false },
+    },
+    {
+        path: "/search/:keyword",
+        name: "Search",
+        component: Search,
+        meta: { keepAlive: true },
+    },
+    {
+        path: "/404",
+        name: "Page not found",
+        component: NotFoundPage,
+    },
+    {
+        path: "*",
+        redirect: "/404"
+    }
+];
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: "history",
     base: process.env.BASE_URL,
-    routes
-})
+    routes,
+});
 
-export default router
+export default router;
