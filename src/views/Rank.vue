@@ -120,7 +120,8 @@ export default {
                 ? this.$store.state.rank.date
                 : dayjs()
                       .startOf("day")
-                      .subtract(3, "day"),
+                      .subtract(3, "day")
+                      .subtract(6, 'hour'),
             mode: this.$store.state.rank.mode
                 ? this.$store.state.rank.mode
                 : this.$cookies.get("rank-mode")
@@ -223,8 +224,9 @@ export default {
         if (!this.routeFrom) {
             this.routeFrom = "Landing";
         }
+    },
+    mounted() {
         // Check reset flag
-        console.log(this.$store.state.rank.reset);
         if (this.$store.state.rank.reset) {
             this.reset();
             this.$store.commit("rank/setReset", false);
@@ -235,8 +237,6 @@ export default {
                 window.scrollTo(0, scrollTop);
             }
         }
-    },
-    mounted() {
         // Add scroll event listener
         window.addEventListener("scroll", this.handleScroll, false);
         // Add resize event listener
@@ -296,7 +296,8 @@ export default {
                     : "day";
                 this.dateObject = dayjs()
                     .startOf("day")
-                    .subtract(3, "day");
+                    .subtract(3, "day")
+                    .subtract(6, 'hour');
                 this.images = [];
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });
@@ -332,8 +333,8 @@ export default {
             this.$router.push("/pic/" + imageId);
         },
         // 窗口事件
-        handleScroll(value) {
-            this.$cookies.set("rank-scroll", value, "20min");
+        handleScroll() {
+            this.$cookies.set("rank-scroll", document.documentElement.scrollTop, "20min");
         },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;
