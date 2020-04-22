@@ -102,7 +102,7 @@ export default {
         };
     },
     watch: {
-        "$route.query.keyword": "handleKeywordChanged",
+        "$route.params.keyword": "handleKeywordChanged",
         /* Watch screen width */
         screenWidth(width) {
             this.screenWidth = width;
@@ -197,7 +197,7 @@ export default {
         handleCardClicked(imageId) {
             this.$cookies.set(
                 "pic-from",
-                `search/${this.$route.query.keyword}`,
+                `search/${this.$route.params.keyword}`,
                 "20min"
             );
             this.$router.push(`/pic/${imageId}`);
