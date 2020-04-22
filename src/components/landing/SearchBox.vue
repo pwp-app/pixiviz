@@ -42,7 +42,20 @@ export default {
     },
     methods: {
         submitSearch() {
-            this.$router.push(`/search?keyword=${this.search}`);
+            let search;
+            if (!this.search) {
+                this.$message.error('呐，输入关键词再搜索！！');
+                return;
+            }
+            if (this.search) {
+                search = this.search.trim();
+                if (search.length < 1) {
+                    this.$message.error('呐，输入关键词再搜索！！');
+                    this.search = '';
+                    return;
+                }
+            };
+            this.$router.push(`/search/${search}`);
         },
         handleSearchClick() {
             this.submitSearch();
