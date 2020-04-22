@@ -94,10 +94,13 @@
     &-content {
         width: 100%;
         padding-top: 18px;
-        overflow-x: hidden;
+        overflow: hidden;
         .waterfall-wrapper {
             .waterfall-wrapper-mixin(6);
             .waterfall-responsive-mixin(5, 2, 72px);
+            .waterfall {
+                overflow: hidden;
+            }
         }
     }
 }
@@ -160,9 +163,6 @@
         &-content {
             .waterfall-wrapper {
                 width: auto !important;
-                .waterfall-container {
-                    width: auto !important;
-                }
             }
         }
     }

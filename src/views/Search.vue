@@ -26,8 +26,9 @@
             </div>
         </div>
         <div class="search-content">
-            <div class="waterfall-wrapper">
+            <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
                 <Waterfall
+                class="waterfall waterfall-responsive"
                     ref="waterfall"
                     :images="images"
                     @card-clicked="handleCardClicked"
@@ -35,6 +36,17 @@
                     imageType="medium"
                 />
             </div>
+            <div class="waterfall-wrapper" v-if="!waterfallResponsive">
+                    <Waterfall
+                            class="waterfall"
+                            ref="waterfall"
+                            :images="images"
+                            @card-clicked="handleCardClicked"
+                            :cardWidth="cardWidth"
+                            imageType="medium"
+                            fit-width="true"
+                        />
+                </div>
         </div>
         <infinite-loading
             :identifier="waterfallIdentifier"
@@ -71,11 +83,24 @@ export default {
             suggestionScrollLock: false,
             // Misc
             screenWidth: document.documentElement.clientWidth,
-            cardWidth: this.getCardWidth(document.documentElement.clientWidth)
+            cardWidth: this.getCardWidth(document.documentElement.clientWidth),
+            waterfallResponsive: true
         };
     },
     watch: {
-        "$route.query.keyword": "handleKeywordChanged"
+        "$route.query.keyword": "handleKeywordChanged",
+        /* Watch screen width */
+        screenWidth(width) {
+            this.screenWidth = width;
+            if (this.screenWidth <= 767) {
+                this.waterfallResponsive = false;
+            } else {
+                this.waterfallResponsive = true;
+            }
+            this.$nextTick(() => {
+                this.cardWidth = this.getCardWidth(this.screenWidth);
+            });
+        }
     },
     mounted() {
         this.fetchSuggestion();
