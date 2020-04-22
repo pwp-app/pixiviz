@@ -25,7 +25,7 @@ const routes = [{
     component: Pic,
     meta: { keepAlive: false }
 }, {
-    path: '/search',
+    path: '/search/:keyword',
     name: 'Search',
     component: Search,
     meta: { keepAlive: true }

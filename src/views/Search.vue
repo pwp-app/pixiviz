@@ -180,11 +180,12 @@ export default {
         },
         submitSearch() {
             this.keywordInput = this.keywordInput.trim();
-            if (!this.keywordInput) {
-                this.$message.error("搜索内容不可以为空");
+            if (!this.keywordInput || this.keywordInput.length < 1) {
+                this.$message.error('呐，输入关键词再搜索！！');
+                this.keywordInput = '';
                 return;
             }
-            this.$router.push(`/search?keyword=${this.keywordInput}`);
+            this.$router.push(`/search/${this.keywordInput}`);
             // 清除监听器
             this.leaveSuggestion();
         },
@@ -196,13 +197,13 @@ export default {
         handleCardClicked(imageId) {
             this.$cookies.set(
                 "pic-from",
-                `search?keyword=${this.$route.query.keyword}`,
+                `search/${this.$route.query.keyword}`,
                 "20min"
             );
             this.$router.push(`/pic/${imageId}`);
         },
         handleSuggestionClick(word) {
-            this.$router.push(`/search?keyword=${word}`);
+            this.$router.push(`/search/${word}`);
             // 清除监听器
             this.leaveSuggestion();
         },
