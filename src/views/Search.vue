@@ -97,7 +97,8 @@ export default {
             // Misc
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true
+            waterfallResponsive: true,
+            scrollTop: 0,
         };
     },
     watch: {
@@ -105,6 +106,7 @@ export default {
         /* Watch screen width */
         screenWidth(width) {
             this.screenWidth = width;
+            this.scrollTop = document.documentElement.scrollTop;
             if (this.screenWidth <= 767) {
                 this.waterfallResponsive = false;
             } else {
@@ -112,15 +114,23 @@ export default {
             }
             this.$nextTick(() => {
                 this.cardWidth = this.getCardWidth(this.screenWidth);
+                document.documentElement.scrollTop = this.scrollTop;
             });
         }
     },
     mounted() {
         this.fetchSuggestion();
+        // Set scroll to last state
+        let scrollTop = this.$cookies.get("search-scroll");
+        if (scrollTop) {
+            window.scrollTo(0, scrollTop);
+        }
         // Add resize event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
         });
+        // Add scroll event listener
+        window.addEventListener("scroll", this.handleScroll, false);
     },
     destroyed() {
         // 清除监听器
@@ -190,6 +200,7 @@ export default {
             this.keyword = keyword;
             this.keywordInput = keyword;
             this.refreshWaterfall();
+            this.resetScrollState();
         },
         handleCardClicked(imageId) {
             this.$cookies.set(
@@ -243,6 +254,13 @@ export default {
             });
         },
         // 窗口事件
+        handleScroll() {
+            this.$cookies.set("search-scroll", document.documentElement.scrollTop, "20min");
+        },
+        resetScrollState() {
+            this.scrollTop = 0;
+            this.$cookies.set("search-scroll", 0, "20min");
+        },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;
         },
