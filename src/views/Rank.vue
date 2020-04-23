@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="rank-body-content">
-                <div class="waterfall-wrapper" :key="waterfallKey" v-if="waterfallResponsive">
+                <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
                         <Waterfall
                             class="waterfall waterfall-responsive"
                             ref="waterfall"
@@ -138,8 +138,7 @@ export default {
             waterfallIdentifier: Math.round(Math.random() * 100),
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true,
-            waterfallKey: Math.random()
+            waterfallResponsive: true
         };
     },
     computed: {
@@ -208,10 +207,8 @@ export default {
             this.screenWidth = width;
             if (this.screenWidth <= 767) {
                 this.waterfallResponsive = false;
-                this.waterfallKey = this.waterfallKey + 1;
             } else {
                 this.waterfallResponsive = true;
-                this.waterfallKey = this.waterfallKey + 1;
             }
             this.$nextTick(() => {
                 this.cardWidth = this.getCardWidth(this.screenWidth);

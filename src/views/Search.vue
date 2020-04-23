@@ -37,7 +37,7 @@
         <div class="search-content">
             <div
                 class="waterfall-wrapper"
-                :key="waterfallKey"
+                :key="waterfallResponsive"
                 v-if="waterfallResponsive"
             >
                 <Waterfall
@@ -97,8 +97,7 @@ export default {
             // Misc
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true,
-            waterfallKey: Math.random()
+            waterfallResponsive: true
         };
     },
     watch: {
@@ -108,10 +107,8 @@ export default {
             this.screenWidth = width;
             if (this.screenWidth <= 767) {
                 this.waterfallResponsive = false;
-                this.waterfallKey = this.waterfallKey + 1;
             } else {
                 this.waterfallResponsive = true;
-                this.waterfallKey = this.waterfallKey + 1;
             }
             this.$nextTick(() => {
                 this.cardWidth = this.getCardWidth(this.screenWidth);
