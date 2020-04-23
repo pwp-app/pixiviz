@@ -51,6 +51,7 @@ Vue.use(Vue2TouchEvents)
 Vue.use(VueMasonryPlugin)
 Vue.use(InfiniteLoading, {
     slots: {
+        noResults: '这里没有图片...',
         noMore: '没有更多图片了...'
     },
 })
