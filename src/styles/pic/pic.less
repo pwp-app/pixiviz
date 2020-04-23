@@ -62,6 +62,26 @@
     }
 }
 
+/* iPad / iPad Pro protrait */
+@media screen and (orientation: portrait) and (max-width: 1024px) {
+    .pic-container {
+        width: auto;
+        padding: 0 24px;
+        .pic-close {
+            display: none;
+        }
+    }
+    .pic {
+        width: 100%;
+        flex-direction: column;
+        &-side {
+            padding-top: 8px;
+            margin-left: 0;
+            width: auto;
+        }
+    }
+}
+
 /* Mobile */
 @media (max-width: 767px) {
     .pic-container {

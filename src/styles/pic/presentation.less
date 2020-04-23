@@ -173,6 +173,32 @@
     }
 }
 
+/* iPad / iPad Pro protrait */
+@media screen and (orientation: portrait) and (max-width: 1024px) {
+    .pic-presentation-image-wrapper {
+        width: calc(100vw - 48px) !important;
+        .pic-presentation-image {
+            width: calc(100vw - 48px) !important;
+            height: auto !important;
+            box-shadow: none;
+            img {
+                width: calc(100vw - 48px) !important;
+                height: auto !important;
+                box-shadow: 0px 4px 12px rgba(0,0,0, .175);
+            }
+        }
+        .pic-presentation-page {
+            margin-top: 18px;
+        }
+        .pic-presentation-info {
+            margin: 18px 0;
+            &-title {
+                font-size: 22px;
+            }
+        }
+    }
+}
+
 /* Mobile */
 @media (max-width: 767px) {
     .pic-presentation-image-wrapper {

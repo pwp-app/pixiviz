@@ -1,7 +1,7 @@
 <template>
     <div class="waterfall-container" v-masonry transition-duration="200ms" item-selector=".waterfall-item">
         <ImageCard v-masonry-tile class="waterfall-item"
-            v-for="item in images" :key="item.id" :image="item"
+            v-for="(item, index) in images" :key="index" :image="item"
             :cardWidth="cardWidth" :imageType="imageType" :squaredImage="squaredImage"
             @clicked="handleCardClicked"/>
     </div>
@@ -25,6 +25,10 @@ export default {
         squaredImage: {
             type: Boolean,
             default: false
+        },
+        randomKey: {
+            type: Boolean,
+            default: false,
         }
     },
     components: {

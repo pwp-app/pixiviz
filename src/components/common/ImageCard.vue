@@ -12,7 +12,7 @@
             <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
                 <i class="el-icon-warning-outline"/>
             </div>
-            <div class="image-card-overlay-tip">
+            <div :class="['image-card-overlay-tip', loadHeight < 128 ? 'image-card-overlay-tip-xs': null]">
                 <span>图片加载失败</span>
             </div>
         </div>

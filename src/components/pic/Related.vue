@@ -2,8 +2,8 @@
     <div class="pic-related">
         <div class="pic-related-title">
             <span>相关作品</span>
-            <div class="pic-related-paginator">
-                <div class="pic-related-paginator-item" v-if="page > 1" @click="handleGo(-1)">
+            <div class="pic-related-paginator" v-if="orientation !== 0">
+                <div class="pic-related-paginator-item" v-if="hasPrev" @click="handleGo(-1)">
                     <i class="el-icon-arrow-left"></i>
                 </div>
                 <div class="pic-related-paginator-item" @click="handleGo(1)">
@@ -18,6 +18,12 @@
                     :cardWidth="cardWidth" imageType="squareMedium" :squaredImage="true"/>
             </div>
         </div>
+        <infinite-loading
+            v-if="orientation === 0 && images.length > 0"
+            :identifier="waterfallIdentifier"
+            @infinite="infiniteHandler"
+            spinner="spiral"
+        ></infinite-loading>
     </div>
 </template>
 
@@ -26,14 +32,21 @@ import Waterfall from '../../components/common/Waterfall';
 
 export default {
     name: 'Pic.Related',
-    props: ['images', 'page'],
+    props: ['images', 'page', 'offset', 'orientation', 'end'],
     components: {
         Waterfall
     },
     data() {
         return {
             screenWidth: document.documentElement.clientWidth,
-            cardWidth: this.getCardWidth(document.documentElement.clientWidth)
+            cardWidth: this.getCardWidth(document.documentElement.clientWidth),
+            // Waterfall
+            waterfallIdentifier: Math.round(Math.random() * 100)
+        }
+    },
+    computed: {
+        hasPrev() {
+            return this.page + this.offset > 1;
         }
     },
     mounted() {
@@ -58,19 +71,33 @@ export default {
                 return 204;
             }
             if (width > 768 && width <= 1024) {
-                return 148;
-            } else if (width <= 768) {
-                return (width - 48) / 2 - 12;
+                if (this.orientation === 0) {
+                    return Math.floor((width - 48) / 4) - 14;
+                } else {
+                    return 148;
+                }
+            } else if (width > 567 && width <= 768) {
+                return Math.floor((width - 48) / 3) - 14;
+            } else if (width <= 567) {
+                return Math.floor((width - 48) / 2) - 12;
             }
         },
+        reset() {
+            this.$refs.waterfall.$el.innerHTML = '';
+        },
+        // Window & Screen
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;
         },
+        // Event
         handleCardClicked(imageId) {
             this.$router.push('/pic/'+imageId);
         },
         handleGo(toward) {
             this.$emit('go', toward);
+        },
+        infiniteHandler($state) {
+            this.$emit('infite-load', $state);
         }
     }
 }
