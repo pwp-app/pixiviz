@@ -119,7 +119,6 @@ export default {
             dateObject: this.$store.state.rank.date
                 ? this.$store.state.rank.date
                 : dayjs()
-                      .startOf("day")
                       .subtract(3, "day")
                       .subtract(6, 'hour'),
             mode: this.$store.state.rank.mode
@@ -138,7 +137,8 @@ export default {
             waterfallIdentifier: Math.round(Math.random() * 100),
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true
+            waterfallResponsive: true,
+            scrollTop: 0,
         };
     },
     computed: {
@@ -182,12 +182,7 @@ export default {
         },
         showDateNext: function() {
             return (
-                (dayjs()
-                    .startOf("day")
-                    .unix() -
-                    this.dateObject.unix()) /
-                    86400 >
-                3
+                (dayjs().startOf("day").unix() - this.dateObject.unix()) / 86400 > 3
             );
         }
     },
@@ -205,6 +200,8 @@ export default {
         /* Watch screen width */
         screenWidth(width) {
             this.screenWidth = width;
+            // After waterfall rerendered, keep the scroll state
+            this.scrollTop = document.documentElement.scrollTop;
             if (this.screenWidth <= 767) {
                 this.waterfallResponsive = false;
             } else {
@@ -212,6 +209,7 @@ export default {
             }
             this.$nextTick(() => {
                 this.cardWidth = this.getCardWidth(this.screenWidth);
+                document.documentElement.scrollTop = this.scrollTop
             });
         }
     },
@@ -288,13 +286,8 @@ export default {
             this.$nextTick(() => {
                 // 重置参数
                 this.page = 1;
-                this.mode = this.$cookies.get("rank-mode")
-                    ? this.$cookies.get("rank-mode")
-                    : "day";
-                this.dateObject = dayjs()
-                    .startOf("day")
-                    .subtract(3, "day")
-                    .subtract(6, 'hour');
+                this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
+                this.dateObject = dayjs().subtract(3, "day").subtract(6, 'hour');
                 this.images = [];
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });
