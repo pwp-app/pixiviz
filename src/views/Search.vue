@@ -97,7 +97,7 @@ export default {
             // Misc
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true,
+            waterfallResponsive: this.screenWidth > 767 && this.window.orientation !== 0,
             scrollTop: 0,
         };
     },
