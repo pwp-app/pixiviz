@@ -49,7 +49,7 @@ export default {
             from: this.$cookies.get('pic-from'),
             // screen
             screenOrientation: window.orientation,
-            showPart: window.orientation !== 0 ? true : false,
+            showPart: window.orientation !== 0,
         }
     },
     components: {
