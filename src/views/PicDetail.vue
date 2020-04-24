@@ -73,6 +73,9 @@ export default {
             window.addEventListener('orientationchange', this.handleScreenRotate, false);
         });
     },
+    destroyed() {
+        window.removeEventListener('orientationchange', this.handleScreenRotate, false);
+    },
     watch: {
         '$route.params.id': 'handleIdChanged'
     },
@@ -116,6 +119,11 @@ export default {
         handleIdChanged() {
             this.infoLoading = true;
             this.fetchInfo();
+            // 清空relatedImages
+            this.$nextTick(() => {
+                this.$refs.related.reset();
+                this.relatedImages = [];
+            })
         },
         handleRelatedPageChanged(toward) {
             if (toward < 0) {
@@ -143,7 +151,6 @@ export default {
                     this.showPart = false;
                 })
             }
-            // 计算当前的page
             this.screenOrientation = window.orientation;
         },
         handleRelatedInfiniteLoad(state) {
