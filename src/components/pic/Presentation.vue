@@ -111,8 +111,7 @@ export default {
             this.$nextTick(() => {
                 this.updateDisplaySize();
             });
-        },
-        '$route.params.id': 'handleIdChanged'
+        }
     },
     computed: {
         source() {
