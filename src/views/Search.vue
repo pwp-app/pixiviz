@@ -97,7 +97,7 @@ export default {
             // Misc
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: this.screenWidth > 767 && this.window.orientation !== 0,
+            waterfallResponsive: document.documentElement.clientWidth > 767 && window.orientation === 0,
             scrollTop: 0,
             // style
             iPadStyle: /iPad/i.test(navigator.userAgent)
