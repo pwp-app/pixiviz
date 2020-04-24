@@ -1,5 +1,5 @@
 <template>
-    <div class="rank-container">
+    <div :class="['rank-container', iPadStyle ? 'ipad-only' : null]">
         <div class="rank-header">
             <div class="rank-header-title">
                 <span>排行榜</span>
@@ -139,6 +139,8 @@ export default {
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
             waterfallResponsive: this.screenWidth > 767 && this.window.orientation !== 0,
             scrollTop: 0,
+            // style
+            iPadStyle: /iPad/i.test(navigator.userAgent)
         };
     },
     computed: {

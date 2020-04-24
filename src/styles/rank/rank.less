@@ -122,6 +122,82 @@
 @import './modeswitcher.less';
 @import './dateswitcher.less';
 
+/* iPad */
+.ipad-only {
+    @media screen and (orientation: landscape) {
+        @media (max-width: 1366px) {
+            .rank-header {
+                width: 1176px !important;
+            }
+            .rank-body {
+                &-date {
+                    width: 1176px !important;
+                }
+                &-content {
+                    .waterfall-wrapper {
+                        .waterfall-container {
+                            width: 1184px !important;
+                        }
+                    }
+                }
+            }
+        }
+        @media (max-width: 1024px) {
+            .rank-header {
+                width: 880px !important;
+            }
+            .rank-body {
+                &-date {
+                    width: 880px !important;
+                }
+                &-content {
+                    .waterfall-wrapper {
+                        .waterfall-container {
+                            width: 888px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (orientation: portrait) {
+        @media (max-width: 1024px) {
+            .rank-header {
+                width: 880px !important;
+            }
+            .rank-body {
+                &-date {
+                    width: 880px !important;
+                }
+                &-content {
+                    .waterfall-wrapper {
+                        .waterfall-container {
+                            width: 888px !important;
+                        }
+                    }
+                }
+            }
+        }
+        @media (max-width: 768px) {
+            .rank-header {
+                width: 584px !important;
+            }
+            .rank-body {
+                &-date {
+                    width: 584px !important;
+                }
+                &-content {
+                    .waterfall-wrapper {
+                        .waterfall-container {
+                            width: 592px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /* Mobile */
 
 @media(max-width: 767px) {

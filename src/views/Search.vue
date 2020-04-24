@@ -1,5 +1,5 @@
 <template>
-    <div class="search-container">
+    <div :class="['search-container', iPadStyle ? 'ipad-only' : null]">
         <div class="search-header">
             <div class="search-header-title">
                 <span>搜索</span>
@@ -99,6 +99,8 @@ export default {
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
             waterfallResponsive: this.screenWidth > 767 && this.window.orientation !== 0,
             scrollTop: 0,
+            // style
+            iPadStyle: /iPad/i.test(navigator.userAgent)
         };
     },
     watch: {

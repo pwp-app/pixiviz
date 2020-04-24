@@ -151,6 +151,75 @@
     }
 }
 
+/* iPad */
+.ipad-only {
+    @media screen and (orientation: landscape) {
+        @media (max-width: 1366px) {
+            .search-header {
+                width: 1176px !important;
+            }
+            .search-suggestion {
+                width: 1176px !important;
+            }
+            &-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 1184px !important;
+                    }
+                }
+            }
+        }
+        @media (max-width: 1024px) {
+            .search-header {
+                width: 880px !important;
+            }
+            .search-suggestion {
+                width: 880px !important;
+            }
+            &-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 888px !important;
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (orientation: portrait) {
+        @media (max-width: 1024px) {
+            .search-header {
+                width: 880px !important;
+            }
+            .search-suggestion {
+                width: 880px !important;
+            }
+            &-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 888px !important;
+                    }
+                }
+            }
+        }
+        @media (max-width: 768px) {
+            .search-header {
+                width: 584px !important;
+            }
+            .search-suggestion {
+                width: 584px !important;
+            }
+            &-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 592px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 /* Mobile */
 @media(max-width: 767px) {
     .search-container {
