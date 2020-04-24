@@ -137,7 +137,7 @@ export default {
             waterfallIdentifier: Math.round(Math.random() * 100),
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
-            waterfallResponsive: true,
+            waterfallResponsive: this.screenWidth > 767,
             scrollTop: 0,
         };
     },
