@@ -114,7 +114,7 @@ export default {
     data() {
         return {
             // Waterfall Data
-            page: this.$store.state.rank.page ? this.$store.state.rank.page : 1,
+            page: this.$store.state.rank.page !== null ? this.$store.state.rank.page : 1,
             pageSize: 30,
             dateObject: this.$store.state.rank.date
                 ? this.$store.state.rank.date
@@ -234,9 +234,8 @@ export default {
                 window.scrollTo(0, scrollTop);
             }
         }
-        // Add scroll event listener
         window.addEventListener("scroll", this.handleScroll, false);
-        // Add resize event listener
+        // Add window event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
         });
@@ -269,6 +268,8 @@ export default {
                     this.$refs.waterfall.firstLoad = false;
                     // Page + 1
                     this.page = this.page + 1;
+                    // 缓存 page
+                    this.$store.commit('rank/page', this.page);
                     $state.loaded();
                 });
         },

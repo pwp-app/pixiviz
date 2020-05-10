@@ -85,10 +85,11 @@ export default {
     },
     data() {
         return {
-            page: 1,
+            page: this.$store.state.search.page !== null ? this.$store.state.search.page : 1,
             pageSize: 30,
-            images: [],
-            suggestions: [],
+            images: this.$store.state.search.keyword === this.$route.params.keyword ?
+                this.$store.state.search.images ? this.$store.state.search.images: [] : [],
+            suggestions: this.$store.state.search.suggestions ? this.$store.state.search.suggestions : [],
             keyword: this.$route.params.keyword,
             keywordInput: this.$route.params.keyword,
             waterfallIdentifier: Math.round(Math.random() * 100),
@@ -121,23 +122,27 @@ export default {
         }
     },
     mounted() {
-        this.fetchSuggestion();
+        if (this.keyword !== this.$store.state.search.keyword) {
+            this.fetchSuggestion();
+        }
+        // update store
+        this.$store.commit('search/setKeyword', this.keyword);
         // Set scroll to last state
         let scrollTop = this.$cookies.get("search-scroll");
         if (scrollTop) {
             window.scrollTo(0, scrollTop);
         }
+        window.addEventListener("scroll", this.handleScroll, false);
         // Add resize event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
         });
-        // Add scroll event listener
-        window.addEventListener("scroll", this.handleScroll, false);
     },
     destroyed() {
         // 清除监听器
         this.leaveSuggestion();
         window.removeEventListener("resize", this.windowResized, false);
+        window.removeEventListener("scroll", this.handleScroll, false);
     },
     methods: {
         infiniteHandler($state) {
@@ -159,10 +164,13 @@ export default {
                         return;
                     }
                     this.images = this.images.concat(response.data.data);
+                    // 缓存 images
+                    this.$store.commit("search/setImages", this.images);
                     // 设置 Load 状态为 false
                     this.$refs.waterfall.firstLoad = false;
                     // Page + 1
                     this.page = this.page + 1;
+                    this.$store.commit("search/setPage", this.page);
                     $state.loaded();
                 });
         },
@@ -174,6 +182,7 @@ export default {
                 .then(response => {
                     if (response.data.data) {
                         this.suggestions = response.data.data;
+                        this.$store.commit('search/setSuggestions', this.suggestions);
                     }
                 });
         },
@@ -201,8 +210,14 @@ export default {
         handleKeywordChanged(keyword) {
             this.keyword = keyword;
             this.keywordInput = keyword;
+            // update store
+            this.$store.commit('search/setKeyword', this.keyword);
+            this.$store.commit('search/setImages', []);
+            this.$store.commit('search/setPage', 1);
+            // refresh
             this.refreshWaterfall();
             this.resetScrollState();
+            this.fetchSuggestion();
         },
         handleCardClicked(imageId) {
             this.$cookies.set(
