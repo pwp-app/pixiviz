@@ -101,7 +101,7 @@ export default {
             waterfallResponsive: document.documentElement.clientWidth > 767,
             scrollTop: 0,
             // style
-            iPadStyle: /iPad/i.test(navigator.userAgent)
+            iPadStyle: /iPad/i.test(navigator.userAgent),
         };
     },
     watch: {
