@@ -19,16 +19,16 @@
                 <div class="rank-mode-item-tag">
                     <span>漫画</span>
                 </div>
-                <div :class="['rank-mode-item', mode === 'month_manga' ? 'rank-mode-item-picked' : null]">
+                <div :class="['rank-mode-item', mode === 'month_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('month_manga')">
                     <span>月排行榜</span>
                 </div>
-                <div :class="['rank-mode-item', mode === 'week_manga' ? 'rank-mode-item-picked' : null]">
+                <div :class="['rank-mode-item', mode === 'week_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('week_manga')">
                     <span>周排行榜</span>
                 </div>
-                <div :class="['rank-mode-item', mode === 'day_manga' ? 'rank-mode-item-picked' : null]">
+                <div :class="['rank-mode-item', mode === 'day_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('day_manga')">
                     <span>日排行榜</span>
                 </div>
-                <div :class="['rank-mode-item', mode === 'week_rookie_manga' ? 'rank-mode-item-picked' : null]">
+                <div :class="['rank-mode-item', mode === 'week_rookie_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('week_rookie_manga')">
                     <span>新秀周排行榜</span>
                 </div>
             </div>
