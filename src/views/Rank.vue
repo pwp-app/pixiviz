@@ -269,7 +269,7 @@ export default {
                     // Page + 1
                     this.page = this.page + 1;
                     // 缓存 page
-                    this.$store.commit('rank/page', this.page);
+                    this.$store.commit('rank/setPage', this.page);
                     $state.loaded();
                 });
         },
