@@ -22,3 +22,4 @@ yarn-error.log*
 
 # Custom
 assets_source
+pwp-deploy.json
