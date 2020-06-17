@@ -1,5 +1,5 @@
 <template>
-    <div class="waterfall-container" v-masonry transition-duration="200ms" item-selector=".waterfall-item">
+    <div class="waterfall-container" v-masonry item-selector=".waterfall-item">
         <ImageCard v-masonry-tile class="waterfall-item"
             v-for="(item, index) in images" :key="index" :image="item"
             :cardWidth="cardWidth" :imageType="imageType" :squaredImage="squaredImage"

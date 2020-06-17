@@ -163,7 +163,13 @@ export default {
                         $state.complete();
                         return;
                     }
-                    this.images = this.images.concat(response.data.data);
+                    let images = response.data.data.filter(img => {
+                        if (img.type === 'ad_image' || img.xrestrict || img.sanityLevel > 5) {
+                            return false;
+                        }
+                        return true;
+                    });
+                    this.images = this.images.concat(images);
                     // 缓存 images
                     this.$store.commit("search/setImages", this.images);
                     // 设置 Load 状态为 false

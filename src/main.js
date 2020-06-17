@@ -41,7 +41,12 @@ Vue.use(VueAxios, axios)
 // Set up lazyload
 Vue.use(VueLazyload, {
     // set observer to true
-    observer: true
+    observer: true,
+    // optional
+    observerOptions: {
+        rootMargin: '0px',
+        threshold: 0.1
+    }
 })
 
 // Mobile events
