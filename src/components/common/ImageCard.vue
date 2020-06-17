@@ -51,18 +51,12 @@ export default {
         return {
             loading: true,
             loadError: false,
+            loadHeight: this.getHeight(),
             block: this.image.xrestrict ? true : this.image.sanityLevel > 5 ? true : false,
             countIcon: require('@/assets/images/count.svg')
         }
     },
     computed: {
-        loadHeight() {
-            if (this.squaredImage) {
-                return this.cardWidth
-            } else {
-                return this.image.height / (this.image.width / this.cardWidth);
-            }
-        },
         source() {
             if (this.block || !this.image) {
                 return '';
@@ -76,22 +70,33 @@ export default {
         }
     },
     created() {
-        this.$Lazyload.$on('loaded', ({el, src}) => {
-            if (src === this.source) {
-                this.loading = false;
-            }
-        });
-        this.$Lazyload.$on('error', ({el, src}) => {
-            if (src === this.source) {
-                this.loading = false;
-                this.loadError = true;
-            }
-        });
+        this.$Lazyload.$on('loaded', this.loadedHandler);
+        this.$Lazyload.$on('error', this.errorHandler);
     },
     methods: {
+        getHeight() {
+            if (this.squaredImage) {
+                return this.cardWidth
+            } else {
+                return this.image.height / (this.image.width / this.cardWidth);
+            }
+        },
         handleClick() {
             if (!this.block && !this.loadError) {
                 this.$emit('clicked', this.image.id);
+            }
+        },
+        loadedHandler({el, src}) {
+            if (el.getAttribute('data-src') === this.source) {
+                this.loading = false;
+                this.$Lazyload.$off('loaded', this.loadedHandler);
+            }
+        },
+        errorHandler({el, src}) {
+            if (src === this.source) {
+                this.loading = false;
+                this.loadError = true;
+                this.$Lazyload.$off('loaded', this.errorHandler);
             }
         }
     }
