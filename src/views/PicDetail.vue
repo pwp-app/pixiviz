@@ -5,7 +5,7 @@
                 <Presentation :image="image" :block="block"/>
             </div>
             <div class="pic-side">
-                <Author :author="image.artistPreView"></Author>
+                <Author :author="author"></Author>
                 <Related
                     ref="related"
                     :key="showPart"
@@ -37,7 +37,7 @@ export default {
     name: 'Pic',
     data() {
         return {
-            image: {},
+            image: null,
             infoLoading: true,
             loadFailed: false,
             block: false,
@@ -64,10 +64,19 @@ export default {
         },
         imageSlice() {
             return this.relatedImages.slice((this.relatedPage - 1 + this.pageOffset) * 6, (this.relatedPage + this.pageOffset) * 6);
+        },
+        author() {
+            if (this.image && this.image.user) {
+                return this.image.user;
+            } else {
+                return null;
+            }
         }
     },
     mounted() {
-        this.fetchInfo();
+        if (this.image === null) {
+            this.fetchInfo();
+        }
         // add event listener
         this.$nextTick(() => {
             window.addEventListener('orientationchange', this.handleScreenRotate, false);
@@ -81,19 +90,23 @@ export default {
     },
     methods: {
         fetchInfo() {
-            this.axios.get(`https://api.pixivic.com/illusts/${this.imageId}`).then(response => {
-                if (!response.data.data) {
+            this.axios.get('/api/v1/illust/detail', {
+                params: {
+                    id: this.imageId,
+                }
+            }).then(response => {
+                if (!response.data || !response.data.illust) {
                     this.infoLoading = false;
                     this.loadFailed = true;
                     return;
                 }
                 this.infoLoading = false;
-                this.image = response.data.data;
-                if (this.image.xrestrict == 1 || this.image.sanityLevel > 5) {
+                this.image = response.data.illust;
+                if (this.image.x_restrict == 1 || this.image.sanity_level > 5) {
                     this.block = true;
                 }
                 // fetch related
-                this.fetchRelated()
+                this.fetchRelated();
             });
         },
         fetchRelated(state) {

@@ -19,7 +19,7 @@ export default {
     computed: {
         avatar() {
             if (this.author) {
-                return this.author.avatar.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                return this.author.profile_image_urls.medium.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
             } else {
                 return '';
             }

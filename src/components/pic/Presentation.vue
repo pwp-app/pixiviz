@@ -13,13 +13,13 @@
                 </div>
             </div>
         </div>
-        <Paginator :page="page" :pageCount="image.pageCount" @page-turn="handlePageChanged"/>
+        <Paginator :page="page" :pageCount="image ? image.page_count : 0" @page-turn="handlePageChanged"/>
         <div class="pic-presentation-info">
             <div class="pic-presentation-info-title">
-                <span>{{image.title}}</span>
+                <span>{{image ? image.title : ''}}</span>
             </div>
             <div class="pic-presentation-info-caption">
-                <span v-html="image.caption"></span>
+                <span v-html="image ? image.caption : ''"></span>
             </div>
             <div class="pic-presentation-info-tags">
                 <div class="pic-tag" v-for="tag in tags" :key="tag.id">
@@ -100,10 +100,10 @@ export default {
                 this.imageLoadError = false;
                 this.page = 1;
                 this.sizeCache = {};
-                this.imageSize.x = image.width;
-                this.imageSize.y = image.height;
-                this.imageWidth = this.computeWidth(image.width, image.height);
-                this.imageHeight = this.computeHeight(image.width, image.height);
+                this.imageSize.x = image ? image.width : 0;
+                this.imageSize.y = image ? image.height : 0;
+                this.imageWidth = this.computeWidth(image ? image.width : 0, image ? image.height : 0);
+                this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
             }
         },
         screenWidth(width) {
@@ -115,11 +115,15 @@ export default {
     },
     computed: {
         source() {
-            if (this.image.imageUrls) {
+            if (this.image && this.image.meta_single_page) {
                 if (this.block) {
                     return '';
                 } else {
-                    return this.image.imageUrls[this.page - 1].original.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                    if (this.image.page_count < 2) {
+                        return this.image.meta_single_page.original_image_url.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                    } else {
+                        return this.image.meta_pages[this.page - 1].image_urls.original.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                    }
                 }
             } else {
                 return '';
@@ -134,14 +138,14 @@ export default {
         },
         views() {
             if (this.image) {
-                return this.image.totalView;
+                return this.image.total_view;
             } else {
                 return 0;
             }
         },
         bookmarks() {
             if (this.image) {
-                return this.image.totalBookmarks;
+                return this.image.total_bookmarks;
             } else {
                 return 0;
             }
