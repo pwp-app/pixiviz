@@ -24,13 +24,13 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.4.4",
-    "@vue/cli-plugin-router": "^4.4.4",
-    "@vue/cli-plugin-vuex": "^4.4.4",
-    "@vue/cli-service": "^4.4.4",
+    "@vue/cli-plugin-babel": "^4.4.5",
+    "@vue/cli-plugin-router": "^4.4.5",
+    "@vue/cli-plugin-vuex": "^4.4.5",
+    "@vue/cli-service": "^4.4.5",
     "babel-plugin-component": "^1.1.1",
     "less": "^3.11.3",
-    "less-loader": "^6.1.1",
+    "less-loader": "^6.1.2",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.11"
   },
