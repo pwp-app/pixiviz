@@ -12,6 +12,7 @@
                     :images="showPart ? imageSlice : relatedImages"
                     :page="relatedPage"
                     :offset="pageOffset"
+                    :loading="relatedLoading"
                     @go="handleRelatedPageChanged"
                     @infite-load="handleRelatedInfiniteLoad"
                     :orientation="screenOrientation"
@@ -107,6 +108,9 @@ export default {
                 }
                 // fetch related
                 this.fetchRelated();
+            }, () => {
+                this.infoLoading = false;
+                this.loadFailed = true;
             });
         },
         fetchRelated(state) {
@@ -132,11 +136,13 @@ export default {
         handleIdChanged() {
             this.infoLoading = true;
             this.fetchInfo();
-            // 清空relatedImages
+            // 重置related
+            this.relatedPage = 1;
+            this.pageOffset = 0;
             this.$nextTick(() => {
                 this.$refs.related.reset();
                 this.relatedImages = [];
-            })
+            });
         },
         handleRelatedPageChanged(toward) {
             if (toward < 0) {

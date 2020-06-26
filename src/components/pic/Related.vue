@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="pic-related-content">
+        <div class="pic-related-content" v-loading="loading">
             <div class="waterfall-wrapper">
                 <Waterfall ref="waterfall"
                     :images="images" @card-clicked="handleCardClicked"
@@ -32,7 +32,7 @@ import Waterfall from '../../components/common/Waterfall';
 
 export default {
     name: 'Pic.Related',
-    props: ['images', 'page', 'offset', 'orientation', 'end'],
+    props: ['images', 'page', 'offset', 'orientation', 'end', 'loading'],
     components: {
         Waterfall
     },
