@@ -235,6 +235,12 @@ export default {
             }
         }
         window.addEventListener("scroll", this.handleScroll, false);
+        // Recheck rank mode
+        let rank_mode = this.$cookies.get("rank-mode");
+        if (rank_mode) {
+            this.mode = rank_mode;
+            this.refreshWaterfall();
+        }
         // Add window event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
