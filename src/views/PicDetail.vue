@@ -10,6 +10,7 @@
                     ref="related"
                     :key="showPart"
                     :images="showPart ? imageSlice : relatedImages"
+                    :o-images="relatedImages"
                     :page="relatedPage"
                     :offset="pageOffset"
                     :loading="relatedLoading"
