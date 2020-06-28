@@ -1,5 +1,5 @@
 <template>
-    <div class="pic-container" v-loading="infoLoading">
+    <div :class="['pic-container', infoLoading ? 'pic-container-loading' : null]" v-loading="infoLoading">
         <div class="pic">
             <div class="pic-presentation">
                 <Presentation :image="image" :block="block"/>
@@ -10,7 +10,7 @@
                     ref="related"
                     :key="showPart"
                     :images="showPart ? imageSlice : relatedImages"
-                    :o-images="relatedImages"
+                    :oimages="relatedImages"
                     :page="relatedPage"
                     :offset="pageOffset"
                     :loading="relatedLoading"
