@@ -236,7 +236,7 @@ export default {
         }
         // Recheck rank mode
         const rank_mode = this.$cookies.get("rank-mode");
-        if (rank_mode !== this.mode) {
+        if (rank_mode && rank_mode !== this.mode) {
             this.mode = rank_mode;
             this.refreshWaterfall();
         }
