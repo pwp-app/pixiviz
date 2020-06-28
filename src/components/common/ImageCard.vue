@@ -84,16 +84,19 @@ export default {
             }
         },
         loadedHandler({el, src}) {
-            if (el.getAttribute('data-src') === this.source) {
+            if (el.getAttribute('data-src') === this.source || src === this.source) {
                 this.loading = false;
+                this.loadError = false;
                 this.$Lazyload.$off('loaded', this.loadedHandler);
+                this.$Lazyload.$off('error', this.loadedHandler);
             }
         },
         errorHandler({el, src}) {
-            if (src === this.source) {
+            if (el.getAttribute('data-src') === this.source || src === this.source) {
                 this.loading = false;
                 this.loadError = true;
                 this.$Lazyload.$off('loaded', this.errorHandler);
+                this.$Lazyload.$off('error', this.errorHandler);
             }
         }
     }

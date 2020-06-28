@@ -2,7 +2,7 @@
     <div class="pic-related">
         <div class="pic-related-title">
             <span>相关作品</span>
-            <div class="pic-related-paginator" v-if="orientation !== 0 && o-images.length >= 6">
+            <div class="pic-related-paginator" v-if="orientation !== 0 && oimages.length >= 6">
                 <div class="pic-related-paginator-item" v-if="hasPrev" @click="handleGo(-1)">
                     <i class="el-icon-arrow-left"></i>
                 </div>
@@ -32,7 +32,7 @@ import Waterfall from '../../components/common/Waterfall';
 
 export default {
     name: 'Pic.Related',
-    props: ['images', 'o-images', 'page', 'offset', 'orientation', 'end', 'loading'],
+    props: ['images', 'oimages', 'page', 'offset', 'orientation', 'end', 'loading'],
     components: {
         Waterfall
     },
