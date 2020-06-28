@@ -128,14 +128,14 @@ export default {
         // update store
         this.$store.commit('search/setKeyword', this.keyword);
         // Set scroll to last state
-        let scrollTop = this.$cookies.get("search-scroll");
+        const scrollTop = this.$cookies.get("search-scroll");
         if (scrollTop) {
             window.scrollTo(0, scrollTop);
         }
-        window.addEventListener("scroll", this.handleScroll, false);
         // Add resize event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
+            window.addEventListener("scroll", this.handleScroll, false);
         });
     },
     destroyed() {

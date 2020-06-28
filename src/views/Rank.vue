@@ -229,21 +229,21 @@ export default {
             this.$store.commit("rank/setReset", false);
         } else {
             // Do scroll when reset is not set
-            let scrollTop = this.$cookies.get("rank-scroll");
+            const scrollTop = this.$cookies.get("rank-scroll");
             if (scrollTop) {
                 window.scrollTo(0, scrollTop);
             }
         }
-        window.addEventListener("scroll", this.handleScroll, false);
         // Recheck rank mode
-        let rank_mode = this.$cookies.get("rank-mode");
-        if (rank_mode) {
+        const rank_mode = this.$cookies.get("rank-mode");
+        if (rank_mode !== this.mode) {
             this.mode = rank_mode;
             this.refreshWaterfall();
         }
         // Add window event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
+            window.addEventListener("scroll", this.handleScroll, false);
         });
     },
     destroyed() {
