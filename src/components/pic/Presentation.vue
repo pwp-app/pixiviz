@@ -24,7 +24,7 @@
             </div>
             <div class="pic-presentation-info-tags">
                 <div class="pic-tag" v-for="tag in tags" :key="tag.id">
-                    <span>#{{tag.name}}</span>
+                    <span :data-tag="tag.name" @click="handleTagClicked">#{{tag.name}}</span>
                 </div>
             </div>
             <div class="pic-presentation-info-stat">
@@ -200,6 +200,11 @@ export default {
             this.page = this.page + toward * 1;
             this.imageLoading = true;
             this.imageLoadError = false;
+        },
+        handleTagClicked(e) {
+            this.$cookies.set('search-from', `pic/${this.image.id}`);
+            this.$router.push(`/search/${e.currentTarget.dataset.tag}`);
+
         }
     }
 }

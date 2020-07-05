@@ -2,12 +2,13 @@
     <div :class="['pic-container', infoLoading ? 'pic-container-loading' : null]" v-loading="infoLoading">
         <div class="pic">
             <div class="pic-presentation">
-                <Presentation :image="image" :block="block"/>
+                <Presentation :image="image" v-if="image" :block="block"/>
             </div>
             <div class="pic-side">
-                <Author :author="author"></Author>
+                <Author :author="author" v-if="author"></Author>
                 <Related
                     ref="related"
+                    v-if="relatedImages"
                     :key="showPart"
                     :images="showPart ? imageSlice : relatedImages"
                     :oimages="relatedImages"
