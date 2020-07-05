@@ -1,8 +1,10 @@
 <template>
     <div class="pic-presentation-page" v-if="pageCount > 1">
-        <div class="pic-presentation-page-back" v-if="page > 1" @click="handleGo(-1)">
-            <i class="el-icon-arrow-left"></i>
-            <span>前一页</span>
+        <div class="pic-presentation-page-back" @click="handleGo(-1)">
+            <template v-if="page > 1">
+                <i class="el-icon-arrow-left"></i>
+                <span>前一页</span>
+            </template>
         </div>
         <div class="pic-presentation-page-number">
             <span>{{page}} / {{pageCount}}</span>

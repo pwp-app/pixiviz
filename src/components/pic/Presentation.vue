@@ -1,6 +1,6 @@
 <template>
     <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
-        <div v-loading="imageLoading" class="pic-presentation-image" v-if="!imageLoading"
+        <div v-loading="imageLoading" class="pic-presentation-image"
             :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
             <img v-lazy="source"
                 :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
@@ -15,7 +15,7 @@
             </div>
         </div>
         <Paginator :page="page" :pageCount="image ? image.page_count : 0" @page-turn="handlePageChanged"/>
-        <div class="pic-presentation-info">
+        <div class="pic-presentation-info" v-if="image">
             <div class="pic-presentation-info-title">
                 <span>{{image ? image.title : ''}}</span>
             </div>
@@ -35,12 +35,16 @@
                     <i class="el-icon-star-on"></i><span>{{bookmarks}}</span>
                 </div>
             </div>
+            <div class="pic-presentation-info-time">
+                <span>{{createTime}}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import CONFIG from '@/config.json';
+import dayjs from 'dayjs';
 /* Components */
 import Paginator from './Pagniator';
 
@@ -97,7 +101,7 @@ export default {
         image: {
             immediate: true,
             handler(image) {
-                this.imageLoading = false;
+                this.imageLoading = true;
                 this.imageLoadError = false;
                 this.page = 1;
                 this.sizeCache = {};
@@ -149,6 +153,13 @@ export default {
                 return this.image.total_bookmarks;
             } else {
                 return 0;
+            }
+        },
+        createTime() {
+            if (this.image) {
+                return dayjs(this.image.create_date).format('YYYY 年 MM 月 DD 日');
+            } else {
+                return null;
             }
         }
     },

@@ -47,8 +47,11 @@
         }
     }
     .pic-presentation-page {
-        margin-top: 24px;
+        margin: 24px 0 32px 0;
         height: 20px;
+        width: 100%;
+        display: flex;
+        float: left;
         span,
         i {
             font-size: 16px;
@@ -58,7 +61,8 @@
             .no-select();
         }
         &-back {
-            float: left;
+            width: 72px;
+            flex-grow: 1;
             i {
                 margin-right: 8px;
             }
@@ -71,13 +75,11 @@
             }
         }
         &-number {
-            width: max-content;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            flex-grow: 1;
+            justify-self: center;
         }
         &-next {
-            float: right;
+            justify-self: flex-end;
             i {
                 margin-left: 8px;
             }
@@ -117,17 +119,17 @@
             .pic-tag {
                 display: inline-block;
                 margin-right: 8px;
-                transition: 100ms ease-in-out;
                 span {
                     font-size: 14px;
                     color: lighten(@color-text-primary, 5%);
+                    transition: 100ms ease-in-out;
                     .no-select();
                 }
             }
             .pic-tag:hover {
                 cursor: pointer;
                 span {
-                    color: lighten(@color-text-primary, 12.5%);
+                    color: lighten(@color-text-primary, 15%);
                 }
             }
             .pic-tag:last-child {
@@ -150,6 +152,14 @@
             }
             .pic-stat:last-child {
                 margin-right: 0;
+            }
+        }
+        &-time {
+            margin-top: 12px;
+            span {
+                font-size: 14px;
+                color: lighten(@color-text-primary, 5%);
+                .no-select();
             }
         }
     }
