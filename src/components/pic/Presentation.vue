@@ -1,9 +1,10 @@
 <template>
     <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
-        <div v-loading="imageLoading" class="pic-presentation-image"
+        <div v-loading="imageLoading" class="pic-presentation-image" v-if="!imageLoading"
             :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
             <img v-lazy="source"
                 :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
+            <div style="clear: both;"></div>
             <div class="pic-presentation-image-error" v-if="imageLoadError">
                 <div class="pic-presentation-image-error-icon">
                     <i class="el-icon-warning-outline"/>
@@ -96,7 +97,7 @@ export default {
         image: {
             immediate: true,
             handler(image) {
-                this.imageLoading = true;
+                this.imageLoading = false;
                 this.imageLoadError = false;
                 this.page = 1;
                 this.sizeCache = {};

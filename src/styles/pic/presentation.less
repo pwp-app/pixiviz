@@ -9,6 +9,8 @@
         box-shadow: 0px 4px 12px rgba(0,0,0, .175);
         border-radius: 0 0 16px 16px;
         img {
+            display: block;
+            float: left;
             height: 0;
             border-radius: 0 0 16px 16px;
             position: relative;
@@ -115,10 +117,17 @@
             .pic-tag {
                 display: inline-block;
                 margin-right: 8px;
+                transition: 100ms ease-in-out;
                 span {
                     font-size: 14px;
                     color: lighten(@color-text-primary, 5%);
                     .no-select();
+                }
+            }
+            .pic-tag:hover {
+                cursor: pointer;
+                span {
+                    color: lighten(@color-text-primary, 12.5%);
                 }
             }
             .pic-tag:last-child {
@@ -191,7 +200,8 @@
             margin-top: 18px;
         }
         .pic-presentation-info {
-            margin: 18px 0;
+            margin: 24px 0;
+            float: left;
             &-title {
                 font-size: 22px;
             }
@@ -217,7 +227,8 @@
             margin-top: 18px;
         }
         .pic-presentation-info {
-            margin: 18px 0;
+            margin: 24px 0;
+            float: left;
             &-title {
                 font-size: 22px;
             }
