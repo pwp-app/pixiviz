@@ -76,6 +76,10 @@ import Waterfall from "../components/common/Waterfall";
 import BackToTop from "../components/common/BackToTop";
 // Util
 import MobileResponsive from "../util/MobileResponsive";
+// config
+import CONFIG from '../config.json';
+
+const id_matcher = /^\d{2,8}$/;
 
 export default {
     name: "Search",
@@ -102,6 +106,8 @@ export default {
             scrollTop: 0,
             // style
             iPadStyle: /iPad/i.test(navigator.userAgent),
+            // notification
+            notification: null,
         };
     },
     watch: {
@@ -125,6 +131,7 @@ export default {
         if (this.keyword !== this.$store.state.search.keyword) {
             this.fetchSuggestion();
         }
+        this.checkIfId();
         // update store
         this.$store.commit('search/setKeyword', this.keyword);
         // Set scroll to last state
@@ -132,6 +139,8 @@ export default {
         if (scrollTop) {
             window.scrollTo(0, scrollTop);
         }
+        // bind event to search notify
+        document.body.addEventListener('click', this.searchNotifyClicked, false);
         // Add resize event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
@@ -143,11 +152,12 @@ export default {
         this.leaveSuggestion();
         window.removeEventListener("resize", this.windowResized, false);
         window.removeEventListener("scroll", this.handleScroll, false);
+        document.body.removeEventListener('click', this.searchNotifyClicked, false);
     },
     methods: {
         infiniteHandler($state) {
             this.axios
-                .get("https://api.pixivic.com/illustrations", {
+                .get(`${CONFIG.PIXIVIC_API}/illustrations`, {
                     params: {
                         illustType: "illust",
                         searchType: "origin",
@@ -183,7 +193,7 @@ export default {
         fetchSuggestion() {
             this.axios
                 .get(
-                    `https://api.pixivic.com/keywords/${this.keyword}/pixivSuggestions`
+                    `${CONFIG.PIXIVIC_API}/keywords/${this.keyword}/pixivSuggestions`
                 )
                 .then(response => {
                     if (response.data.data) {
@@ -191,6 +201,29 @@ export default {
                         this.$store.commit('search/setSuggestions', this.suggestions);
                     }
                 });
+        },
+        checkIfId() {
+            // 检查关键词是不是纯数字
+            if (id_matcher.test(this.keyword) && !isNaN(this.keyword)) {
+                this.axios.get(`${CONFIG.OWN_API}/illust/detail`, {
+                    params: {
+                        id: parseInt(this.keyword)
+                    }
+                }).then(res => {
+                    if (res.data.illust) {
+                        this.notification = this.$notify({
+                            title: '您要找的可能是：',
+                            position: 'bottom-left',
+                            dangerouslyUseHTMLString: true,
+                            duration: 10000,
+                            message: `
+                            <div class="search-notify">
+                                <span data-name="search-notify">${res.data.illust.title} （ID: ${this.keyword}）</span>
+                            </div>`
+                        });
+                    }
+                });
+            }
         },
         refreshWaterfall() {
             // 提前清空 dom
@@ -224,6 +257,7 @@ export default {
             this.refreshWaterfall();
             this.resetScrollState();
             this.fetchSuggestion();
+            this.checkIfId();
         },
         handleCardClicked(imageId) {
             this.$cookies.set(
@@ -289,6 +323,13 @@ export default {
         },
         getCardWidth(width) {
             return MobileResponsive.getCardWidth(width);
+        },
+        // 通知事件
+        searchNotifyClicked(e) {
+            if (e.target.dataset.name === 'search-notify') {
+                this.$router.push(`/pic/${this.keyword}`);
+                this.notification.close();
+            }
         }
     }
 };

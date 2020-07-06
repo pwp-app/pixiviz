@@ -1,3 +1,5 @@
 {
-    "IMAGE_PROXY_HOST": "i.pixiv.cat"
+    "IMAGE_PROXY_HOST": "i.pixiv.cat",
+    "PIXIVIC_API": "https://api.pixivic.com",
+    "OWN_API": "/api/v1"
 }

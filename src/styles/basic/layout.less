@@ -58,6 +58,25 @@ button:focus {
     display: none;
 }
 
+// notify
+.el-notification__title {
+    color: @color-text-primary;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.el-notification__group {
+    margin-left: 7px;
+}
+.el-notification__closeBtn {
+    color: @color-text-primary;
+    transition: 100ms ease-in-out;
+}
+.el-notification__closeBtn:hover {
+    cursor: pointer;
+    color: lighten(@color-text-primary, 12.5%);
+}
+
 @media (max-width: 767px) {
     .mobile-hide {
         display: none;

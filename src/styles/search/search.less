@@ -125,6 +125,20 @@
     }
 }
 
+// notify
+.search-notify {
+    color: @color-text-primary;
+    font-size: 15px;
+    font-weight: 300;
+    transition: 100ms ease-in-out;
+}
+.search-notify:hover {
+    cursor: pointer;
+    color: lighten(@color-text-primary, 12.5%);
+}
+
+// mixin
+
 .search-component-width-mixin(@col) {
     @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
     width: @container-width - 8px;
