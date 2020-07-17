@@ -2,7 +2,7 @@
     <div :class="['banner-wrapper', expanded ? 'banner-expanded' : '', clearMarginBottom ? 'clear-margin-bottom' : '']" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap" v-lazy:background-image="bannerBG">
         <div class="banner">
             <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
-                <span>Pixiv C</span>
+                <span>Pixiviz</span>
             </div>
             <div :class="['about', aboutShow ? 'about-show' : '']" v-show="expanded">
                 <div class="about-borrow">
@@ -16,7 +16,7 @@
                         <span>Proxy: <a target="_blank" class="about-borrow-link" href="https://pixiv.cat">Pixivcat</a></span>
                     </div>
                     <div class="about-borrow-item">
-                        <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixivc.pwp.app/pic/63139897">Pixiv - 63139897</a></span>
+                        <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/63139897">Pixiv - 63139897</a></span>
                     </div>
                 </div>
                 <div class="about-copyright">

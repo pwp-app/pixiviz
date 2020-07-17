@@ -2,7 +2,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'https://pixivc.pwp.app/api',
+                target: 'https://pixiviz.pwp.app/api',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

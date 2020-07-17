@@ -1,11 +1,11 @@
 <div align="center"><img width="100" src="https://img.backrunner.top/pixiv-c/logo.png"></div>
-<h1 align="center">Pixiv C</h1>
+<h1 align="center">Pixiviz</h1>
 
 ## 概述
 
-尝试使用 [Pixivic.com](https://pixivic.com) 的接口，做一个具有清新画风，支持一定程度响应式的前端。
+一个具有清新画风，支持一定程度响应式的 Pixiv 代理站。
 
-项目使用 Vue-cli 建立，配合 Element UI 编写。
+项目基于 Vue CLI + Element UI 编写。
 
 ## 开发目标
 
@@ -31,13 +31,11 @@ npm install
 npm run serve
 ```
 
-推荐使用 Vue-cli 的 GUI 来管理本项目。
+推荐使用 Vue CLI 的 GUI 来管理本项目。
 
 ## 说明
 
-该项目更多是作为技术探索，欢迎有想开发这方面站点的朋友参考我的代码。
-
-觉得这个项目不错，可以点个star~
+该项目更多是作为技术探索，觉得这个项目不错，可以点个star~
 
 一些我个人觉得这个项目里值得你参考的东西：
 
@@ -51,4 +49,4 @@ npm run serve
 
 ## 许可
 
-跟随 [Pixivic.com](https://pixivic.com) 相关项目使用 Apache License 2.0
+Apache License 2.0
