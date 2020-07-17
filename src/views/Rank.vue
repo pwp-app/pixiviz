@@ -105,6 +105,11 @@ import MobileResponsive from "../util/MobileResponsive";
 
 export default {
     name: "Rank",
+    metaInfo: {
+        htmlAttrs: {
+            lang: 'zh-CN',
+        }
+    },
     components: {
         Waterfall,
         BackToTop,
@@ -245,6 +250,8 @@ export default {
             window.addEventListener("resize", this.windowResized, false);
             window.addEventListener("scroll", this.handleScroll, false);
         });
+        // Change title
+        document.title = this.modeText + ' - Pixiviz';
     },
     destroyed() {
         window.removeEventListener("scroll", this.handleScroll, false);
@@ -309,6 +316,7 @@ export default {
         },
         handleModeChanged(mode) {
             this.mode = mode;
+            document.title = this.modeText + ' - Pixiviz';
             this.refreshWaterfall();
         },
         handleBack() {

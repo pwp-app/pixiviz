@@ -18,6 +18,9 @@ export default {
         goBack() {
             window.history.go(-1);
         }
+    },
+    mounted() {
+        document.title = '404 - Pixiviz';
     }
 }
 </script>

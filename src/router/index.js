@@ -1,44 +1,37 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-// Import views
-import Landing from "../views/Landing.vue";
-import Rank from "../views/Rank.vue";
-import Pic from "../views/PicDetail.vue";
-import Search from "../views/Search.vue";
-import NotFoundPage from '../views/404.vue';
-
 Vue.use(VueRouter);
 
 const routes = [
     {
         path: "/",
         name: "Landing",
-        component: Landing,
+        component: () => import(/* webpackChunkName: "landing" */ "../views/Landing.vue"),
         meta: { keepAlive: false },
     },
     {
         path: "/rank",
         name: "Rank",
-        component: Rank,
+        component: () => import(/* webpackChunkName: "rank" */ "../views/Rank.vue"),
         meta: { keepAlive: true },
     },
     {
         path: "/pic/:id",
         name: "Pic",
-        component: Pic,
+        component: () => import(/* webpackChunkName: "pic" */ "../views/PicDetail.vue"),
         meta: { keepAlive: false },
     },
     {
         path: "/search/:keyword",
         name: "Search",
-        component: Search,
+        component: () => import(/* webpackChunkName: "search" */ "../views/Search.vue"),
         meta: { keepAlive: true },
     },
     {
         path: "/404",
         name: "Page not found",
-        component: NotFoundPage,
+        component: () => import(/* webpackChunkName: "notfound" */ "../views/404.vue"),
     },
     {
         path: "*",

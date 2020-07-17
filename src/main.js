@@ -9,6 +9,7 @@ import VueLazyload from 'vue-lazyload'
 import Vue2TouchEvents from 'vue2-touch-events'
 import {VueMasonryPlugin} from 'vue-masonry';
 import InfiniteLoading from 'vue-infinite-loading';
+import VueMeta from 'vue-meta'
 
 // Import element ui and styles
 
@@ -62,11 +63,16 @@ Vue.use(InfiniteLoading, {
 })
 
 // Set up vue cookies
-Vue.use(VueCookies)
+Vue.use(VueCookies);
 Vue.$cookies.config('7d');
+
+Vue.use(VueMeta);
 
 new Vue({
     router,
     store,
-    render: h => h(App)
-}).$mount('#app')
+    render: h => h(App),
+    mounted() {
+        document.dispatchEvent(new Event('render-event'));
+    }
+}).$mount('#app');

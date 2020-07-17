@@ -84,6 +84,8 @@ export default {
         this.$nextTick(() => {
             window.addEventListener('orientationchange', this.handleScreenRotate, false);
         });
+        // change title
+        document.title = `图片${this.imageId} - Pixiviz`;
     },
     destroyed() {
         window.removeEventListener('orientationchange', this.handleScreenRotate, false);
@@ -110,6 +112,8 @@ export default {
                 }
                 // fetch related
                 this.fetchRelated();
+                // change title
+                document.title = this.image.title + ' - Pixiviz';
             }, () => {
                 this.infoLoading = false;
                 this.loadFailed = true;

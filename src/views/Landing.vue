@@ -15,6 +15,13 @@ import RankBox from '../components/landing/RankBox';
 
 export default {
     name: 'Landing',
+    metaInfo: {
+        title: 'Pixiviz',
+        htmlAttrs: {
+            lang: 'zh-CN',
+            amp: true,
+        }
+    },
     data() {
         return {
             bannerExpanded: false

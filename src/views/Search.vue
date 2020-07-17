@@ -146,6 +146,8 @@ export default {
             window.addEventListener("resize", this.windowResized, false);
             window.addEventListener("scroll", this.handleScroll, false);
         });
+        // change title
+        document.title = this.keyword + ' - Pixiviz';
     },
     destroyed() {
         // 清除监听器
@@ -258,6 +260,8 @@ export default {
             this.resetScrollState();
             this.fetchSuggestion();
             this.checkIfId();
+            // change title
+            document.title = this.keyword + ' - Pixiviz';
         },
         handleCardClicked(imageId) {
             this.$cookies.set(
