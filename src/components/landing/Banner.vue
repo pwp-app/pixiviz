@@ -96,7 +96,7 @@ export default {
             handleDblClick()
         },
         goGitHub() {
-            window.open('https://github.com/pwp-app/pixiv-c');
+            window.open('https://github.com/pwp-app/pixiviz');
         }
     }
 }
