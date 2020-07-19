@@ -1,5 +1,6 @@
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
+const ImageminPlugin = require('imagemin-webpack-plugin').default
 const path = require('path');
 
 module.exports = {
@@ -13,6 +14,16 @@ module.exports = {
                 }
             }
         }
+    },
+    chainWebpack: (config) => {
+        config.module
+          .rule("images")
+          .use("url-loader")
+          .loader("url-loader")
+          .tap((options) => {
+            options.fallback.options.name = "img/[name].[ext]"
+            return options
+          })
     },
     configureWebpack: () => {
         if (process.env.NODE_ENV !== 'production') return;
@@ -30,6 +41,7 @@ module.exports = {
                         renderAfterDocumentEvent: 'render-event'
                     })
                 }),
+                new ImageminPlugin(),
             ],
         };
     }
