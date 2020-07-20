@@ -14,7 +14,6 @@
                     :oimages="relatedImages"
                     :page="relatedPage"
                     :offset="pageOffset"
-                    :loading="relatedLoading"
                     @go="handleRelatedPageChanged"
                     @infite-load="handleRelatedInfiniteLoad"
                     :orientation="screenOrientation"
