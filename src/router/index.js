@@ -45,4 +45,10 @@ const router = new VueRouter({
     routes,
 });
 
+router.afterEach(() => {
+    if (window.MtaH5) {
+        window.MtaH5.pgv();
+    }
+});
+
 export default router;
