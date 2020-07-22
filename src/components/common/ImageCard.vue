@@ -62,6 +62,9 @@ export default {
                 return '';
             } else {
                 let url = this.image.imageUrls[0][this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                if (window.isSafari) {
+                    url = url.replace('_10_webp', '_70');
+                }
                 return url;
             }
         }
