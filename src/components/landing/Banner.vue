@@ -40,7 +40,7 @@ export default {
     name: "Landing.Banner",
     data() {
         return {
-            bannerBG: document.body.clientWidth <= 768 ? require('@/assets/images/banner.jpg') : require('@/assets/images/landing.jpg'),
+            bannerBG: document.body.clientWidth <= 768 ? require(`@/assets/images/banner${window.isSafari ? '.jpg' : '.webp'}`) : require(`@/assets/images/landing${window.isSafari ? '.jpg' : '.webp'}`),
             expanded: false,
             expandLock: false,
             titleUp: false,

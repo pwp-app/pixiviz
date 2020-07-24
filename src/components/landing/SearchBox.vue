@@ -20,7 +20,7 @@ export default {
     data() {
         return {
             show: true,
-            searchBG: require('@/assets/images/searchbox.jpg'),
+            searchBG: require(`@/assets/images/searchbox${window.isSafari ? '.jpg' : '.webp'}`),
             search: '',
             bannerExpanded: false
         }

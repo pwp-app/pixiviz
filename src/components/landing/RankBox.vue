@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             show: true,
-            rankboxBG: require('@/assets/images/rank.jpg'),
+            rankboxBG: require(`@/assets/images/rank${window.isSafari ? '.jpg' : '.webp'}`),
             bannerExpanded: false
         }
     },

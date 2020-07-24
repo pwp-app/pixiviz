@@ -145,7 +145,9 @@ export default {
             this.relatedPage = 1;
             this.pageOffset = 0;
             this.$nextTick(() => {
-                this.$refs.related.reset();
+                if (this.$refs.related) {
+                    this.$refs.related.reset();
+                }
                 this.relatedImages = [];
             });
         },
