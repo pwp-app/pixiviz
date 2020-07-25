@@ -1,0 +1,29 @@
+.context-menu {
+    position: fixed;
+    background: @color-accent;
+    border-radius: 8px;
+    box-shadow: @shadow-small;
+    &-item:first-child {
+        border-radius: 8px 8px 0 0;
+    }
+    &-item:last-child {
+        border-radius: 0 0 8px 8px;
+    }
+    &-item:only-child {
+        border-radius: 8px;
+    }
+    &-item {
+        color: @color-primary;
+        padding: 12px 20px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.05rem;
+        transition: 100ms all ease-in-out;
+        user-select: none;
+    }
+    &-item:hover {
+        background-color: @color-primary;
+        color: @color-accent;
+        cursor: pointer;
+    }
+}
