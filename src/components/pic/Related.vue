@@ -15,7 +15,7 @@
             <div class="waterfall-wrapper">
                 <Waterfall ref="waterfall"
                     :images="images" @card-clicked="handleCardClicked"
-                    :cardWidth="cardWidth" imageType="squareMedium" :squaredImage="true"/>
+                    :cardWidth="cardWidth" imageType="square_medium" :squaredImage="true"/>
             </div>
         </div>
         <infinite-loading
@@ -32,21 +32,44 @@ import Waterfall from '../../components/common/Waterfall';
 
 export default {
     name: 'Pic.Related',
-    props: ['images', 'oimages', 'page', 'offset', 'orientation', 'end'],
+    props: ['images', 'oimages', 'page', 'orientation', 'end'],
     components: {
         Waterfall
     },
     data() {
         return {
-            screenWidth: document.documentElement.clientWidth,
-            cardWidth: this.getCardWidth(document.documentElement.clientWidth),
+            screenWidth: window.innerWidth,
             // Waterfall
             waterfallIdentifier: Math.round(Math.random() * 100)
         }
     },
     computed: {
         hasPrev() {
-            return this.page + this.offset > 1;
+            return this.page > 1;
+        },
+        cardWidth() {
+            const width = this.screenWidth;
+            if (width > 1366) {
+                this.$emit('change-page-size', 6);
+                return 204;
+            } else if (width > 1024 && width <= 1366) {
+                if (this.orientation === 0) {
+                    this.$emit('change-page-size', 20);
+                    return Math.floor((width - 48) / 4) - 16;
+                } else {
+                    this.$emit('change-page-size', 6);
+                    return 181;
+                }
+            } else if (width > 768 && width <= 1024) {
+                this.$emit('change-page-size', 30);
+                return Math.floor((width - 48) / 4) - 16;
+            } else if (width > 567 && width <= 768) {
+                this.$emit('change-page-size', 30);
+                return Math.floor((width - 48) / 3) - 16;
+            } else if (width <= 567) {
+                this.$emit('change-page-size', 30);
+                return Math.floor((width - 48) / 2) - 16;
+            }
         }
     },
     mounted() {
@@ -57,37 +80,24 @@ export default {
     watch: {
         screenWidth(width) {
             this.screenWidth = width;
-            this.$nextTick(() => {
-                this.cardWidth = this.getCardWidth(this.screenWidth);
-            });
         }
     },
     destroyed(){
         window.removeEventListener("resize", this.windowResized, false);
     },
     methods: {
-        getCardWidth(width) {
-            if (width > 1024) {
-                return 204;
-            }
-            if (width > 768 && width <= 1024) {
-                if (this.orientation === 0) {
-                    return Math.floor((width - 48) / 4) - 14;
-                } else {
-                    return 148;
-                }
-            } else if (width > 567 && width <= 768) {
-                return Math.floor((width - 48) / 3) - 14;
-            } else if (width <= 567) {
-                return Math.floor((width - 48) / 2) - 12;
-            }
-        },
         reset() {
             this.$refs.waterfall.$el.innerHTML = '';
         },
         // Window & Screen
         windowResized() {
-            this.screenWidth = document.documentElement.clientWidth;
+            this.screenWidth = window.innerWidth;
+            // 只有6个元素，重绘确保正确性
+            if (this.screenWidth >= 1366) {
+                this.$nextTick(() => {
+                    this.$redrawVueMasonry();
+                });
+            }
         },
         // Event
         handleCardClicked(imageId) {

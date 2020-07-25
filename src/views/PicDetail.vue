@@ -16,6 +16,7 @@
                     :offset="pageOffset"
                     @go="handleRelatedPageChanged"
                     @infite-load="handleRelatedInfiniteLoad"
+                    @change-page-size="handlePageSizeChanged"
                     :orientation="screenOrientation"
                     >
                 </Related>
@@ -35,6 +36,9 @@ import Author from '../components/pic/Author';
 import Related from '../components/pic/Related';
 import Overlay from '../components/pic/Overlay';
 
+// config
+import CONFIG from '../config.json';
+
 export default {
     name: 'Pic',
     data() {
@@ -47,6 +51,8 @@ export default {
             relatedLoading: false,
             relatedLoadFailed: false,
             relatedPage: 1,
+            relatedPageSize: 6,
+            realRelatedPage: 1,
             pageOffset: 0,
             from: this.$cookies.get('pic-from'),
             // screen
@@ -65,7 +71,7 @@ export default {
             return this.$route.params.id;
         },
         imageSlice() {
-            return this.relatedImages.slice((this.relatedPage - 1 + this.pageOffset) * 6, (this.relatedPage + this.pageOffset) * 6);
+            return this.relatedImages.slice((this.relatedPage - 1) * this.relatedPageSize, this.relatedPage * this.relatedPageSize);
         },
         author() {
             if (this.image && this.image.user) {
@@ -120,18 +126,18 @@ export default {
         },
         fetchRelated(state) {
             this.relatedLoading = true;
-            this.axios.get(`https://api.pixivic.com/illusts/${this.image.id}/related`, {
+            this.axios.get(`${CONFIG.OWN_API}/illust/related`, {
                 params: {
-                    page: this.relatedPage,
-                    pageSize: 6
+                    id: this.imageId,
+                    page: this.realRelatedPage,
                 }
             }).then(response => {
-                if (!response.data.data) {
+                if (!response.data.illusts) {
                     this.relatedLoadFailed = true;
                     this.relatedLoading = false;
                     return;
                 }
-                this.relatedImages = this.relatedImages.concat(response.data.data);
+                this.relatedImages = this.relatedImages.concat(response.data.illusts);
                 this.relatedLoading = false;
                 if (state) {
                     state.loaded();
@@ -143,7 +149,7 @@ export default {
             this.fetchInfo();
             // 重置related
             this.relatedPage = 1;
-            this.pageOffset = 0;
+            this.realRelatedPage = 1;
             this.$nextTick(() => {
                 if (this.$refs.related) {
                     this.$refs.related.reset();
@@ -151,15 +157,19 @@ export default {
                 this.relatedImages = [];
             });
         },
+        handlePageSizeChanged(size) {
+            this.relatedPageSize = size;
+        },
         handleRelatedPageChanged(toward) {
             if (toward < 0) {
-                this.pageOffset = this.pageOffset - 1;
+                this.relatedPage = this.relatedPage - 1;
             } else {
                 if (!this.relatedLoading) {
                     this.relatedPage = this.relatedPage + 1;
-                    this.fetchRelated();
-                    if (this.pageOffset < 0) {
-                        this.pageOffset = this.pageOffset + 1;
+                    // 提前2页load
+                    if (this.relatedPage * this.relatedPageSize > this.relatedImages.length - this.relatedPageSize) {
+                        this.realRelatedPage = this.realRelatedPage + 1;
+                        this.fetchRelated();
                     }
                 }
             }
@@ -170,17 +180,17 @@ export default {
                 this.$nextTick(() => {
                     this.$refs.related.reset();
                     this.showPart = true;
-                })
+                });
             } else if (this.screenOrientation !== 0 && window.orientation === 0) {
                 this.$nextTick(() => {
                     this.$refs.related.reset();
                     this.showPart = false;
-                })
+                });
             }
             this.screenOrientation = window.orientation;
         },
         handleRelatedInfiniteLoad(state) {
-            this.relatedPage = this.relatedPage + 1;
+            this.realRelatedPage = this.realRelatedPage + 1;
             this.fetchRelated(state);
         },
         handleClose(){

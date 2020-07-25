@@ -1,6 +1,6 @@
 <template>
-    <div class="waterfall-container" v-masonry item-selector=".waterfall-item">
-        <ImageCard v-masonry-tile class="waterfall-item"
+    <div class="waterfall-container" v-masonry fit-width="true" item-selector=".waterfall-item">
+        <ImageCard class="waterfall-item" v-masonry-tile
             v-for="(item, index) in images" :key="index" :image="item"
             :cardWidth="cardWidth" :imageType="imageType" :squaredImage="squaredImage"
             @clicked="handleCardClicked"/>

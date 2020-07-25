@@ -20,7 +20,7 @@ export default {
             selectDate: this.date.toDate(),
             pickerOpt: {
                 disabledDate: (time) => {
-                    return time && time.valueOf() >= Date.now() - 86400000 * 3;
+                    return time && time.valueOf() > Date.now() - 86400000 * 1;
                 }
             }
         }

@@ -1,27 +1,29 @@
 <template>
-    <div :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
-        <div class="image-card-overlay image-card-block" v-if="block">
-            <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
-                <i class="el-icon-warning-outline"/>
+    <div class="image-card-wrapper">
+        <div :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
+            <div class="image-card-overlay image-card-block" v-if="block">
+                <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
+                    <i class="el-icon-warning-outline"/>
+                </div>
+                <div :class="['image-card-overlay-tip', loadHeight < 128 ? 'image-card-overlay-tip-xs': null]">
+                    <span>该图片无法展示</span>
+                </div>
             </div>
-            <div :class="['image-card-overlay-tip', loadHeight < 128 ? 'image-card-overlay-tip-xs': null]">
-                <span>该图片无法展示</span>
+            <div class="image-card-overlay image-card-error" v-if="loadError">
+                <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
+                    <i class="el-icon-warning-outline"/>
+                </div>
+                <div :class="['image-card-overlay-tip', loadHeight < 128 ? 'image-card-overlay-tip-xs': null]">
+                    <span>图片加载失败</span>
+                </div>
             </div>
-        </div>
-        <div class="image-card-overlay image-card-error" v-if="loadError">
-            <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
-                <i class="el-icon-warning-outline"/>
+            <div class="image-card-count" v-if="image.page_count > 1">
+                <img :src="countIcon"><span>{{image.page_count}}</span>
             </div>
-            <div :class="['image-card-overlay-tip', loadHeight < 128 ? 'image-card-overlay-tip-xs': null]">
-                <span>图片加载失败</span>
+            <div ref="image" class="image-card-image" v-if="!block" v-loading="loading" v-lazy:background-image="source"></div>
+            <div class="image-card-title">
+                {{image.title}}
             </div>
-        </div>
-        <div class="image-card-count" v-if="image.pageCount > 1">
-            <img :src="countIcon"><span>{{image.pageCount}}</span>
-        </div>
-        <div ref="image" class="image-card-image" v-if="!block" v-loading="loading" v-lazy:background-image="source"></div>
-        <div class="image-card-title">
-            {{image.title}}
         </div>
     </div>
 </template>
@@ -52,7 +54,7 @@ export default {
             loading: true,
             loadError: false,
             loadHeight: this.getHeight(),
-            block: this.image.xrestrict ? true : this.image.sanityLevel > 5 ? true : false,
+            block: this.image.x_strict ? true : this.image.sanity_level > 5 ? true : false,
             countIcon: require('@/assets/images/count.svg')
         }
     },
@@ -61,7 +63,7 @@ export default {
             if (this.block || !this.image) {
                 return '';
             } else {
-                let url = this.image.imageUrls[0][this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                let url = this.image.image_urls[this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
                 if (window.isSafari) {
                     url = url.replace('_10_webp', '_70');
                 }
@@ -76,7 +78,7 @@ export default {
     methods: {
         getHeight() {
             if (this.squaredImage) {
-                return this.cardWidth
+                return this.cardWidth;
             } else {
                 return this.image.height / (this.image.width / this.cardWidth);
             }

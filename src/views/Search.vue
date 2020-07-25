@@ -90,7 +90,6 @@ export default {
     data() {
         return {
             page: this.$store.state.search.page !== null ? this.$store.state.search.page : 1,
-            pageSize: 30,
             images: this.$store.state.search.keyword === this.$route.params.keyword ?
                 this.$store.state.search.images ? this.$store.state.search.images: [] : [],
             suggestions: this.$store.state.search.suggestions ? this.$store.state.search.suggestions : [],
@@ -159,24 +158,20 @@ export default {
     methods: {
         infiniteHandler($state) {
             this.axios
-                .get(`${CONFIG.PIXIVIC_API}/illustrations`, {
+                .get(`${CONFIG.OWN_API}/illust/search`, {
                     params: {
-                        illustType: "illust",
-                        searchType: "origin",
-                        maxSanityLevel: 5,
-                        keyword: this.keyword,
+                        word: this.keyword,
                         page: this.page,
-                        pageSize: this.pageSize
                     }
                 })
                 .then(response => {
-                    if (!response.data.data) {
+                    if (!response.data.illusts) {
                         // 加载失败
                         $state.complete();
                         return;
                     }
-                    let images = response.data.data.filter(img => {
-                        if (img.type === 'ad_image' || img.xrestrict || img.sanityLevel > 5) {
+                    let images = response.data.illusts.filter(img => {
+                        if (img.x_restrict || img.sanity_level > 5) {
                             return false;
                         }
                         return true;
