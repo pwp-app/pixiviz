@@ -5,6 +5,8 @@
 </template>
 
 <script>
+let lastOffset = 0;
+
 export default {
     name: "Common.BackToTop",
     data() {
@@ -16,21 +18,27 @@ export default {
     created () {
         window.addEventListener('scroll', this.handleScroll);
     },
-    beforeDestroy () {
-        window.removeEventListener('scroll', this.handleScroll)
+    destroyed () {
+        window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
         handleScroll() {
-            if (this.show && window.pageYOffset < 300) {
-                this.showClass = false;
-                setTimeout(function() {
-                    this.show = false;
-                }.bind(this), 300);
-            } else {
-                this.show = window.pageYOffset > 300;
-                setTimeout(function() {
-                    this.showClass = this.show;
-                }.bind(this), 0);
+            if (window.pageYOffset - lastOffset < -50) {
+                if (this.show) {
+                    this.showClass = false;
+                    setTimeout(function() {
+                        this.show = false;
+                    }.bind(this), 300);
+                }
+                lastOffset = window.pageYOffset;
+            } else if (window.pageYOffset - lastOffset > 100) {
+                if (!this.show) {
+                    this.show = true;
+                    setTimeout(function() {
+                        this.showClass = this.show;
+                    }.bind(this), 0);
+                    }
+                lastOffset = window.pageYOffset;
             }
         },
         handleClick() {

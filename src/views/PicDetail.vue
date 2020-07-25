@@ -1,13 +1,11 @@
 <template>
-    <div :class="['pic-container', infoLoading ? 'pic-container-loading' : null]" v-loading="infoLoading">
+    <div
+        :class="['pic-container', infoLoading ? 'pic-container-loading' : null]"
+        v-loading="infoLoading"
+    >
         <div class="pic" v-if="!infoLoading">
             <div class="pic-presentation">
-                <Presentation
-                    v-if="image"
-                    :image="image"
-                    :block="block"
-                    @action-back="handleClose"
-                    />
+                <Presentation v-if="image" :image="image" :block="block" />
             </div>
             <div class="pic-side">
                 <Author :author="author" v-if="author"></Author>
@@ -31,26 +29,41 @@
                     @infite-load="handleRelatedInfiniteLoad"
                     @change-page-size="handlePageSizeChanged"
                     :orientation="screenOrientation"
-                    >
-                </Related>
+                ></Related>
             </div>
         </div>
-        <Overlay text="图片无法展示" v-if="block"/>
-        <Overlay text="图片信息加载失败" v-if="loadFailed"/>
+        <Overlay text="图片无法展示" v-if="block" />
+        <Overlay text="图片信息加载失败" v-if="loadFailed" />
         <div class="pic-close" @click="handleClose">
             <i class="el-icon-close"></i>
+        </div>
+        <div :class="['pic-action', actionShowClass ? 'pic-action-show' : null]" v-if="!infoLoading && actionShow">
+            <HomeIcon @action="handleAction" />
+            <RankIcon @action="handleAction" />
+            <LinkIcon @action="handleAction" />
+            <BackIcon @action="handleAction" />
         </div>
     </div>
 </template>
 
 <script>
+import * as clipboard from "clipboard-polyfill/dist/text/clipboard-polyfill.text";
+
 import Presentation from '../components/pic/Presentation';
 import Author from '../components/pic/Author';
 import Related from '../components/pic/Related';
 import Overlay from '../components/pic/Overlay';
 
+// icons
+import HomeIcon from '../components/icons/home';
+import RankIcon from '../components/icons/rank';
+import LinkIcon from '../components/icons/link';
+import BackIcon from '../components/icons/back';
+
 // config
 import CONFIG from '../config.json';
+
+let lastOffset = 0;
 
 export default {
     name: 'Pic',
@@ -73,13 +86,22 @@ export default {
             showPart: window.orientation !== 0,
             // download
             downloadStarted: false,
+            // action
+            actionShow: false,
+            actionShowClass: false,
+            link: window.location.href
         }
     },
     components: {
         Presentation,
         Author,
         Overlay,
-        Related
+        Related,
+        // icons
+        HomeIcon,
+        RankIcon,
+        LinkIcon,
+        BackIcon,
     },
     computed: {
         imageId() {
@@ -108,14 +130,16 @@ export default {
             this.fetchInfo();
         }
         // add event listener
-        this.$nextTick(() => {
-            window.addEventListener('orientationchange', this.handleScreenRotate, false);
-        });
+        window.addEventListener('orientationchange', this.handleScreenRotate, false);
+        window.addEventListener('scroll', this.handleScroll);
         // change title
         document.title = `图片${this.imageId} - Pixiviz`;
+        // reset var
+        lastOffset = 0;
     },
     destroyed() {
         window.removeEventListener('orientationchange', this.handleScreenRotate, false);
+        window.removeEventListener('scroll', this.handleScroll);
     },
     watch: {
         '$route.params.id': 'handleIdChanged'
@@ -179,6 +203,10 @@ export default {
                 }
                 this.relatedImages = [];
             });
+            // change title
+            document.title = `图片${this.imageId} - Pixiviz`;
+            // reset var
+            lastOffset = 0;
         },
         handlePageSizeChanged(size) {
             this.relatedPageSize = size;
@@ -197,7 +225,7 @@ export default {
                 }
             }
         },
-        handleScreenRotate(){
+        handleScreenRotate() {
             if (this.screenOrientation === 0 && window.orientation !== 0) {
                 // 切割显示的数组
                 this.$nextTick(() => {
@@ -216,14 +244,14 @@ export default {
             this.realRelatedPage = this.realRelatedPage + 1;
             this.fetchRelated(state);
         },
-        handleClose(){
+        handleClose() {
             if (this.from) {
                 this.$router.push('/' + this.from);
             } else {
                 this.$router.push('/');
             }
         },
-        downloadImage(src, name, queue=false) {
+        downloadImage(src, name, queue = false) {
             if (queue) {
                 window.downloadQueue.push({
                     url: src,
@@ -296,6 +324,53 @@ export default {
             this.downloadStarted = true;
             this.contextMenuVisible = false;
         },
+        // action
+        handleScroll() {
+            if (window.pageYOffset - lastOffset < -50) {
+                if (this.actionShow) {
+                    this.actionShowClass = false;
+                    setTimeout(function() {
+                        this.actionShow = false;
+                    }.bind(this), 300);
+                }
+                lastOffset = window.pageYOffset;
+            } else if (window.pageYOffset - lastOffset > 50) {
+                if (!this.actionShow) {
+                    this.actionShow = true;
+                    setTimeout(function() {
+                        this.actionShowClass = this.actionShow;
+                    }.bind(this), 0);
+                    }
+                lastOffset = window.pageYOffset;
+            }
+        },
+        handleAction(action) {
+            switch (action) {
+                case 'home':
+                    this.$router.push('/');
+                    break;
+                case 'rank':
+                    this.$router.push('/rank');
+                    break;
+                case 'copy-link':
+                    clipboard.writeText(window.location.href);
+                    this.$notify({
+                        title: '',
+                        position: 'top-right',
+                        customClass: 'oneline-notice-container',
+                        dangerouslyUseHTMLString: true,
+                        duration: 2000,
+                        message: `
+                            <div class="oneline-notice">
+                                <span data-name="oneline-notice">当前页面的链接已经复制到剪贴板啦~</span>
+                            </div>`
+                    });
+                    break;
+                case 'back':
+                    this.handleClose();
+                    break;
+            }
+        }
     }
 }
 </script>
