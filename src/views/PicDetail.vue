@@ -71,6 +71,8 @@ export default {
             // screen
             screenOrientation: window.orientation,
             showPart: window.orientation !== 0,
+            // download
+            downloadStarted: false,
         }
     },
     components: {
@@ -94,7 +96,7 @@ export default {
             }
         },
         originalUrls() {
-            if (this.image.page_count < 2) {
+            if (!this.image || this.image.page_count < 2) {
                 return null;
             } else {
                 return this.image.meta_pages;
@@ -166,6 +168,7 @@ export default {
         },
         handleIdChanged() {
             this.infoLoading = true;
+            this.downloadStarted = false;
             this.fetchInfo();
             // 重置related
             this.relatedPage = 1;
@@ -221,7 +224,7 @@ export default {
             }
         },
         downloadImage(src, name, queue=false) {
-            if (window.isSafari && queue) {
+            if (queue) {
                 window.downloadQueue.push({
                     url: src,
                     name: name
@@ -246,10 +249,32 @@ export default {
             image.src = src;
         },
         downloadAll() {
+            if (!this.originalUrls) {
+                return;
+            }
+            // notice
+            this.notification = this.$notify({
+                title: '',
+                position: 'top-right',
+                customClass: 'download-notice-container',
+                dangerouslyUseHTMLString: true,
+                duration: 2000,
+                message: `
+                    <div class="download-notice">
+                        <span data-name="download-notice">${this.downloadStarted ? '您的下载已经开始了，请耐心等待' : '您的下载开始了，请注意浏览器的提示'}</span>
+                    </div>`
+            });
+            // lock
+            if (this.downloadStarted) {
+                setTimeout(() => {
+                    this.downloadStarted = false;
+                }, 3000);
+                return;
+            }
             for (let i = 0; i < this.originalUrls.length; i++) {
                 this.downloadImage(this.originalUrls[i].image_urls
                     .original.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST),
-                    `${this.image.id}-${i}.jpg`, true);
+                    `${this.image.id}-${i}.jpg`, window.isSafari ? true : false);
             }
             if (window.isSafari) {
                 if (!window.downloadTimer) {
@@ -268,6 +293,7 @@ export default {
                     }, 1000);
                 }
             }
+            this.downloadStarted = true;
             this.contextMenuVisible = false;
         },
     }
