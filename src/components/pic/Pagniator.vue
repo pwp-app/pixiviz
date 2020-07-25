@@ -6,6 +6,7 @@
                 <span>前一页</span>
             </template>
         </div>
+        <div class="pic-presentation-page-back" v-if="pageCount <= 1"></div>
         <div class="pic-presentation-page-number">
             <span>{{page}} / {{pageCount}}</span>
         </div>
@@ -13,6 +14,7 @@
             <span>下一页</span>
             <i class="el-icon-arrow-right"></i>
         </div>
+        <div class="pic-presentation-page-next" v-if="page >= pageCount"></div>
     </div>
 </template>
 
