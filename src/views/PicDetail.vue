@@ -256,12 +256,12 @@ export default {
             this.notification = this.$notify({
                 title: '',
                 position: 'top-right',
-                customClass: 'download-notice-container',
+                customClass: 'oneline-notice-container',
                 dangerouslyUseHTMLString: true,
                 duration: 2000,
                 message: `
-                    <div class="download-notice">
-                        <span data-name="download-notice">${this.downloadStarted ? '您的下载已经开始了，请耐心等待' : '您的下载开始了，请注意浏览器的提示'}</span>
+                    <div class="oneline-notice">
+                        <span data-name="oneline-notice">${this.downloadStarted ? '您的下载已经开始了，请耐心等待' : '您的下载开始了，请注意浏览器的提示'}</span>
                     </div>`
             });
             // lock

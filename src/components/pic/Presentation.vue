@@ -41,6 +41,7 @@
             <div class="pic-presentation-info-action">
                 <HomeIcon @action="handleAction"/>
                 <RankIcon @action="handleAction"/>
+                <LinkIcon @action="handleAction"/>
                 <BackIcon @action="handleAction"/>
             </div>
         </div>
@@ -55,6 +56,7 @@ import Paginator from './Pagniator';
 
 import HomeIcon from '../../components/icons/home';
 import RankIcon from '../../components/icons/rank';
+import LinkIcon from '../../components/icons/link';
 import BackIcon from '../../components/icons/back';
 
 export default {
@@ -64,6 +66,7 @@ export default {
         Paginator,
         HomeIcon,
         RankIcon,
+        LinkIcon,
         BackIcon
     },
     data() {
@@ -249,6 +252,20 @@ export default {
                     break;
                 case 'rank':
                     this.$router.push('/rank');
+                    break;
+                case 'copy-link':
+                    navigator.clipboard.writeText(window.location.href);
+                    this.notification = this.$notify({
+                        title: '',
+                        position: 'top-right',
+                        customClass: 'oneline-notice-container',
+                        dangerouslyUseHTMLString: true,
+                        duration: 2000,
+                        message: `
+                            <div class="oneline-notice">
+                                <span data-name="oneline-notice">当前页面的链接已经复制到剪贴板啦~</span>
+                            </div>`
+                    });
                     break;
                 case 'back':
                     this.$emit('action-back');
