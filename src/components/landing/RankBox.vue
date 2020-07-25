@@ -5,15 +5,15 @@
                 <span>排行榜</span>
             </div>
             <div class="rankbox-options">
-                <div class="rankbox-options-text" @click="torankbox('month')">
+                <div class="rankbox-options-text" @click="toRank('month')">
                     <span>月</span>
                 </div>
                 <span class="rankbox-options-split">/</span>
-                <div class="rankbox-options-text" @click="torankbox('week')">
+                <div class="rankbox-options-text" @click="toRank('week')">
                     <span>周</span>
                 </div>
                 <span class="rankbox-options-split">/</span>
-                <div class="rankbox-options-text" @click="torankbox('day')">
+                <div class="rankbox-options-text" @click="toRank('day')">
                     <span>日</span>
                 </div>
             </div>
@@ -47,13 +47,11 @@ export default {
         }
     },
     methods: {
-        torankbox(mode) {
+        toRank(mode) {
             this.$cookies.set('rank-mode', mode, '20min');
             this.$cookies.set('rank-from', 'Landing', '20min');
-            // 如果是返回到主界面再重新打开排行榜，且与缓存非同一排行榜，则重置相关缓存
-            if (this.$store.state.rank.mode && this.$store.state.rank.mode !== mode) {
-                this.$store.commit('rank/setReset', true);
-            }
+            this.$cookies.set('rank-scroll', 0, '20min');
+            this.$cookies.set('rank-reset', 'true', '20min');
             this.$router.push({
                 name: 'Rank'
             });
