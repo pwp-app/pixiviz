@@ -319,9 +319,13 @@ export default {
             this.refreshWaterfall();
         },
         handleBack() {
-            this.$router.push({
-                name: this.routeFrom
-            });
+            if (this.routeFrom) {
+                this.$router.push({
+                    name: this.routeFrom
+                });
+            } else {
+                this.$router.push('/');
+            }
         },
         // 日期事件
         handleDateChanged(toward) {

@@ -38,6 +38,11 @@
             <div class="pic-presentation-info-time">
                 <span>{{createTime}}</span>
             </div>
+            <div class="pic-presentation-info-action">
+                <HomeIcon @action="handleAction"/>
+                <RankIcon @action="handleAction"/>
+                <BackIcon @action="handleAction"/>
+            </div>
         </div>
     </div>
 </template>
@@ -48,11 +53,18 @@ import dayjs from 'dayjs';
 /* Components */
 import Paginator from './Pagniator';
 
+import HomeIcon from '../../components/icons/home';
+import RankIcon from '../../components/icons/rank';
+import BackIcon from '../../components/icons/back';
+
 export default {
     name: 'Pic.Presentation',
     props: ['image', 'block'],
     components: {
         Paginator,
+        HomeIcon,
+        RankIcon,
+        BackIcon
     },
     data() {
         return {
@@ -228,6 +240,20 @@ export default {
         handleTagClicked(e) {
             this.$cookies.set('search-from', `pic/${this.image.id}`);
             this.$router.push(`/search/${e.currentTarget.dataset.tag}`);
+        },
+        // action
+        handleAction(action) {
+            switch(action) {
+                case 'home':
+                    this.$router.push('/');
+                    break;
+                case 'rank':
+                    this.$router.push('/rank');
+                    break;
+                case 'back':
+                    this.$emit('action-back');
+                    break;
+            }
         }
     }
 }

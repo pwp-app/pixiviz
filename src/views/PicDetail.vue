@@ -2,7 +2,12 @@
     <div :class="['pic-container', infoLoading ? 'pic-container-loading' : null]" v-loading="infoLoading">
         <div class="pic" v-if="!infoLoading">
             <div class="pic-presentation">
-                <Presentation :image="image" v-if="image" :block="block"/>
+                <Presentation
+                    v-if="image"
+                    :image="image"
+                    :block="block"
+                    @action-back="handleClose"
+                    />
             </div>
             <div class="pic-side">
                 <Author :author="author" v-if="author"></Author>
