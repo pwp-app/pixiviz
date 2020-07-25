@@ -2,8 +2,7 @@ const state = {
     images: null,
     page: null,
     mode: null,
-    date: null,
-    reset: false
+    date: null
 }
 
 const mutations = {
@@ -18,9 +17,6 @@ const mutations = {
     },
     setDate (state, date) {
         state.date = date;
-    },
-    setReset (state, value) {
-        state.reset = value;
     }
 }
 

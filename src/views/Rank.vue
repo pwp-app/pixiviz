@@ -11,10 +11,7 @@
                         width="440"
                         trigger="click"
                     >
-                        <ModeSwitcher
-                            :mode="mode"
-                            @mode-changed="handleModeChanged"
-                        />
+                        <ModeSwitcher :mode="mode" @mode-changed="handleModeChanged" />
                         <i class="el-icon-refresh" slot="reference"></i>
                     </el-popover>
                 </div>
@@ -25,10 +22,7 @@
         </div>
         <div class="rank-body">
             <div class="rank-body-date">
-                <div
-                    class="rank-body-date-item rank-body-date-back"
-                    @click="handleDateChanged(-1)"
-                >
+                <div class="rank-body-date-item rank-body-date-back" @click="handleDateChanged(-1)">
                     <i class="el-icon-arrow-left"></i>
                     <span>{{ backDateText }}{{ dateUnit }}</span>
                 </div>
@@ -43,10 +37,7 @@
                         :date="dateObject"
                         @date-selected="handleDateSelected"
                     />
-                    <div
-                        slot="reference"
-                        class="rank-body-date-item rank-body-date-date"
-                    >
+                    <div slot="reference" class="rank-body-date-item rank-body-date-date">
                         <span>{{ displayDate }}</span>
                     </div>
                 </el-popover>
@@ -60,26 +51,31 @@
                 </div>
             </div>
             <div class="rank-body-content">
-                <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
-                        <Waterfall
-                            class="waterfall waterfall-responsive"
-                            ref="waterfall"
-                            :images="images"
-                            @card-clicked="handleCardClicked"
-                            :cardWidth="cardWidth"
-                            imageType="medium"/>
+                <div
+                    class="waterfall-wrapper"
+                    :key="waterfallResponsive"
+                    v-if="waterfallResponsive"
+                >
+                    <Waterfall
+                        class="waterfall waterfall-responsive"
+                        ref="waterfall"
+                        :images="images"
+                        @card-clicked="handleCardClicked"
+                        :cardWidth="cardWidth"
+                        imageType="medium"
+                    />
                 </div>
                 <!-- 针对移动端渲染一个不同的组件 -->
                 <div class="waterfall-wrapper" v-if="!waterfallResponsive">
                     <Waterfall
-                            class="waterfall"
-                            ref="waterfall"
-                            :images="images"
-                            @card-clicked="handleCardClicked"
-                            :cardWidth="cardWidth"
-                            imageType="medium"
-                            fit-width="true"
-                        />
+                        class="waterfall"
+                        ref="waterfall"
+                        :images="images"
+                        @card-clicked="handleCardClicked"
+                        :cardWidth="cardWidth"
+                        imageType="medium"
+                        fit-width="true"
+                    />
                 </div>
             </div>
         </div>
@@ -103,6 +99,9 @@ import DateSwitcher from "../components/rank/DateSwitcher";
 // Util
 import MobileResponsive from "../util/MobileResponsive";
 
+// config
+import CONFIG from '../config.json';
+
 export default {
     name: "Rank",
     metaInfo: {
@@ -120,17 +119,16 @@ export default {
         return {
             // Waterfall Data
             page: this.$store.state.rank.page !== null ? this.$store.state.rank.page : 1,
-            pageSize: 30,
             dateObject: this.$store.state.rank.date
                 ? this.$store.state.rank.date
                 : dayjs()
-                      .subtract(3, "day")
-                      .subtract(6, 'hour'),
+                    .subtract(1, "day")
+                    .subtract(6, 'hour'),
             mode: this.$store.state.rank.mode
                 ? this.$store.state.rank.mode
                 : this.$cookies.get("rank-mode")
-                ? this.$cookies.get("rank-mode")
-                : "day",
+                    ? this.$cookies.get("rank-mode")
+                    : "day",
             images: this.$store.state.rank.images
                 ? this.$store.state.rank.images
                 : [],
@@ -149,10 +147,10 @@ export default {
         };
     },
     computed: {
-        date: function() {
+        date: function () {
             return this.dateObject.format("YYYY-MM-DD");
         },
-        modeText: function() {
+        modeText: function () {
             const mode2text = {
                 day: "日排行榜",
                 week: "周排行榜",
@@ -164,7 +162,7 @@ export default {
             };
             return mode2text[this.mode];
         },
-        dateUnit: function() {
+        dateUnit: function () {
             if (this.mode.indexOf("day") != -1) {
                 return "天";
             } else if (this.mode.indexOf("week") != -1) {
@@ -173,7 +171,7 @@ export default {
                 return "月";
             }
         },
-        displayDate: function() {
+        displayDate: function () {
             if (this.mode.indexOf("day") != -1) {
                 return this.dateObject.format("YYYY-MM-DD");
             } else if (this.mode.indexOf("week") != -1) {
@@ -187,9 +185,9 @@ export default {
                 return this.dateObject.format("YYYY-MM");
             }
         },
-        showDateNext: function() {
+        showDateNext: function () {
             return (
-                (dayjs().startOf("day").unix() - this.dateObject.unix()) / 86400 > 3
+                (dayjs().startOf("day").unix() - this.dateObject.unix()) / 86400 > 1
             );
         }
     },
@@ -228,23 +226,17 @@ export default {
         }
     },
     mounted() {
-        // Check reset flag
-        if (this.$store.state.rank.reset) {
-            this.reset();
-            this.$store.commit("rank/setReset", false);
-        } else {
-            // Do scroll when reset is not set
-            const scrollTop = this.$cookies.get("rank-scroll");
-            if (scrollTop) {
-                window.scrollTo(0, scrollTop);
-            }
+        // Do scroll when reset is not set
+        const scrollTop = this.$cookies.get("rank-scroll");
+        if (scrollTop) {
+            window.scrollTo(0, scrollTop);
         }
         // Recheck rank mode
-        const rank_mode = this.$cookies.get("rank-mode");
-        if (rank_mode && rank_mode !== this.mode) {
-            this.mode = rank_mode;
-            this.refreshWaterfall();
+        const reset = this.$cookies.get("rank-reset");
+        if (reset === 'true') {
+            this.resetImmediate();
         }
+        this.$cookies.remove('rank-reset');
         // Add window event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
@@ -260,22 +252,21 @@ export default {
     methods: {
         infiniteHandler($state) {
             this.axios
-                .get("https://api.pixivic.com/ranks", {
+                .get(`${CONFIG.OWN_API}/illust/rank`, {
                     params: {
                         mode: this.mode,
                         date: this.date,
-                        page: this.page,
-                        pageSize: this.pageSize
+                        page: this.page
                     }
                 })
                 .then((response, state) => {
-                    if (!response.data.data) {
+                    if (!response.data || !response.data.illusts) {
                         // 加载失败
                         $state.complete();
                         return;
                     }
-                    let images = response.data.data.filter(img => {
-                        if (img.type === 'ad_image' || img.xrestrict || img.sanityLevel > 5) {
+                    let images = response.data.illusts.filter(img => {
+                        if (img.x_restrict || img.sanity_level > 5) {
                             return false;
                         }
                         return true;
@@ -309,10 +300,18 @@ export default {
                 // 重置参数
                 this.page = 1;
                 this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
-                this.dateObject = dayjs().subtract(3, "day").subtract(6, 'hour');
+                this.dateObject = dayjs().subtract(1, "day").subtract(6, 'hour');
                 this.images = [];
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });
+        },
+        resetImmediate() {
+            this.$refs.waterfall.$el.innerHTML = "";
+            this.page = 1;
+            this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
+            this.dateObject = dayjs().subtract(1, "day").subtract(6, 'hour');
+            this.images = [];
+            this.waterfallIdentifier = this.waterfallIdentifier + 1;
         },
         handleModeChanged(mode) {
             this.mode = mode;
