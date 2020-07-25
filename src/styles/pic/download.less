@@ -1,0 +1,46 @@
+.pic-download {
+    margin-top: 28px;
+    &-title {
+        font-size: 26px;
+        color: @color-primary;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        .no-select();
+    }
+    &-items {
+        display: flex;
+        margin-top: 18px;
+        .el-button {
+            flex: 1;
+            flex-grow: 1;
+        }
+    }
+}
+
+/* Responsive */
+@media(max-width: 1024px) {
+    .pic-download {
+        &-title {
+            font-size: 24px;
+        }
+    }
+}
+
+/* iPad / iPad Pro protrait */
+@media screen and (orientation: portrait) and (max-width: 1024px) {
+    .pic-download {
+        &-title {
+            font-size: 22px;
+        }
+    }
+}
+
+/* Mobile */
+@media(max-width: 767px) {
+    .pic-download {
+        margin-top: 28px;
+        &-title {
+            font-size: 22px;
+        }
+    }
+}

@@ -1,13 +1,12 @@
 {
   "name": "pixiviz",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@xunlei/vue-context-menu": "^1.0.2",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "dayjs": "^1.8.29",

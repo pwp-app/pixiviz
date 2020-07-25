@@ -163,15 +163,6 @@
                 .no-select();
             }
         }
-        &-download {
-            display: none;
-            margin-top: 24px;
-            width: 100%;
-            .el-button {
-                flex: 1;
-                flex-grow: 1;
-            }
-        }
     }
 }
 
@@ -200,11 +191,6 @@
             max-width: 740px;
             max-height: 540px;
         }
-        .pic-presentation-info {
-            &-download {
-                display: flex;
-            }
-        }
     }
 }
 
@@ -228,6 +214,8 @@
         width: calc(100vw - 48px) !important;
         .pic-presentation-image {
             width: calc(100vw - 48px) !important;
+            max-width: none !important;
+            max-height: none !important;
             height: auto !important;
             box-shadow: none;
             img {
@@ -256,6 +244,8 @@
         .pic-presentation-image {
             width: calc(100vw - 48px) !important;
             height: auto !important;
+            max-width: none !important;
+            max-height: none !important;
             box-shadow: none;
             img {
                 width: calc(100vw - 48px) !important;

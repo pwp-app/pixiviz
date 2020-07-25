@@ -6,6 +6,14 @@
             </div>
             <div class="pic-side">
                 <Author :author="author" v-if="author"></Author>
+                <div class="pic-download" v-if="image.page_count > 1">
+                    <div class="pic-download-title">
+                        <span>下载</span>
+                    </div>
+                    <div class="pic-download-items" v-if="image.page_count > 1">
+                        <el-button type="primary" @click="downloadAll">下载所有</el-button>
+                    </div>
+                </div>
                 <Related
                     ref="related"
                     v-if="relatedImages"
@@ -24,7 +32,7 @@
         </div>
         <Overlay text="图片无法展示" v-if="block"/>
         <Overlay text="图片信息加载失败" v-if="loadFailed"/>
-        <div class="pic-close" v-if="from" @click="handleClose">
+        <div class="pic-close" @click="handleClose">
             <i class="el-icon-close"></i>
         </div>
     </div>
@@ -79,7 +87,14 @@ export default {
             } else {
                 return null;
             }
-        }
+        },
+        originalUrls() {
+            if (this.image.page_count < 2) {
+                return null;
+            } else {
+                return this.image.meta_pages;
+            }
+        },
     },
     mounted() {
         if (this.image === null) {
@@ -194,8 +209,62 @@ export default {
             this.fetchRelated(state);
         },
         handleClose(){
-            this.$router.push('/' + this.from);
-        }
+            if (this.from) {
+                this.$router.push('/' + this.from);
+            } else {
+                this.$router.push('/');
+            }
+        },
+        downloadImage(src, name, queue=false) {
+            if (window.isSafari && queue) {
+                window.downloadQueue.push({
+                    url: src,
+                    name: name
+                });
+                return;
+            }
+            const image = new Image();
+            image.setAttribute('crossOrigin', '*');
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                const context = canvas.getContext('2d');
+                context.drawImage(image, 0, 0, image.width, image.height);
+                const url = canvas.toDataURL('image/jpeg');
+                let a = document.createElement('a');
+                a.download = name;
+                a.href = url;
+                a.click();
+                a = null;
+            };
+            image.src = src;
+        },
+        downloadAll() {
+            for (let i = 0; i < this.originalUrls.length; i++) {
+                this.downloadImage(this.originalUrls[i].image_urls
+                    .original.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST),
+                    `${this.image.id}-${i}.jpg`, true);
+            }
+            if (window.isSafari) {
+                if (!window.downloadTimer) {
+                    window.downloadTimer = setInterval(() => {
+                        if (window.downloadQueue.length) {
+                            const image = window.downloadQueue.shift();
+                            this.downloadImage(image.url, image.name);
+                            window.downloadCounter = 0;
+                        } else {
+                            window.downloadCounter++;
+                            // 闲置超过10秒即销毁
+                            if (window.downloadCounter > 10) {
+                                clearInterval(window.downloadTimer);
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+            this.contextMenuVisible = false;
+        },
     }
 }
 </script>

@@ -38,15 +38,7 @@
             <div class="pic-presentation-info-time">
                 <span>{{createTime}}</span>
             </div>
-            <div class="pic-presentation-info-download" v-if="image.page_count === 1">
-                <el-button type="primary" @click="download">下载</el-button>
-            </div>
-            <div class="pic-presentation-info-download" v-else>
-                <el-button type="primary" @click="download">下载当前</el-button>
-                <el-button type="primary" @click="downloadAll">下载所有</el-button>
-            </div>
         </div>
-        <DownloadContextMenu :target="imageEl" :showAll="image.page_count > 1" @download="download" @download-all="downloadAll"></DownloadContextMenu>
     </div>
 </template>
 
@@ -55,14 +47,12 @@ import CONFIG from '@/config.json';
 import dayjs from 'dayjs';
 /* Components */
 import Paginator from './Pagniator';
-import DownloadContextMenu from './DownloadContextMenu';
 
 export default {
     name: 'Pic.Presentation',
     props: ['image', 'block'],
     components: {
         Paginator,
-        DownloadContextMenu,
     },
     data() {
         return {
@@ -182,20 +172,6 @@ export default {
                 return null;
             }
         },
-        originalUrl() {
-            if (this.image.page_count < 2) {
-                return this.image.meta_single_page.original_image_url.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST);
-            } else {
-                return this.image.meta_pages[this.page - 1].image_urls.original.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST);
-            }
-        },
-        originalUrls() {
-            if (this.image.page_count < 2) {
-                return null;
-            } else {
-                return this.image.meta_pages;
-            }
-        },
     },
     methods: {
         setLimitWidth(width) {
@@ -252,62 +228,7 @@ export default {
         handleTagClicked(e) {
             this.$cookies.set('search-from', `pic/${this.image.id}`);
             this.$router.push(`/search/${e.currentTarget.dataset.tag}`);
-
-        },
-        downloadImage(src, name, queue=false) {
-            if (window.isSafari && queue) {
-                window.downloadQueue.push({
-                    url: src,
-                    name: name
-                });
-                return;
-            }
-            const image = new Image();
-            image.setAttribute('crossOrigin', '*');
-            image.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = image.width;
-                canvas.height = image.height;
-                const context = canvas.getContext('2d');
-                context.drawImage(image, 0, 0, image.width, image.height);
-                const url = canvas.toDataURL('image/jpeg');
-                let a = document.createElement('a');
-                a.download = name;
-                a.href = url;
-                a.click();
-                a = null;
-            };
-            image.src = src;
-        },
-        download() {
-            this.downloadImage(this.originalUrl, `${this.image.id}.jpg`);
-            this.contextMenuVisible = false;
-        },
-        downloadAll() {
-            for (let i = 0; i < this.originalUrls.length; i++) {
-                this.downloadImage(this.originalUrls[i].image_urls
-                    .original.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST),
-                    `${this.image.id}-${i}.jpg`, true);
-            }
-            if (window.isSafari) {
-                if (!window.downloadTimer) {
-                    window.downloadTimer = setInterval(() => {
-                        if (window.downloadQueue.length) {
-                            const image = window.downloadQueue.shift();
-                            this.downloadImage(image.url, image.name);
-                            window.downloadCounter = 0;
-                        } else {
-                            window.downloadCounter++;
-                            // 闲置超过10秒即销毁
-                            if (window.downloadCounter > 10) {
-                                clearInterval(window.downloadTimer);
-                            }
-                        }
-                    }, 1000);
-                }
-            }
-            this.contextMenuVisible = false;
-        },
+        }
     }
 }
 </script>
