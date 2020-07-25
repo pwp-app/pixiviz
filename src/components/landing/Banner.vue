@@ -16,7 +16,7 @@
                         <span>Proxy: <a target="_blank" class="about-borrow-link" href="https://pixiv.cat">Pixivcat</a></span>
                     </div>
                     <div class="about-borrow-item">
-                        <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/63139897">Pixiv - 63139897</a></span>
+                        <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/63139897">63139897</a></span>
                     </div>
                 </div>
                 <div class="about-copyright">
@@ -26,7 +26,7 @@
                     <div class="about-copyright-item mobile-hide">
                         <span>Frontend based on Vue</span>
                     </div>
-                    <div class="about-copyright-item mobile-hide">
+                    <div class="about-copyright-item">
                         <span>Version: {{version}}</span>
                     </div>
                     <div class="about-copyright-item" @click="goGitHub">
