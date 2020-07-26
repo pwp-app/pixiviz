@@ -331,6 +331,13 @@ export default {
         // 通知事件
         searchNotifyClicked(e) {
             if (e.target.dataset.name === 'search-notify') {
+                // 添加来源
+                this.$cookies.set(
+                    "pic-from",
+                    `search/${this.$route.params.keyword}`,
+                    "20min"
+                );
+                // this.keyword此处等同于pic id
                 this.$router.push(`/pic/${this.keyword}`);
                 this.notification.close();
             }
