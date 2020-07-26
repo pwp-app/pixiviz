@@ -170,6 +170,11 @@ export default {
                         $state.complete();
                         return;
                     }
+                    if (response.data.illusts.length === 0) {
+                        // 无数据
+                        $state.complete();
+                        return;
+                    }
                     let images = response.data.illusts.filter(img => {
                         if (img.x_restrict || img.sanity_level > 5) {
                             return false;

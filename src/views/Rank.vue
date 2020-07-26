@@ -121,9 +121,7 @@ export default {
             page: this.$store.state.rank.page !== null ? this.$store.state.rank.page : 1,
             dateObject: this.$store.state.rank.date
                 ? this.$store.state.rank.date
-                : dayjs()
-                    .subtract(1, "day")
-                    .subtract(6, 'hour'),
+                : dayjs().subtract(2, "day"),
             mode: this.$store.state.rank.mode
                 ? this.$store.state.rank.mode
                 : this.$cookies.get("rank-mode")
@@ -187,7 +185,7 @@ export default {
         },
         showDateNext: function () {
             return (
-                (dayjs().startOf("day").unix() - this.dateObject.unix()) / 86400 > 1
+                (dayjs().startOf("day").unix() - this.dateObject.unix()) / 86400 > 2
             );
         }
     },
@@ -265,6 +263,11 @@ export default {
                         $state.complete();
                         return;
                     }
+                    if (response.data.illusts.length === 0) {
+                        // 无数据
+                        $state.complete();
+                        return;
+                    }
                     let images = response.data.illusts.filter(img => {
                         if (img.x_restrict || img.sanity_level > 5) {
                             return false;
@@ -300,7 +303,7 @@ export default {
                 // 重置参数
                 this.page = 1;
                 this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
-                this.dateObject = dayjs().subtract(1, "day").subtract(6, 'hour');
+                this.dateObject = dayjs().subtract(2, "day");
                 this.images = [];
                 this.waterfallIdentifier = this.waterfallIdentifier + 1;
             });
@@ -309,7 +312,7 @@ export default {
             this.$refs.waterfall.$el.innerHTML = "";
             this.page = 1;
             this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
-            this.dateObject = dayjs().subtract(1, "day").subtract(6, 'hour');
+            this.dateObject = dayjs().subtract(2, "day");
             this.images = [];
             this.waterfallIdentifier = this.waterfallIdentifier + 1;
         },
