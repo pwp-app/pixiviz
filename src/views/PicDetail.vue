@@ -9,11 +9,11 @@
             </div>
             <div class="pic-side">
                 <Author :author="author" v-if="author"></Author>
-                <div class="pic-download" v-if="image.page_count > 1">
+                <div class="pic-download" v-if="image && image.page_count > 1">
                     <div class="pic-download-title">
                         <span>下载</span>
                     </div>
-                    <div class="pic-download-items" v-if="image.page_count > 1">
+                    <div class="pic-download-items" v-if="image && image.page_count > 1">
                         <el-button type="primary" @click="downloadAll">下载所有</el-button>
                     </div>
                 </div>

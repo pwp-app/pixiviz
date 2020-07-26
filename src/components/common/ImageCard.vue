@@ -17,8 +17,8 @@
                     <span>图片加载失败</span>
                 </div>
             </div>
-            <div class="image-card-count" v-if="image.page_count > 1">
-                <img :src="countIcon"><span>{{image.page_count}}</span>
+            <div class="image-card-count" v-if="image && image.page_count > 1">
+                <img :src="countIcon"><span>{{image && image.page_count}}</span>
             </div>
             <div ref="image" class="image-card-image" v-if="!block" v-loading="loading" v-lazy:background-image="source"></div>
             <div class="image-card-title">

@@ -134,10 +134,12 @@ export default {
                 if (this.block) {
                     return '';
                 } else {
-                    if (this.image.page_count < 2) {
+                    if (this.image && this.image.page_count < 2) {
                         return this.image.meta_single_page.original_image_url.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
-                    } else {
+                    } else if (this.image && this.image.page_count >= 2) {
                         return this.image.meta_pages[this.page - 1].image_urls.original.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                    } else {
+                        return '';
                     }
                 }
             } else {
