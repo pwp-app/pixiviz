@@ -5,6 +5,18 @@
             margin: 2px 0 0;
             color: @color-primary;
             font-weight: 600;
+            .notice-link {
+                margin: 2px;
+                text-decoration: underline;
+                transition: color 150ms ease-in-out;
+            }
+            .notice-link:hover {
+                cursor: pointer;
+                color: lighten(@color-primary, 10%);
+            }
+            .notice-link:last-child {
+                margin-right: 0;
+            }
         }
     }
 }
