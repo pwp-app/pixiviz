@@ -33,7 +33,7 @@
             </div>
         </div>
         <Overlay text="图片无法展示" v-if="block" />
-        <Overlay text="图片信息加载失败" v-if="loadFailed" />
+        <Overlay text="图片信息加载失败" v-if="loadFailed" :showRefresh="true"/>
         <div class="pic-close" @click="handleClose">
             <i class="el-icon-close"></i>
         </div>

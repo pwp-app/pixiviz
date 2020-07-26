@@ -8,9 +8,11 @@
                 <span>{{text}}</span>
             </div>
             <div class="pic-overlay-back" v-if="showBack">
+                <el-button type="primary" round @click="handleRefresh" v-if="showRefresh">刷新</el-button>
                 <el-button type="primary" round @click="handleBack">返回</el-button>
             </div>
             <div class="pic-overlay-back" v-if="!showBack">
+                <el-button type="primary" round @click="handleRefresh" v-if="showRefresh">刷新</el-button>
                 <el-button type="primary" round @click="handleBackLanding">返回主页</el-button>
             </div>
         </div>
@@ -20,7 +22,7 @@
 <script>
 export default {
     name: 'Pic.Overlay',
-    props: ['text'],
+    props: ['text', 'showRefresh'],
     data() {
         return {
             showBack: false
@@ -34,6 +36,9 @@ export default {
     methods: {
         handleBack() {
             window.history.go(-1);
+        },
+        handleRefresh() {
+            window.location.reload();
         },
         handleBackLanding() {
             this.$router.push({
