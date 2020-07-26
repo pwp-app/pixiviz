@@ -289,7 +289,7 @@ export default {
                 duration: 2000,
                 message: `
                     <div class="oneline-notice">
-                        <span data-name="oneline-notice">${this.downloadStarted ? '您的下载已经开始了，请耐心等待' : '您的下载开始了，请注意浏览器的提示'}</span>
+                        <span data-name="notice-download">${this.downloadStarted ? '您的下载已经开始了，请耐心等待' : '您的下载开始了，请注意浏览器的提示'}</span>
                     </div>`
             });
             // lock
