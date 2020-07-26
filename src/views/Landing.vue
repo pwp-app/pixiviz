@@ -67,7 +67,11 @@ export default {
         },
         guideNoticeClicked(e) {
             if (e.target.dataset.name && e.target.dataset.name === 'link-guide') {
-                window.open(CONFIG.USE_GUIDE, '_blank');
+                if (window.isSafari) {
+                    window.location.href = CONFIG.USE_GUIDE;
+                } else {
+                    window.open(CONFIG.USE_GUIDE, '_blank');
+                }
                 this.guideNotice.close();
             }
         },
