@@ -138,8 +138,6 @@ export default {
         if (scrollTop) {
             window.scrollTo(0, scrollTop);
         }
-        // bind event to search notify
-        document.body.addEventListener('click', this.searchNotifyClicked, false);
         // Add resize event listener
         this.$nextTick(() => {
             window.addEventListener("resize", this.windowResized, false);
@@ -153,7 +151,9 @@ export default {
         this.leaveSuggestion();
         window.removeEventListener("resize", this.windowResized, false);
         window.removeEventListener("scroll", this.handleScroll, false);
-        document.body.removeEventListener('click', this.searchNotifyClicked, false);
+        if (this.notification) {
+            this.notification.close();
+        }
     },
     methods: {
         infiniteHandler($state) {
@@ -212,18 +212,22 @@ export default {
                         id: parseInt(this.keyword)
                     }
                 }).then(res => {
-                    if (res.data.illust) {
-                        this.notification = this.$notify({
-                            title: '您要找的可能是：',
-                            position: 'bottom-left',
-                            dangerouslyUseHTMLString: true,
-                            duration: 10000,
-                            message: `
-                            <div class="search-notify">
-                                <span data-name="search-notify">${res.data.illust.title} （ID: ${this.keyword}）</span>
-                            </div>`
-                        });
+                    if (!res.data.illust) {
+                        return;
                     }
+                    // bind event to search notify
+                    document.body.addEventListener('click', this.searchNotifyClicked, false);
+                    this.notification = this.$notify({
+                        title: '您要找的可能是：',
+                        position: 'bottom-left',
+                        dangerouslyUseHTMLString: true,
+                        duration: 5000,
+                        onClose: this.searchNotifyClosed,
+                        message: `
+                        <div class="search-notify">
+                            <span data-name="search-notify">${res.data.illust.title} （ID: ${this.keyword}）</span>
+                        </div>`
+                    });
                 });
             }
         },
@@ -330,7 +334,7 @@ export default {
         },
         // 通知事件
         searchNotifyClicked(e) {
-            if (e.target.dataset.name === 'search-notify') {
+            if (e.target.dataset.name && e.target.dataset.name === 'search-notify') {
                 // 添加来源
                 this.$cookies.set(
                     "pic-from",
@@ -341,6 +345,9 @@ export default {
                 this.$router.push(`/pic/${this.keyword}`);
                 this.notification.close();
             }
+        },
+        searchNotifyClosed() {
+            document.body.removeEventListener('click', this.searchNotifyClicked, false);
         }
     }
 };
