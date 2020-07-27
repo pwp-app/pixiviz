@@ -11,12 +11,15 @@
                 </div>
             </div>
         </div>
-        <div class="pic-related-content">
+        <div class="pic-related-content" v-if="!completed">
             <div class="waterfall-wrapper">
                 <Waterfall ref="waterfall"
                     :images="images" @card-clicked="handleCardClicked"
                     :cardWidth="cardWidth" imageType="square_medium" :squaredImage="true"/>
             </div>
+        </div>
+        <div class="pic-related-content-completed" v-else>
+            <span>没有相关图片...</span>
         </div>
         <infinite-loading
             v-if="orientation === 0 && images.length > 0"
@@ -32,7 +35,7 @@ import Waterfall from '../../components/common/Waterfall';
 
 export default {
     name: 'Pic.Related',
-    props: ['images', 'oimages', 'page', 'orientation', 'end'],
+    props: ['images', 'oimages', 'page', 'orientation', 'completed'],
     components: {
         Waterfall
     },
@@ -101,6 +104,11 @@ export default {
         },
         // Event
         handleCardClicked(imageId) {
+            // 设置缓存
+            const info = window.pixiviz.infoMap[imageId];
+            if (info) {
+                this.$store.commit('imageCache/setCache', info);
+            }
             this.$router.push('/pic/'+imageId);
         },
         handleGo(toward) {

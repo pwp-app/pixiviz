@@ -216,6 +216,12 @@ export default {
             });
         }
     },
+    beforeCreate() {
+        // 设置一个全局map
+        if (!window.pixiviz.infoMap) {
+            window.pixiviz.infoMap = {};
+        }
+    },
     created() {
         // Get cookies
         this.routeFrom = this.$cookies.get("rank-from");
@@ -272,6 +278,7 @@ export default {
                         if (img.x_restrict || img.sanity_level > 5) {
                             return false;
                         }
+                        if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
                         return true;
                     });
                     this.images = this.images.concat(images);
@@ -349,6 +356,11 @@ export default {
         // 跳转
         handleCardClicked(imageId) {
             this.$cookies.set("pic-from", "rank", "20min");
+            // 设置图片缓存
+            const info = window.pixiviz.infoMap[imageId];
+            if (info) {
+                this.$store.commit('imageCache/setCache', info);
+            }
             this.$router.push("/pic/" + imageId);
         },
         // 窗口事件

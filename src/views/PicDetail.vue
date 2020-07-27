@@ -25,6 +25,7 @@
                     :oimages="relatedImages"
                     :page="relatedPage"
                     :offset="pageOffset"
+                    :completed="relatedCompleted"
                     @go="handleRelatedPageChanged"
                     @infite-load="handleRelatedInfiniteLoad"
                     @change-page-size="handlePageSizeChanged"
@@ -75,7 +76,7 @@ export default {
             block: false,
             relatedImages: [],
             relatedLoading: false,
-            relatedLoadFailed: false,
+            relatedCompleted: false,
             relatedPage: 1,
             relatedPageSize: 6,
             realRelatedPage: 1,
@@ -146,6 +147,15 @@ export default {
     },
     methods: {
         fetchInfo() {
+            // 检查缓存
+            if (this.$store.state.imageCache.image) {
+                this.image = this.$store.state.imageCache.image;
+                this.afterLoad();
+                // 用完就丢
+                this.$store.commit('imageCache/destory');
+                this.infoLoading = false;
+                return;
+            }
             this.axios.get('/api/v1/illust/detail', {
                 params: {
                     id: this.imageId,
@@ -158,17 +168,20 @@ export default {
                 }
                 this.infoLoading = false;
                 this.image = response.data.illust;
-                if (this.image.x_restrict == 1 || this.image.sanity_level > 5) {
-                    this.block = true;
-                }
-                // fetch related
-                this.fetchRelated();
-                // change title
-                document.title = this.image.title + ' - Pixiviz';
+                this.afterLoad();
             }, () => {
                 this.infoLoading = false;
                 this.loadFailed = true;
             });
+        },
+        afterLoad() {
+            if (this.image.x_restrict == 1 || this.image.sanity_level > 5) {
+                this.block = true;
+            }
+            // fetch related
+            this.fetchRelated();
+            // change title
+             document.title = this.image.title + ' - Pixiviz';
         },
         fetchRelated(state) {
             this.relatedLoading = true;
@@ -178,12 +191,20 @@ export default {
                     page: this.realRelatedPage,
                 }
             }).then(response => {
-                if (!response.data.illusts) {
-                    this.relatedLoadFailed = true;
+                if (!response.data.illusts || response.data.illusts.length === 0) {
                     this.relatedLoading = false;
+                    this.relatedCompleted = true;
+                    if (state) state.complete();
                     return;
                 }
-                this.relatedImages = this.relatedImages.concat(response.data.illusts);
+                let images = response.data.illusts.filter(img => {
+                    if (img.x_restrict || img.sanity_level > 5) {
+                        return false;
+                    }
+                    if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
+                    return true;
+                });
+                this.relatedImages = this.relatedImages.concat(images);
                 this.relatedLoading = false;
                 if (state) {
                     state.loaded();

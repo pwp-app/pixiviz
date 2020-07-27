@@ -13,6 +13,12 @@
 
 export default {
     name: "app",
+    beforeCreate() {
+        // 全局构建
+        if (!window.pixiviz) {
+            window.pixiviz = {};
+        }
+    },
     created() {
         // 检测Safari
         window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
