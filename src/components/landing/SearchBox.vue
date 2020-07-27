@@ -1,5 +1,5 @@
 <template>
-    <div :class="['searchbox-wrapper', bannerExpanded ? 'searchbox-hide' : '']" v-show="show" v-lazy:background-image="searchBG">
+    <div :class="['landing-component-default', 'searchbox-wrapper', bannerExpanded ? 'searchbox-hide' : '']" v-show="show" v-lazy:background-image="searchBG">
         <div class="searchbox">
             <div class="searchbox-title">
                 <span>寻找你想要的图片</span>

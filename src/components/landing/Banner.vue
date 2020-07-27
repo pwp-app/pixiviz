@@ -1,5 +1,5 @@
 <template>
-    <div :class="['banner-wrapper', expanded ? 'banner-expanded' : '', clearMarginBottom ? 'clear-margin-bottom' : '']" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap" v-lazy:background-image="bannerBG">
+    <div :class="['landing-component-default', 'banner-wrapper', expanded ? 'banner-expanded' : '', clearMarginBottom ? 'clear-margin-bottom' : '']" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap" v-lazy:background-image="bannerBG">
         <div class="banner">
             <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
                 <span>Pixiviz</span>
@@ -93,13 +93,13 @@ export default {
                                 // Reverse hiding scrollbar
                                 document.body.className = document.body.className.replace(' no-scrollbar', '');
                             }, 500);
-                        }, 350)
-                    }, 350)
+                        }, 350);
+                    }, 350);
                 }
             }
         },
         handleDoubleTap() {
-            handleDblClick()
+            handleDblClick();
         },
         goGitHub() {
             window.open('https://github.com/pwp-app/pixiviz');

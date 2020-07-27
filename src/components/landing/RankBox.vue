@@ -1,5 +1,5 @@
 <template>
-    <div :class="['rankbox-wrapper', bannerExpanded ? 'rankbox-hide' : '']" v-show="show" v-lazy:background-image="rankboxBG">
+    <div :class="['landing-component-default', 'rankbox-wrapper', bannerExpanded ? 'rankbox-hide' : '']" v-show="show" v-lazy:background-image="rankboxBG">
         <div class="rankbox">
             <div class="rankbox-title">
                 <span>排行榜</span>
