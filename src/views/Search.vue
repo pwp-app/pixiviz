@@ -34,7 +34,7 @@
                 <span>{{ suggestion.keyword }}</span>
             </div>
         </div>
-        <div class="search-content">
+        <div class="search-content" v-if="!keywordBlocked">
             <div
                 class="waterfall-wrapper"
                 :key="waterfallResponsive"
@@ -61,10 +61,14 @@
                 />
             </div>
         </div>
+        <div class="search-content search-content-blocked" v-if="keywordBlocked">
+            <p>别搜了，这里真的没有色图...</p>
+        </div>
         <infinite-loading
             :identifier="waterfallIdentifier"
             @infinite="infiniteHandler"
             spinner="spiral"
+            v-if="!keywordBlocked"
         ></infinite-loading>
         <BackToTop />
     </div>
@@ -81,6 +85,9 @@ import CONFIG from '../config.json';
 
 const id_matcher = /^\d{2,8}$/;
 
+// block words
+const BLOCK_WORDS = [/r-?18/i, /18-?r/i, /^色图$/];
+
 export default {
     name: "Search",
     components: {
@@ -95,6 +102,7 @@ export default {
             suggestions: this.$store.state.search.suggestions ? this.$store.state.search.suggestions : [],
             keyword: this.$route.params.keyword,
             keywordInput: this.$route.params.keyword,
+            keywordBlocked: false,
             waterfallIdentifier: Math.round(Math.random() * 100),
             from: this.$cookies.get("search-from"),
             suggestionScrollLock: false,
@@ -133,6 +141,9 @@ export default {
         }
     },
     mounted() {
+        // 检查屏蔽
+        this.checkBlocked();
+        // 检查建议词
         if (this.keyword !== this.$store.state.search.keyword) {
             this.fetchSuggestion();
         }
@@ -163,6 +174,10 @@ export default {
     },
     methods: {
         infiniteHandler($state) {
+            // 屏蔽了就不发包
+            if (this.keywordBlocked) {
+                return;
+            }
             this.axios
                 .get(`${CONFIG.OWN_API}/illust/search`, {
                     params: {
@@ -259,9 +274,21 @@ export default {
             // 清除监听器
             this.leaveSuggestion();
         },
+        checkBlocked() {
+            // 检查屏蔽
+            let flag_blocked = false;
+            for (let pattern of BLOCK_WORDS) {
+                if (pattern.test(this.keyword)) {
+                    flag_blocked = true;
+                }
+            }
+            this.keywordBlocked = flag_blocked;
+        },
         handleKeywordChanged(keyword) {
             this.keyword = keyword;
             this.keywordInput = keyword;
+            // 检查屏蔽
+            this.checkBlocked();
             // update store
             this.$store.commit('search/setKeyword', this.keyword);
             this.$store.commit('search/setImages', []);
