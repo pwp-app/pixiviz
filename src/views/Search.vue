@@ -1,5 +1,5 @@
 <template>
-    <div :class="['search-container', iPadStyle ? 'ipad-only' : null]">
+    <div :class="['search-container', iPadStyle ? 'ipad-only' : null]" :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px`} : null">
         <div class="search-header">
             <div class="search-header-title">
                 <span>搜索</span>
@@ -103,6 +103,7 @@ export default {
             keyword: this.$route.params.keyword,
             keywordInput: this.$route.params.keyword,
             keywordBlocked: false,
+            blockedCount: 0,
             waterfallIdentifier: Math.round(Math.random() * 100),
             from: this.$cookies.get("search-from"),
             suggestionScrollLock: false,
@@ -277,6 +278,21 @@ export default {
         checkBlocked() {
             // 检查屏蔽
             let flag_blocked = false;
+            this.blockedCountTime = parseInt(window.localStorage.getItem('blocked_count_time'));
+            if (new Date().valueOf() - this.blockedCountTime > 180000) {
+                this.blockedCount = 1;
+                window.localStorage.setItem('blocked_count', 1);
+                window.localStorage.setItem('blocked_count_time', new Date().valueOf());
+            } else {
+                this.blockedCount = parseInt(window.localStorage.getItem('blocked_count'), 10);
+                if (!this.blockedCount) {
+                    window.localStorage.setItem('blocked_count', 1);
+                    window.localStorage.setItem('blocked_count_time', new Date().valueOf());
+                } else {
+                    window.localStorage.setItem('blocked_count', this.blockedCount + 1);
+                    window.localStorage.setItem('blocked_count_time', new Date().valueOf());
+                }
+            }
             for (let pattern of BLOCK_WORDS) {
                 if (pattern.test(this.keyword)) {
                     flag_blocked = true;
@@ -343,6 +359,9 @@ export default {
             }
         },
         enterSuggesion() {
+            if (!this.$refs.suggestions) {
+                return;
+            }
             if (
                 this.$refs.suggestions.scrollWidth >
                 this.$refs.suggestions.clientWidth
