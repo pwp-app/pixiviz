@@ -135,12 +135,6 @@ export default {
             });
         }
     },
-    beforeCreate() {
-        // 设置一个全局map
-        if (!window.pixiviz.infoMap) {
-            window.pixiviz.infoMap = {};
-        }
-    },
     mounted() {
         // 检查屏蔽
         this.checkBlocked();

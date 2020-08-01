@@ -216,12 +216,6 @@ export default {
             });
         }
     },
-    beforeCreate() {
-        // 设置一个全局map
-        if (!window.pixiviz.infoMap) {
-            window.pixiviz.infoMap = {};
-        }
-    },
     created() {
         // Get cookies
         this.routeFrom = this.$cookies.get("rank-from");

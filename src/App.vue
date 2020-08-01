@@ -18,6 +18,10 @@ export default {
         if (!window.pixiviz) {
             window.pixiviz = {};
         }
+        // 设置一个全局map
+        if (!window.pixiviz.infoMap) {
+            window.pixiviz.infoMap = {};
+        }
     },
     created() {
         // 检测Safari
