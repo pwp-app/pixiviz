@@ -5,7 +5,7 @@
         </div>
         <div class="pic-author-info">
             <div class="pic-author-info-avatar" v-lazy:background-image="avatar"></div>
-            <span>{{authorName}}</span>
+            <span @click="toArtistPage">{{authorName}}</span>
         </div>
     </div>
 </template>
@@ -30,6 +30,11 @@ export default {
             } else {
                 return '';
             }
+        }
+    },
+    methods: {
+        toArtistPage() {
+            this.$router.push(`/artist/${this.author.id}`);
         }
     }
 }

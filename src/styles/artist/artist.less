@@ -1,0 +1,149 @@
+.artist-container {
+    .infinite-loading-container {
+        .infinite-status-prompt {
+            padding: 42px 0 !important;
+            color: @color-text-primary !important;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            .no-select();
+        }
+    }
+
+    .artist-header {
+        padding-top: 40px;
+        margin: 0 auto;
+        .artist-component-width-mixin(3);
+        .artist-component-width-responsive-mixin(2, 2, 72px);
+        span, i {
+            .no-select();
+        }
+        &-close {
+            float: right;
+            transition: 200ms ease-in-out;
+            color: @color-text-primary;
+            font-size: 36px;
+            margin-top: 4px;
+            transform: translateX(8px); // 对齐下方内容
+        }
+        &-close:hover {
+            color: lighten(@color-text-primary, 10%);
+            cursor: pointer;
+        }
+    }
+
+    .artist-content {
+        width: 100%;
+        overflow: hidden;
+        padding-top: 8px;
+        .waterfall-wrapper {
+            .waterfall-wrapper-mixin(3);
+            .waterfall-responsive-mixin(2, 2, 72px);
+            .waterfall {
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+// ipad
+
+.artist-ipad-only {
+    @media screen and (orientation: landscape) {
+        @media (max-width: 1366px) {
+            .artist-header {
+                width: 1176px !important;
+            }
+            .artist-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 1184px !important;
+                    }
+                }
+            }
+        }
+        @media (max-width: 1024px) {
+            .artist-header {
+                width: 880px !important;
+            }
+            .artist-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 888px !important;
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (orientation: portrait) {
+        @media (max-width: 1024px) {
+            .artist-header {
+                width: 880px !important;
+            }
+            .artist-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 888px !important;
+                    }
+                }
+            }
+        }
+        @media (max-width: 768px) {
+            .artist-header {
+                width: 584px !important;
+            }
+            .artist-content {
+                .waterfall-wrapper {
+                    .waterfall-container {
+                        width: 592px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// mobile
+
+@media (max-width: 767px) {
+    .artist-container {
+        .artist-header {
+            width: auto !important;
+            padding: 32px 24px 0 24px;
+            display: flex;
+            align-items: center;
+            &-close {
+                position: absolute;
+                top: 24px;
+                right: 24px;
+                transform: translate(4px, -6px);
+            }
+        }
+        .artist-content {
+            width: auto !important;
+            padding: 8px 16px;
+            .waterfall-wrapper {
+                width: auto !important;
+            }
+        }
+    }
+}
+
+// mixin
+
+.artist-component-width-mixin(@col) {
+    @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+    width: @container-width - 8px;
+}
+
+.artist-component-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
+    @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
+    @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+    @media(max-width: @trigger-width) {
+        width: @container-width - 8px !important;
+    }
+    .artist-component-width-responsive-mixin(@col - 1, @min-col, @margin);
+}
+
+// import
+
+@import './detail.less';

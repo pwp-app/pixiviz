@@ -1,0 +1,87 @@
+.artist-detail {
+    width: 100%;
+    .artist-overview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &-avatar {
+            #avatar {
+                width: 80px;
+                height: 80px;
+                background-size: cover;
+                background-repeat: no-repeat;
+                border-radius: 50%;
+                box-shadow: 0 4px 8px rgba(0,0,0, .175);
+            }
+        }
+        &-content {
+            &-name {
+                font-size: 26px;
+                letter-spacing: 0.075rem;
+                text-align: center;
+                color: @color-text-primary;
+                font-weight: 600;
+                margin: 24px 0;
+            }
+            &-data {
+                display: flex;
+                .overview-data {
+                    display: flex;
+                    flex-direction: column;
+                    margin-right: 36px;
+                    &-name {
+                        text-align: center;
+                        color: @color-text-primary;
+                        font-size: 20px;
+                        font-weight: 600;
+                        letter-spacing: 0.05rem;
+                    }
+                    &-number {
+                        margin-top: 6px;
+                        text-align: center;
+                        color: @color-text-primary;
+                        font-size: 17px;
+                        font-weight: 600;
+                        letter-spacing: 0.05rem;
+                    }
+                }
+                .overview-data:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+    .artist-comment {
+        font-size: 14px;
+        font-weight: 400;
+        color: @color-text-primary;
+        line-height: 24px;
+        letter-spacing: 0.03rem;
+        border-top: 1px @color-text-primary dashed;
+        border-bottom: 1px @color-text-primary dashed;
+        max-width: 888px;
+        margin: 32px auto;
+        pre {
+            max-height: 180px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            margin: 16px 0;
+            padding-right: 8px;
+            white-space: pre-wrap;
+        }
+        pre::-webkit-scrollbar {
+            width: 5px;
+        }
+        pre::-webkit-scrollbar-button {
+            display: none;
+        }
+        pre::-webkit-scrollbar-thumb {
+            width: 5px;
+            border-radius: 3px;
+            background: @color-primary;
+        }
+        pre::-webkit-scrollbar-track {
+            background: @color-background-primary;
+        }
+    }
+}

@@ -23,6 +23,12 @@ const routes = [
         meta: { keepAlive: false },
     },
     {
+        path: "/artist/:id",
+        name: "Artist",
+        component: () => import(/* webpackChunkName: "artist" */ "../views/Artist.vue"),
+        meta: { keepAlive: true },
+    },
+    {
         path: "/search/:keyword",
         name: "Search",
         component: () => import(/* webpackChunkName: "search" */ "../views/Search.vue"),

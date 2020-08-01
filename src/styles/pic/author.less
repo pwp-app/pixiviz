@@ -1,6 +1,6 @@
 .pic-author {
     span {
-        color: @color-primary;
+        color: @color-text-primary;
         font-weight: 600;
         letter-spacing: 0.05em;
     }
@@ -24,6 +24,11 @@
         span {
             margin-left: 16px;
             font-size: 20px;
+            transition: 150ms all ease-in-out;
+        }
+        span:hover {
+            cursor: pointer;
+            color: lighten(@color-text-primary, 10%);
         }
     }
 }

@@ -6,6 +6,7 @@ import landingBanner from './modules/landingBanner';
 import rank from './modules/rank';
 import search from './modules/search';
 import imageCache from './modules/imageCache';
+import artist from './modules/artist';
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
         landingBanner,
         rank,
         search,
-        imageCache
+        imageCache,
+        artist
     }
 })

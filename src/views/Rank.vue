@@ -74,7 +74,7 @@
                         @card-clicked="handleCardClicked"
                         :cardWidth="cardWidth"
                         imageType="medium"
-                        fit-width="true"
+                        :fitWidth="true"
                     />
                 </div>
             </div>
