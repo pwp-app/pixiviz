@@ -117,15 +117,14 @@ export default {
                 this.sizeCache = {};
                 this.imageSize.x = image ? image.width : 0;
                 this.imageSize.y = image ? image.height : 0;
+                this.setLimitWidth(document.documentElement.clientWidth);
                 this.imageWidth = this.computeWidth(image ? image.width : 0, image ? image.height : 0);
                 this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
             }
         },
         screenWidth(width) {
             this.setLimitWidth(width);
-            this.$nextTick(() => {
-                this.updateDisplaySize();
-            });
+            this.updateDisplaySize();
         }
     },
     computed: {
