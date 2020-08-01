@@ -8,7 +8,7 @@
                 <Presentation v-if="image" :image="image" :block="block" />
             </div>
             <div class="pic-side">
-                <Author :author="author" v-if="author"></Author>
+                <Author :author="author" :imageId="image ? image.id : null" v-if="author"></Author>
                 <div class="pic-download" v-if="image && image.page_count > 1">
                     <div class="pic-download-title">
                         <span>下载</span>

@@ -15,7 +15,7 @@ import CONFIG from '@/config.json';
 
 export default {
     name: 'Pic.Author',
-    props: ['author'],
+    props: ['author', 'imageId'],
     computed: {
         avatar() {
             if (this.author) {
@@ -34,6 +34,7 @@ export default {
     },
     methods: {
         toArtistPage() {
+            this.$cookies.set('artist-from', `/pic/${this.imageId}`, '20min');
             this.$router.push(`/artist/${this.author.id}`);
         }
     }

@@ -91,7 +91,7 @@ export default {
                 this.name = user.name;
                 this.comment = user.comment;
                 // 触发事件
-                this.$emit('loaded')
+                this.$emit('loaded', this.name);
             });
         }
     }

@@ -1,12 +1,16 @@
 <template>
-    <div :class="['artist-container', iPadStyle ? 'artist-ipad-only' : null]">
+    <div :class="['artist-container', iPadStyle ? 'artist-ipad-only' : null]" v-loading="!infoLoaded">
         <div class="artist-header">
             <div class="artist-header-close">
                 <i class="el-icon-close" @click="handleBack"></i>
             </div>
-            <ArtistDetail :artistId="$route.params.id"/>
+            <ArtistDetail
+                :artistId="$route.params.id"
+                @loaded="handleInfoLoaded"
+                @failed="handleLoadFailed"
+                />
         </div>
-        <div class="artist-content">
+        <div class="artist-content" v-if="infoLoaded && !infoLoadFailed">
             <div
                 class="waterfall-wrapper"
                 :key="waterfallResponsive"
@@ -33,7 +37,9 @@
                 />
             </div>
         </div>
+        <Overlay text="画师信息加载失败" v-if="infoLoadFailed" />
         <infinite-loading
+            v-if="infoLoaded && !infoLoadFailed"
             :identifier="waterfallIdentifier"
             @infinite="infiniteHandler"
             spinner="spiral"
@@ -46,6 +52,7 @@
 import Waterfall from "../components/common/Waterfall";
 import BackToTop from "../components/common/BackToTop";
 import ArtistDetail from '../components/artist/ArtistDetail';
+import Overlay from '../components/pic/Overlay';
 // Util
 import MobileResponsive from "../util/MobileResponsive";
 // config
@@ -69,6 +76,8 @@ export default {
             images: this.$store.state.artist.id === this.$route.params.id ?
                 this.$store.state.artist.images ? this.$store.state.artist.images: [] : [],
             id: this.$route.params.id,
+            infoLoaded: false,
+            infoLoadFailed: false,
             // waterfall
             waterfallIdentifier: Math.round(Math.random() * 100),
             from: this.$cookies.get('artist-from'),
@@ -167,7 +176,9 @@ export default {
                     // 缓存 images
                     this.$store.commit("artist/setImages", this.images);
                     // 设置 Load 状态为 false
-                    this.$refs.waterfall.firstLoad = false;
+                    if (this.$refs.waterfall) {
+                        this.$refs.waterfall.firstLoad = false;
+                    }
                     // Page + 1
                     this.page = this.page + 1;
                     this.$store.commit("artist/setPage", this.page);
@@ -197,10 +208,19 @@ export default {
             }
             this.$router.push(`/pic/${imageId}`);
         },
+        // info
+        handleInfoLoaded(name) {
+            this.infoLoaded = true;
+            document.title = `${name} - Pixiviz`;
+        },
+        handleLoadFailed() {
+            this.infoLoaded = true;
+            this.infoLoadFailed = true;
+        },
         // 组件
         handleBack() {
             if (this.from) {
-                this.$router.push("/" + this.from);
+                this.$router.push(this.from);
             } else {
                 this.$router.push({
                     name: "Landing"

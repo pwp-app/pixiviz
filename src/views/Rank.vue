@@ -279,7 +279,9 @@ export default {
                     // 缓存 images
                     this.$store.commit("rank/setImages", this.images);
                     // 设置 Load 状态为 false
-                    this.$refs.waterfall.firstLoad = false;
+                    if (this.$refs.waterfall) {
+                        this.$refs.waterfall.firstLoad = false;
+                    }
                     // Page + 1
                     this.page = this.page + 1;
                     // 缓存 page
