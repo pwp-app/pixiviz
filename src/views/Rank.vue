@@ -351,7 +351,7 @@ export default {
         },
         // 跳转
         handleCardClicked(imageId) {
-            this.$cookies.set("pic-from", "rank", "20min");
+            this.$cookies.set("pic-from", "rank", "1h");
             // 设置图片缓存
             const info = window.pixiviz.infoMap[imageId];
             if (info) {
@@ -361,7 +361,7 @@ export default {
         },
         // 窗口事件
         handleScroll() {
-            this.$cookies.set("rank-scroll", document.documentElement.scrollTop, "20min");
+            this.$cookies.set("rank-scroll", document.documentElement.scrollTop, "1h");
         },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;

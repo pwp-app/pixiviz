@@ -317,7 +317,7 @@ export default {
             this.$cookies.set(
                 "pic-from",
                 `search/${this.$route.params.keyword}`,
-                "20min"
+                "1h"
             );
             // 设置图片缓存
             const info = window.pixiviz.infoMap[imageId];
@@ -374,11 +374,11 @@ export default {
         },
         // 窗口事件
         handleScroll() {
-            this.$cookies.set("search-scroll", document.documentElement.scrollTop, "20min");
+            this.$cookies.set("search-scroll", document.documentElement.scrollTop, "1h");
         },
         resetScrollState() {
             this.scrollTop = 0;
-            this.$cookies.set("search-scroll", 0, "20min");
+            this.$cookies.set("search-scroll", 0, "1h");
         },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;
@@ -393,7 +393,7 @@ export default {
                 this.$cookies.set(
                     "pic-from",
                     `search/${this.$route.params.keyword}`,
-                    "20min"
+                    "1h"
                 );
                 // this.keyword此处等同于pic id
                 this.$router.push(`/pic/${this.keyword}`);
