@@ -2,7 +2,7 @@
     <div class="artist-detail">
         <div class="artist-overview">
             <div class="artist-overview-avatar">
-                <div id="avatar" v-lazy:background-image="avatar"></div>
+                <div id="avatar" :style="{backgroundImage: `url(${this.avatar})`}"></div>
             </div>
             <div class="artist-overview-content">
                 <div class="artist-overview-content-name">
@@ -72,6 +72,11 @@ export default {
     },
     methods: {
         fetchDetail() {
+            if (window.pixiviz && window.pixiviz.artistMap && window.pixiviz.artistMap[this.artistId]) {
+                this.artist = window.pixiviz.artistMap[this.artistId];
+                this.afterLoad();
+                return;
+            }
             this.axios.get(`${CONFIG.OWN_API}/user/detail`, {
                 params: {
                     id: this.artistId,
@@ -82,17 +87,23 @@ export default {
                     return;
                 }
                 this.artist = res.data;
-                // 拆解
-                const profile = this.artist.profile;
-                this.totalIllusts = profile.total_illusts;
-                this.totalManga = profile.total_manga;
-                this.totalNovel = profile.total_novels;
-                const user = this.artist.user;
-                this.name = user.name;
-                this.comment = user.comment;
-                // 触发事件
-                this.$emit('loaded', this.name);
+                if (window.pixiviz && window.pixiviz.artistMap) {
+                    window.pixiviz.artistMap[this.artistId] = this.artist;
+                }
+                this.afterLoad();
             });
+        },
+        afterLoad() {
+            // 拆解
+            const profile = this.artist.profile;
+            this.totalIllusts = profile.total_illusts;
+            this.totalManga = profile.total_manga;
+            this.totalNovel = profile.total_novels;
+            const user = this.artist.user;
+            this.name = user.name;
+            this.comment = user.comment;
+            // 触发事件
+            this.$emit('loaded', this.name);
         }
     }
 }

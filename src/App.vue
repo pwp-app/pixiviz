@@ -18,9 +18,12 @@ export default {
         if (!window.pixiviz) {
             window.pixiviz = {};
         }
-        // 设置一个全局map
+        // 设置全局map
         if (!window.pixiviz.infoMap) {
             window.pixiviz.infoMap = {};
+        }
+        if (!window.pixiviz.artistMap) {
+            window.pixiviz.artistMap = {};
         }
     },
     created() {
