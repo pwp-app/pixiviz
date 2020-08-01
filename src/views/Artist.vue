@@ -196,10 +196,15 @@ export default {
             });
         },
         handleCardClicked(imageId) {
+            const picFrom = this.$cookies.get('pic-from');
+            // 保存原始的pic-from
+            if (picFrom) {
+                window.localStorage.setItem('entry-pic-from', picFrom);
+            }
             this.$cookies.set(
                 "pic-from",
                 `artist/${this.id}`,
-                "20min"
+                "1h"
             );
             // 设置图片缓存
             const info = window.pixiviz.infoMap[imageId];
@@ -220,20 +225,21 @@ export default {
         // 组件
         handleBack() {
             if (this.from) {
+                if (this.from.includes('pic')) {
+                    window.localStorage.setItem('is-entry-pic', true);
+                }
                 this.$router.push(this.from);
             } else {
-                this.$router.push({
-                    name: "Landing"
-                });
+                this.$router.push('/');
             }
         },
         // 窗口事件
         handleScroll() {
-            this.$cookies.set("artist-scroll", document.documentElement.scrollTop, "20min");
+            this.$cookies.set("artist-scroll", document.documentElement.scrollTop, "1h");
         },
         resetScrollState() {
             this.scrollTop = 0;
-            this.$cookies.set("artist-scroll", 0, "20min");
+            this.$cookies.set("artist-scroll", 0, "1h");
         },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;

@@ -34,7 +34,7 @@ export default {
     },
     methods: {
         toArtistPage() {
-            this.$cookies.set('artist-from', `/pic/${this.imageId}`, '20min');
+            this.$cookies.set('artist-from', `/pic/${this.imageId}`, '1h');
             this.$router.push(`/artist/${this.author.id}`);
         }
     }
