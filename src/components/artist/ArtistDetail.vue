@@ -1,5 +1,5 @@
 <template>
-    <div class="artist-detail">
+    <div class="artist-detail" v-if="loaded">
         <div class="artist-overview">
             <div class="artist-overview-avatar">
                 <div id="avatar" :style="{backgroundImage: `url(${this.avatar})`}"></div>
@@ -56,6 +56,7 @@ export default {
             totalIllusts: 0,
             totalManga: 0,
             totalNovel: 0,
+            loaded: false,
         };
     },
     mounted() {
@@ -102,6 +103,7 @@ export default {
             const user = this.artist.user;
             this.name = user.name;
             this.comment = user.comment;
+            this.loaded = true;
             // 触发事件
             this.$emit('loaded', this.name);
         }
