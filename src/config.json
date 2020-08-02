@@ -1,7 +1,6 @@
 {
     "IMAGE_PROXY_HOST": "i.pixiv.cat",
     "DOWNLOAD_HOST": "pixiv.pwp.workers.dev",
-    "PIXIVIC_API": "https://api.pixivic.com",
     "OWN_API": "/api/v1",
     "USE_GUIDE": "https://io.backrunner.top/2020/07/27/Pixiviz%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97.html"
 }

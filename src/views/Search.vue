@@ -28,10 +28,10 @@
             <div
                 class="search-suggestion-item"
                 v-for="suggestion in suggestions"
-                :key="suggestion.keyword"
-                @click="handleSuggestionClick(suggestion.keyword)"
+                :key="suggestion"
+                @click="handleSuggestionClick(suggestion)"
             >
-                <span>{{ suggestion.keyword }}</span>
+                <span>{{ suggestion }}</span>
             </div>
         </div>
         <div class="search-content" v-if="!keywordBlocked">
@@ -212,16 +212,16 @@ export default {
                 });
         },
         fetchSuggestion() {
-            this.axios
-                .get(
-                    `${CONFIG.PIXIVIC_API}/keywords/${this.keyword}/pixivSuggestions`
-                )
-                .then(response => {
-                    if (response.data.data) {
-                        this.suggestions = response.data.data;
-                        this.$store.commit('search/setSuggestions', this.suggestions);
-                    }
-                });
+            this.axios.get(`${CONFIG.OWN_API}/search/suggestions`, {
+                params: {
+                    keyword: this.keyword,
+                }
+            }).then(res => {
+                if (res.data) {
+                    this.suggestions = res.data.filter(item => item !== this.keyword);
+                    this.$store.commit('search/setSuggestions', this.suggestions);
+                }
+            });
         },
         checkIfId() {
             // 检查关键词是不是纯数字

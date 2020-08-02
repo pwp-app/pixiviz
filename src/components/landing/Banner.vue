@@ -10,9 +10,6 @@
                         <span>借物</span>
                     </div>
                     <div class="about-borrow-item">
-                        <span>API（部分）: <a target="_blank" class="about-borrow-link" href="https://pixivic.com">Pixivic</a></span>
-                    </div>
-                    <div class="about-borrow-item">
                         <span>Proxy: <a target="_blank" class="about-borrow-link" href="https://pixiv.cat">Pixivcat</a></span>
                     </div>
                     <div class="about-borrow-item">
