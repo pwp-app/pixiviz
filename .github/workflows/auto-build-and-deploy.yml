@@ -1,0 +1,35 @@
+name: Auto build & deploy when master changed
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Checkout master
+      uses: actions/checkout@v2
+
+    - name: Setup node
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '14'
+
+    - name: Build project
+      run: npm install && npm run build
+    
+    - name: Clean repo
+      run: git reset --hard
+    
+    - name: Deploy to remote
+      uses: SamKirkland/FTP-Deploy-Action@3.1.1
+      with:
+        ftp-server: ${{ secrets.DEPLOY_REMOTE_SERVER }}
+        ftp-username: ${{ secrets.DEPLOY_REMOTE_USER }}
+        ftp-password: ${{ secrets.DEPLOY_REMOTE_PASSWORD }}
+        local-dir: dist
+        git-ftp-args: --insecure
