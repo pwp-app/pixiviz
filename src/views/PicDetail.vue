@@ -1,6 +1,6 @@
 <template>
     <div
-        :class="['pic-container', infoLoading ? 'pic-container-loading' : null]"
+        :class="['pic-container', infoLoading ? 'pic-container-loading' : null, block || loadFailed ? 'pic-container-failed' : null]"
         v-loading="infoLoading"
     >
         <div class="pic" v-if="!infoLoading">
