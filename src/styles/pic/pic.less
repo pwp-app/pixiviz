@@ -93,6 +93,13 @@
     transform: translateY(0);
 }
 
+// iPhone X
+@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
+    .pic-action {
+        bottom: 26px !important;
+    }
+  }
+
 /* Responsive */
 @media(max-width: 1680px) {
     .pic {

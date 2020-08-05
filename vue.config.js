@@ -79,23 +79,25 @@ module.exports = {
                 },
             },
         };
-        return {
-            plugins: [
-                new CompressionWebpackPlugin({
-                    algorithm(input, compressionOptions, callback) {
-                        return zopfli.gzip(input, compressionOptions, callback);
-                    },
-                    compressionOptions: {
-                        numiterations: 15,
-                    },
-                    minRatio: 0.8,
-                    test: productionGzipExtensions,
-                }),
-                new BrotliPlugin({
-                    test: productionGzipExtensions,
-                    minRatio: 0.8,
-                }),
-            ],
-        };
+        if (process.env.NODE_ENV === 'production') {
+            return {
+                plugins: [
+                    new CompressionWebpackPlugin({
+                        algorithm(input, compressionOptions, callback) {
+                            return zopfli.gzip(input, compressionOptions, callback);
+                        },
+                        compressionOptions: {
+                            numiterations: 15,
+                        },
+                        minRatio: 0.8,
+                        test: productionGzipExtensions,
+                    }),
+                    new BrotliPlugin({
+                        test: productionGzipExtensions,
+                        minRatio: 0.8,
+                    }),
+                ],
+            };
+        }
     },
 };
