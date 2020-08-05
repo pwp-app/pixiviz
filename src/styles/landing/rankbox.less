@@ -10,7 +10,7 @@
     transition: 500ms ease-in-out;
     background-size: 100%;
     background-position-x: center;
-    background-position-y: 92%;
+    background-position-y: 94.5%;
 }
 .rankbox-hide {
     opacity: 0;
@@ -73,6 +73,12 @@
 }
 
 // iPad
+@media(max-width: 1024px) and (max-height: 768px) {
+    .rankbox-wrapper {
+        background-size: 135%;
+        background-position-y: 92.5%;
+    }
+}
 @media(max-width: 768px) and (max-height: 1024px) {
     .rankbox-wrapper {
         background-size: 180%;
