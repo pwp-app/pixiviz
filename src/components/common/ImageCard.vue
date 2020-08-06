@@ -1,6 +1,6 @@
 <template>
     <div class="image-card-wrapper">
-        <div :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
+        <a :href="loadError || block || !image ? 'javascript:;' : `/pic/${image.id}`" :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click.prevent="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
             <div class="image-card-overlay image-card-block" v-if="block">
                 <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
                     <i class="el-icon-warning-outline"/>
@@ -24,7 +24,7 @@
             <div class="image-card-title">
                 {{image.title}}
             </div>
-        </div>
+        </a>
     </div>
 </template>
 
@@ -107,4 +107,3 @@ export default {
     }
 }
 </script>
-
