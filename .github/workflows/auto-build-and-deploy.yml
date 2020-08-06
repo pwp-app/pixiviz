@@ -2,9 +2,8 @@ name: Auto build & deploy when master changed
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: 
+    - master
 
 jobs:
   build:
