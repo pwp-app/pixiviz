@@ -14,8 +14,13 @@
         <div class="pic-related-content" v-if="!completed">
             <div class="waterfall-wrapper">
                 <Waterfall ref="waterfall"
-                    :images="images" @card-clicked="handleCardClicked"
-                    :cardWidth="cardWidth" imageType="square_medium" :squaredImage="true"/>
+                    :images="images"
+                    @card-clicked="handleCardClicked"
+                    :cardWidth="cardWidth"
+                    imageType="square_medium"
+                    :squaredImage="true"
+                    :fitWidth="true"
+                    />
             </div>
         </div>
         <div class="pic-related-content-completed" v-else>
