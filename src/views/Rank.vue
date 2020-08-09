@@ -287,6 +287,9 @@ export default {
                     // 缓存 page
                     this.$store.commit('rank/setPage', this.page);
                     $state.loaded();
+                }, () => {
+                    // 网络错误
+                    $state.complete();
                 });
         },
         refreshWaterfall() {

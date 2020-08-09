@@ -183,6 +183,8 @@ export default {
                     this.page = this.page + 1;
                     this.$store.commit("artist/setPage", this.page);
                     $state.loaded();
+                }, () => {
+                    $state.complete();
                 });
         },
         refreshWaterfall() {

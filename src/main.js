@@ -29,7 +29,7 @@ Vue.config.productionTip = false
 // Set up axios
 axios.defaults.baseURL = ''
 axios.defaults.withCredentials = true
-axios.defaults.timeout = 15000
+axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.transformRequest = [function (data) {

@@ -209,6 +209,8 @@ export default {
                     this.page = this.page + 1;
                     this.$store.commit("search/setPage", this.page);
                     $state.loaded();
+                }, () => {
+                    $state.complete();
                 });
         },
         fetchSuggestion() {

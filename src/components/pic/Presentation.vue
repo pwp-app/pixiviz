@@ -3,7 +3,9 @@
         <div v-loading="imageLoading" class="pic-presentation-image"
             :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
             <img ref="image" v-lazy="source"
-                :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
+                :style="{width: imageWidth + 'px', height: imageHeight + 'px'}"
+                @click="openLightBox"
+                >
             <div style="clear: both;"></div>
             <div class="pic-presentation-image-error" v-if="imageLoadError">
                 <div class="pic-presentation-image-error-icon">
@@ -39,6 +41,9 @@
                 <span>{{createTime}}</span>
             </div>
         </div>
+        <transition>
+            <LightBox v-if="lightBoxShow" @close="onLightBoxClose" :src="source" :isLanding="imageWidth < imageHeight" />
+        </transition>
     </div>
 </template>
 
@@ -47,12 +52,14 @@ import CONFIG from '@/config.json';
 import dayjs from 'dayjs';
 /* Components */
 import Paginator from './Pagniator';
+import LightBox  from './LightBox';
 
 export default {
     name: 'Pic.Presentation',
     props: ['image', 'block'],
     components: {
         Paginator,
+        LightBox,
     },
     data() {
         return {
@@ -66,7 +73,9 @@ export default {
             imageHeight: 0,
             imageLoading: true,
             imageLoadError: false,
-            page: 1
+            page: 1,
+            // lightbox
+            lightBoxShow: false,
         }
     },
     beforeCreate() {
@@ -230,6 +239,18 @@ export default {
             this.$cookies.set('search-from', `pic/${this.image.id}`);
             this.$router.push(`/search/${e.currentTarget.dataset.tag}`);
         },
+        // lightbox
+        openLightBox() {
+            if (this.imageLoading || this.imageLoadError) {
+                return;
+            }
+            this.lightBoxShow = true;
+            this.$emit('lightbox-open');
+        },
+        onLightBoxClose() {
+            this.lightBoxShow = false;
+            this.$emit('lightbox-close');
+        }
     }
 }
 </script>

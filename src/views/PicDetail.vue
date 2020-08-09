@@ -1,11 +1,21 @@
 <template>
     <div
-        :class="['pic-container', infoLoading ? 'pic-container-loading' : null, block || loadFailed ? 'pic-container-failed' : null]"
+        :class="['pic-container',
+                infoLoading ? 'pic-container-loading' : null,
+                block || loadFailed ? 'pic-container-failed' : null,
+                lightboxShow ? 'pic-container-lockscroll' : null,
+                ]"
         v-loading="infoLoading"
     >
         <div class="pic" v-if="!infoLoading">
             <div class="pic-presentation">
-                <Presentation v-if="image" :image="image" :block="block" />
+                <Presentation
+                    v-if="image"
+                    :image="image"
+                    :block="block"
+                    @lightbox-open="handleLightBoxOpen"
+                    @lightbox-close="handleLightBoxClose"
+                    />
             </div>
             <div class="pic-side">
                 <Author :author="author" :imageId="image ? image.id : null" v-if="author"></Author>
@@ -90,7 +100,9 @@ export default {
             // action
             actionShow: false,
             actionShowClass: false,
-            link: window.location.href
+            link: window.location.href,
+            // lightbox
+            lightboxShow: false,
         }
     },
     components: {
@@ -129,14 +141,19 @@ export default {
     mounted() {
         if (this.image === null) {
             this.fetchInfo();
+            document.title = `图片${this.imageId} - Pixiviz`;
+        } else {
+            this.image.title = `${this.image.title} - Pixiviz`;
         }
         // add event listener
         window.addEventListener('orientationchange', this.handleScreenRotate, false);
         window.addEventListener('scroll', this.handleScroll);
-        // change title
-        document.title = `图片${this.imageId} - Pixiviz`;
         // reset var
         lastOffset = 0;
+        // scroll to top
+        window.scrollTo({
+            top: 0,
+        });
     },
     destroyed() {
         window.removeEventListener('orientationchange', this.handleScreenRotate, false);
@@ -181,7 +198,7 @@ export default {
             // fetch related
             this.fetchRelated();
             // change title
-             document.title = this.image.title + ' - Pixiviz';
+            document.title = this.image.title + ' - Pixiviz';
         },
         fetchRelated(state) {
             this.relatedLoading = true;
@@ -355,6 +372,12 @@ export default {
             }
             this.downloadStarted = true;
             this.contextMenuVisible = false;
+        },
+        handleLightBoxOpen() {
+            this.lightboxShow = true;
+        },
+        handleLightBoxClose() {
+            this.lightboxShow = false;
         },
         // action
         handleScroll() {
