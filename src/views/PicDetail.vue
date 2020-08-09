@@ -143,7 +143,7 @@ export default {
             this.fetchInfo();
             document.title = `图片${this.imageId} - Pixiviz`;
         } else {
-            this.image.title = `${this.image.title} - Pixiviz`;
+            document.title = `${this.image.title} - Pixiviz`;
         }
         // add event listener
         window.addEventListener('orientationchange', this.handleScreenRotate, false);
