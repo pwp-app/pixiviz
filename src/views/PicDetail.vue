@@ -198,7 +198,9 @@ export default {
             // fetch related
             this.fetchRelated();
             // change title
-            document.title = this.image.title + ' - Pixiviz';
+            this.$nextTick(() => {
+                document.title = `${this.image.title} - Pixiviz`;
+            });
         },
         fetchRelated(state) {
             this.relatedLoading = true;
