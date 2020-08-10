@@ -42,7 +42,12 @@
             </div>
         </div>
         <transition>
-            <LightBox v-if="lightBoxShow" @close="onLightBoxClose" :src="source" :isLanding="imageWidth < imageHeight || imageHeight > screenHeight" />
+            <LightBox
+                v-if="lightBoxShow"
+                :src="source"
+                :isLanding="imageWidth < imageHeight || imageHeight / (imageWidth / screenWidth) > screenHeight" 
+                @close="onLightBoxClose"
+                />
         </transition>
     </div>
 </template>
