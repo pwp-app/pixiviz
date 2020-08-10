@@ -19,6 +19,10 @@
         width: auto;
         height: 100vh;
     }
+    &-content-overheight {
+        width: auto;
+        height: 100vh;
+    }
 }
 
 @media screen and (orientation: portrait) and (max-width: 768px) {
@@ -28,6 +32,11 @@
             transform: rotateZ(90deg);
         }
         &-content-landing {
+            width: 100vw;
+            height: auto;
+            transform: none;
+        }
+        &-content-overheight {
             width: auto;
             height: 100vh;
             transform: none;
