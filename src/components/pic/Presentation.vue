@@ -42,7 +42,7 @@
             </div>
         </div>
         <transition>
-            <LightBox v-if="lightBoxShow" @close="onLightBoxClose" :src="source" :isLanding="imageWidth < imageHeight" />
+            <LightBox v-if="lightBoxShow" @close="onLightBoxClose" :src="source" :isLanding="imageWidth < imageHeight || imageHeight > screenHeight" />
         </transition>
     </div>
 </template>
@@ -67,6 +67,7 @@ export default {
             limitWidth: 1152,
             limitHeight: 796,
             screenWidth: document.documentElement.clientWidth,
+            screenHeight: document.documentElement.clientHeight,
             imageEl: null,
             imageSize: {},
             imageWidth: 0,
@@ -204,6 +205,7 @@ export default {
         },
         windowResized() {
             this.screenWidth = document.documentElement.clientWidth;
+            this.screenHeight = document.documentElement.clientHeight;
         },
         updateDisplaySize() {
             if (this.sizeCache[this.page]) {
