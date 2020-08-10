@@ -45,7 +45,8 @@
             <LightBox
                 v-if="lightBoxShow"
                 :src="source"
-                :isLanding="imageWidth < imageHeight || imageHeight / (imageWidth / screenWidth) > screenHeight" 
+                :isLanding="imageWidth < imageHeight"
+                :isOverHeight="imageHeight / (imageWidth / screenWidth) > screenHeight"
                 @close="onLightBoxClose"
                 />
         </transition>
