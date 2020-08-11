@@ -25,13 +25,15 @@
             @mouseleave="leaveSuggestion"
             v-if="suggestions.length > 0"
         >
-            <div
-                class="search-suggestion-item"
-                v-for="suggestion in suggestions"
-                :key="suggestion"
-                @click="handleSuggestionClick(suggestion)"
-            >
-                <span>{{ suggestion }}</span>
+            <div class="search-suggestion-items" ref="suggestionItems">
+                <div
+                    class="search-suggestion-item"
+                    v-for="suggestion in suggestions"
+                    :key="suggestion"
+                    @click="handleSuggestionClick(suggestion)"
+                >
+                    <span>{{ suggestion }}</span>
+                </div>
             </div>
         </div>
         <div class="search-content" v-if="!keywordBlocked">
@@ -106,12 +108,12 @@ export default {
             blockedCount: 0,
             waterfallIdentifier: Math.round(Math.random() * 100),
             from: this.$cookies.get("search-from"),
-            suggestionScrollLock: false,
             // Misc
             screenWidth: document.documentElement.clientWidth,
             cardWidth: this.getCardWidth(document.documentElement.clientWidth),
             waterfallResponsive: document.documentElement.clientWidth > 767,
             scrollTop: 0,
+            suggestionTranslate: 0,
             // style
             iPadStyle: /iPad/i.test(navigator.userAgent),
             // notification
@@ -254,7 +256,9 @@ export default {
         },
         refreshWaterfall() {
             // 提前清空 dom
-            this.$refs.waterfall.$el.innerHTML = "";
+            if (this.$refs.waterfall) {
+                this.$refs.waterfall.$el.innerHTML = "";
+            }
             this.$nextTick(() => {
                 // 重置瀑布流参数
                 this.page = 1;
@@ -299,6 +303,9 @@ export default {
             this.keywordBlocked = flag_blocked;
         },
         handleKeywordChanged(keyword) {
+            if (keyword === this.keyword) {
+                return;
+            }
             this.keyword = keyword;
             this.keywordInput = keyword;
             // 检查屏蔽
@@ -345,16 +352,14 @@ export default {
         scrollSuggesion(e) {
             e.preventDefault();
             e.stopPropagation();
-            if (!this.suggestionScrollLock) {
-                this.suggestionScrollLock = true;
-                this.$refs.suggestions.scrollTo({
-                    left: this.$refs.suggestions.scrollLeft + e.deltaY * 4,
-                    behavior: "smooth"
-                });
-                setTimeout(() => {
-                    this.suggestionScrollLock = false;
-                }, 125);
+            this.suggestionTranslate = this.suggestionTranslate + e.deltaY * 2.5;
+            if (this.suggestionTranslate < 0) {
+                this.suggestionTranslate = 0;
             }
+            if (this.suggestionTranslate > this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth) {
+                this.suggestionTranslate = this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth;
+            }
+            this.$refs.suggestionItems.setAttribute('style', `transform: translateX(-${this.suggestionTranslate}px)`);
         },
         enterSuggesion() {
             if (!this.$refs.suggestions) {

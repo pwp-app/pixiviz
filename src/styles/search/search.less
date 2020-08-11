@@ -74,8 +74,11 @@
         .search-component-width-mixin(6);
         .search-component-width-responsive-mixin(5, 2, 72px);
         white-space: nowrap;
-        overflow-x: scroll;
+        overflow-x: hidden;
         padding-bottom: 12px;
+        &-items {
+            transition: 200ms ease-in-out transform;
+        }
         &-item {
             background: @color-primary;
             display: inline-block;
@@ -97,21 +100,6 @@
         &-item:last-child {
             margin-right: 0;
         }
-    }
-
-    .search-suggestion::-webkit-scrollbar {
-        height: 4px;
-    }
-    .search-suggestion::-webkit-scrollbar-button {
-        display: none;
-    }
-    .search-suggestion::-webkit-scrollbar-thumb {
-        width: @scrollbar-width;
-        border-radius: @scrollbar-width;
-        background: @color-primary;
-    }
-    .search-suggestion::-webkit-scrollbar-track {
-        background: @color-background-primary;
     }
 
     .search-content {

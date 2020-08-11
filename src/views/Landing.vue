@@ -31,7 +31,8 @@ export default {
     data() {
         return {
             bannerExpanded: false,
-            guideNotice: null
+            guideNotice: null,
+            notFirstUse: false,
         }
     },
     mounted() {
@@ -49,6 +50,7 @@ export default {
             }
             const not_first_use = window.localStorage.getItem('not-first-use');
             if (not_first_use) {
+                this.notFirstUse = true;
                 return;
             }
             document.body.addEventListener('click', this.guideNoticeClicked, false);
