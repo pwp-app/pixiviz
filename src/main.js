@@ -11,6 +11,10 @@ import {VueMasonryPlugin} from 'vue-masonry';
 import InfiniteLoading from 'vue-infinite-loading';
 import VueMeta from 'vue-meta'
 
+// Import Sentry
+import * as Sentry from '@sentry/browser';
+import { Vue as VueIntegration } from '@sentry/integrations';
+
 // Import element ui and styles
 
 import './plugins/element.js'
@@ -68,6 +72,12 @@ Vue.use(VueCookies);
 Vue.$cookies.config('7d');
 
 Vue.use(VueMeta);
+
+// Init sentry
+Sentry.init({
+    dsn: 'https://ff7a600f1b9545cca27d95f70bc3cd6d@o432797.ingest.sentry.io/5386808',
+    integrations: [new VueIntegration({ Vue, attachProps: true, logErrors: true })],
+});
 
 new Vue({
     router,

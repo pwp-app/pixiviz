@@ -89,12 +89,12 @@ module.exports = {
                         compressionOptions: {
                             numiterations: 15,
                         },
-                        minRatio: 0.8,
+                        minRatio: 0.75,
                         test: productionGzipExtensions,
                     }),
                     new BrotliPlugin({
                         test: productionGzipExtensions,
-                        minRatio: 0.8,
+                        minRatio: 0.75,
                     }),
                 ],
             };

@@ -7,6 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@sentry/browser": "^5.20.1",
+    "@sentry/integrations": "^5.20.1",
     "axios": "^0.19.2",
     "clipboard-polyfill": "^3.0.1",
     "core-js": "^3.6.5",
