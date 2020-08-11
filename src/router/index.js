@@ -1,37 +1,43 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+import Landing from '../views/Landing.vue';
+import Rank from '../views/Rank.vue';
+import Pic from '../views/PicDetail.vue';
+import Search from '../views/Search.vue';
+import Artist from '../views/Artist.vue';
+
 Vue.use(VueRouter);
 
 const routes = [
     {
         path: "/",
         name: "Landing",
-        component: () => import(/* webpackChunkName: "landing" */ "../views/Landing.vue"),
+        component: Landing,
         meta: { keepAlive: false },
     },
     {
         path: "/rank",
         name: "Rank",
-        component: () => import(/* webpackChunkName: "rank" */ "../views/Rank.vue"),
+        component: Rank,
         meta: { keepAlive: true },
     },
     {
         path: "/pic/:id",
         name: "Pic",
-        component: () => import(/* webpackChunkName: "pic" */ "../views/PicDetail.vue"),
+        component: Pic,
         meta: { keepAlive: false },
     },
     {
         path: "/artist/:id",
         name: "Artist",
-        component: () => import(/* webpackChunkName: "artist" */ "../views/Artist.vue"),
+        component: Artist,
         meta: { keepAlive: true },
     },
     {
         path: "/search/:keyword",
         name: "Search",
-        component: () => import(/* webpackChunkName: "search" */ "../views/Search.vue"),
+        component: Search,
         meta: { keepAlive: true },
     },
     {
