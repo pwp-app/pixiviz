@@ -192,7 +192,10 @@ export default {
     },
     methods: {
         setLimitWidth(width) {
-            if (width > 1680 && width <= 1920) {
+            if (width >= 2560) {
+                this.limitWidth = 1680;
+                this.limitHeight = 1120;
+            } else if (width > 1680 && width <= 1920) {
                 this.limitWidth = 1152;
                 this.limitHeight = 796;
             } else if (width > 1430 && width <= 1680) {
