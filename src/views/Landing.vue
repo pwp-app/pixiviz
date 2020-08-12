@@ -83,7 +83,7 @@ export default {
             }
             // 随机5%的概率展示通知
             if (Math.random() < 0.05) {
-                window.localStorage.setItem('last-show-donate', new Date().valueOf() / 1000);
+                window.localStorage.setItem('last-show-donate', new Date().valueOf());
                 document.body.addEventListener('click', this.donateNoticeClicked, false);
                 this.donateNotice = this.$notify({
                     title: '',

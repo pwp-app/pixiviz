@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import CONFIG from './config.json';
 
 export default {
     name: "app",
@@ -25,10 +26,45 @@ export default {
         if (!window.pixiviz.artistMap) {
             window.pixiviz.artistMap = {};
         }
+        // 初始化图片负载表
+        if (!window.pixiviz.loadMap) {
+            const loadMap = JSON.parse(window.localStorage.getItem('loadmap'));
+            const loadMapTime = window.localStorage.getItem('loadmap-save-time');
+            if (!loadMap || !loadMapTime) {
+                window.pixiviz.loadMap = {};
+            } else if (loadMapTime && new Date().valueOf() / 1000 - loadMapTime > 10800) {
+                window.pixiviz.loadMap = {};
+            } else if (loadMap) {
+                window.pixiviz.loadMap = JSON.parse(loadMap);
+            }
+        }
+        // 异步获取分流配置
+        this.axios.get('https://config.backrunner.top/pixiviz/proxy-config.json', {
+            withCredentials: false,
+        }).then((res) => {
+            if (res.data) {
+                let index = 0;
+                window.pixiviz.hostMap = {};
+                Object.keys(res.data).forEach((key) => {
+                    window.pixiviz.hostMap[index] = key;
+                    window.pixiviz.hostMap[key] = index;
+                    index++;
+                });
+                window.pixiviz.proxyMap = res.data;
+            }
+        }, () => {
+            console.log('Cannot fetch proxy config.');
+        });
     },
     created() {
         // 检测Safari
         window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    },
+    destroyed() {
+        if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
+            window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
+            window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+        }
     }
 }
 </script>

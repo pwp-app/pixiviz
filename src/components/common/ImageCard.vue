@@ -63,7 +63,7 @@ export default {
             if (this.block || !this.image) {
                 return '';
             } else {
-                let url = this.image.image_urls[this.imageType].replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+                let url = this.image.image_urls[this.imageType].replace('i.pximg.net', this.getHost());
                 if (window.isSafari) {
                     url = url.replace('_10_webp', '_70');
                 }
@@ -76,6 +76,26 @@ export default {
         this.$Lazyload.$on('error', this.errorHandler);
     },
     methods: {
+        getHost() {
+            if (window.pixiviz.proxyMap && window.pixiviz.hostMap && window.pixiviz.loadMap) {
+                if (window.pixiviz.loadMap[this.image.id]) {
+                    return window.pixiviz.hostMap[window.pixiviz.loadMap[this.image.id]];
+                } else {
+                    const random = Math.random();
+                    const hosts = Object.keys(window.pixiviz.proxyMap);
+                    for (let host of hosts) {
+                        if (random >= window.pixiviz.proxyMap[host][0]
+                            && random < window.pixiviz.proxyMap[host][1]) {
+                            window.pixiviz.loadMap[this.image.id] = window.pixiviz.hostMap[host];
+                            return host;
+                        }
+                    };
+                }
+                return CONFIG.IMAGE_PROXY_HOST;
+            } else {
+                return CONFIG.IMAGE_PROXY_HOST;
+            }
+        },
         getHeight() {
             if (this.squaredImage) {
                 return this.cardWidth;
