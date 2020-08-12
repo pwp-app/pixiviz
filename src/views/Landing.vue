@@ -37,10 +37,14 @@ export default {
     },
     mounted() {
         this.checkFirstUse();
+        this.displayDonate();
     },
     destroyed() {
-        if (this.notification) {
-            this.notification.close();
+        if (this.guideNotice) {
+            this.guideNotice.close();
+        }
+        if (this.donateNotice) {
+            this.donateNotice.close();
         }
     },
     methods: {
@@ -48,12 +52,13 @@ export default {
             if (!window.localStorage) {
                 return;
             }
-            const not_first_use = window.localStorage.getItem('not-first-use');
-            if (not_first_use) {
+            const notFirstUse = window.localStorage.getItem('not-first-use');
+            if (notFirstUse) {
                 this.notFirstUse = true;
                 return;
             }
             document.body.addEventListener('click', this.guideNoticeClicked, false);
+            window.localStorage.setItem('not-first-use', true);
             this.guideNotice = this.$notify({
                 title: '',
                 position: 'top-right',
@@ -67,6 +72,33 @@ export default {
                     </div>`
             });
         },
+        displayDonate() {
+            if (!this.notFirstUse) {
+                return;
+            }
+            // 同一个设备7天内只展示一次
+            const lastShowDonate = window.localStorage.getItem('last-show-donate');
+            if (lastShowDonate && new Date().valueOf() / 1000 - lastShowDonate < 604800) {
+                return;
+            }
+            // 随机5%的概率展示通知
+            if (Math.random() < 0.05) {
+                window.localStorage.setItem('last-show-donate', new Date().valueOf() / 1000);
+                document.body.addEventListener('click', this.donateNoticeClicked, false);
+                this.donateNotice = this.$notify({
+                    title: '',
+                    position: 'top-right',
+                    customClass: 'oneline-notice-container',
+                    dangerouslyUseHTMLString: true,
+                    duration: 5000,
+                    onClose: this.donateNoticeClosed,
+                    message: `
+                        <div class="oneline-notice">
+                            <span data-name="notice-donate">帮助我们维持无广告运营 -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
+                        </div>`
+                });
+            }
+        },
         guideNoticeClicked(e) {
             if (e.target.dataset.name && e.target.dataset.name === 'link-guide') {
                 if (window.isSafari) {
@@ -78,8 +110,20 @@ export default {
             }
         },
         guideNoticeClosed() {
-            window.localStorage.setItem('not-first-use', true);
             document.body.removeEventListener('click', this.guideNoticeClicked, false);
+        },
+        donateNoticeClicked(e) {
+            if (e.target.dataset.name && e.target.dataset.name === 'link-donate') {
+                if (window.isSafari) {
+                    window.location.href = CONFIG.DONATE;
+                } else {
+                    window.open(CONFIG.DONATE, '_blank');
+                }
+                this.guideNotice.close();
+            }
+        },
+        donateNoticeClosed() {
+            document.body.addEventListener('click', this.donateNoticeClicked, false);
         }
     }
 }
