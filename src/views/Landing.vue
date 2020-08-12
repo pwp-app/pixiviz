@@ -119,7 +119,7 @@ export default {
                 } else {
                     window.open(CONFIG.DONATE, '_blank');
                 }
-                this.guideNotice.close();
+                this.donateNotice.close();
             }
         },
         donateNoticeClosed() {
