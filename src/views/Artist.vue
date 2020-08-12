@@ -130,6 +130,9 @@ export default {
     },
     methods: {
         handleIdChanged(newId) {
+            if (this.id === newId) {
+                return;
+            }
             this.id = newId;
             // 更新store
             this.$store.commit('artist/setId', this.id);
