@@ -76,6 +76,7 @@ export default {
             images: this.$store.state.artist.id === this.$route.params.id ?
                 this.$store.state.artist.images ? this.$store.state.artist.images: [] : [],
             id: this.$route.params.id,
+            artistName: null,
             infoLoaded: false,
             infoLoadFailed: false,
             // waterfall
@@ -121,7 +122,11 @@ export default {
             window.addEventListener("scroll", this.handleScroll, false);
         });
         // change title
-        document.title = '画师' + this.id + ' - Pixiviz';
+        if (this.artistName) {
+            document.title = this.artistName + ' - Pixiviz';
+        } else {
+            document.title = '画师' + this.id + ' - Pixiviz';
+        }
     },
     destroyed() {
         // 清除监听器
@@ -134,6 +139,7 @@ export default {
                 return;
             }
             this.id = newId;
+            this.artistName = null;
             // 更新store
             this.$store.commit('artist/setId', this.id);
             this.$store.commit('artist/setImages', []);
@@ -221,6 +227,7 @@ export default {
         // info
         handleInfoLoaded(name) {
             this.infoLoaded = true;
+            this.artistName = name;
             document.title = `${name} - Pixiviz`;
         },
         handleLoadFailed() {
