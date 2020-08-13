@@ -81,8 +81,8 @@ export default {
             if (lastShowDonate && new Date().valueOf() / 1000 - lastShowDonate < 604800) {
                 return;
             }
-            // 随机5%的概率展示通知
-            if (Math.random() < 0.05) {
+            // 20%的概率展示通知
+            if (Math.random() < 0.2) {
                 window.localStorage.setItem('last-show-donate', new Date().valueOf());
                 document.body.addEventListener('click', this.donateNoticeClicked, false);
                 this.donateNotice = this.$notify({
@@ -108,7 +108,7 @@ export default {
                 }
                 this.guideNotice.close();
                 // 数据上报
-                if (window.MtaH5) window,MtaH5.clickStat("guide_clicked");
+                if (window.MtaH5) window.MtaH5.clickStat("guide_clicked");
             }
         },
         guideNoticeClosed() {
@@ -123,7 +123,7 @@ export default {
                 }
                 this.donateNotice.close();
                 // 数据上报
-                if (window.MtaH5) window,MtaH5.clickStat("donate_clicked");
+                if (window.MtaH5) window.MtaH5.clickStat("donate_clicked");
             }
         },
         donateNoticeClosed() {
