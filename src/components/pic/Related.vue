@@ -95,6 +95,10 @@ export default {
     },
     methods: {
         reset() {
+            // avoid error when waterfall ref is undefined
+            if (!this.$refs.waterfall)  {
+                return;
+            }
             this.$refs.waterfall.$el.innerHTML = '';
         },
         // Window & Screen
