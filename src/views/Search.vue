@@ -273,6 +273,10 @@ export default {
                 this.keywordInput = '';
                 return;
             }
+            // avoid redundant navigation
+            if (this.keywordInput === this.keyword) {
+                return;
+            }
             this.$router.push(`/search/${this.keywordInput}`);
             // 清除监听器
             this.leaveSuggestion();
