@@ -81,8 +81,8 @@ export default {
             if (lastShowDonate && new Date().valueOf() / 1000 - lastShowDonate < 604800) {
                 return;
             }
-            // 20%的概率展示通知
-            if (Math.random() < 0.2) {
+            // 30%的概率展示通知
+            if (Math.random() < 0.3) {
                 window.localStorage.setItem('last-show-donate', new Date().valueOf());
                 document.body.addEventListener('click', this.donateNoticeClicked, false);
                 this.donateNotice = this.$notify({
