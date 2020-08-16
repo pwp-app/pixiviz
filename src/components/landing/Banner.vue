@@ -79,7 +79,7 @@ export default {
     },
     mounted() {
         const darkEnabled = window.localStorage.getItem('enable-dark');
-        this.darkmode = darkEnabled ? true : false;
+        this.darkmode = darkEnabled === 'true' ? true : false;
     },
     methods: {
         handleDblClick(e) {

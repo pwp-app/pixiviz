@@ -53,7 +53,7 @@ export default {
                 return;
             }
             const notFirstUse = window.localStorage.getItem('not-first-use');
-            if (notFirstUse) {
+            if (notFirstUse === 'true') {
                 this.notFirstUse = true;
                 return;
             }
@@ -73,12 +73,12 @@ export default {
             });
         },
         displayDonate() {
-            if (!this.notFirstUse) {
+            if (this.notFirstUse) {
                 return;
             }
             // 同一个设备7天内只展示一次
             const lastShowDonate = window.localStorage.getItem('last-show-donate');
-            if (lastShowDonate && new Date().valueOf() / 1000 - lastShowDonate < 604800) {
+            if (lastShowDonate && new Date().valueOf() / 1000 - parseInt(lastShowDonate, 10) < 604800) {
                 return;
             }
             // 30%的概率展示通知

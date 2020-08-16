@@ -64,10 +64,12 @@ export default {
     mounted() {
         // check dark mode
         const darkEnabled = window.localStorage.getItem('enable-dark');
-        const now = dayjs();
-        const hour = now.hour();
-        if (hour < 6 || hour >= 18) {
-            document.documentElement.setAttribute('class', 'dark');
+        if (darkEnabled === 'true') {
+            const now = dayjs();
+            const hour = now.hour();
+            if (hour < 6 || hour >= 18) {
+                document.documentElement.setAttribute('class', 'dark');
+            }
         }
     },
     destroyed() {
