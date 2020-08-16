@@ -98,6 +98,28 @@
     transform: translateY(0);
 }
 
+// dark mode
+
+.dark {
+    .pic-action {
+        background: #3e3e3e;
+        i {
+            svg {
+                path {
+                    fill: darken(@color-primary, 2.5%);
+                }
+            }
+        }
+        i:hover {
+            svg {
+                path {
+                    fill: lighten(@color-primary, 7.5%);
+                }
+            }
+        }
+    }
+}
+
 // iPhone X
 @supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
     .pic-action {

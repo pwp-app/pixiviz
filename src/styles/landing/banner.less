@@ -28,6 +28,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 1rem;
     background: linear-gradient(to right, hsla(255, 255, 255, 0.1), hsla(0, 0, 0, 0.125) 35%, hsla(0, 0, 0, 0.125) 65%, hsla(255, 255, 255, 0.1));
     span, a {
         color: @color-text-accent;
@@ -71,8 +72,27 @@
                 text-decoration: underline;
             }
         }
+        &-theme {
+            margin-top: 2rem;
+            &-title {
+                text-align: center;
+                font-size: 28px;
+                line-height: 80px;
+                .no-select();
+            }
+            &-switch {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                span {
+                    font-size: 20px;
+                    letter-spacing: 0.05em;
+                    font-weight: 400;
+                }
+            }
+        }
         &-copyright {
-            margin-top: 12rem;
+            margin-top: 6.75rem;
             font-weight: 300;
             &-item {
                 font-size: 1rem;
@@ -116,8 +136,19 @@
         .about {
             position: absolute;
             bottom: 54px;
+            &-borrow {
+                &-title { 
+                    font-size: 28px;
+                }
+            }
+            &-theme {
+                margin-top: 16px;
+                &-title { 
+                    font-size: 26px;
+                }
+            }
             &-copyright {
-                margin-top: 122px;
+                margin-top: 56px;
             }
         }
     }
@@ -185,8 +216,23 @@
                     font-weight: 400;
                 }
             }
+            &-theme {
+                margin-top: 4px;
+                &-title {
+                    font-size: 24px;
+                    line-height: 72px;
+                }
+                &-switch {
+
+                    .el-switch {
+                        span {
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
             &-copyright {
-                margin-top: 108px;
+                margin-top: 64px;
                 &-item {
                     font-size: 14px;
                 }

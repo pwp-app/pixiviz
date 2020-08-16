@@ -88,6 +88,23 @@
     }
 }
 
+// dark mode
+.dark {
+    .artist-overview {
+        .avatar {
+            filter: brightness(0.875);
+        }
+    }
+    .artist-comment {
+        pre::-webkit-scrollbar-thumb {
+            background: darken(@color-primary, 5%);
+        }
+        pre::-webkit-scrollbar-track {
+            background: @color-background-dark;
+        }
+    }
+}
+
 // mobile
 
 @media(max-width: 767px) {

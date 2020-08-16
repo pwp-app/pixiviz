@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import CONFIG from './config.json';
 
 export default {
@@ -35,7 +36,7 @@ export default {
             } else if (loadMapTime && new Date().valueOf() / 1000 - loadMapTime > 10800) {
                 window.pixiviz.loadMap = {};
             } else if (loadMap) {
-                window.pixiviz.loadMap = JSON.parse(loadMap);
+                window.pixiviz.loadMap = loadMap;
             }
         }
         // 异步获取分流配置
@@ -59,6 +60,15 @@ export default {
     created() {
         // 检测Safari
         window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    },
+    mounted() {
+        // check dark mode
+        const darkEnabled = window.localStorage.getItem('enable-dark');
+        const now = dayjs();
+        const hour = now.hour();
+        if (hour < 6 || hour >= 18) {
+            document.documentElement.setAttribute('class', 'dark');
+        }
     },
     destroyed() {
         if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {

@@ -3,12 +3,13 @@ html {
     min-height: 100vh;
 }
 
-body{
+body {
     margin: 0;
     width: 100%;
     min-height: 100vh;
     scroll-behavior: smooth;
     background: @color-background-primary;
+    transition: background-color 200ms ease-in-out;
     font-family: MicroSoft Yahei UI, Heiti SC, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
@@ -75,6 +76,51 @@ button:focus {
 .el-notification__closeBtn:hover {
     cursor: pointer;
     color: lighten(@color-text-primary, 12.5%);
+}
+
+// dark mode
+.dark {
+    body {
+        background: @color-background-dark;
+    }
+    body::-webkit-scrollbar-thumb {
+        background: darken(@color-primary, 5%);
+    }
+    body::-webkit-scrollbar-track {
+        background: @color-background-dark;
+    }
+    .el-date-editor {
+        input {
+            background: lighten(@color-background-dark, 10%);
+            border-color: lighten(@color-background-dark, 10%);
+        }
+    }
+    .el-popover {
+        background: lighten(@color-background-dark, 5%);
+        border: 1px solid lighten(@color-background-dark, 7.5%);
+    }
+    .el-popper[x-placement^=bottom] .popper__arrow {
+        border-bottom-color: lighten(@color-background-dark, 7.5%);
+    }
+    .el-popper[x-placement^=bottom] .popper__arrow::after {
+        border-bottom-color: lighten(@color-background-dark, 7.5%);
+    }
+    .el-picker-panel {
+        background: lighten(@color-background-dark, 5%);
+        border-color: lighten(@color-background-dark, 7.5%);
+        .el-picker-panel__icon-btn {
+            color: #606266;
+        }
+        td.disabled div {
+            background: lighten(@color-background-dark, 7.5%);
+        }
+        td.disabled .cell {
+            background: lighten(@color-background-dark, 7.5%);
+        }
+    }
+    .el-loading-mask {
+        background-color: lighten(@color-background-dark, 2.5%) !important;
+    }
 }
 
 @media (max-width: 767px) {

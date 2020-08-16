@@ -1,5 +1,12 @@
 <template>
-    <div :class="['landing-component-default', 'banner-wrapper', expanded ? 'banner-expanded' : '', clearMarginBottom ? 'clear-margin-bottom' : '']" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap" v-lazy:background-image="bannerBG">
+    <div
+        :class="['landing-component-default', 'banner-wrapper',
+            expanded ? 'banner-expanded' : '',
+            clearMarginBottom ? 'clear-margin-bottom' : '']"
+        @dblclick="handleDblClick"
+        v-touch:doubletap="handleDoubleTap"
+        v-lazy:background-image="bannerBG"
+        >
         <div class="banner">
             <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
                 <span>Pixiviz</span>
@@ -14,6 +21,23 @@
                     </div>
                     <div class="about-borrow-item">
                         <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/63139897">63139897</a></span>
+                    </div>
+                </div>
+                <div class="about-theme">
+                    <div class="about-theme-title">
+                        <span>颜色主题</span>
+                    </div>
+                    <div class="about-theme-switch">
+                        <el-switch
+                            v-model="darkmode"
+                            active-color="#2e2e2e"
+                            inactive-color="#da7a85"
+                            active-text="自动深色"
+                            inactive-text="正常"
+                            @change="themeChanged"
+                            @click.stop
+                            >
+                        </el-switch>
                     </div>
                 </div>
                 <div class="about-copyright">
@@ -36,6 +60,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import packInfo from '../../../package.json';
 
 export default {
@@ -48,11 +73,20 @@ export default {
             titleUp: false,
             aboutShow: false,
             clearMarginBottom: false,
-            version: packInfo.version
+            version: packInfo.version,
+            darkmode: false,
         }
     },
+    mounted() {
+        const darkEnabled = window.localStorage.getItem('enable-dark');
+        this.darkmode = darkEnabled ? true : false;
+    },
     methods: {
-        handleDblClick() {
+        handleDblClick(e) {
+            if (e.target.getAttribute('class') && 
+                e.target.getAttribute('class').includes('el-switch')) {
+                return;
+            }
             // Banner Anim
             if (!this.expandLock) {
                 this.expandLock = true;
@@ -97,6 +131,18 @@ export default {
         },
         handleDoubleTap() {
             handleDblClick();
+        },
+        themeChanged(value) {
+            if (value) {
+                const now = dayjs();
+                const hour = now.hour();
+                if (hour < 6 || hour >= 18) {
+                    document.documentElement.setAttribute('class', 'dark');
+                }
+            } else {
+                document.documentElement.removeAttribute('class');
+            }
+            window.localStorage.setItem('enable-dark', value);
         },
         goGitHub() {
             window.open('https://github.com/pwp-app/pixiviz');

@@ -136,6 +136,38 @@
     color: lighten(@color-text-primary, 12.5%);
 }
 
+// dark mode
+.dark {
+    .search-container {
+        .search-header {
+            &-title {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-input {
+                input {
+                    background: @color-background-dark;
+                    border: 1px solid darken(@color-text-primary, 2.5%);
+                }
+            }
+            &-close {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-close:hover {
+                color: lighten(@color-text-primary, 2.5%);
+            }
+        }
+        .search-suggestion {
+            filter: brightness(0.8);
+            &-item {
+                background: darken(@color-text-primary, 2.5%);
+            }
+            &-item:hover {
+                background: lighten(@color-text-primary, 2.5%);
+            }
+        }
+    }
+}
+
 // mixin
 
 .search-component-width-mixin(@col) {

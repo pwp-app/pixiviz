@@ -1,5 +1,6 @@
 .landing-component-default {
     background: lighten(@color-primary, 5%);
+    transition: background-color 200ms ease-in-out;
 }
 .landing-container {
     padding: 2rem 4rem;
@@ -12,6 +13,15 @@
     display: block;
     &-card {
         margin-bottom: 1.5rem;
+    }
+}
+
+// dark mode
+.dark {
+    .landing {
+        .landing-card {
+            filter: brightness(0.8);
+        }
     }
 }
 

@@ -34,3 +34,17 @@
 .back2top:focus {
     background: lighten(@color-primary, 5%);
 }
+
+// dark mode
+.dark {
+    .back2top {
+        background: darken(@color-primary, 5%);
+    }
+    .back2top:hover {
+        cursor: pointer;
+        background: @color-primary;
+    }
+    .back2top:focus {
+        background: darken(@color-primary, 2.5%);
+    }
+}
