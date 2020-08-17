@@ -3,7 +3,7 @@
         <div class="landing">
             <Banner class="landing-card" />
             <SearchBox class="landing-card" />
-            <RankBox />
+            <RankBox class="landing-card" />
         </div>
     </div>
 </template>
