@@ -1,5 +1,5 @@
 .pic-author {
-    span {
+    span, a {
         color: @color-text-primary;
         font-weight: 600;
         letter-spacing: 0.05em;
@@ -21,12 +21,13 @@
             border-radius: 24px;
             box-shadow: 0 4px 8px rgba(0,0,0, .175);
         }
-        span {
+        a {
             margin-left: 16px;
             font-size: 20px;
             transition: 150ms all ease-in-out;
+            text-decoration: none;
         }
-        span:hover {
+        a:hover {
             cursor: pointer;
             color: lighten(@color-text-primary, 10%);
         }
@@ -35,8 +36,18 @@
 
 // dark mode
 .dark {
-    .pic-author-info-avatar {
-        filter: brightness(0.875);
+    .pic-author {
+        span {
+            color: darken(@color-text-primary, 2.5%);
+        }
+        &-info {
+            &-avatar {
+                filter: brightness(0.875);
+            }
+            span:hover {
+                color: lighten(@color-text-primary, 2.5%);
+            }
+        }
     }
 }
 

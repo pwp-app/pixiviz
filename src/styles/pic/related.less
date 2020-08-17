@@ -33,6 +33,21 @@
     }
 }
 
+// dark mode
+
+.dark {
+    .pic-related {
+        &-title {
+            color: darken(@color-primary, 2.5%);
+        }
+        .pic-related-paginator {
+            &-item:hover {
+                color: lighten(@color-text-primary, 2.5%);
+            }
+        }
+    }
+}
+
 /* Responsive */
 @media(max-width: 1024px) {
     .pic-related {

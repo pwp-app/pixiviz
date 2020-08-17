@@ -175,6 +175,53 @@
         .pic-presentation-image {
             filter: brightness(0.875);
         }
+        .pic-presentation-page {
+            span, i {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-back:hover {
+                span, i {
+                    color: lighten(@color-text-primary, 2.5%);
+                }
+            }
+            &-next:hover {
+                span, i {
+                    color: lighten(@color-text-primary, 2.5%);
+                }
+            }
+        }
+        .pic-presentation-info {
+            &-title {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-caption {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-tags {
+                .pic-tag {
+                    span {
+                        color: @color-text-primary;
+                    }
+                }
+                .pic-tag:hover {
+                    span {
+                        color: lighten(@color-text-primary, 5%);
+                    }
+                }
+            }
+            &-stat {
+                .pic-stat {
+                    span, i {
+                        color: @color-text-primary;
+                    }
+                }
+            }
+            &-time {
+                span {
+                    color: @color-text-primary;
+                }
+            }
+        }
     }
 }
 

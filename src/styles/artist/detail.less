@@ -94,6 +94,21 @@
         .avatar {
             filter: brightness(0.875);
         }
+        &-content {
+            &-name {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-data {
+                .overview-data {
+                    &-name {
+                        color: darken(@color-text-primary, 2.5%);
+                    }
+                    &-number {
+                        color: darken(@color-text-primary, 2.5%);
+                    }
+                }
+            }
+        }
     }
     .artist-comment {
         pre::-webkit-scrollbar-thumb {

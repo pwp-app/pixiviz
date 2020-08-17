@@ -42,6 +42,33 @@
     }
 }
 
+// dark mode
+
+.dark {
+    .rank-mode-switcher {
+        span {
+            color: darken(@color-text-primary, 2.5%);
+        }
+    }
+    .rank-mode-item:hover {
+        cursor: pointer;
+        span {
+            color: lighten(@color-text-primary, 3.5%);
+        }
+    }
+    .rank-mode-item-picked {
+        span {
+            color: lighten(@color-text-primary, 3.5%);
+        }
+    }
+    .rank-mode-item-picked:hover {
+        cursor: no-drop;
+        span {
+            color: lighten(@color-text-primary, 3.5%);
+        }
+    }
+}
+
 /* Mobile */
 
 @media(max-width: 767px) {

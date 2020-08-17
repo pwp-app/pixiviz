@@ -105,6 +105,39 @@
     }
 }
 
+// dark mode
+
+.dark {
+    .rank-header {
+        &-title {
+            color: darken(@color-text-primary, 2.5%);
+            &-category {
+                i:hover {
+                    color: lighten(@color-text-primary, 2.5%);
+                }
+            }
+        }
+        &-close {
+            color: darken(@color-text-primary, 2.5%);
+        }
+        &-close:hover {
+            color: lighten(@color-text-primary, 2.5%);
+        }
+    }
+    .rank-body {
+        &-date {
+            span, i {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-item:hover {
+                span, i {
+                    color: lighten(@color-text-primary, 2.5%);
+                }
+            }
+        }
+    }
+}
+
 /* Popover */
 
 .rank-date-popover {

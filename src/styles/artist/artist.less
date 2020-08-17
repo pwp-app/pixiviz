@@ -49,6 +49,21 @@
     }
 }
 
+// dark mode
+
+.dark {
+    .artist-container {
+        .artist-header {
+            &-close {
+                color: darken(@color-text-primary, 2.5%);
+            }
+            &-close:hover {
+                color: lighten(@color-text-primary, 2.5%);
+            }
+        }
+    }
+}
+
 // ipad
 
 .artist-ipad-only {

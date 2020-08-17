@@ -17,6 +17,17 @@
     }
 }
 
+.dark {
+    .pic-download {
+        &-title {
+            color: darken(@color-text-primary, 2.5%);
+        }
+        .el-button {
+            filter: brightness(0.875);
+        }
+    }
+}
+
 /* Responsive */
 @media(max-width: 1024px) {
     .pic-download {

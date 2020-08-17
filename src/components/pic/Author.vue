@@ -5,7 +5,7 @@
         </div>
         <div class="pic-author-info">
             <div class="pic-author-info-avatar" v-lazy:background-image="avatar"></div>
-            <span @click="toArtistPage">{{authorName}}</span>
+            <a :href="this.author ? `/artist/${this.author.id}` : 'javascript:;'" @click.prevent="toArtistPage">{{authorName}}</a>
         </div>
     </div>
 </template>
