@@ -173,7 +173,7 @@ export default {
                 this.infoLoading = false;
                 return;
             }
-            this.axios.get('/api/v1/illust/detail', {
+            this.axios.get(`${CONFIG.OWN_API}/illust/detail`, {
                 params: {
                     id: this.imageId,
                 }
