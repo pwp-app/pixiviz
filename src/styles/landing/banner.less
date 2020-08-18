@@ -54,7 +54,7 @@
             &-title {
                 text-align: center;
                 font-size: 32px;
-                line-height: 80px;
+                line-height: 62px;
                 .no-select();
             }
             &-item {
@@ -73,7 +73,7 @@
             }
         }
         &-theme {
-            margin-top: 2rem;
+            margin-top: 1rem;
             &-title {
                 text-align: center;
                 font-size: 28px;
@@ -84,15 +84,19 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                margin-bottom: 1.5rem;
                 span {
-                    font-size: 20px;
+                    font-size: 18px;
                     letter-spacing: 0.05em;
                     font-weight: 400;
                 }
             }
+            &-switch:last-child {
+                margin-bottom: 0;
+            }
         }
         &-copyright {
-            margin-top: 6.75rem;
+            margin-top: 6rem;
             font-weight: 300;
             &-item {
                 font-size: 1rem;
@@ -137,20 +141,26 @@
             position: absolute;
             bottom: 54px;
             &-borrow {
-                &-title { 
+                &-title {
                     font-size: 28px;
                 }
             }
             &-theme {
-                margin-top: 16px;
-                &-title { 
+                margin-top: 0;
+                &-title {
                     font-size: 26px;
                 }
             }
             &-copyright {
-                margin-top: 56px;
+                margin-top: 44px;
             }
         }
+    }
+}
+
+@media (max-width: 1330px) {
+    .banner-wrapper {
+        background-size: cover;
     }
 }
 
@@ -160,11 +170,16 @@
         background-size: 135%;
     }
 }
+@media(max-width: 1020px) and (max-height: 1365px) {
+    .banner-wrapper {
+        background-size: cover;
+    }
+}
 
 // iPad
 @media(max-width: 768px) and (max-height: 1024px) {
     .banner-wrapper {
-        background-size: 180%;
+        background-size: 220%;
     }
 }
 
@@ -179,6 +194,12 @@
     }
     .banner-title {
         font-size: 68px;
+    }
+}
+
+@media (max-width: 920px) and (max-height: 754px) {
+    .banner-wrapper {
+        background-size: cover;
     }
 }
 
@@ -207,32 +228,31 @@
             &-borrow {
                 padding: 0 24px;
                 &-title {
-                    font-size: 26px;
-                    line-height: 72px;
+                    font-size: 24px;
+                    line-height: 48px;
                 }
                 &-item {
-                    font-size: 20px;
+                    font-size: 18px;
                     line-height: 40px;
                     font-weight: 400;
                 }
             }
             &-theme {
-                margin-top: 4px;
+                margin-top: 0;
                 &-title {
-                    font-size: 24px;
-                    line-height: 72px;
+                    font-size: 22px;
+                    line-height: 68px;
                 }
                 &-switch {
-
                     .el-switch {
                         span {
-                            font-size: 18px;
+                            font-size: 16px;
                         }
                     }
                 }
             }
             &-copyright {
-                margin-top: 64px;
+                margin-top: 46px;
                 &-item {
                     font-size: 14px;
                 }

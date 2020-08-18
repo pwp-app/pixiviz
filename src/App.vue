@@ -63,14 +63,7 @@ export default {
     },
     mounted() {
         // check dark mode
-        const darkEnabled = window.localStorage.getItem('enable-dark');
-        if (darkEnabled === 'true') {
-            const now = dayjs();
-            const hour = now.hour();
-            if (hour < 6 || hour >= 18) {
-                document.documentElement.setAttribute('class', 'dark');
-            }
-        }
+        this.checkDarkMode();
         // add save loadmap listener
         window.addEventListener('beforeunload', this.saveLoadMap);
     },
@@ -78,6 +71,18 @@ export default {
         window.removeEventListener('beforeunload', this.saveLoadMap);
     },
     methods: {
+        checkDarkMode() {
+            const darkEnabled = window.localStorage.getItem('enable-dark');
+            const darkPersist = window.localStorage.getItem('dark-persist');
+            if (darkEnabled !== 'true') {
+                return;
+            }
+            const now = dayjs();
+            const hour = now.hour();
+            if (darkPersist === 'true' || (hour < 6 || hour >= 18)) {
+                document.documentElement.setAttribute('class', 'dark');
+            }
+        },
         saveLoadMap() {
             if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
                 window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));

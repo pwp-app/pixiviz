@@ -32,10 +32,21 @@
                             v-model="darkmode"
                             active-color="#2e2e2e"
                             inactive-color="#da7a85"
-                            active-text="自动深色"
+                            active-text="深色"
                             inactive-text="正常"
                             @change="themeChanged"
-                            @click.stop
+                            >
+                        </el-switch>
+                    </div>
+                    <div class="about-theme-switch">
+                        <el-switch
+                            v-model="darkPersist"
+                            active-color="#2e2e2e"
+                            inactive-color="#3e3e3e"
+                            active-text="永久"
+                            inactive-text="自动"
+                            :disabled="!darkmode"
+                            @change="themeModeChanged"
                             >
                         </el-switch>
                     </div>
@@ -75,11 +86,14 @@ export default {
             clearMarginBottom: false,
             version: packInfo.version,
             darkmode: false,
+            darkPersist: false, // 永久禁用
         }
     },
     mounted() {
         const darkEnabled = window.localStorage.getItem('enable-dark');
         this.darkmode = darkEnabled === 'true' ? true : false;
+        const darkPersist = window.localStorage.getItem('dark-persist');
+        this.darkPersist = darkPersist === 'true' ? true : false;
     },
     methods: {
         handleDblClick(e) {
@@ -143,6 +157,21 @@ export default {
                 document.documentElement.removeAttribute('class');
             }
             window.localStorage.setItem('enable-dark', value);
+        },
+        themeModeChanged(value) {
+            if (value) {
+                // 开启永久黑暗模式
+                window.localStorage.setItem('dark-persist', true);
+                if (!document.documentElement.getAttribute('class')) {
+                    document.documentElement.setAttribute('class', 'dark');
+                }
+            } else {
+                // 自动黑暗模式
+                window.localStorage.setItem('dark-persist', false);
+                if (hour >= 6 && hour < 18) {
+                    document.documentElement.removeAttribute('class', 'dark');
+                }
+            }
         },
         goGitHub() {
             window.open('https://github.com/pwp-app/pixiviz');
