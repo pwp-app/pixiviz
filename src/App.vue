@@ -71,11 +71,18 @@ export default {
                 document.documentElement.setAttribute('class', 'dark');
             }
         }
+        // add save loadmap listener
+        window.addEventListener('beforeunload', this.saveLoadMap);
     },
     destroyed() {
-        if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
-            window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
-            window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+        window.removeEventListener('beforeunload', this.saveLoadMap);
+    },
+    methods: {
+        saveLoadMap() {
+            if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
+                window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
+                window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+            }
         }
     }
 }
