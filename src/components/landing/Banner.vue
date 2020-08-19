@@ -168,6 +168,8 @@ export default {
             } else {
                 // 自动黑暗模式
                 window.localStorage.setItem('dark-persist', false);
+                const now = dayjs();
+                const hour = now.hour();
                 if (hour >= 6 && hour < 18) {
                     document.documentElement.removeAttribute('class', 'dark');
                 }
