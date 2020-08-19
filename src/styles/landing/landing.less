@@ -1,26 +1,64 @@
-.landing-component-default {
-    background: lighten(@color-primary, 5%);
-    transition: background-color 200ms ease-in-out;
-}
 .landing-container {
     padding: 2rem 4rem;
     position: relative;
-}
-.landing {
-    width: 100%;
-    margin: 0 auto;
-    max-width: 75rem;
-    display: block;
-    &-card {
-        margin-bottom: 1.5rem;
+    .landing {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 75rem;
+        position: relative;
+        display: block;
+        border-radius: 20px;
+        background: lighten(@color-primary, 5%);
+        background-position: top-center;
+        background-repeat: no-repeat;
+        //background-size: cover;
+        transition: background-color 200ms ease-in-out;
+        filter: brightness(0.98);
+        .landing-card {
+            margin-bottom: 1.5rem;
+            border-radius: 24px;
+        }
+        &-content {
+            width: 100%;
+            border-radius: 26px;
+            background: #fff;
+            mix-blend-mode: screen;
+            .landing-card {
+                background: black;
+                mix-blend-mode: normal;
+            }
+            .landing-card:last-child {
+                margin-bottom: 0;
+            }
+        }
+        &-real-content {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0%;
+            .landing-card {
+                background: transparent;
+                box-shadow: @shadow-medium;
+            }
+            .landing-card:last-child {
+                margin-bottom: 0;
+            }
+        }
     }
 }
 
 // dark mode
 .dark {
-    .landing {
-        .landing-card {
-            filter: brightness(0.8);
+    .landing-container {
+        .landing {
+            filter: brightness(0.875);
+            &-content {
+                background: lighten(@color-background-dark, 2.75%);
+                mix-blend-mode: darken;
+                .landing-card {
+                    background: white;
+                }
+            }
         }
     }
 }

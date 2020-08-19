@@ -1,5 +1,5 @@
 <template>
-    <div :class="['landing-component-default', 'rankbox-wrapper', bannerExpanded ? 'rankbox-hide' : '']" v-show="show" v-lazy:background-image="rankboxBG">
+    <div :class="['rankbox-wrapper', bannerExpanded ? 'rankbox-hide' : '']" v-show="show">
         <div class="rankbox">
             <div class="rankbox-title">
                 <span>排行榜</span>
@@ -27,7 +27,6 @@ export default {
     data() {
         return {
             show: true,
-            rankboxBG: require(`@/assets/images/landing${window.isSafari ? '.jpg' : '.webp'}`),
             bannerExpanded: false
         }
     },

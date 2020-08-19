@@ -1,11 +1,10 @@
 <template>
     <div
-        :class="['landing-component-default', 'banner-wrapper',
+        :class="['banner-wrapper',
             expanded ? 'banner-expanded' : '',
             clearMarginBottom ? 'clear-margin-bottom' : '']"
         @dblclick="handleDblClick"
         v-touch:doubletap="handleDoubleTap"
-        v-lazy:background-image="bannerBG"
         >
         <div class="banner">
             <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
@@ -78,7 +77,6 @@ export default {
     name: "Landing.Banner",
     data() {
         return {
-            bannerBG: require(`@/assets/images/landing${window.isSafari ? '.jpg' : '.webp'}`),
             expanded: false,
             expandLock: false,
             titleUp: false,
@@ -97,7 +95,7 @@ export default {
     },
     methods: {
         handleDblClick(e) {
-            if (e.target.getAttribute('class') && 
+            if (e.target.getAttribute('class') &&
                 e.target.getAttribute('class').includes('el-switch')) {
                 return;
             }
@@ -109,6 +107,7 @@ export default {
                     // Hide scrollbar
                     document.body.className += ' no-scrollbar';
                     this.$store.commit('landingBanner/setExpanded', this.expanded);
+                    this.$emit('expanded', true);
                     setTimeout(() => {
                         this.clearMarginBottom = true;
                     }, 200);
@@ -128,6 +127,7 @@ export default {
                     this.clearMarginBottom = false;
                     // Hide scrollbar
                     document.body.className += ' no-scrollbar';
+                    this.$emit('expanded', false);
                     setTimeout(() => {
                         this.titleUp = false;
                         setTimeout(() => {

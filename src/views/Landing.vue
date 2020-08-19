@@ -1,9 +1,18 @@
 <template>
     <div class="landing-container">
-        <div class="landing">
-            <Banner class="landing-card" />
-            <SearchBox class="landing-card" />
-            <RankBox class="landing-card" />
+        <div class="landing"
+            v-lazy:background-image="landingBG"
+            >
+            <div class="landing-content">
+                <BannerPlaceholder class="landing-card" ref="bannerPlaceholder" />
+                <SearchPlaceholder class="landing-card" />
+                <RankPlaceholder class="landing-card" />
+            </div>
+            <div class="landing-real-content">
+                <Banner class="landing-card" @expanded="handleExpanded" />
+                <SearchBox class="landing-card" />
+                <RankBox class="landing-card" />
+            </div>
         </div>
     </div>
 </template>
@@ -12,6 +21,10 @@
 import Banner from '../components/landing/Banner';
 import SearchBox from '../components/landing/SearchBox';
 import RankBox from '../components/landing/RankBox';
+// placeholder
+import BannerPlaceholder from '../components/landing/BannerPlaceholder';
+import SearchPlaceholder from '../components/landing/SearchBoxPlaceholder';
+import RankPlaceholder from '../components/landing/RankBoxPlaceholder';
 
 import CONFIG from '@/config.json';
 
@@ -26,10 +39,14 @@ export default {
     components: {
         Banner,
         SearchBox,
-        RankBox
+        RankBox,
+        BannerPlaceholder,
+        SearchPlaceholder,
+        RankPlaceholder
     },
     data() {
         return {
+            landingBG: require(`@/assets/images/landing${window.isSafari ? '.jpg' : '.webp'}`),
             bannerExpanded: false,
             guideNotice: null,
             notFirstUse: false,
@@ -48,6 +65,12 @@ export default {
         }
     },
     methods: {
+        // event
+        handleExpanded(expanded) {
+            console.log(expanded);
+            this.$refs.bannerPlaceholder.expandedChanged(expanded);
+        },
+        // notification
         checkFirstUse() {
             if (!window.localStorage) {
                 return;
