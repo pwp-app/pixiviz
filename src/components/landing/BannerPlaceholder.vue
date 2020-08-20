@@ -23,7 +23,10 @@ export default {
             if (expanded) {
                 this.expanded = true;
                 // Hide scrollbar
-                document.body.className += ' no-scrollbar';
+                const classes = document.body.getAttribute('class');
+                if (!(classes && classes.includes('no-scrollbar'))) {
+                    document.body.setAttribute('class', classes + ' no-scrollbar');
+                }
                 setTimeout(() => {
                     this.clearMarginBottom = true;
                 }, 200);
@@ -40,7 +43,10 @@ export default {
                 this.aboutShow = false;
                 this.clearMarginBottom = false;
                 // Hide scrollbar
-                document.body.className += ' no-scrollbar';
+                const classes = document.body.getAttribute('class');
+                if (!(classes && classes.includes('no-scrollbar'))) {
+                    document.body.setAttribute('class', classes + ' no-scrollbar');
+                }
                 setTimeout(() => {
                     this.titleUp = false;
                     setTimeout(() => {

@@ -105,7 +105,10 @@ export default {
                 if (!this.expanded) {
                     this.expanded = true;
                     // Hide scrollbar
-                    document.body.className += ' no-scrollbar';
+                    const classes = document.body.getAttribute('class');
+                    if (!(classes && classes.includes('no-scrollbar'))) {
+                        document.body.setAttribute('class', classes + ' no-scrollbar');
+                    }
                     this.$store.commit('landingBanner/setExpanded', this.expanded);
                     this.$emit('expanded', true);
                     setTimeout(() => {
@@ -118,7 +121,7 @@ export default {
                             setTimeout(() => {
                                 this.expandLock = false;
                                 // Reverse hiding scrollbar
-                                document.body.className = document.body.className.replace(' no-scrollbar', '');
+                                document.body.setAttribute('class', classes.replace(/\s(no\-scrollbar)/gi, ''));
                             }, 500);
                         }, 350);
                     }, 350);
@@ -126,7 +129,10 @@ export default {
                     this.aboutShow = false;
                     this.clearMarginBottom = false;
                     // Hide scrollbar
-                    document.body.className += ' no-scrollbar';
+                    const classes = document.body.getAttribute('class');
+                    if (!(classes && classes.includes('no-scrollbar'))) {
+                        document.body.setAttribute('class', classes + ' no-scrollbar');
+                    }
                     this.$emit('expanded', false);
                     setTimeout(() => {
                         this.titleUp = false;
@@ -136,7 +142,8 @@ export default {
                             setTimeout(() => {
                                 this.expandLock = false;
                                 // Reverse hiding scrollbar
-                                document.body.className = document.body.className.replace(' no-scrollbar', '');
+                                const classes = document.body.getAttribute('class');
+                                document.body.setAttribute('class', classes.replace(/\s(no\-scrollbar)/gi, ''));
                             }, 500);
                         }, 350);
                     }, 350);

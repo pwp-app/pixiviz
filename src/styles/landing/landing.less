@@ -9,7 +9,7 @@
         display: block;
         border-radius: 20px;
         background: lighten(@color-primary, 5%);
-        background-position: top-center;
+        background-position: top center;
         background-repeat: no-repeat;
         transition: background-color 200ms ease-in-out;
         filter: brightness(0.98);
@@ -65,8 +65,12 @@
 // 2k
 
 @media(min-height: 1200px) and (min-width: 1960px) {
-    .landing {
-        transform: scale(1.175) translateY(12.5%)
+    .landing-container {
+        padding: 5rem 8rem;
+        .landing {
+            max-width: 110rem;
+            background-size: 150%;
+        }
     }
 }
 
@@ -75,10 +79,43 @@
 @media(max-width: 767px) {
     .landing-container {
         padding: 20px;
+        .landing {
+            background-size: 180%;
+            &-card {
+                margin-bottom: 20px;
+            }
+        }
     }
-    .landing {
-        &-card {
-            margin-bottom: 20px;
+}
+
+@media(max-width: 640px) {
+    .landing-container {
+        .landing {
+            background-size: 240%;
+        }
+    }
+}
+
+@media(max-width: 480px) {
+    .landing-container {
+        .landing {
+            background-size: 320%;
+        }
+    }
+}
+
+@media(max-width: 380px) {
+    .landing-container {
+        .landing {
+            background-size: 380%;
+        }
+    }
+}
+
+@media(max-width: 319px) {
+    .landing-container {
+        .landing {
+            background-size: unset;
         }
     }
 }

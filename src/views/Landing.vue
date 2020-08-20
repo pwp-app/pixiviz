@@ -67,7 +67,6 @@ export default {
     methods: {
         // event
         handleExpanded(expanded) {
-            console.log(expanded);
             this.$refs.bannerPlaceholder.expandedChanged(expanded);
         },
         // notification

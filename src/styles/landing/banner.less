@@ -11,7 +11,7 @@
 }
 
 .clear-margin-bottom {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 
 .banner {
@@ -114,6 +114,35 @@
 }
 
 /* PC */
+
+// 2k
+
+@media(min-height: 1200px) and (min-width: 1960px) {
+    .banner-wrapper {
+        height: 78.75rem;
+        max-height: 28rem;
+    }
+    .banner-expanded {
+        max-height: 78.75rem;
+    }
+    .banner {
+        transform: scale(1.3);
+        &-title-up {
+            transform: translateY(-20rem);
+        }
+        &-borrow {
+            margin-top: 1.5rem;
+        }
+        .about {
+            position: absolute;
+            bottom: 17rem;
+            transform: scale(1.2);
+            &-copyright {
+                margin-top: 5.375rem;
+            }
+        }
+    }
+}
 
 @media (max-height: 768px) {
     .banner-wrapper {
