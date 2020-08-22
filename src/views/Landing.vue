@@ -47,7 +47,6 @@ export default {
     data() {
         return {
             landingBG: require(`@/assets/images/landing${window.isSafari ? '.jpg' : '.webp'}`),
-            bannerExpanded: false,
             guideNotice: null,
             notFirstUse: false,
         }

@@ -1,5 +1,5 @@
 <template>
-    <div class="image-card-wrapper">
+    <div class="image-card-wrapper image-card-fade">
         <a :href="loadError || block || !image ? 'javascript:;' : `/pic/${image.id}`" :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click.prevent="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
             <div class="image-card-overlay image-card-block" v-if="block">
                 <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
@@ -78,7 +78,8 @@ export default {
     methods: {
         getHost() {
             if (window.pixiviz.proxyMap && window.pixiviz.hostMap && window.pixiviz.loadMap) {
-                if (window.pixiviz.loadMap[this.image.id]) {
+                const hostLog = window.pixiviz.loadMap[this.image.id];
+                if (typeof hostLog !== 'undefined' && hostLog !== null) {
                     return window.pixiviz.hostMap[window.pixiviz.loadMap[this.image.id]];
                 } else {
                     const random = Math.random();
