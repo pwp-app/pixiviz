@@ -97,6 +97,10 @@ export default {
         afterLoad() {
             // 拆解
             const profile = this.artist.profile;
+            if (!profile) {
+                this.$emit('failed');
+                return;
+            }
             this.totalIllusts = profile.total_illusts;
             this.totalManga = profile.total_manga;
             this.totalNovel = profile.total_novels;
