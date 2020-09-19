@@ -2,7 +2,7 @@
     <div :class="['searchbox-wrapper', bannerExpanded ? 'searchbox-hide' : '']" v-show="show">
         <div class="searchbox">
             <div class="searchbox-title">
-                <span>寻找你想看的画作/画师</span>
+                <span>寻找你想看的画作</span>
             </div>
             <div class="searchbox-input">
                 <el-input v-model="search" spellcheck="false" @keyup.enter.native="submitSearch"></el-input>
