@@ -61,6 +61,15 @@ router.afterEach(() => {
     if (window.MtaH5) {
         window.MtaH5.pgv();
     }
+    // check dark mode
+    if (window.pixiviz) {
+        if (window.pixiviz.darkEnabled && !window.pixiviz.darkPersist) {
+            const hour = new Date().getHours();
+            if (hour < 6 || hour >= 18) {
+                document.documentElement.setAttribute('class', 'dark');
+            }
+        }
+    }
 });
 
 export default router;
