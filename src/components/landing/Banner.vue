@@ -30,7 +30,7 @@
                         <el-switch
                             v-model="darkmode"
                             active-color="#2e2e2e"
-                            inactive-color="#da7a85"
+                            inactive-color="#E3A7A1"
                             active-text="深色"
                             inactive-text="正常"
                             @change="themeChanged"
