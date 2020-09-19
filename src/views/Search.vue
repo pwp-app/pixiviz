@@ -1,5 +1,8 @@
 <template>
-    <div :class="['search-container', iPadStyle ? 'ipad-only' : null]" :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px`} : null">
+    <div
+        :class="['search-container', iPadStyle ? 'ipad-only' : null]"
+        :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px`} : null"
+    >
         <div class="search-header">
             <div class="search-header-title">
                 <span>搜索</span>
@@ -37,11 +40,7 @@
             </div>
         </div>
         <div class="search-content" v-if="!keywordBlocked">
-            <div
-                class="waterfall-wrapper"
-                :key="waterfallResponsive"
-                v-if="waterfallResponsive"
-            >
+            <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
                 <Waterfall
                     class="waterfall waterfall-responsive"
                     ref="waterfall"
@@ -100,7 +99,7 @@ export default {
         return {
             page: this.$store.state.search.page !== null ? this.$store.state.search.page : 1,
             images: this.$store.state.search.keyword === this.$route.params.keyword ?
-                this.$store.state.search.images ? this.$store.state.search.images: [] : [],
+                this.$store.state.search.images ? this.$store.state.search.images : [] : [],
             suggestions: this.$store.state.search.suggestions ? this.$store.state.search.suggestions : [],
             keyword: this.$route.params.keyword,
             keywordInput: this.$route.params.keyword,
@@ -117,7 +116,8 @@ export default {
             // style
             iPadStyle: /iPad/i.test(navigator.userAgent),
             // notification
-            notification: null,
+            illustNotice: null,
+            artistNotice: null,
         };
     },
     watch: {
@@ -172,7 +172,7 @@ export default {
     methods: {
         infiniteHandler($state) {
             // 屏蔽了就不发包
-            if (this.keywordBlocked) {
+            if (this.keywordBlocked || !this.keyword) {
                 return;
             }
             this.axios
@@ -230,29 +230,58 @@ export default {
         checkIfId() {
             // 检查关键词是不是纯数字
             if (id_matcher.test(this.keyword) && !isNaN(this.keyword)) {
-                this.axios.get(`${CONFIG.OWN_API}/illust/detail`, {
-                    params: {
-                        id: parseInt(this.keyword)
-                    }
-                }).then(res => {
-                    if (!res.data.illust) {
-                        return;
-                    }
-                    // bind event to search notify
-                    document.body.addEventListener('click', this.searchNotifyClicked, false);
-                    this.notification = this.$notify({
-                        title: '您要找的可能是：',
-                        position: 'bottom-left',
-                        dangerouslyUseHTMLString: true,
-                        duration: 5000,
-                        onClose: this.searchNotifyClosed,
-                        message: `
-                        <div class="search-notify">
-                            <span data-name="search-notify">${res.data.illust.title} （ID: ${this.keyword}）</span>
-                        </div>`
-                    });
-                });
+                this.checkIfIllust();
+                this.checkIfArtist();
             }
+        },
+        checkIfIllust() {
+            this.axios.get(`${CONFIG.OWN_API}/illust/detail`, {
+                params: {
+                    id: parseInt(this.keyword, 10),
+                },
+            }).then((res) => {
+                if (!res || !res.data || !res.data.illust) {
+                    return;
+                }
+                const { data: { illust } } = res;
+                // bind event to search notify
+                document.body.addEventListener('click', this.illustNoticeClick, false);
+                this.illustNotice = this.$notify({
+                    title: '您要找的可能是：',
+                    position: 'bottom-left',
+                    dangerouslyUseHTMLString: true,
+                    duration: 5000,
+                    onClose: this.illustNoticeClose,
+                    message: `
+                        <div class="search-notify">
+                            <span data-name="search-notify">画作 ${illust.title} （ID: ${this.keyword}）</span>
+                        </div>`
+                });
+            });
+        },
+        checkIfArtist() {
+            this.axios.get(`${CONFIG.OWN_API}/user/detail`, {
+                params: {
+                    id: parseInt(this.keyword, 10),
+                },
+            }).then((res) => {
+                if (!res || !res.data || !res.data.user) {
+                    return;
+                }
+                const { data: { user } } = res;
+                document.body.addEventListener('click', this.artistNoticeClick, false);
+                this.artistNotice = this.$notify({
+                    title: '您要找的可能是：',
+                    position: 'bottom-left',
+                    dangerouslyUseHTMLString: true,
+                    duration: 5000,
+                    onClose: this.artistNoticeClose,
+                    message: `
+                        <div class="search-notify">
+                            <span data-name="search-notify">画师 ${user.name} （ID: ${this.keyword}）</span>
+                        </div>`
+                });
+            });
         },
         refreshWaterfall() {
             // 提前清空 dom
@@ -398,22 +427,23 @@ export default {
             return MobileResponsive.getCardWidth(width);
         },
         // 通知事件
-        searchNotifyClicked(e) {
-            if (e.target.dataset.name && e.target.dataset.name === 'search-notify') {
-                // 添加来源
-                this.$cookies.set(
-                    "pic-from",
-                    `search/${this.$route.params.keyword}`,
-                    "1h"
-                );
+        illustNoticeClick(e) {
+            if (e.target.dataset.name && e.target.dataset.name === 'search-notify-illust') {
                 // this.keyword此处等同于pic id
                 this.$router.push(`/pic/${this.keyword}`);
-                this.notification.close();
+                this.illustNotice.close();
             }
         },
-        searchNotifyClosed() {
-            document.body.removeEventListener('click', this.searchNotifyClicked, false);
-        }
+        illustNoticeClose() {
+            document.body.removeEventListener('click', this.illustNoticeClick, false);
+        },
+        artistNoticeClick() {
+            this.$router.push(`/artist/${this.keyword}`);
+            this.artistNotice.close();
+        },
+        artistNoticeClose() {
+            document.body.removeEventListener('click', this.artistNoticeClick, false);
+        },
     }
 };
 </script>
