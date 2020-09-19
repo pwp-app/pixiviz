@@ -121,6 +121,7 @@ export default {
                             setTimeout(() => {
                                 this.expandLock = false;
                                 // Reverse hiding scrollbar
+                                const classes = document.body.getAttribute('class');
                                 document.body.setAttribute('class', classes.replace(/\s(no\-scrollbar)/gi, ''));
                             }, 500);
                         }, 350);
@@ -178,7 +179,7 @@ export default {
                 const now = dayjs();
                 const hour = now.hour();
                 if (hour >= 6 && hour < 18) {
-                    document.documentElement.removeAttribute('class', 'dark');
+                    document.documentElement.removeAttribute('class');
                 }
             }
         },
