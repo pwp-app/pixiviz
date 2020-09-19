@@ -17,6 +17,25 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      // dark mode enhancement
+      (() => {
+        if (!window.pixiviz) {
+          window.pixiviz = {};
+        }
+        const darkEnabled = window.localStorage.getItem('enable-dark');
+        const darkPersist = window.localStorage.getItem('dark-persist');
+        window.pixiviz.darkEnabled = darkEnabled ? true : false;
+        window.pixiviz.darkPersist = darkPersist ? true : false;
+        if (darkEnabled !== 'true') {
+          return;
+        }
+        const hour = new Date().getHours();
+        if (darkPersist === 'true' || hour < 6 || hour >= 18) {
+          document.documentElement.setAttribute('class', 'dark');
+        }
+      })();
+    </script>
     <script async defer>
       var _mtac = {"senseHash":0,"performanceMonitor":1};
       (function() {
