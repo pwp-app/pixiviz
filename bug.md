@@ -1,4 +1,4 @@
-Pixiv C Bug记录
+Pixiviz Bug记录
 
 ## Overview
 
@@ -9,4 +9,3 @@ Pixiv C Bug记录
 ### 20200425
 
 - [x] 相关图片以瀑布流形态展示时不会清理
-- [ ] iPhone下搜索框内文字错误下移
