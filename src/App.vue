@@ -33,7 +33,8 @@ export default {
             const loadMapTime = window.localStorage.getItem('loadmap-save-time');
             if (!loadMap || !loadMapTime) {
                 window.pixiviz.loadMap = {};
-            } else if (loadMapTime && new Date().valueOf() / 1000 - loadMapTime > 10800) {
+                // loadMap有效期3小时
+            } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 10800) {
                 window.pixiviz.loadMap = {};
             } else if (loadMap) {
                 window.pixiviz.loadMap = loadMap;
@@ -72,7 +73,7 @@ export default {
         saveLoadMap() {
             if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
                 window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
-                window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+                window.localStorage.setItem('loadmap-save-time', Math.ceil(new Date().valueOf() / 1000));
             }
         }
     }
