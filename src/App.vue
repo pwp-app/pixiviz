@@ -73,7 +73,7 @@ export default {
         saveLoadMap() {
             if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
                 window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
-                window.localStorage.setItem('loadmap-save-time', Math.ceil(new Date().valueOf() / 1000));
+                window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
             }
         }
     }
