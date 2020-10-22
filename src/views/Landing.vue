@@ -14,10 +14,20 @@
                 <RankBox class="landing-card" />
             </div>
         </div>
+        <el-dialog
+            :title="announceTitle"
+            :visible.sync="showAnnounce"
+            :before-close="handleAnnounceClose"
+            >
+            <pre>{{announceContent}}</pre>
+            <pre class="annouce-footer">{{announceFooter}}</pre>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+import dayjs from 'dayjs';
+// components
 import Banner from '../components/landing/Banner';
 import SearchBox from '../components/landing/SearchBox';
 import RankBox from '../components/landing/RankBox';
@@ -49,9 +59,15 @@ export default {
             landingBG: require(`@/assets/images/landing${window.isSafari ? '.jpg' : '.webp'}`),
             guideNotice: null,
             notFirstUse: false,
+            announceId: -1,
+            announceTitle: '',
+            announceFooter: '',
+            showAnnounce: false,
+            announceContent: false,
         }
     },
     mounted() {
+        this.fetchAnnounce();
         this.checkFirstUse();
         this.displayDonate();
     },
@@ -67,6 +83,32 @@ export default {
         // event
         handleExpanded(expanded) {
             this.$refs.bannerPlaceholder.expandedChanged(expanded);
+        },
+        // announce
+        fetchAnnounce() {
+            this.axios.get('https://config.backrunner.top/pixiviz/announcement.json', {
+                withCredentials: false,
+            }).then((res) => {
+                if (res.data) {
+                    const { id, title, content, footer, expires } = res.data;
+                    const announceLog = window.localStorage.getItem('announce-read-id');
+                    if (announceLog && parseInt(announceLog, 10) >= id) {
+                        return;
+                    }
+                    if (dayjs(expires).unix() <= dayjs().unix()) {
+                        return;
+                    }
+                    this.announceId = id;
+                    this.announceTitle = title;
+                    this.announceContent = content;
+                    this.announceFooter = footer;
+                    this.showAnnounce = true;
+                }
+            });
+        },
+        handleAnnounceClose(done) {
+            window.localStorage.setItem('announce-read-id', this.announceId);
+            done();
         },
         // notification
         checkFirstUse() {

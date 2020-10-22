@@ -82,6 +82,45 @@ button:focus {
     color: lighten(@color-text-primary, 12.5%);
 }
 
+// dialog
+.el-dialog {
+    width: 57.5%;
+    border-radius: 1rem;
+    box-shadow: 0 4px 28px rgba(0, 0, 0, .2);
+    .el-dialog__header {
+        padding: 24px 28px 8px;
+        span {
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+        }
+        .el-dialog__headerbtn {
+            top: 24px;
+            right: 28px;
+            i {
+                color: @color-primary;
+            }
+            i:hover {
+                color: lighten(@color-primary, 10%);
+            }
+        }
+    }
+    .el-dialog__body {
+        padding: 12px 28px 24px;
+        pre {
+            margin: 0;
+            font-size: 14px;
+            line-height: 28px;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+        .annouce-footer {
+            text-align: right;
+            line-height: 24px;
+            margin-top: 12px;
+        }
+    }
+}
+
 // dark mode
 .dark {
     body {
@@ -124,6 +163,20 @@ button:focus {
     }
     .el-loading-mask {
         background-color: lighten(@color-background-dark, 2.5%) !important;
+    }
+    .el-dialog {
+        background: lighten(@color-background-dark, 5%);
+        .el-dialog__header, .el-dialog__body {
+            span, pre {
+                color: darken(@color-text-accent, 15%);
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .el-dialog {
+        width: 90%;
     }
 }
 
