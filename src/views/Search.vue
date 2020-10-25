@@ -26,7 +26,7 @@
             ref="suggestions"
             @mouseenter="enterSuggesion"
             @mouseleave="leaveSuggestion"
-            v-if="suggestions.length > 0"
+            v-if="suggestions.length > 0 && showContent"
         >
             <div class="search-suggestion-items" ref="suggestionItems">
                 <div
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="search-content" v-if="!keywordBlocked">
+        <div class="search-content" v-if="showContent">
             <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
                 <Waterfall
                     class="waterfall waterfall-responsive"
@@ -65,11 +65,16 @@
         <div class="search-content search-content-blocked" v-if="keywordBlocked">
             <p>别搜了，这里真的没有色图...</p>
         </div>
+        <div class="search-content search-content-blocked" v-if="sensitiveBlocked">
+            <p>富强、民主、文明、和谐</p>
+            <p>自由、平等、公正、法制</p>
+            <p>爱国、敬业、诚信、友善</p>
+        </div>
         <infinite-loading
             :identifier="waterfallIdentifier"
             @infinite="infiniteHandler"
             spinner="spiral"
-            v-if="!keywordBlocked"
+            v-if="showContent"
         ></infinite-loading>
         <BackToTop />
     </div>
@@ -104,6 +109,7 @@ export default {
             keyword: this.$route.params.keyword,
             keywordInput: this.$route.params.keyword,
             keywordBlocked: false,
+            sensitiveBlocked: false,
             blockedCount: 0,
             waterfallIdentifier: Math.round(Math.random() * 100),
             from: this.$cookies.get("search-from"),
@@ -135,6 +141,11 @@ export default {
                 this.cardWidth = this.getCardWidth(this.screenWidth);
                 document.documentElement.scrollTop = this.scrollTop;
             });
+        }
+    },
+    computed: {
+        showContent() {
+            return !this.keywordBlocked && !this.sensitiveBlocked;
         }
     },
     mounted() {
@@ -186,6 +197,9 @@ export default {
                     if (!response.data.illusts) {
                         // 加载失败
                         $state.complete();
+                        if (response.data.sensitive) {
+                            this.sensitiveBlocked = true;
+                        }
                         return;
                     }
                     if (response.data.illusts.length === 0) {
