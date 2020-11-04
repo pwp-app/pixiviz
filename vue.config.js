@@ -45,6 +45,10 @@ module.exports = {
                 gifsicle: { interlaced: false },
             });
         config.optimization.delete("splitChunks");
+        if (process.env.NODE_ENV === 'production' && process.env.ANALYZE === 'true') {
+            config.plugin('webpack-bundle-analyzer')
+                .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
+        }
     },
     configureWebpack: (config) => {
         config.optimization = {
