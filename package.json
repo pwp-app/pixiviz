@@ -10,11 +10,11 @@
     "analyze": "cross-env ANALYZE=true vue-cli-service build"
   },
   "dependencies": {
+    "@pwp-app/better-element-ui": "^2.14.0-fix-1",
     "axios": "^0.21.0",
     "clipboard-polyfill": "^3.0.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.4",
-    "element-ui": "^2.13.2",
     "qs": "^6.9.4",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.12",

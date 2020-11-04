@@ -51,6 +51,10 @@ module.exports = {
         }
     },
     configureWebpack: (config) => {
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            'element-ui': '@pwp-app/better-element-ui',
+        };
         config.optimization = {
             splitChunks: {
                 cacheGroups: {
