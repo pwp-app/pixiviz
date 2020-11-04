@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run serve",
+    "dev": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build"

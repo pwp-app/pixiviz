@@ -43,7 +43,7 @@ const routes = [
     {
         path: "/404",
         name: "Page not found",
-        component: () => import(/* webpackChunkName: "notfound" */ "../views/404.vue"),
+        component: () => import(/* webpackChunkName: "group-lazy" */ "../views/404.vue"),
     },
     {
         path: "*",

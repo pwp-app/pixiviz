@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 // Import dependencies
 import qs from "qs"
-import VueAxios from 'vue-axios'
+import VueAxios from 'vue-axios/dist/vue-axios.min'
 import axios from 'axios';
 import VueCookies from 'vue-cookies';
 import VueLazyload from 'vue-lazyload'
