@@ -138,8 +138,8 @@ export default {
                 this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
             }
         },
-        screenWidth(width) {
-            this.setLimitWidth(width);
+        screenWidth() {
+            this.setLimitWidth();
             this.updateDisplaySize();
         }
     },
@@ -191,10 +191,16 @@ export default {
         },
     },
     methods: {
-        setLimitWidth(width) {
+        setLimitWidth() {
+            const { screenWidth: width, screenHeight: height } = this;
             if (width >= 2400) {
-                this.limitWidth = 1680;
-                this.limitHeight = 960;
+                if (height > 1280) {
+                    this.limitWidth = 1680;
+                    this.limitHeight = 960;
+                } else {
+                    this.limitWidth = 1152;
+                    this.limitHeight = 796;
+                }
             } else if (width > 1680 && width <= 1920) {
                 this.limitWidth = 1152;
                 this.limitHeight = 796;
