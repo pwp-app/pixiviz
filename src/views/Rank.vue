@@ -161,31 +161,26 @@ export default {
             return mode2text[this.mode];
         },
         dateUnit: function () {
-            if (this.mode.indexOf("day") != -1) {
+            if (this.mode.includes('day')) {
                 return "天";
-            } else if (this.mode.indexOf("week") != -1) {
+            } else if (this.mode.includes('week')) {
                 return "周";
-            } else if (this.mode.indexOf("month") != -1) {
+            } else if (this.mode.includes('month')) {
                 return "月";
             }
         },
         displayDate: function () {
-            if (this.mode.indexOf("day") != -1) {
-                return this.dateObject.format("YYYY-MM-DD");
-            } else if (this.mode.indexOf("week") != -1) {
-                return (
-                    this.dateObject.format("YYYY-MM") +
-                    " 第 " +
-                    Math.round(this.dateObject.date() / 7) +
-                    " 周"
-                );
-            } else if (this.mode.indexOf("month") != -1) {
+            if (this.mode.includes('day')) {
+                return this.dateObject.format('YYYY-MM-DD');
+            } else if (this.mode.includes('week')) {
+                return `${this.dateObject.format('YYYY-MM')} 第 ${Math.floor(this.dateObject.date() / 7) + 1} 周`;
+            } else if (this.mode.includes('month')) {
                 return this.dateObject.format("YYYY-MM");
             }
         },
         showDateNext: function () {
             return (
-                (dayjs().startOf("day").unix() - this.dateObject.unix()) / 86400 > 2
+                (dayjs().startOf('day').unix() - this.dateObject.unix()) / 86400 > 2
             );
         }
     },
