@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   opacity: 1;
-  transition: 500ms ease-in-out;
+  transition: opacity 500ms ease-in-out;
 }
 .rankbox-hide {
   opacity: 0;
@@ -63,7 +63,7 @@
     height: 21rem;
   }
   .rankbox {
-    span {
+    span, a {
       font-size: 2.5rem;
     }
     &-title {
@@ -89,7 +89,7 @@
 
 @media (max-width: 767px) {
   .rankbox {
-    span {
+    span, a {
       font-size: 24px;
     }
     &-options {
