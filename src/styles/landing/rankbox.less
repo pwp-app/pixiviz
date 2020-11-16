@@ -1,98 +1,101 @@
 .rankbox-wrapper {
-    width: 100%;
-    height: 16.375rem;
-    position: relative;
-    display: flex;
-    opacity: 1;
-    transition: 500ms ease-in-out;
+  width: 100%;
+  height: 16.375rem;
+  position: relative;
+  display: flex;
+  opacity: 1;
+  transition: 500ms ease-in-out;
 }
 .rankbox-hide {
-    opacity: 0;
+  opacity: 0;
 }
 .rankbox {
-    margin: auto;
-    span {
-        text-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
-        color: @color-text-accent;
-        font-size: 1.625rem;
-        .no-select();
+  margin: auto;
+  span, a {
+    text-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+    color: @color-text-accent;
+    font-size: 1.625rem;
+    .no-select();
+	}
+	a {
+		text-decoration: none;
+	}
+  &-title {
+    padding: 0 0 1rem 0;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+  &-options {
+    text-align: center;
+    &-text {
+      position: relative;
+      display: inline-block;
     }
-    &-title {
-        padding: 0 0 1rem 0;
-        letter-spacing: 0.1em;
-        text-align: center;
+    &-text:hover {
+      cursor: pointer;
     }
-    &-options {
-        text-align: center;
-        &-text {
-            position: relative;
-            display: inline-block;
-        }
-        &-text:hover {
-            cursor: pointer;
-        }
-        &-text::after {
-            content: '';
-            display: block;
-            position: absolute;
-            width: 100%;
-            height: 0.125rem;
-            margin-top: 0.25rem;
-            background: @color-text-accent;
-            border-radius: 0.125rem;
-            transform: scale3d(0,0,1);
-            transition: all 200ms ease-in-out;
-        }
-        &-text:hover::after{
-			transform: scale3d(1,1,1);
-		}
-        &-split {
-            margin: 0 2rem;
-        }
+    &-text::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 0.125rem;
+      margin-top: 0.25rem;
+      background: @color-text-accent;
+      border-radius: 0.125rem;
+      transform: scale3d(0, 0, 1);
+      transition: all 200ms ease-in-out;
     }
+    &-text:hover::after {
+      transform: scale3d(1, 1, 1);
+    }
+    &-split {
+      margin: 0 2rem;
+    }
+  }
 }
 
 // 2k
 
-@media(min-height: 1200px) and (min-width: 1960px) {
-    .rankbox-wrapper {
-        width: 100%;
-        height: 21rem;
+@media (min-height: 1200px) and (min-width: 1960px) {
+  .rankbox-wrapper {
+    width: 100%;
+    height: 21rem;
+  }
+  .rankbox {
+    span {
+      font-size: 2.5rem;
     }
-    .rankbox {
-        span {
-            font-size: 2.5rem;
-        }
-        &-title {
-            padding-bottom: 2rem;
-        }
-        &-options {
-            &-split {
-                margin: 0 3.25rem;
-            }
-        }
+    &-title {
+      padding-bottom: 2rem;
     }
+    &-options {
+      &-split {
+        margin: 0 3.25rem;
+      }
+    }
+  }
 }
 
 // low height
 
 @media (max-height: 754px) {
-    .rankbox-wrapper {
-        height: 202px;
-    }
+  .rankbox-wrapper {
+    height: 202px;
+  }
 }
 
 /* Mobile */
 
 @media (max-width: 767px) {
-    .rankbox {
-        span {
-            font-size: 24px;
-        }
-        &-options {
-            &-split {
-                margin: 0 28px;
-            }
-        }
+  .rankbox {
+    span {
+      font-size: 24px;
     }
+    &-options {
+      &-split {
+        margin: 0 28px;
+      }
+    }
+  }
 }

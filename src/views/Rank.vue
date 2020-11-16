@@ -122,11 +122,7 @@ export default {
       dateObject: this.$store.state.rank.date
         ? this.$store.state.rank.date
         : dayjs().subtract(2, "day"),
-      mode: this.$store.state.rank.mode
-        ? this.$store.state.rank.mode
-        : this.$cookies.get("rank-mode")
-          ? this.$cookies.get("rank-mode")
-          : "day",
+      mode: this.initMode(),
       images: this.$store.state.rank.images
         ? this.$store.state.rank.images
         : [],
@@ -318,7 +314,21 @@ export default {
       this.dateObject = dayjs().subtract(2, "day");
       this.images = [];
       this.waterfallIdentifier = this.waterfallIdentifier + 1;
-    },
+		},
+		initMode() {
+			const query = this.$route.query.mode;
+			if (query) {
+				this.$store.commit('rank/setMode', query);
+			}
+			const stored = this.$store.state.rank.mode;
+			if (stored) {
+				return stored;
+			}
+			const cookieStored = this.$cookies.get("rank-mode");
+			if (cookieStored) {
+				return cookieStored;
+			}
+		},
     handleModeChanged(mode) {
       this.mode = mode;
       document.title = this.modeText + ' - Pixiviz';
