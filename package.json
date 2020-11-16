@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.14.2",
+  "version": "1.14.3",
   "private": true,
   "scripts": {
     "start": "npm run serve",
