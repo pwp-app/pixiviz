@@ -11,10 +11,6 @@ import { VueMasonryPlugin } from 'vue-masonry';
 import InfiniteLoading from 'vue-infinite-loading';
 import VueMeta from 'vue-meta'
 
-// Import Sentry
-// import * as Sentry from '@sentry/browser';
-// import { Vue as VueIntegration } from '@sentry/integrations';
-
 // Import element ui and styles
 
 import './plugins/element.js'
@@ -37,22 +33,22 @@ axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.transformRequest = [function (data) {
-    return qs.stringify(data, {
-        arrayFormat: 'brackets'
-    })
+  return qs.stringify(data, {
+    arrayFormat: 'brackets'
+  })
 }]
 
 Vue.use(VueAxios, axios)
 
 // Set up lazyload
 Vue.use(VueLazyload, {
-    // set observer to true
-    observer: true,
-    // optional
-    observerOptions: {
-        rootMargin: '0px',
-        threshold: 0.1
-    }
+  // set observer to true
+  observer: true,
+  // optional
+  observerOptions: {
+    rootMargin: '0px',
+    threshold: 0.1
+  }
 })
 
 // Mobile events
@@ -61,10 +57,10 @@ Vue.use(Vue2TouchEvents)
 // Set up things for waterfall
 Vue.use(VueMasonryPlugin)
 Vue.use(InfiniteLoading, {
-    slots: {
-        noResults: '这里没有图片...',
-        noMore: '没有更多图片了...'
-    },
+  slots: {
+    noResults: '这里没有图片...',
+    noMore: '没有更多图片了...'
+  },
 })
 
 // Set up vue cookies
@@ -73,17 +69,11 @@ Vue.$cookies.config('7d');
 
 Vue.use(VueMeta);
 
-// Init sentry
-/* Sentry.init({
-    dsn: 'https://ff7a600f1b9545cca27d95f70bc3cd6d@o432797.ingest.sentry.io/5386808',
-    integrations: [new VueIntegration({ Vue, attachProps: true, logErrors: true })],
-});*/
-
 new Vue({
-    router,
-    store,
-    render: h => h(App),
-    mounted() {
-        document.dispatchEvent(new Event('render-event'));
-    }
+  router,
+  store,
+  render: h => h(App),
+  mounted() {
+    document.dispatchEvent(new Event('render-event'));
+  }
 }).$mount('#app');
