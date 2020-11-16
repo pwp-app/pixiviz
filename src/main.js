@@ -69,6 +69,7 @@ Vue.use(InfiniteLoading, {
 Vue.use(VueCookies);
 Vue.$cookies.config('7d');
 
+// Set up meta
 Vue.use(VueMeta);
 
 new Vue({

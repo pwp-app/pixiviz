@@ -127,8 +127,7 @@ export default {
     if (this.artistName) {
       document.title = this.artistName + ' - Pixiviz';
     } else {
-			const { id: artistId } = this;
-      document.title = `画师${artistId || ''} - Pixiviz`;
+      document.title = `画师${this.id || ''} - Pixiviz`;
     }
   },
   destroyed() {
