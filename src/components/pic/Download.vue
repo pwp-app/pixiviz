@@ -2,6 +2,7 @@
   <div class="pic-download">
     <div class="pic-download-title">
       <span>下载</span>
+      <Setting class="pic-download-title-icon" @click="openDownloadSettings"/>
     </div>
     <div class="pic-download-items">
       <el-button type="primary" @click="downloadCurrent" :disabled="disableDownloadCurrent">{{ downloadCurrentText }}</el-button>
@@ -12,9 +13,13 @@
 
 <script>
 import CONFIG from '../../config.json';
+import Setting from '../icons/setting';
 
 export default {
   props: ['image', 'loaded'],
+  components: {
+    Setting,
+  },
   data() {
     return {
       // download
@@ -42,6 +47,9 @@ export default {
     }
   },
   methods: {
+    openDownloadSettings() {
+
+    },
     createDownloadTimer() {
 			window.pixiviz.downloadTimer = setInterval(() => {
 				if (window.pixiviz.downloadQueue.length) {

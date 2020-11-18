@@ -1,208 +1,208 @@
 .pic-container {
-    width: calc(100% - 128px);
-    padding: 0 64px 0 64px;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    .el-loading-mask {
-        background-color: #fff;
-    }
-    .pic-close {
-        position: absolute;
-        right: 36px;
-        top: 24px;
-        font-size: 28px;
-        color: @color-text-primary;
-        transition: 200ms ease-in-out;
-    }
-    .pic-close:hover {
-        cursor: pointer;
-        color: lighten(@color-text-primary, 10%);
-    }
+  width: calc(100% - 128px);
+  padding: 0 64px 0 64px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  .el-loading-mask {
+    background-color: #fff;
+  }
+  .pic-close {
+    position: absolute;
+    right: 36px;
+    top: 24px;
+    font-size: 28px;
+    color: @color-text-primary;
+    transition: 200ms ease-in-out;
+  }
+  .pic-close:hover {
+    cursor: pointer;
+    color: lighten(@color-text-primary, 10%);
+  }
 }
 
 .pic-container-loading {
-    max-width: 100vw;
-    max-height: 100vh;
-    overflow: hidden;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .pic-container-failed {
-    .pic-container-loading();
+  .pic-container-loading();
 }
 
 .pic-container-lockscroll {
-    max-height: 100vh;
-    overflow: hidden !important;
+  max-height: 100vh;
+  overflow: hidden !important;
 }
 
 .pic {
-    height: max-content;
-    margin: 0 auto;
-    display: flex;
-    &-presentation {
-        width: max-content;
-        flex: 0 0 auto;
-    }
-    &-side {
-        padding-top: 24px;
-        width: 432px;
-        margin-left: 48px;
-        flex: 0 0 auto;
-    }
+  height: max-content;
+  margin: 0 auto;
+  display: flex;
+  &-presentation {
+    width: max-content;
+    flex: 0 0 auto;
+  }
+  &-side {
+    padding-top: 24px;
+    width: 432px;
+    margin-left: 48px;
+    flex: 0 0 auto;
+  }
 }
 
 // action
 .pic-action {
-    display: none;
-    position: fixed;
-    bottom: 18px;
-    padding: 12px 24px;
+  display: none;
+  position: fixed;
+  bottom: 18px;
+  padding: 12px 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+  z-index: 9999;
+  background: @color-accent;
+  opacity: 0;
+  transition: 300ms all ease-in-out;
+  transform: translateY(12px);
+  i {
+    width: 22px;
+    height: 22px;
+    margin-right: 28px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 28px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
-    z-index: 9999;
-    background: @color-accent;
-    opacity: 0;
-    transition: 300ms all ease-in-out;
-    transform: translateY(12px);
-    i {
-        width: 22px;
-        height: 22px;
-        margin-right: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        svg {
-            path {
-                transition: 150ms all ease-in-out;
-            }
-        }
+    svg {
+      path {
+        transition: 150ms all ease-in-out;
+      }
     }
-    i:hover {
-        cursor: pointer;
-        svg {
-            path {
-                fill: lighten(@color-primary, 10%);
-            }
-        }
+  }
+  i:hover {
+    cursor: pointer;
+    svg {
+      path {
+        fill: lighten(@color-primary, 10%);
+      }
     }
-    i:last-of-type {
-        margin-right: 0;
-    }
+  }
+  i:last-of-type {
+    margin-right: 0;
+  }
 }
 
 .pic-action-show {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 // dark mode
 
 .dark {
-    .pic-action {
-        background: #3e3e3e;
-        i {
-            svg {
-                path {
-                    fill: darken(@color-primary, 2.5%);
-                }
-            }
+  .pic-action {
+    background: #3e3e3e;
+    i {
+      svg {
+        path {
+          fill: darken(@color-primary, 2.5%);
         }
-        i:hover {
-            svg {
-                path {
-                    fill: lighten(@color-primary, 7.5%);
-                }
-            }
-        }
+      }
     }
+    i:hover {
+      svg {
+        path {
+          fill: lighten(@color-primary, 7.5%);
+        }
+      }
+    }
+  }
 }
 
 // iPhone X
 @supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
-    .pic-action {
-        bottom: 26px !important;
-    }
+  .pic-action {
+    bottom: 26px !important;
+  }
   }
 
 /* Responsive */
 @media(max-width: 1680px) {
-    .pic {
-        &-side {
-            margin-left: 36px;
-        }
+  .pic {
+    &-side {
+      margin-left: 36px;
     }
+  }
 }
 @media(max-width: 1430px) {
-    .pic {
-        &-side {
-            margin-left: 32px;
-        }
+  .pic {
+    &-side {
+      margin-left: 32px;
     }
+  }
 }
 @media (max-width: 1366px) {
-    .pic {
-        &-side {
-            width: 386px;
-        }
+  .pic {
+    &-side {
+      width: 386px;
     }
+  }
 }
 @media(max-width: 1024px) {
-    .pic {
-        &-side {
-            padding-top: 18px;
-            margin-left: 24px;
-            width: 320px;
-        }
+  .pic {
+    &-side {
+      padding-top: 18px;
+      margin-left: 24px;
+      width: 320px;
     }
+  }
 }
 
 /* iPad / iPad Pro protrait */
 @media screen and (orientation: portrait) and (max-width: 1024px) {
-    .pic-container {
-        width: auto;
-        padding: 0 24px;
-        .pic-close {
-            display: none;
-        }
+  .pic-container {
+    width: auto;
+    padding: 0 24px;
+    .pic-close {
+      display: none;
     }
-    .pic {
-        width: 100%;
-        flex-direction: column;
-        &-side {
-            padding-top: 8px;
-            margin-left: 0;
-            width: auto;
-        }
+  }
+  .pic {
+    width: 100%;
+    flex-direction: column;
+    &-side {
+      padding-top: 8px;
+      margin-left: 0;
+      width: auto;
     }
-    .pic-action {
-        display: flex;
-    }
+  }
+  .pic-action {
+    display: flex;
+  }
 }
 
 /* Mobile */
 @media (max-width: 767px) {
-    .pic-container {
-        width: auto;
-        padding: 0 24px;
-        .pic-close {
-            display: none;
-        }
+  .pic-container {
+    width: auto;
+    padding: 0 24px;
+    .pic-close {
+      display: none;
     }
-    .pic {
-        width: 100%;
-        flex-direction: column;
-        &-side {
-            padding-top: 8px;
-            margin-left: 0;
-            width: auto;
-        }
+  }
+  .pic {
+    width: 100%;
+    flex-direction: column;
+    &-side {
+      padding-top: 8px;
+      margin-left: 0;
+      width: auto;
     }
-    .pic-action {
-        display: flex;
-    }
+  }
+  .pic-action {
+    display: flex;
+  }
 }
 
 /* Overlay */
