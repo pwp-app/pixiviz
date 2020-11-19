@@ -23,5 +23,5 @@ yarn-error.log*
 # Custom
 assets_source
 pwp-deploy.json
-announcement.json
+announcement*.json
 .history
