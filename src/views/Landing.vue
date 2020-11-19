@@ -18,6 +18,8 @@
       :title="announceTitle"
       :visible.sync="showAnnounce"
       :before-close="handleAnnounceClose"
+      class="landing-announcement"
+      top="8.5vh"
       >
       <pre>{{announceContent}}</pre>
       <pre class="annouce-footer">{{announceFooter}}</pre>

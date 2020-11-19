@@ -47,6 +47,12 @@
   }
 }
 
+.landing-announcement {
+  .el-dialog {
+    width: 57.5vw;
+  }
+}
+
 @media only screen and (max-aspect-ratio: ~"1/1") {
 	.landing-container {
 		.landing {
@@ -90,10 +96,24 @@
   }
 }
 
+// tablet
+@media(max-width: 1024px) {
+  .landing-announcement {
+    .el-dialog {
+      width: 75vw;
+    }
+  }
+}
+
 // mobile
 @media(max-width: 767px) {
   .landing-container {
 		padding: 20px;
+  }
+  .landing-announcement {
+    .el-dialog {
+      width: 90vw;
+    }
   }
 }
 

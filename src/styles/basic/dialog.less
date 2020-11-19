@@ -1,18 +1,29 @@
 // dialog
 .el-dialog {
-  width: 57.5%;
   border-radius: 1rem;
   box-shadow: 0 4px 28px rgba(0, 0, 0, 0.2);
   .el-dialog__header {
+    display: flex;
+    align-items: center;
     padding: 24px 28px 8px;
     user-select: none;
     span {
+      display: block;
+      flex: 1;
       font-weight: 600;
       letter-spacing: 0.05rem;
     }
     .el-dialog__headerbtn {
-      top: 24px;
-      right: 28px;
+      justify-self: flex-end;
+      position: initial;
+      top: initial !important;
+      right: initial !important;
+      font-size: 20px;
+      width: 16px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: right;
       i {
         color: @color-primary;
       }
@@ -40,21 +51,8 @@
 
 .dialog {
   .el-dialog__header {
-    display: flex;
-    align-items: center;
     span {
-      display: block;
-      flex: 1;
       color: @color-text-primary;
-    }
-    button {
-      justify-self: flex-end;
-      position: initial;
-      top: initial !important;
-      right: initial !important;
-      font-size: 20px;
-      width: 16px;
-      height: 24px;
     }
   }
   .el-dialog__body {
