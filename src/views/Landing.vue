@@ -86,8 +86,7 @@ export default {
     },
     // announce
     fetchAnnounce() {
-      const after = window.location.hostname === 'localhost' ? '-dev' : '';
-      this.axios.get(`https://config.backrunner.top/pixiviz/announcement${after}.json`, {
+      this.axios.get('https://config.backrunner.top/pixiviz/announcement.json', {
         withCredentials: false,
       }).then((res) => {
         if (res.data) {
