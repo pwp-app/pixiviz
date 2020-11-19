@@ -1,0 +1,110 @@
+// dialog
+.el-dialog {
+  width: 57.5%;
+  border-radius: 1rem;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.2);
+  .el-dialog__header {
+    padding: 24px 28px 8px;
+    user-select: none;
+    span {
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+    }
+    .el-dialog__headerbtn {
+      top: 24px;
+      right: 28px;
+      i {
+        color: @color-primary;
+      }
+      i:hover {
+        color: lighten(@color-primary, 10%);
+      }
+    }
+  }
+  .el-dialog__body {
+    padding: 12px 28px 24px;
+    pre {
+      margin: 0;
+      font-size: 14px;
+      line-height: 28px;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+    .annouce-footer {
+      text-align: right;
+      line-height: 24px;
+      margin-top: 12px;
+    }
+  }
+}
+
+.dialog {
+  .el-dialog__header {
+    display: flex;
+    align-items: center;
+    span {
+      display: block;
+      flex: 1;
+      color: @color-text-primary;
+    }
+    button {
+      justify-self: flex-end;
+      position: initial;
+      top: initial !important;
+      right: initial !important;
+      font-size: 20px;
+      width: 16px;
+      height: 24px;
+    }
+  }
+  .el-dialog__body {
+    .el-form {
+      .el-form-item:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .el-dialog__footer {
+    padding: 0 28px 28px 28px;
+    .el-button {
+      padding: 12px 22px;
+      border-radius: 6px;
+      letter-spacing: 0.05rem;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, .02);
+    }
+  }
+}
+
+.dark {
+  .el-dialog {
+    background: lighten(@color-background-dark, 5%);
+    .el-dialog__header {
+      .el-dialog__headerbtn {
+        i:hover {
+          color: darken(@color-text-primary, 5%);
+        }
+      }
+    }
+    .el-dialog__header, .el-dialog__body {
+      span, pre {
+        color: darken(@color-text-accent, 15%);
+      }
+    }
+  }
+  .dialog {
+    .el-dialog__header {
+      span {
+        color: darken(@color-text-primary, 2.5%);
+      }
+    }
+    .el-dialog__footer {
+      .el-button--primary {
+        background-color: darken(@color-text-primary, 2.5%);
+      }
+      .el-button--primary:hover {
+        background-color: darken(@color-text-primary, 7.5%);
+        border-color: darken(@color-text-primary, 8.75%);
+      }
+    }
+  }
+}

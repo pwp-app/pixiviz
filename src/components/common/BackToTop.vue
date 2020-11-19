@@ -26,28 +26,35 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
+    // event
+    hide() {
+      if (this.show) {
+        this.showClass = false;
+        setTimeout(
+          function () {
+            this.show = false;
+          }.bind(this),
+          300
+        );
+      }
+      lastOffset = window.pageYOffset;
+    },
+    display() {
+      if (!this.show) {
+        this.show = true;
+        setTimeout(
+          function () {
+            this.showClass = this.show;
+          }.bind(this),
+          0
+        );
+      }
+    },
     handleScroll() {
       if (window.pageYOffset - lastOffset < -50) {
-        if (this.show) {
-          this.showClass = false;
-          setTimeout(
-            function () {
-              this.show = false;
-            }.bind(this),
-            300
-          );
-        }
-        lastOffset = window.pageYOffset;
+        this.hide();
       } else if (window.pageYOffset - lastOffset > 100) {
-        if (!this.show) {
-          this.show = true;
-          setTimeout(
-            function () {
-              this.showClass = this.show;
-            }.bind(this),
-            0
-          );
-        }
+        this.display();
         lastOffset = window.pageYOffset;
       }
     },

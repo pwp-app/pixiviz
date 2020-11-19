@@ -204,9 +204,16 @@ export default {
         document.title = `${this.image.title} - Pixiviz`;
       });
 		},
-		downloadCurrent() {
-			const url = this.$refs.presentation.source;
-			this.$refs.download.downloadImage(url, this.image.id);
+		downloadCurrent(name) {
+      const url = this.$refs.presentation.source;
+      const page = this.$refs.presentation.page;
+      if (page > 1) {
+        const name = this.$refs.download.getDownloadName('multi');
+        this.$refs.download.downloadImage(url, name.replace('{index}', page));
+      } else {
+        const name = this.$refs.download.getDownloadName('single');
+        this.$refs.download.downloadImage(url, name);
+      }
 		},
     fetchRelated(state) {
       this.relatedLoading = true;

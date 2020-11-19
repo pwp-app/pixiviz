@@ -84,7 +84,7 @@
       @infinite="infiniteHandler"
       spinner="spiral"
     ></infinite-loading>
-    <BackToTop />
+    <BackToTop ref="backToTop" />
   </div>
 </template>
 
@@ -216,10 +216,13 @@ export default {
   },
   mounted() {
     // Do scroll when reset is not set
-    const scrollTop = this.$cookies.get("rank-scroll");
-    if (scrollTop) {
+    const scrollTop = parseInt(this.$cookies.get("rank-scroll"), 10);
+    if (scrollTop && this.images.length > 0) {
 			this.$nextTick(() => {
-				window.scrollTo(0, scrollTop);
+        window.scrollTo(0, scrollTop);
+        if (scrollTop > 300) {
+          this.$refs.backToTop && this.$refs.backToTop.display();
+        }
 			});
     }
     // Recheck rank mode

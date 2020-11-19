@@ -76,7 +76,7 @@
       spinner="spiral"
       v-if="showContent"
     ></infinite-loading>
-    <BackToTop />
+    <BackToTop ref="backToTop" />
   </div>
 </template>
 
@@ -159,10 +159,13 @@ export default {
     // update store
     this.$store.commit('search/setKeyword', this.keyword);
     // Set scroll to last state
-    const scrollTop = this.$cookies.get("search-scroll");
-    if (scrollTop) {
+    const scrollTop = parseInt(this.$cookies.get("search-scroll"), 10);
+    if (scrollTop && this.images.length > 0) {
 			this.$nextTick(() => {
-				window.scrollTo(0, scrollTop);
+        window.scrollTo(0, scrollTop);
+        if (scrollTop > 300) {
+          this.$refs.backToTop && this.$refs.backToTop.display();
+        }
 			});
     }
     // Add resize event listener

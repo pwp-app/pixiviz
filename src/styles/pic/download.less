@@ -21,10 +21,12 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			svg {
-				width: 32px;
-				height: 32px;
-			}
+			color: @color-text-primary;
+			transition: 200ms;
+		}
+		&-icon:hover {
+			cursor: pointer;
+			color: lighten(@color-text-primary, 10%);
 		}
   }
   &-items {
@@ -33,19 +35,56 @@
     .el-button {
       flex: 1;
       flex-grow: 1;
-    }
+		}
+		.el-button+.el-button {
+			margin-left: 16px;
+		}
+		.el-button.is-disabled {
+			background-color: #999 !important;
+			border-color: #999 !important;
+		}
   }
+}
+
+.pic-download-dialog {
+	.el-dialog {
+		width: 580px;
+	}
+	&-tips {
+		margin-top: 24px;
+		p {
+			margin: 0;
+			span {
+				color: #999 !important;
+			}
+		}
+	}
 }
 
 .dark {
   .pic-download {
     &-title {
-      color: darken(@color-text-primary, 2.5%);
+			color: darken(@color-text-primary, 2.5%);
+			&-icon {
+				color: darken(@color-text-primary, 2.5%);
+			}
+			&-icon:hover {
+				color: lighten(@color-text-primary, 2.5%);
+			}
     }
-    .el-button {
-      filter: brightness(0.875);
-    }
-  }
+    &-items {
+			.el-button {
+				filter: brightness(0.875);
+				background-color: darken(@color-text-primary, 2.5%);
+				border-color: darken(@color-text-primary, 2%);
+			}
+		}
+	}
+	.pic-download-dialog {
+		.el-button {
+			filter: brightness(0.875);
+		}
+	}
 }
 
 /* Responsive */
@@ -73,5 +112,26 @@
     &-title {
       font-size: 22px;
     }
-  }
+	}
+	.pic-download-dialog {
+		.el-dialog {
+			width: 360px;
+		}
+	}
+}
+
+@media(max-width: 375px) {
+	.pic-download-dialog {
+		.el-dialog {
+			width: 332px;
+		}
+	}
+}
+
+@media(max-width: 320px) {
+	.pic-download-dialog {
+		.el-dialog {
+			width: 296px;
+		}
+	}
 }

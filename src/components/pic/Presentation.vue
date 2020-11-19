@@ -129,7 +129,6 @@ export default {
       immediate: true,
       handler(image) {
 				this.imageLoading = true;
-				this.$emit('load');
         this.imageLoadError = false;
         this.page = 1;
         this.sizeCache = {};
@@ -138,6 +137,7 @@ export default {
         this.setLimitWidth(document.documentElement.clientWidth);
         this.imageWidth = this.computeWidth(image ? image.width : 0, image ? image.height : 0);
         this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
+        this.$emit('load');
       }
     },
     screenWidth() {
@@ -251,6 +251,7 @@ export default {
     },
     handlePageChanged(toward) {
       this.page = this.page + toward * 1;
+      this.$emit('load');
       this.imageLoading = true;
       this.imageLoadError = false;
     },

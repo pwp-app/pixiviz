@@ -5,6 +5,10 @@ const BrotliPlugin = require('brotli-webpack-plugin');
 
 module.exports = {
   devServer: {
+    https: true,
+    allowedHosts: [
+      'pixiviz.pwp.app',
+    ],
     proxy: {
       '/api': {
         target: 'https://pixiviz.pwp.app/api',

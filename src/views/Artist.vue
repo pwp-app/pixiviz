@@ -44,7 +44,7 @@
       @infinite="infiniteHandler"
       spinner="spiral"
     ></infinite-loading>
-    <BackToTop />
+    <BackToTop ref="backToTop" />
   </div>
 </template>
 <script>
@@ -117,10 +117,13 @@ export default {
       window.addEventListener('scroll', this.handleScroll, false);
 		});
 		// Set scroll to last state
-		const scrollTop = this.$cookies.get("artist-scroll");
-    if (scrollTop) {
+		const scrollTop = parseInt(this.$cookies.get("artist-scroll"), 10);
+    if (scrollTop && this.images.length > 0) {
 			this.$nextTick(() => {
-				window.scrollTo(0, scrollTop);
+        window.scrollTo(0, scrollTop);
+        if (scrollTop > 300) {
+          this.$refs.backToTop && this.$refs.backToTop.display();
+        }
 			});
     }
     // change title

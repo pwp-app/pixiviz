@@ -6,15 +6,27 @@
       </keep-alive>
       <router-view v-else></router-view>
     </transition>
+    <transition-group
+      class="right-tag-wrapper"
+      mode="out-in"
+      enter-active-class="right-tag-in"
+      leave-to-class="right-tag-out"
+      >
+      <DownloadListTag key="downloadList" v-if="showDownloadList"/>
+    </transition-group>
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs';
 import CONFIG from './config.json';
+import DownloadListTag from './components/common/DownloadList';
 
 export default {
   name: "app",
+  components: {
+    DownloadListTag,
+  },
   beforeCreate() {
     // 全局构建
     if (!window.pixiviz) {
@@ -24,18 +36,16 @@ export default {
     if (!window.pixiviz.infoMap) {
       window.pixiviz.infoMap = {};
     }
-    if (!window.pixiviz.artistMap) {
-      window.pixiviz.artistMap = {};
-    }
     // 初始化图片负载表
     if (!window.pixiviz.loadMap) {
       const loadMap = JSON.parse(window.localStorage.getItem('loadmap'));
       const loadMapTime = window.localStorage.getItem('loadmap-save-time');
       if (!loadMap || !loadMapTime) {
         window.pixiviz.loadMap = {};
-        // loadMap有效期3小时
-      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 10800) {
+        // loadMap有效期30分钟
+      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 1800) {
         window.pixiviz.loadMap = {};
+        window.localStorage.removeItem('loadmap');
       } else if (loadMap) {
         window.pixiviz.loadMap = loadMap;
       }
@@ -69,12 +79,26 @@ export default {
   destroyed() {
     window.removeEventListener('beforeunload', this.saveLoadMap);
   },
+  computed: {
+    showDownloadList() {
+      return this.$store.state.download.list.length > 1;
+    }
+  },
   methods: {
     saveLoadMap() {
-      if (window.pixiviz.loadMap && Object.keys(window.pixiviz.loadMap).length > 0) {
-        window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
-        window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+      const keys = Object.keys(window.pixiviz.loadMap);
+      const len = keys.length;
+      if (!window.pixiviz.loadMap && len < 1) {
+        return;
       }
+      if (len > 500) {
+        // loadMap最多只存500条数据，避免localStorage爆掉
+        for (let i = 0; i < 500; i++) {
+          delete window.pixiviz.loadMap[keys[len]];
+        }
+      }
+      window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
+      window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
     }
   }
 }

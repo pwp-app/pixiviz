@@ -15,6 +15,7 @@ import VueMeta from 'vue-meta';
 
 import './plugins/element.js';
 import './styles/main.less';
+import './util/extends.js';
 
 // Import store
 import store from './store';
@@ -71,6 +72,21 @@ Vue.$cookies.config('7d');
 
 // Set up meta
 Vue.use(VueMeta);
+
+// 获取下载设置
+const downloadSettings = window.localStorage.getItem('download-settings');
+if (downloadSettings) {
+  try {
+    Vue.prototype.$downloadSettings = JSON.parse(downloadSettings);
+  } catch (err) {
+    console.error('Cannot parse download settings.', err);
+  }
+} else {
+  Vue.prototype.$downloadSettings = {
+    singleFileName: '{title}-{id}',
+    multiFileName: '{title}-{id}-{index}',
+  };
+}
 
 new Vue({
   router,

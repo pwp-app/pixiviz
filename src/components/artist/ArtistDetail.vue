@@ -73,8 +73,9 @@ export default {
   },
   methods: {
     fetchDetail() {
-      if (window.pixiviz && window.pixiviz.artistMap && window.pixiviz.artistMap[this.artistId]) {
-        this.artist = window.pixiviz.artistMap[this.artistId];
+			const stored = this.$store.state.artist.map[this.artistId];
+      if (stored) {
+        this.artist = stored;
         this.afterLoad();
         return;
       }
@@ -88,9 +89,7 @@ export default {
           return;
         }
         this.artist = res.data;
-        if (window.pixiviz && window.pixiviz.artistMap) {
-          window.pixiviz.artistMap[this.artistId] = this.artist;
-        }
+        this.$store.commit('artist/setMapItem', { id: this.artistId, content: this.artist });
         this.afterLoad();
       });
     },
