@@ -1,190 +1,163 @@
 html {
-    width: 100%;
-    min-height: 100vh;
+  width: 100%;
+  min-height: 100vh;
 }
 
 body {
-    margin: 0;
-    width: 100%;
-    min-height: 100vh;
-    scroll-behavior: smooth;
-    background: @color-background-primary;
-    transition: background-color 200ms ease-in-out;
-    font-family: MicroSoft Yahei UI, Heiti SC, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  background: @color-background-primary;
+  transition: background-color 200ms ease-in-out;
+  font-family: MicroSoft Yahei UI, Heiti SC, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
 @scrollbar-width: 8px;
 
 body::-webkit-scrollbar {
-    width: @scrollbar-width;
-    height: @scrollbar-width;
+  width: @scrollbar-width;
+  height: @scrollbar-width;
 }
 body::-webkit-scrollbar-button {
-    display: none;
+  display: none;
 }
 body::-webkit-scrollbar-thumb {
-    width: @scrollbar-width;
-    border-radius: @scrollbar-width;
-    background: @color-primary;
+  width: @scrollbar-width;
+  border-radius: @scrollbar-width;
+  background: @color-primary;
 }
 body::-webkit-scrollbar-track {
-    background: @color-background-primary;
+  background: @color-background-primary;
 }
 
 .no-scrollbar {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 button {
-    border: none;
+  border: none;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 #app {
-    width: 100%;
-    min-height: 100%;
-    position: relative;
+  width: 100%;
+  min-height: 100%;
+  position: relative;
 }
 
 .no-select {
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 
 .desktop-hide {
-    display: none;
+  display: none;
 }
 
 // notify
 .el-notification__title {
-    color: @color-text-primary;
-    font-weight: 600;
-    letter-spacing: 0.05em;
+  color: @color-text-primary;
+  font-weight: 600;
+	letter-spacing: 0.05em;
 }
-
 .el-notification__group {
-    margin-left: 7px;
+  margin-left: 7px;
 }
 .el-notification__closeBtn {
-    color: @color-text-primary;
-    transition: 100ms ease-in-out;
+  color: @color-text-primary;
+  transition: 100ms ease-in-out;
 }
 .el-notification__closeBtn:hover {
-    cursor: pointer;
-    color: lighten(@color-text-primary, 12.5%);
-}
-
-// dialog
-.el-dialog {
-    width: 57.5%;
-    border-radius: 1rem;
-    box-shadow: 0 4px 28px rgba(0, 0, 0, .2);
-    .el-dialog__header {
-        padding: 24px 28px 8px;
-        span {
-            font-weight: 600;
-            letter-spacing: 0.05rem;
-        }
-        .el-dialog__headerbtn {
-            top: 24px;
-            right: 28px;
-            i {
-                color: @color-primary;
-            }
-            i:hover {
-                color: lighten(@color-primary, 10%);
-            }
-        }
-    }
-    .el-dialog__body {
-        padding: 12px 28px 24px;
-        pre {
-            margin: 0;
-            font-size: 14px;
-            line-height: 28px;
-            word-break: break-all;
-            white-space: pre-wrap;
-        }
-        .annouce-footer {
-            text-align: right;
-            line-height: 24px;
-            margin-top: 12px;
-        }
-    }
+  cursor: pointer;
+  color: lighten(@color-text-primary, 12.5%);
 }
 
 // dark mode
 .dark {
-    body {
-        background: @color-background-dark;
+  body {
+    background: @color-background-dark;
+  }
+  body::-webkit-scrollbar-thumb {
+    background: darken(@color-primary, 5%);
+  }
+  body::-webkit-scrollbar-track {
+    background: @color-background-dark;
+  }
+  .el-date-editor {
+    input {
+      background: lighten(@color-background-dark, 10%);
+      border-color: lighten(@color-background-dark, 10%);
     }
-    body::-webkit-scrollbar-thumb {
-        background: darken(@color-primary, 5%);
+	}
+	.el-message {
+		filter: brightness(0.8);
+	}
+	.el-notification {
+		background: lighten(@color-background-dark, 5%);
+		border: lighten(@color-background-dark, 2.5%);
+		box-shadow: 0 0 2px rgba(255, 255, 255, 0.05);
+	}
+	.el-notification__title {
+		color: darken(@color-text-primary, 5%);
+	}
+	.el-notification__closeBtn {
+		color: darken(@color-text-primary, 2.5%);
+	}
+	.el-notification__closeBtn:hover {
+		color: lighten(@color-text-primary, 2.5%);
+	}
+  .el-popover {
+    background: lighten(@color-background-dark, 5%);
+    border: 1px solid lighten(@color-background-dark, 7.5%);
+  }
+  .el-popper[x-placement^=bottom] .popper__arrow {
+    border-bottom-color: lighten(@color-background-dark, 7.5%);
+  }
+  .el-popper[x-placement^=bottom] .popper__arrow::after {
+    border-bottom-color: lighten(@color-background-dark, 7.5%);
+  }
+  .el-picker-panel {
+    background: lighten(@color-background-dark, 5%);
+    border-color: lighten(@color-background-dark, 7.5%);
+    .el-picker-panel__icon-btn {
+      color: #606266;
     }
-    body::-webkit-scrollbar-track {
-        background: @color-background-dark;
+    td.disabled div {
+      background: lighten(@color-background-dark, 7.5%);
     }
-    .el-date-editor {
-        input {
-            background: lighten(@color-background-dark, 10%);
-            border-color: lighten(@color-background-dark, 10%);
-        }
+    td.disabled .cell {
+      background: lighten(@color-background-dark, 7.5%);
     }
-    .el-popover {
-        background: lighten(@color-background-dark, 5%);
-        border: 1px solid lighten(@color-background-dark, 7.5%);
-    }
-    .el-popper[x-placement^=bottom] .popper__arrow {
-        border-bottom-color: lighten(@color-background-dark, 7.5%);
-    }
-    .el-popper[x-placement^=bottom] .popper__arrow::after {
-        border-bottom-color: lighten(@color-background-dark, 7.5%);
-    }
-    .el-picker-panel {
-        background: lighten(@color-background-dark, 5%);
-        border-color: lighten(@color-background-dark, 7.5%);
-        .el-picker-panel__icon-btn {
-            color: #606266;
-        }
-        td.disabled div {
-            background: lighten(@color-background-dark, 7.5%);
-        }
-        td.disabled .cell {
-            background: lighten(@color-background-dark, 7.5%);
-        }
-    }
-    .el-loading-mask {
-        background-color: lighten(@color-background-dark, 2.5%) !important;
-    }
-    .el-dialog {
-        background: lighten(@color-background-dark, 5%);
-        .el-dialog__header, .el-dialog__body {
-            span, pre {
-                color: darken(@color-text-accent, 15%);
-            }
-        }
-    }
+  }
+  .el-loading-mask {
+    background-color: lighten(@color-background-dark, 2.5%) !important;
+  }
 }
 
 @media (max-width: 1024px) {
-    .el-dialog {
-        width: 90%;
-    }
+  .el-dialog {
+    width: 90%;
+  }
 }
 
 @media (max-width: 767px) {
-    .mobile-hide {
-        display: none;
-    }
-    .desktop-hide {
-        display: inherit;
-    }
+  .mobile-hide {
+    display: none;
+  }
+  .desktop-hide {
+    display: inherit;
+  }
 }
+
+@import './form.less';
+@import './dialog.less';
+@import './tag.less';

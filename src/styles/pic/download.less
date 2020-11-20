@@ -1,57 +1,137 @@
 .pic-download {
-    margin-top: 28px;
-    &-title {
-        font-size: 26px;
-        color: @color-text-primary;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        .no-select();
-    }
-    &-items {
-        display: flex;
-        margin-top: 18px;
-        .el-button {
-            flex: 1;
-            flex-grow: 1;
-        }
-    }
+  margin-top: 28px;
+  &-title {
+		display: flex;
+		font-size: 26px;
+		height: 34px;
+    color: @color-text-primary;
+    font-weight: 600;
+		letter-spacing: 0.05em;
+		align-items: center;
+		.no-select();
+		span {
+			flex: 1;
+			display: block;
+			height: 32px;
+		}
+		&-icon {
+			justify-self: flex-end;
+			display: block;
+			height: 34px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: @color-text-primary;
+			transition: 200ms;
+		}
+		&-icon:hover {
+			cursor: pointer;
+			color: lighten(@color-text-primary, 10%);
+		}
+  }
+  &-items {
+    display: flex;
+    margin-top: 18px;
+    .el-button {
+      flex: 1;
+      flex-grow: 1;
+		}
+		.el-button+.el-button {
+			margin-left: 16px;
+		}
+		.el-button.is-disabled {
+			background-color: #999 !important;
+			border-color: #999 !important;
+		}
+  }
+}
+
+.pic-download-dialog {
+	.el-dialog {
+		width: 580px;
+	}
+	&-tips {
+		margin-top: 24px;
+		p {
+			margin: 0;
+			span {
+				color: #999 !important;
+			}
+		}
+	}
 }
 
 .dark {
-    .pic-download {
-        &-title {
-            color: darken(@color-text-primary, 2.5%);
-        }
-        .el-button {
-            filter: brightness(0.875);
-        }
+  .pic-download {
+    &-title {
+			color: darken(@color-text-primary, 2.5%);
+			&-icon {
+				color: darken(@color-text-primary, 2.5%);
+			}
+			&-icon:hover {
+				color: lighten(@color-text-primary, 2.5%);
+			}
     }
+    &-items {
+			.el-button {
+				filter: brightness(0.875);
+				background-color: darken(@color-text-primary, 2.5%);
+				border-color: darken(@color-text-primary, 2%);
+			}
+		}
+	}
+	.pic-download-dialog {
+		.el-button {
+			filter: brightness(0.875);
+		}
+	}
 }
 
 /* Responsive */
 @media(max-width: 1024px) {
-    .pic-download {
-        &-title {
-            font-size: 24px;
-        }
+  .pic-download {
+    &-title {
+      font-size: 24px;
     }
+  }
 }
 
 /* iPad / iPad Pro protrait */
 @media screen and (orientation: portrait) and (max-width: 1024px) {
-    .pic-download {
-        &-title {
-            font-size: 22px;
-        }
+  .pic-download {
+    &-title {
+      font-size: 22px;
     }
+  }
 }
 
 /* Mobile */
 @media(max-width: 767px) {
-    .pic-download {
-        margin-top: 28px;
-        &-title {
-            font-size: 22px;
-        }
+  .pic-download {
+    margin-top: 28px;
+    &-title {
+      font-size: 22px;
     }
+	}
+	.pic-download-dialog {
+		.el-dialog {
+			width: 360px;
+		}
+	}
+}
+
+@media(max-width: 375px) {
+	.pic-download-dialog {
+		.el-dialog {
+			width: 332px;
+		}
+	}
+}
+
+@media(max-width: 320px) {
+	.pic-download-dialog {
+		.el-dialog {
+			width: 296px;
+		}
+	}
 }

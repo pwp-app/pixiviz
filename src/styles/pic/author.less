@@ -1,79 +1,80 @@
 .pic-author {
-    span, a {
-        color: @color-text-primary;
-        font-weight: 600;
-        letter-spacing: 0.05em;
+  span, a {
+    color: @color-text-primary;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  &-title {
+		font-size: 26px;
+		height: 34px;
+    .no-select();
+  }
+  &-info {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    &-avatar {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      border-radius: 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0, .175);
     }
-    &-title {
-        font-size: 26px;
-        .no-select();
+    a {
+      margin-left: 16px;
+      font-size: 20px;
+      transition: 150ms all ease-in-out;
+      text-decoration: none;
     }
-    &-info {
-        margin-top: 18px;
-        display: flex;
-        align-items: center;
-        &-avatar {
-            display: inline-block;
-            width: 48px;
-            height: 48px;
-            background-size: cover;
-            background-repeat: no-repeat;
-            border-radius: 24px;
-            box-shadow: 0 4px 8px rgba(0,0,0, .175);
-        }
-        a {
-            margin-left: 16px;
-            font-size: 20px;
-            transition: 150ms all ease-in-out;
-            text-decoration: none;
-        }
-        a:hover {
-            cursor: pointer;
-            color: lighten(@color-text-primary, 10%);
-        }
+    a:hover {
+      cursor: pointer;
+      color: lighten(@color-text-primary, 10%);
     }
+  }
 }
 
 // dark mode
 .dark {
-    .pic-author {
-        span {
-            color: darken(@color-text-primary, 2.5%);
-        }
-        &-info {
-            &-avatar {
-                filter: brightness(0.875);
-            }
-            span:hover {
-                color: lighten(@color-text-primary, 2.5%);
-            }
-        }
+  .pic-author {
+    span {
+      color: darken(@color-text-primary, 2.5%);
     }
+    &-info {
+      &-avatar {
+        filter: brightness(0.875);
+      }
+      span:hover {
+        color: lighten(@color-text-primary, 2.5%);
+      }
+    }
+  }
 }
 
 /* Responsive */
 @media(max-width: 1024px) {
-    .pic-author {
-        &-title {
-            font-size: 24px;
-        }
+  .pic-author {
+    &-title {
+      font-size: 24px;
     }
+  }
 }
 
 /* iPad / iPad Pro protrait */
 @media screen and (orientation: portrait) and (max-width: 1024px) {
-    .pic-author {
-        &-title {
-            font-size: 22px;
-        }
+  .pic-author {
+    &-title {
+      font-size: 22px;
     }
+  }
 }
 
 /* Mobile */
 @media(max-width: 767px) {
-    .pic-author {
-        &-title {
-            font-size: 22px;
-        }
+  .pic-author {
+    &-title {
+      font-size: 22px;
     }
+  }
 }

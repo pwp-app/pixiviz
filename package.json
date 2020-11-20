@@ -1,20 +1,23 @@
 {
   "name": "pixiviz",
-  "version": "1.14.2",
+  "version": "1.15.0",
   "private": true,
   "scripts": {
     "start": "npm run serve",
     "dev": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "analyze": "cross-env ANALYZE=true vue-cli-service build"
+    "analyze": "cross-env ANALYZE=true vue-cli-service build",
+    "gen:anno": "node ./tools/announcementGen.js",
+    "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementGen.js",
+    "push:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementUpload.js"
   },
   "dependencies": {
     "@pwp-app/better-element-ui": "^2.14.0-fix-1",
     "axios": "^0.21.0",
     "clipboard-polyfill": "^3.0.1",
-    "core-js": "^3.6.5",
-    "dayjs": "^1.9.4",
+    "core-js": "^3.7.0",
+    "dayjs": "^1.9.6",
     "qs": "^6.9.4",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.12",
@@ -24,7 +27,7 @@
     "vue-lazyload": "^1.3.3",
     "vue-masonry": "^0.11.8",
     "vue-meta": "^2.4.0",
-    "vue-router": "^3.4.8",
+    "vue-router": "^3.4.9",
     "vue-touch": "^2.0.0-beta.4",
     "vue2-touch-events": "^2.3.2",
     "vuex": "^3.5.1"
@@ -38,11 +41,12 @@
     "@vue/cli-service": "^4.5.8",
     "babel-plugin-component": "^1.1.1",
     "brotli-webpack-plugin": "^1.1.0",
-    "compression-webpack-plugin": "^6.0.5",
+    "compression-webpack-plugin": "^6.1.1",
     "cross-env": "^7.0.2",
     "image-webpack-loader": "^6.0.0",
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
+    "qiniu": "^7.3.2",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.12"
   },

@@ -7,15 +7,17 @@ import rank from './modules/rank';
 import search from './modules/search';
 import imageCache from './modules/imageCache';
 import artist from './modules/artist';
+import download from './modules/download';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-    modules: {
-        landingBanner,
-        rank,
-        search,
-        imageCache,
-        artist
-    }
-})
+  modules: {
+    landingBanner,
+    rank,
+    search,
+    imageCache,
+		artist,
+		download,
+  },
+});

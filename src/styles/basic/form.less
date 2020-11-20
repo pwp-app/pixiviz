@@ -1,0 +1,46 @@
+.el-form {
+  &-item {
+    &__label {
+      font-size: 14px;
+      color: lighten(@color-text-primary, 5%);
+      letter-spacing: 0.025rem;
+      font-weight: 400;
+      user-select: none;
+    }
+    .el-input {
+      input {
+        color: @color-text-primary;
+        border-radius: 8px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, .02);
+      }
+      input:hover {
+        border: 1px solid lighten(@color-text-primary, 15%);
+      }
+      input:focus {
+        border: 1px solid darken(@color-text-primary, 5%) !important;
+      }
+    }
+  }
+}
+
+.dark {
+  .el-form {
+    &-item {
+      &__label {
+        color: @color-text-primary;
+      }
+      .el-input {
+        input {
+          background: lighten(@color-background-dark, 5%);
+          border: 1px solid lighten(@color-background-dark, 25%);
+        }
+        input:hover {
+          border: 1px solid darken(@color-text-primary, 2.5%);
+        }
+        input:focus {
+          border: 1px solid darken(@color-text-primary, 7.5%) !important;
+        }
+      }
+    }
+  }
+}
