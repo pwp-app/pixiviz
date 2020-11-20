@@ -73,7 +73,7 @@ export default {
     this.checkFirstUse();
     this.displayDonate();
   },
-  destroyed() {
+  beforeDestroy() {
     if (this.guideNotice) {
       this.guideNotice.close();
     }

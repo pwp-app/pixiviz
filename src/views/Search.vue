@@ -176,14 +176,19 @@ export default {
     // change title
     document.title = this.keyword + ' - Pixiviz';
   },
+  beforeDestroy() {
+    if (this.illustNotice) {
+      this.illustNotice.close();
+    }
+    if (this.artistNotice) {
+      this.artistNotice.close();
+    }
+  },
   destroyed() {
     // 清除监听器
     this.leaveSuggestion();
     window.removeEventListener("resize", this.windowResized, false);
     window.removeEventListener("scroll", this.handleScroll, false);
-    if (this.notification) {
-      this.notification.close();
-    }
   },
   methods: {
     infiniteHandler($state) {
@@ -273,7 +278,7 @@ export default {
           onClose: this.illustNoticeClose,
           message: `
             <div class="search-notify">
-              <span data-name="search-notify">画作 ${illust.title} （ID: ${this.keyword}）</span>
+              <span data-name="search-notify-illust">画作 ${illust.title} （ID: ${this.keyword}）</span>
             </div>`
         });
       });
@@ -297,7 +302,7 @@ export default {
           onClose: this.artistNoticeClose,
           message: `
             <div class="search-notify">
-              <span data-name="search-notify">画师 ${user.name} （ID: ${this.keyword}）</span>
+              <span data-name="search-notify-artist">画师 ${user.name} （ID: ${this.keyword}）</span>
             </div>`
         });
       });
@@ -457,8 +462,10 @@ export default {
       document.body.removeEventListener('click', this.illustNoticeClick, false);
     },
     artistNoticeClick() {
-      this.$router.push(`/artist/${this.keyword}`);
-      this.artistNotice.close();
+      if (e.target.dataset.name && e.target.dataset.name === 'search-notify-artist') {
+        this.$router.push(`/artist/${this.keyword}`);
+        this.artistNotice.close();
+      }
     },
     artistNoticeClose() {
       document.body.removeEventListener('click', this.artistNoticeClick, false);
