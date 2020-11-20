@@ -239,8 +239,8 @@ export default {
         params: {
           keyword: this.keyword,
         }
-      }).then(res => {
-        if (res.data) {
+      }).then((res) => {
+        if (res.data && Array.isArray(res.data)) {
           this.suggestions = res.data.filter(item => item !== this.keyword);
           this.$store.commit('search/setSuggestions', this.suggestions);
         }
