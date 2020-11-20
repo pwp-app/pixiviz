@@ -9,7 +9,7 @@
     "build": "vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "gen:anno": "node ./tools/announcementGen.js",
-    "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementGen.js",
+    "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementUpload.js",
     "push:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementUpload.js"
   },
   "dependencies": {
