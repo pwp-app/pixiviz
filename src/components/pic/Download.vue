@@ -98,6 +98,9 @@ export default {
       keys.forEach((key) => {
         this.$downloadSettings[key] = this.settingsForm[key] || defaultValue[key];
       });
+      // 写入localStorage
+      window.localStorage.setItem('download-settings', JSON.stringify(this.$downloadSettings));
+      this.settingsVisible = false;
     },
     createDownloadTimer() {
 			window.pixiviz.downloadTimer = setInterval(() => {
