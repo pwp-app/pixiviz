@@ -121,16 +121,16 @@ export default {
       page: this.$store.state.rank.page !== null ? this.$store.state.rank.page : 1,
       dateObject: this.$store.state.rank.date
         ? this.$store.state.rank.date
-        : dayjs().subtract(2, "day"),
-      mode: this.initMode(),
+        : dayjs().subtract(2, 'day'),
+      mode: this.initMode() || 'day',
       images: this.$store.state.rank.images
         ? this.$store.state.rank.images
         : [],
       // Time
-      backDateText: "前一",
-      nextDateText: "后一",
+      backDateText: '前一',
+      nextDateText: '后一',
       // Misc
-      routeFrom: "",
+      routeFrom: '',
       waterfallIdentifier: Math.round(Math.random() * 100),
       screenWidth: document.documentElement.clientWidth,
       cardWidth: this.getCardWidth(document.documentElement.clientWidth),
@@ -158,11 +158,11 @@ export default {
     },
     dateUnit: function () {
       if (this.mode.includes('day')) {
-        return "天";
+        return '天';
       } else if (this.mode.includes('week')) {
-        return "周";
+        return '周';
       } else if (this.mode.includes('month')) {
-        return "月";
+        return '月';
       }
     },
     displayDate: function () {
@@ -304,8 +304,9 @@ export default {
       this.$nextTick(() => {
         // 重置参数
         this.page = 1;
-        this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
-        this.dateObject = dayjs().subtract(2, "day");
+        const storedMode = this.$cookies.get('rank-mode');
+        this.mode = storedMode || 'day';
+        this.dateObject = dayjs().subtract(2, 'day');
         this.images = [];
         this.waterfallIdentifier = this.waterfallIdentifier + 1;
       });
@@ -313,8 +314,9 @@ export default {
     resetImmediate() {
       this.$refs.waterfall.$el.innerHTML = "";
       this.page = 1;
-      this.mode = this.$cookies.get("rank-mode") ? this.$cookies.get("rank-mode") : "day";
-      this.dateObject = dayjs().subtract(2, "day");
+      const storedMode = this.$cookies.get('rank-mode');
+      this.mode = storedMode || 'day';
+      this.dateObject = dayjs().subtract(2, 'day');
       this.images = [];
       this.waterfallIdentifier = this.waterfallIdentifier + 1;
 		},
@@ -333,7 +335,7 @@ export default {
 			}
 		},
     handleModeChanged(mode) {
-      this.mode = mode;
+      this.mode = mode || 'day';
       document.title = this.modeText + ' - Pixiviz';
       this.refreshWaterfall();
     },
