@@ -249,7 +249,7 @@ export default {
         if (this.from.includes('pic')) {
           window.localStorage.setItem('is-entry-pic', true);
         }
-        this.$router.push(this.from);
+        this.$router.push(`/${this.from}`);
       } else {
         this.$router.push('/');
       }

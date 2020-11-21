@@ -209,9 +209,10 @@ export default {
   },
   created() {
     // Get cookies
-    this.routeFrom = this.$cookies.get("rank-from");
-    if (!this.routeFrom) {
-      this.routeFrom = "Landing";
+    this.routeFrom = this.$cookies.get('rank-from');
+    // 旧版本兼容
+    if (this.routeFrom === 'Landing') {
+      this.routeFrom = null;
     }
   },
   mounted() {
@@ -340,14 +341,12 @@ export default {
 		},
     handleModeChanged(mode) {
       this.mode = mode || 'day';
-      document.title = this.modeText + ' - Pixiviz';
+      document.title = `${this.modeText} - Pixiviz`;
       this.refreshWaterfall();
     },
     handleBack() {
       if (this.routeFrom) {
-        this.$router.push({
-          name: this.routeFrom
-        });
+        this.$router.push(`${this.routeFrom}`);
       } else {
         this.$router.push('/');
       }
@@ -376,7 +375,7 @@ export default {
       if (info) {
         this.$store.commit('imageCache/setCache', info);
       }
-      this.$router.push("/pic/" + imageId);
+      this.$router.push(`/pic/${imageId}`);
     },
     // 窗口事件
     handleScroll() {
