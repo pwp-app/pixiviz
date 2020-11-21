@@ -23,6 +23,9 @@ module.exports = {
     name: 'Pixiviz',
     themeColor: '#da7a85',
     msTileColor: '#da7a85',
+    assetsVersion: '20201121',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black-translucent',
     manifestOptions: {
       start_url: '.',
       background_color: '#da7a85',
@@ -33,7 +36,72 @@ module.exports = {
       importWorkboxFrom: 'local',
       importsDirectory: 'js',
       navigateFallback: '/',
-      navigateFallbackBlacklist: [/\/api\//],
+      navigateFallbackDenylist: [/\/api\//],
+      sourcemap: false,
+      runtimeCaching: [
+        {
+          // 静态文件缓存，网络资源优先，7天过期
+          handler: 'NetworkFirst',
+          options: {
+            urlPattern: new RegExp('^https://pixiviz.pwp.app(/.*\\.(html|js|css|jpg|png|webp))?$'),
+            cacheName: 'static-files',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 14,
+            },
+            networkTimeoutSeconds: 10,
+          },
+        },
+        {
+          // API缓存，本地资源优先，7天过期
+          urlPattern: new RegExp('^https://pixiviz.pwp.app/api/.*$'),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'api-return',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 7,
+            },
+            networkTimeoutSeconds: 30,
+          },
+        },
+        {
+          // 作者头像缓存，14天过期，最多缓存200个
+          urlPattern: new RegExp('^https://pixiv-image.pwp.link/user-profile/.*$'),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'artist-avatar',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 14,
+              maxEntries: 200,
+            },
+            networkTimeoutSeconds: 30,
+          },
+        },
+        {
+          // 大图缓存，本地资源优先，7天过期，最多存100张
+          urlPattern: new RegExp('^https://pixiv-image.pwp.link/img-original/.*$'),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'big-picture',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 7,
+              maxEntries: 100,
+            },
+            networkTimeoutSeconds: 300,
+          },
+        },
+      ],
     }
   },
   productionSourceMap: false,
@@ -92,6 +160,12 @@ module.exports = {
       },
     };
     if (process.env.NODE_ENV === 'production') {
+      // drop debug lines
+      config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true
+      config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log']
+      // compress
       return {
         plugins: [
           new CompressionWebpackPlugin({

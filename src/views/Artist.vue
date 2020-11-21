@@ -117,14 +117,18 @@ export default {
       window.addEventListener('scroll', this.handleScroll, false);
 		});
 		// Set scroll to last state
-		const scrollTop = parseInt(this.$cookies.get("artist-scroll"), 10);
-    if (scrollTop && this.images.length > 0) {
-			this.$nextTick(() => {
-        window.scrollTo(0, scrollTop);
-        if (scrollTop > 300) {
-          this.$refs.backToTop && this.$refs.backToTop.display();
-        }
-			});
+    const scrollTop = parseInt(this.$cookies.get("artist-scroll"), 10);
+    if (this.images.length > 0) {
+      if (scrollTop) {
+        this.$nextTick(() => {
+          window.scrollTo(0, scrollTop);
+          if (scrollTop > 300) {
+            this.$refs.backToTop && this.$refs.backToTop.display();
+          }
+        });
+      }
+    } else {
+      this.$cookies.set('artist-scroll', 0, '1h');
     }
     // change title
     if (this.artistName) {

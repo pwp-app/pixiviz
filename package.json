@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "private": true,
   "scripts": {
     "start": "npm run serve",
@@ -9,7 +9,7 @@
     "build": "vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "gen:anno": "node ./tools/announcementGen.js",
-    "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementGen.js",
+    "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementUpload.js",
     "push:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementUpload.js"
   },
   "dependencies": {
@@ -34,11 +34,11 @@
   },
   "devDependencies": {
     "@gfx/zopfli": "^1.0.15",
-    "@vue/cli-plugin-babel": "^4.5.8",
-    "@vue/cli-plugin-pwa": "^4.5.8",
-    "@vue/cli-plugin-router": "^4.5.8",
-    "@vue/cli-plugin-vuex": "^4.5.8",
-    "@vue/cli-service": "^4.5.8",
+    "@vue/cli-plugin-babel": "^4.5.9",
+    "@vue/cli-plugin-pwa": "^4.5.9",
+    "@vue/cli-plugin-router": "^4.5.9",
+    "@vue/cli-plugin-vuex": "^4.5.9",
+    "@vue/cli-service": "^4.5.9",
     "babel-plugin-component": "^1.1.1",
     "brotli-webpack-plugin": "^1.1.0",
     "compression-webpack-plugin": "^6.1.1",

@@ -160,13 +160,17 @@ export default {
     this.$store.commit('search/setKeyword', this.keyword);
     // Set scroll to last state
     const scrollTop = parseInt(this.$cookies.get("search-scroll"), 10);
-    if (scrollTop && this.images.length > 0) {
-			this.$nextTick(() => {
-        window.scrollTo(0, scrollTop);
-        if (scrollTop > 300) {
-          this.$refs.backToTop && this.$refs.backToTop.display();
-        }
-			});
+    if (this.images.length > 0) {
+      if (scrollTop) {
+        this.$nextTick(() => {
+          window.scrollTo(0, scrollTop);
+          if (scrollTop > 300) {
+            this.$refs.backToTop && this.$refs.backToTop.display();
+          }
+        });
+      }
+    } else {
+      this.$cookies.set('serach-scroll', 0, '1h');
     }
     // Add resize event listener
     this.$nextTick(() => {
