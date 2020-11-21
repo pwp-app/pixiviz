@@ -36,14 +36,13 @@ module.exports = {
       importWorkboxFrom: 'local',
       importsDirectory: 'js',
       navigateFallback: '/',
-      navigateFallbackDenylist: [/\/api\//],
-      sourcemap: false,
+      navigateFallbackBlacklist: [/\/api\//],
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
+          urlPattern: new RegExp('^https://pixiviz.pwp.app(/.*\\.(html|js|css|jpg|png|webp))?$'),
           handler: 'NetworkFirst',
           options: {
-            urlPattern: new RegExp('^https://pixiviz.pwp.app(/.*\\.(html|js|css|jpg|png|webp))?$'),
             cacheName: 'static-files',
             cacheableResponse: {
               statuses: [0, 200],
@@ -55,18 +54,20 @@ module.exports = {
           },
         },
         {
-          // API缓存，本地资源优先，7天过期
+          // API缓存，本地资源优先，7天过期，最多1w条
           urlPattern: new RegExp('^https://pixiviz.pwp.app/api/.*$'),
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
             cacheableResponse: {
-              statuses: [0, 200],
+              headers: {
+                'pixiviz-cache': 'true'
+              },
             },
             expiration: {
               maxAgeSeconds: 86400 * 7,
+              maxEntries: 10000,
             },
-            networkTimeoutSeconds: 30,
           },
         },
         {
@@ -82,7 +83,6 @@ module.exports = {
               maxAgeSeconds: 86400 * 14,
               maxEntries: 200,
             },
-            networkTimeoutSeconds: 30,
           },
         },
         {
@@ -98,7 +98,6 @@ module.exports = {
               maxAgeSeconds: 86400 * 7,
               maxEntries: 100,
             },
-            networkTimeoutSeconds: 300,
           },
         },
       ],
@@ -117,6 +116,16 @@ module.exports = {
         gifsicle: { interlaced: false },
       });
     config.optimization.delete("splitChunks");
+    // drop debug lines
+    if (process.env.NODE_ENV === 'production') {
+      config.optimization.minimizer('terser').tap((args) => {
+        args[0].terserOptions.compress.drop_console = true;
+        args[0].terserOptions.compress.warnings = false;
+        args[0].terserOptions.compress.drop_debugger = true;
+        args[0].terserOptions.compress.pure_funcs = ['console.log'];
+        return args;
+      });
+    }
     if (process.env.NODE_ENV === 'production' && process.env.ANALYZE === 'true') {
       config.plugin('webpack-bundle-analyzer')
         .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
@@ -160,11 +169,6 @@ module.exports = {
       },
     };
     if (process.env.NODE_ENV === 'production') {
-      // drop debug lines
-      config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true
-      config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log']
       // compress
       return {
         plugins: [
