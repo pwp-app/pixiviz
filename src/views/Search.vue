@@ -403,11 +403,9 @@ export default {
     },
     handleBack() {
       if (this.from) {
-        this.$router.push("/" + this.from);
+        this.$router.push(`/${this.from}`);
       } else {
-        this.$router.push({
-          name: "Landing"
-        });
+        this.$router.push('/');
       }
     },
     scrollSuggesion(e) {

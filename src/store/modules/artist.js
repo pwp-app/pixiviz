@@ -15,7 +15,7 @@ const mutations = {
   setPage(state, page) {
     state.page = page;
   },
-  setItem(state, info) {
+  setMapItem(state, info) {
     state.map[info.id] = info.content;
   }
 }

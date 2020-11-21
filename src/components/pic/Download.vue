@@ -73,6 +73,7 @@ export default {
       return this.image.page_count > 1 ? '下载当前' : '点我下载';
 		},
 		showDownloadAll() {
+      if (!this.image) return false;
 			return this.image.page_count > 1;
     },
     disableDownloadCurrent() {

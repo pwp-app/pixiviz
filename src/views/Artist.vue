@@ -69,6 +69,7 @@ export default {
     Waterfall,
     BackToTop,
     ArtistDetail,
+    Overlay,
   },
   data() {
     return {
@@ -81,7 +82,7 @@ export default {
       infoLoadFailed: false,
       // waterfall
       waterfallIdentifier: Math.round(Math.random() * 100),
-      from: this.$cookies.get('artist-from'),
+      from: this.$cookies.get('artist-from') || null,
       // Misc
       screenWidth: document.documentElement.clientWidth,
       cardWidth: this.getCardWidth(document.documentElement.clientWidth),
@@ -217,20 +218,23 @@ export default {
     },
     handleCardClicked(imageId) {
       const picFrom = this.$cookies.get('pic-from');
+      const entryPicFrom = window.localStorage.getItem('entry-pic-from');
       // 保存原始的pic-from
-      if (picFrom) {
+      if (picFrom && !entryPicFrom) {
         window.localStorage.setItem('entry-pic-from', picFrom);
       }
-      this.$cookies.set(
-        "pic-from",
-        `artist/${this.id}`,
-        "1h"
-      );
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
         this.$store.commit('imageCache/setCache', info);
       }
+      // 设置路由信息
+      this.$cookies.set(
+        'pic-from',
+        `artist/${this.id}`,
+        "1h"
+      );
+      window.localStorage.setItem('is-entry-pic', false);
       this.$router.push(`/pic/${imageId}`);
     },
     // info
@@ -249,7 +253,7 @@ export default {
         if (this.from.includes('pic')) {
           window.localStorage.setItem('is-entry-pic', true);
         }
-        this.$router.push(this.from);
+        this.$router.push(`/${this.from}`);
       } else {
         this.$router.push('/');
       }

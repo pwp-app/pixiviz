@@ -36,9 +36,10 @@
         </div>
       </div>
     </div>
-    <div class="artist-comment">
+    <div class="artist-comment" v-if="!comment">
       <pre>{{comment}}</pre>
     </div>
+    <div class="artist-comment-empty" v-else></div>
   </div>
 </template>
 

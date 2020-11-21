@@ -305,18 +305,20 @@ export default {
     },
     handleClose() {
       if (this.from) {
-        if (window.localStorage.getItem('is-entry-pic')) {
+        const isEntryPic = window.localStorage.getItem('is-entry-pic');
+        if (isEntryPic === 'true') {
           const entryFrom = window.localStorage.getItem('entry-pic-from');
           if (entryFrom) {
-            this.$router.push('/' + entryFrom);
+            this.$router.push(`/${entryFrom}`);
             window.localStorage.removeItem('is-entry-pic');
             window.localStorage.removeItem('entry-pic-from');
             return;
           } else {
-            this.$router.push('/');
+            this.$router.push(`/${this.from}`);
           }
+        } else {
+          this.$router.push(`/${this.from}`);
         }
-        this.$router.push('/' + this.from);
       } else {
         this.$router.push('/');
       }
