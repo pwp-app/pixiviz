@@ -1,133 +1,138 @@
 .artist-detail {
-    width: 100%;
-    .artist-overview {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        &-avatar {
-            #avatar {
-                width: 80px;
-                height: 80px;
-                background-size: cover;
-                background-repeat: no-repeat;
-                border-radius: 50%;
-                box-shadow: 0 4px 8px rgba(0,0,0, .175);
-            }
-        }
-        &-content {
-            &-name {
-                font-size: 26px;
-                letter-spacing: 0.075rem;
-                text-align: center;
-                color: @color-text-primary;
-                font-weight: 600;
-                margin: 24px 0;
-            }
-            &-data {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                .overview-data {
-                    display: flex;
-                    flex-direction: column;
-                    margin-right: 36px;
-                    &-name {
-                        text-align: center;
-                        color: @color-text-primary;
-                        font-size: 20px;
-                        font-weight: 600;
-                        letter-spacing: 0.05rem;
-                    }
-                    &-number {
-                        margin-top: 6px;
-                        text-align: center;
-                        color: @color-text-primary;
-                        font-size: 17px;
-                        font-weight: 600;
-                        letter-spacing: 0.05rem;
-                    }
-                }
-                .overview-data:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
+  width: 100%;
+  .artist-overview {
+		width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-avatar {
+      #avatar {
+        width: 80px;
+        height: 80px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0,0,0, .175);
+      }
     }
-    .artist-comment {
-        font-size: 14px;
-        font-weight: 400;
+    &-content {
+      &-name {
+        font-size: 26px;
+        letter-spacing: 0.075rem;
+        text-align: center;
         color: @color-text-primary;
-        line-height: 24px;
-        letter-spacing: 0.03rem;
-        border-top: 1px @color-text-primary dashed;
-        border-bottom: 1px @color-text-primary dashed;
-        max-width: 888px;
-        margin: 32px auto;
-        pre {
-            max-height: 180px;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            margin: 16px 0;
-            padding-right: 8px;
-            white-space: pre-wrap;
+        font-weight: 600;
+        margin: 24px 0;
+      }
+      &-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .overview-data {
+          display: flex;
+          flex-direction: column;
+          margin-right: 36px;
+          &-name {
+            text-align: center;
+            color: @color-text-primary;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+          }
+          &-number {
+            margin-top: 6px;
+            text-align: center;
+            color: @color-text-primary;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+          }
         }
-        pre::-webkit-scrollbar {
-            width: 5px;
+        .overview-data:last-child {
+          margin-right: 0;
         }
-        pre::-webkit-scrollbar-button {
-            display: none;
-        }
-        pre::-webkit-scrollbar-thumb {
-            width: 5px;
-            border-radius: 3px;
-            background: @color-primary;
-        }
-        pre::-webkit-scrollbar-track {
-            background: @color-background-primary;
-        }
+      }
     }
+  }
+  .artist-comment {
+    font-size: 14px;
+    font-weight: 400;
+    color: @color-text-primary;
+    line-height: 24px;
+    letter-spacing: 0.03rem;
+    border-top: 1px @color-text-primary dashed;
+    border-bottom: 1px @color-text-primary dashed;
+    max-width: 888px;
+    margin: 32px auto;
+    pre {
+      max-height: 180px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      margin: 16px 0;
+      padding-right: 8px;
+      white-space: pre-wrap;
+    }
+    pre::-webkit-scrollbar {
+      width: 5px;
+    }
+    pre::-webkit-scrollbar-button {
+      display: none;
+    }
+    pre::-webkit-scrollbar-thumb {
+      width: 5px;
+      border-radius: 3px;
+      background: @color-primary;
+    }
+    pre::-webkit-scrollbar-track {
+      background: @color-background-primary;
+    }
+	}
+	.artist-comment-empty {
+		margin: 32px auto;
+		border-bottom: 1px @color-text-primary dashed;
+	}
 }
 
 // dark mode
 .dark {
-    .artist-overview {
-        .avatar {
-            filter: brightness(0.875);
-        }
-        &-content {
-            &-name {
-                color: darken(@color-text-primary, 2.5%);
-            }
-            &-data {
-                .overview-data {
-                    &-name {
-                        color: darken(@color-text-primary, 2.5%);
-                    }
-                    &-number {
-                        color: darken(@color-text-primary, 2.5%);
-                    }
-                }
-            }
-        }
+  .artist-overview {
+    .avatar {
+      filter: brightness(0.875);
     }
-    .artist-comment {
-        pre::-webkit-scrollbar-thumb {
-            background: darken(@color-primary, 5%);
+    &-content {
+      &-name {
+        color: darken(@color-text-primary, 2.5%);
+      }
+      &-data {
+        .overview-data {
+          &-name {
+            color: darken(@color-text-primary, 2.5%);
+          }
+          &-number {
+            color: darken(@color-text-primary, 2.5%);
+          }
         }
-        pre::-webkit-scrollbar-track {
-            background: @color-background-dark;
-        }
+      }
     }
+  }
+  .artist-comment {
+    pre::-webkit-scrollbar-thumb {
+      background: darken(@color-primary, 5%);
+    }
+    pre::-webkit-scrollbar-track {
+      background: @color-background-dark;
+    }
+  }
 }
 
 // mobile
 
 @media(max-width: 767px) {
-    .artist-detail {
-        &-content {
-            &-name {
-                font-size: 24px;
-            }
-        }
+  .artist-detail {
+    &-content {
+      &-name {
+        font-size: 24px;
+      }
     }
+  }
 }
