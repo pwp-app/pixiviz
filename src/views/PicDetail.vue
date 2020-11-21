@@ -314,7 +314,7 @@ export default {
             window.localStorage.removeItem('entry-pic-from');
             return;
           } else {
-            this.$router.push('/');
+            this.$router.push(`/${this.from}`);
           }
         } else {
           this.$router.push(`/${this.from}`);
