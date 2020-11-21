@@ -1,3 +1,5 @@
+@header-padding-top: 40px;
+
 .artist-container {
   min-height: 100vh;
   .el-loading-mask {
@@ -14,7 +16,8 @@
   }
 
   .artist-header {
-    margin: 40px auto 0 auto;
+		padding-top: @header-padding-top;
+    margin: 0 auto;
     .artist-component-width-mixin(3);
 		.artist-component-width-responsive-mixin(2, 2, 72px);
 		position: relative;
@@ -24,7 +27,7 @@
     &-close {
 			position: absolute;
 			right: 0;
-			top: 0;
+			top: @header-padding-top;
       transition: 200ms ease-in-out;
       color: @color-text-primary;
       font-size: 32px;
