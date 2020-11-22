@@ -23,7 +23,6 @@ module.exports = {
     name: 'Pixiviz',
     themeColor: '#da7a85',
     msTileColor: '#da7a85',
-    assetsVersion: '20201121',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black-translucent',
     manifestOptions: {
