@@ -22,7 +22,7 @@
       top="8.5vh"
       >
       <pre>{{announceContent}}</pre>
-      <pre class="annouce-footer">{{announceFooter}}</pre>
+      <pre class="announce-footer">{{announceFooter}}</pre>
     </el-dialog>
   </div>
 </template>
@@ -96,10 +96,10 @@ export default {
           return;
         }
         for (let announcement of res.data) {
-          const { id, title, content, footer, expires, matchVersion } = res.data;
+          const { id, title, content, footer, expires, matchVersion } = announcement;
           const announceLog = window.localStorage.getItem('announce-read-id');
           if (
-            (announceLog && parseInt(announceLog, 10) >= id) ||
+            (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
             (dayjs(expires).unix() <= dayjs().unix()) ||
             (matchVersion && !matchVersion.includes(version))
           ) {
