@@ -9,8 +9,15 @@
     "build": "node ./tools/processVersion.js && vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "gen:anno": "node ./tools/announcementGen.js",
+    "gen:proxy": "node ./tools/proxyConfigGen.js",
+    "upload:anno": "npm run push:anno",
+    "upload:anno-dev": "npm run push:anno-dev",
+    "upload:proxy": "npm run push:proxy",
+    "upload:proxy-dev": "npm run push:dev",
     "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementUpload.js",
-    "push:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementUpload.js"
+    "push:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementUpload.js",
+    "push:proxy": "cross-env NODE_ENV=prod node ./tools/proxyConfigUpload.js",
+    "push:proxy-dev": "cross-env NODE_ENV=dev node ./tools/proxyConfigUpload.js"
   },
   "dependencies": {
     "@pwp-app/better-element-ui": "^2.14.0-fix-1",

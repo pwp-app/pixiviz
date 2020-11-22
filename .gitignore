@@ -27,3 +27,4 @@ config.*.js
 announcement.txt
 announcement*.json
 .history
+proxy-config.*
