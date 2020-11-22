@@ -39,6 +39,7 @@ import SearchPlaceholder from '../components/landing/SearchBoxPlaceholder';
 import RankPlaceholder from '../components/landing/RankBoxPlaceholder';
 
 import CONFIG from '@/config.json';
+import { version } from '../version';
 
 export default {
   name: 'Landing',
@@ -91,20 +92,25 @@ export default {
       this.axios.get('https://config.backrunner.top/pixiviz/announcement.json', {
         withCredentials: false,
       }).then((res) => {
-        if (res.data) {
-          const { id, title, content, footer, expires } = res.data;
+        if (!res.data) {
+          return;
+        }
+        for (let announcement of res.data) {
+          const { id, title, content, footer, expires, matchVersion } = res.data;
           const announceLog = window.localStorage.getItem('announce-read-id');
-          if (announceLog && parseInt(announceLog, 10) >= id) {
-            return;
-          }
-          if (dayjs(expires).unix() <= dayjs().unix()) {
-            return;
+          if (
+            (announceLog && parseInt(announceLog, 10) >= id) ||
+            (dayjs(expires).unix() <= dayjs().unix()) ||
+            (matchVersion && !matchVersion.includes(version))
+          ) {
+            continue;
           }
           this.announceId = id;
           this.announceTitle = title;
           this.announceContent = content;
           this.announceFooter = footer;
           this.showAnnounce = true;
+          break;
         }
       });
     },

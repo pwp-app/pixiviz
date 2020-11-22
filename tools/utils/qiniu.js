@@ -1,4 +1,4 @@
-const { qiniu: qiniuConfig } = require('../../config.announcement');
+const qiniuConfig = require('../../config.qiniu');
 const qiniu = require('qiniu');
 
 // Set qiniu config and uploader
