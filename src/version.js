@@ -1,3 +1,1 @@
-export default {
-  version: '1.15.1',
-};
+export const version = '1.15.1'
