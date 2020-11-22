@@ -39,7 +39,7 @@ module.exports = {
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
-          urlPattern: new RegExp('^https://pixiviz.pwp.app(/.*\\.(html|js|css|jpg|png|webp))?$'),
+          urlPattern: new RegExp('^https:\\/\\/pixiviz\\.pwp\\.app(\\/.*\\.(html|js|css|jpg|png|webp))?$'),
           handler: 'NetworkFirst',
           options: {
             cacheName: 'static-files',
@@ -54,7 +54,7 @@ module.exports = {
         },
         {
           // API缓存，本地资源优先，7天过期，最多1w条
-          urlPattern: new RegExp('^https://pixiviz.pwp.app/api/.*$'),
+          urlPattern: new RegExp('^https:\\/\\/pixiviz\\.pwp\\.app\\/api\\/.*$'),
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
@@ -71,7 +71,7 @@ module.exports = {
         },
         {
           // 作者头像缓存，14天过期，最多缓存200个
-          urlPattern: new RegExp('^https://pixiv-image.pwp.link/user-profile/.*$'),
+          urlPattern: new RegExp('^https:\\/\\/pixiv-image\\.pwp\\.link\\/user-profile\\/.*$'),
           handler: 'CacheFirst',
           options: {
             cacheName: 'artist-avatar',
@@ -82,11 +82,14 @@ module.exports = {
               maxAgeSeconds: 86400 * 14,
               maxEntries: 200,
             },
+            fetchOptions: {
+              mode: 'cors',
+            },
           },
         },
         {
           // 大图缓存，本地资源优先，7天过期，最多存100张
-          urlPattern: new RegExp('^https://pixiv-image.pwp.link/img-original/.*$'),
+          urlPattern: new RegExp('^https:\\/\\/pixiv-image\\.pwp\\.link\\/img-original\\/.*$'),
           handler: 'CacheFirst',
           options: {
             cacheName: 'big-picture',
@@ -96,6 +99,9 @@ module.exports = {
             expiration: {
               maxAgeSeconds: 86400 * 7,
               maxEntries: 100,
+            },
+            fetchOptions: {
+              mode: 'cors',
             },
           },
         },
