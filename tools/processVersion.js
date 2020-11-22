@@ -4,9 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const packageInfo = require('../package.json');
 
-const versionInfo = `export default {
-  version: '${packageInfo.version}',
-};`;
+const versionInfo = `export const version = '${packageInfo.version}';`;
 
 try {
   fs.writeFileSync(
