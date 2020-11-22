@@ -1,7 +1,7 @@
 const state = {
   id: null,
-  images: null,
-	page: null,
+  images: {},
+	page: {},
 	map: {},
 }
 
@@ -9,11 +9,11 @@ const mutations = {
   setId(state, id) {
     state.id = id;
   },
-  setImages(state, images) {
-    state.images = images;
+  setImages(state, data) {
+    state.images[data.id] = data.images;
   },
-  setPage(state, page) {
-    state.page = page;
+  setPage(state, data) {
+    state.page[data.id] = data.page;
   },
   setMapItem(state, info) {
     state.map[info.id] = info.content;

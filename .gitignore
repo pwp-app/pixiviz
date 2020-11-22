@@ -24,6 +24,7 @@ yarn-error.log*
 assets_source
 pwp-deploy.json
 config.*.js
-announcement.txt
+announcement
 announcement*.json
 .history
+proxy-config.*

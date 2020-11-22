@@ -337,7 +337,8 @@ export default {
 			const cookieStored = this.$cookies.get("rank-mode");
 			if (cookieStored) {
 				return cookieStored;
-			}
+      }
+      return 'day';
 		},
     handleModeChanged(mode) {
       this.mode = mode || 'day';

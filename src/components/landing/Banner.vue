@@ -71,7 +71,7 @@
 
 <script>
 import dayjs from 'dayjs';
-import packInfo from '../../../package.json';
+import { version } from '../../version.js';
 
 export default {
   name: "Landing.Banner",
@@ -82,7 +82,7 @@ export default {
       titleUp: false,
       aboutShow: false,
       clearMarginBottom: false,
-      version: packInfo.version,
+      version,
       darkmode: false,
       darkPersist: false, // 永久禁用
     }
