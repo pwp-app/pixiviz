@@ -73,9 +73,8 @@ export default {
   },
   data() {
     return {
-      page: this.$store.state.artist.page !== null ? this.$store.state.artist.page : 1,
-      images: this.$store.state.artist.id === this.$route.params.id ?
-        this.$store.state.artist.images ? this.$store.state.artist.images: [] : [],
+      page: this.initPage(),
+      images: this.initImages(),
       id: this.$route.params.id,
       artistName: null,
       infoLoaded: false,
@@ -144,6 +143,20 @@ export default {
     window.removeEventListener('scroll', this.handleScroll, false);
   },
   methods: {
+    initPage() {
+      const storedPage = this.$store.state.artist.page[this.$route.params.id];
+      if (storedPage) {
+        return storedPage;
+      }
+      return 1;
+    },
+    initImages() {
+      const storedImages = this.$store.state.artist.images[this.$route.params.id];
+      if (storedImages) {
+        return storedImages;
+      }
+      return [];
+    },
     handleIdChanged(newId) {
       if (this.id === newId) {
         return;
@@ -152,8 +165,6 @@ export default {
       this.artistName = null;
       // 更新store
       this.$store.commit('artist/setId', this.id);
-      this.$store.commit('artist/setImages', []);
-      this.$store.commit('artist/setPage', 1);
       // 刷新页面
       this.refreshWaterfall();
       this.resetScrollState();
@@ -193,14 +204,20 @@ export default {
           });
           this.images = this.images.concat(images);
           // 缓存 images
-          this.$store.commit("artist/setImages", this.images);
+          this.$store.commit('artist/setImages', {
+            id: this.id,
+            images: this.images,
+          });
           // 设置 Load 状态为 false
           if (this.$refs.waterfall) {
             this.$refs.waterfall.firstLoad = false;
           }
           // Page + 1
           this.page = this.page + 1;
-          this.$store.commit("artist/setPage", this.page);
+          this.$store.commit('artist/setPage', {
+            id: this.id,
+            page: this.page,
+          });
           $state.loaded();
         }, () => {
           $state.complete();
@@ -210,9 +227,10 @@ export default {
       // 提前清空 dom
       this.$refs.waterfall.$el.innerHTML = "";
       this.$nextTick(() => {
-        // 重置瀑布流参数
-        this.page = 1;
-        this.images = [];
+        // 考虑缓存
+        this.page = this.$store.state.artist.page[this.id] || 1;
+        this.images = this.$store.state.artist.images[this.id] || [];
+        // 刷新无限加载id
         this.waterfallIdentifier = this.waterfallIdentifier + 1;
       });
     },
