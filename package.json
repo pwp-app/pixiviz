@@ -5,8 +5,8 @@
   "scripts": {
     "start": "npm run serve",
     "dev": "npm run serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "node ./tools/processVersion.js && vue-cli-service serve",
+    "build": "node ./tools/processVersion.js && vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "gen:anno": "node ./tools/announcementGen.js",
     "push:anno": "cross-env NODE_ENV=prod node ./tools/announcementUpload.js",

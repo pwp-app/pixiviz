@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const qiniu = require('./utils/qiniu');
 const { qiniu: qiniuConfig } = require('../config.announcement');
 
