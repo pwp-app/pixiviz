@@ -83,6 +83,7 @@ module.exports = {
               maxEntries: 200,
             },
             fetchOptions: {
+              credentials: 'omit',
               mode: 'cors',
             },
           },
@@ -101,6 +102,7 @@ module.exports = {
               maxEntries: 100,
             },
             fetchOptions: {
+              credentials: 'omit',
               mode: 'cors',
             },
           },
