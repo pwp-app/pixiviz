@@ -143,6 +143,8 @@ export default {
 				let list = [];
 				this.sections.forEach((section, index) => {
 					const { head, tail } = section;
+					// console.log('index', index, 'head', head, 'tail', tail);
+					// console.log('scrollTop', this.scrollTop, 'cond', head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300);
 					if (head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300) {
 						list = list.concat(this.images.slice(index * countPerSection, (index + 1) * countPerSection));
 					}
@@ -201,19 +203,22 @@ export default {
 					top = this.heightStore[minHeightIdx];
 					storeIdx = minHeightIdx;
 				}
+				// check section count
+				if (this.currentSectionCount < countPerSection) {
+					this.currentSectionCount += 1;
+				} else {
+					this.currentSectionCount = 1;
+					this.sections.push({});
+				}
 				// set position
 				this.$set(this.positionMap[mapKey], 'left', left);
 				this.$set(this.positionMap[mapKey], 'top', top);
-				this.heightStore[storeIdx] += h + this.gap;
-				// join section
-				if (this.currentSectionCount >= countPerSection) {
-					this.currentSectionCount = 0;
-					this.sections.push({});
-				} else {
-					this.currentSectionCount += 1;
-				}
+				this.heightStore[storeIdx] += (h + this.gap);
+				console.log('index', index, 'top', top);
+				console.log('heightStore', this.heightStore);
 				// set group position
 				const sectionIdx = this.sections.length - 1;
+				console.log('sectionIdx', sectionIdx);
 				const { head, tail } = this.sections[sectionIdx];
 				if (typeof head === 'undefined' || top < head) {
 					this.sections[sectionIdx].head = top;
