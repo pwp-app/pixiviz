@@ -14,6 +14,9 @@
 <script>
 import ImageCard from './ImageCard';
 
+// 瀑布流可视区额外距离
+const ADDITIONAL_DISTANCE = 500;
+
 export default {
   name: 'Common.Waterfall',
   props: {
@@ -139,18 +142,26 @@ export default {
 			this.setDisplay();
 		},
 		setDisplay() {
+			const countPerSection = this.columns * this.rowsPerSection;
+			let list = [];
+			for (let i = 0; i < this.sections.length; i++) {
+				const section = this.sections[i];
+				const { head, tail } = section;
+				// console.log('index', i, 'head', head, 'tail', tail);
+				// console.log('scrollTop', this.scrollTop, 'cond', head <= this.scrollTop + this.screenHeight + ADDITIONAL_DISTANCE && tail > this.scrollTop - ADDITIONAL_DISTANCE);
+				const showCondHead = this.scrollTop + this.screenHeight + ADDITIONAL_DISTANCE;
+				const showCondTail = this.scrollTop - ADDITIONAL_DISTANCE;
+				if (head <= showCondHead && tail > showCondTail) {
+					list = list.concat(this.images.slice(i * countPerSection, (i + 1) * countPerSection));
+				}
+				if (head > showCondHead) {
+					// 有序数据，后面的都不会显示出来没必要遍历了
+					break;
+				}
+			}
 			window.requestAnimationFrame(() => {
-				const countPerSection = this.columns * this.rowsPerSection;
-				let list = [];
-				this.sections.forEach((section, index) => {
-					const { head, tail } = section;
-					console.log('index', index, 'head', head, 'tail', tail);
-					console.log('scrollTop', this.scrollTop, 'cond', head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300);
-					if (head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300) {
-						list = list.concat(this.images.slice(index * countPerSection, (index + 1) * countPerSection));
-					}
-				});
 				this.$set(this, 'displayImages', list);
+				this.$forceUpdate();
 			});
 		},
 		resetWidthStore() {

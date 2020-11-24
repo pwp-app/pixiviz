@@ -1,6 +1,11 @@
 <template>
-  <div class="image-card-wrapper image-card-fade" :style="positionStyle">
-    <a :href="loadError || block || !image ? 'javascript:;' : `/pic/${image.id}`" :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click.prevent="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
+  <div class="image-card-wrapper" :style="positionStyle">
+    <a
+      :href="loadError || block || !image ? 'javascript:;' : `/pic/${image.id}`"
+      :class="['image-card', loadError || block ? 'image-card-status-error' : '']"
+      :style="{width: cardWidth + 'px', height: loadHeight + 'px'}"
+      @click.prevent="handleClick"
+      >
       <div class="image-card-overlay image-card-block" v-if="block">
         <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
           <i class="el-icon-warning-outline"/>
@@ -20,7 +25,14 @@
       <div class="image-card-count" v-if="image && image.page_count > 1">
         <img :src="countIcon"><span>{{image && image.page_count}}</span>
       </div>
-      <div ref="image" class="image-card-image" v-if="!block" v-loading="loading" v-lazy:background-image="source"></div>
+      <div
+        ref="image"
+        class="image-card-image"
+        v-if="!block"
+        v-loading="loading"
+        v-lazy:background-image="source"
+        >
+      </div>
       <div class="image-card-title">
         {{image.title}}
       </div>
