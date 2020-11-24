@@ -61,20 +61,20 @@ export default {
       } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
         if (this.orientation === 0) {
           this.$emit('change-page-size', 20);
-          return Math.floor((this.screenWidth - 48) / 4) - 16;
+          return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
           this.$emit('change-page-size', 6);
           return 181;
         }
       } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
         this.$emit('change-page-size', 30);
-        return Math.floor((this.screenWidth - 48) / 4) - 16;
+        return Math.floor((this.screenWidth - 32) / 4) - 16;
       } else if (this.screenWidth > 567 && this.screenWidth <= 768) {
         this.$emit('change-page-size', 30);
-        return Math.floor((this.screenWidth - 48) / 3) - 16;
+        return Math.floor((this.screenWidth - 32) / 3) - 16;
       } else if (this.screenWidth <= 567) {
         this.$emit('change-page-size', 30);
-        return Math.floor((this.screenWidth - 48) / 2) - 16;
+        return Math.floor((this.screenWidth - 32) / 2) - 16;
       }
     }
   },
