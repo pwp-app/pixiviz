@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="pic-related-content" v-if="!completed">
+    <div class="pic-related-content">
       <div class="waterfall-wrapper">
         <Waterfall ref="waterfall"
           :images="images"
@@ -22,7 +22,7 @@
           />
       </div>
     </div>
-    <div class="pic-related-content-completed" v-else>
+    <div class="pic-related-content-completed" v-if="completed && images.length < 1">
       <span>没有相关图片...</span>
     </div>
     <infinite-loading
@@ -55,27 +55,26 @@ export default {
       return this.page > 1;
     },
     cardWidth() {
-      const width = this.screenWidth;
-      if (width > 1366) {
+      if (this.screenWidth > 1366) {
         this.$emit('change-page-size', 6);
         return 204;
-      } else if (width > 1024 && width <= 1366) {
+      } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
         if (this.orientation === 0) {
           this.$emit('change-page-size', 20);
-          return Math.floor((width - 48) / 4) - 16;
+          return Math.floor((this.screenWidth - 48) / 4) - 16;
         } else {
           this.$emit('change-page-size', 6);
           return 181;
         }
-      } else if (width > 768 && width <= 1024) {
+      } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
         this.$emit('change-page-size', 30);
-        return Math.floor((width - 48) / 4) - 16;
-      } else if (width > 567 && width <= 768) {
+        return Math.floor((this.screenWidth - 48) / 4) - 16;
+      } else if (this.screenWidth > 567 && this.screenWidth <= 768) {
         this.$emit('change-page-size', 30);
-        return Math.floor((width - 48) / 3) - 16;
-      } else if (width <= 567) {
+        return Math.floor((this.screenWidth - 48) / 3) - 16;
+      } else if (this.screenWidth <= 567) {
         this.$emit('change-page-size', 30);
-        return Math.floor((width - 48) / 2) - 16;
+        return Math.floor((this.screenWidth - 48) / 2) - 16;
       }
     }
   },
