@@ -214,11 +214,11 @@ export default {
 				this.$set(this.positionMap[mapKey], 'left', left);
 				this.$set(this.positionMap[mapKey], 'top', top);
 				this.heightStore[storeIdx] += (h + this.gap);
-				console.log('index', index, 'top', top);
-				console.log('heightStore', this.heightStore);
+				// console.log('index', index, 'top', top);
+				// console.log('heightStore', this.heightStore);
 				// set group position
 				const sectionIdx = this.sections.length - 1;
-				console.log('sectionIdx', sectionIdx);
+				// console.log('sectionIdx', sectionIdx);
 				const { head, tail } = this.sections[sectionIdx];
 				if (typeof head === 'undefined' || top < head) {
 					this.sections[sectionIdx].head = top;
