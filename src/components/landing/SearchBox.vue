@@ -54,7 +54,8 @@ export default {
           return;
         }
       };
-      this.$router.push(`/search/${search}`);
+			this.$router.push(`/search/${search}`);
+			this.$cookies.set('search-from', `/`);
     },
     handleSearchClick() {
       this.submitSearch();
