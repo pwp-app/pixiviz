@@ -131,6 +131,7 @@ export default {
 			this.setDisplay();
 		},
 		renderWaterfall() {
+			this.resetSections();
 			this.resetWidthStore();
 			this.resetHeightStore();
 			this.resetPositionMap();
@@ -143,8 +144,8 @@ export default {
 				let list = [];
 				this.sections.forEach((section, index) => {
 					const { head, tail } = section;
-					// console.log('index', index, 'head', head, 'tail', tail);
-					// console.log('scrollTop', this.scrollTop, 'cond', head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300);
+					console.log('index', index, 'head', head, 'tail', tail);
+					console.log('scrollTop', this.scrollTop, 'cond', head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300);
 					if (head <= this.scrollTop + this.screenHeight + 300 && tail > this.scrollTop - 300) {
 						list = list.concat(this.images.slice(index * countPerSection, (index + 1) * countPerSection));
 					}
@@ -169,9 +170,8 @@ export default {
 			this.computePosition();
 		},
 		resetSections() {
-			this.sections = {};
+			this.sections = [{}];
 			this.currentSectionCount = 0;
-			this.sectionsLength = 0;
 		},
 		computePosition() {
 			if (!this.widthStore || !this.heightStore || !this.columns) {
