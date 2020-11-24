@@ -4,9 +4,9 @@
 		}">
     <ImageCard class="waterfall-item"
       v-for="item in displayImages"
-			:key="item.id" :image="item"
+			:key="item.index" :image="item"
       :cardWidth="cardWidth" :imageType="imageType"
-			:position="positionMap[item.id]"
+			:position="positionMap[item.index]"
       @clicked="handleCardClicked"/>
   </div>
 </template>
@@ -178,7 +178,8 @@ export default {
 			const countPerSection = this.columns * this.rowsPerSection;
 			this.images.forEach((image, index) => {
 				// ignore computed
-				const mapKey = image.id;
+				const mapKey = index;
+				image.index = index;
 				if (this.positionMap[mapKey]) {
 					return;
 				}
@@ -266,7 +267,6 @@ export default {
 			this.lastScroll = Date.now();
 			this.containerOffset = this.getContainerOffset();
 			this.scrollTop = document.documentElement.scrollTop - this.containerOffset;
-			console.log('scrollTop', this.scrollTop);
 		},
   }
 }
