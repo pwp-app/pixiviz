@@ -8,6 +8,7 @@
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
     "build": "node ./tools/processVersion.js && vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
+    "gen:ver": "node ./tools/processVersion.js",
     "gen:anno": "cross-env NODE_ENV=prod node ./tools/announcementGen.js",
     "gen:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementGen.js",
     "gen:proxy": "node ./tools/proxyConfigGen.js",
