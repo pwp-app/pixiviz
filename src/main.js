@@ -7,7 +7,6 @@ import axios from 'axios';
 import VueCookies from 'vue-cookies';
 import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
-import { VueMasonryPlugin } from 'vue-masonry';
 import InfiniteLoading from 'vue-infinite-loading';
 import VueMeta from 'vue-meta';
 
@@ -58,7 +57,6 @@ Vue.use(VueLazyload, {
 Vue.use(Vue2TouchEvents);
 
 // Set up things for waterfall
-Vue.use(VueMasonryPlugin);
 Vue.use(InfiniteLoading, {
   slots: {
     noResults: '这里没有图片...',
