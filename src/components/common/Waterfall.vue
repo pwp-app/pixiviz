@@ -56,6 +56,7 @@ export default {
 			screenWidth: document.documentElement.clientWidth,
 			screenHeight: document.documentElement.clientHeight,
 			scrollTop: document.documentElement.scrollTop,
+			containerOffset: 0,
 		};
 	},
 	computed: {
@@ -88,6 +89,7 @@ export default {
 	},
 	mounted() {
 		this.containerWidth = this.getContainerWidth();
+		this.containerOffset = this.getContainerOffset();
 	},
 	updated() {
 		this.containerWidth = this.getContainerWidth();
@@ -104,6 +106,11 @@ export default {
 			} else {
 				return 0;
 			}
+		},
+		getContainerOffset() {
+			const bodyRect = document.documentElement.getBoundingClientRect();
+			const elRect = this.$refs.container.getBoundingClientRect();
+    	return elRect.top - bodyRect.top;
 		},
 		// waterfall items
 		imagesChanged() {
@@ -250,13 +257,16 @@ export default {
 		handleWindowResize() {
 			this.screenWidth = document.documentElement.clientWidth;
 			this.screenHeight = document.documentElement.clientHeight;
+			this.containerOffset = this.getContainerOffset();
 		},
 		handleScroll() {
 			if (this.lastScroll && Date.now() - this.lastScroll < 200) {
-				return;
+			 	return;
 			}
 			this.lastScroll = Date.now();
-			this.scrollTop = document.documentElement.scrollTop;
+			this.containerOffset = this.getContainerOffset();
+			this.scrollTop = document.documentElement.scrollTop - this.containerOffset;
+			console.log('scrollTop', this.scrollTop);
 		},
   }
 }
