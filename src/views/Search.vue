@@ -40,25 +40,18 @@
       </div>
     </div>
     <div class="search-content" v-if="showContent">
-      <div class="waterfall-wrapper" :key="waterfallResponsive" v-if="waterfallResponsive">
+      <div class="waterfall-wrapper">
         <Waterfall
-          class="waterfall waterfall-responsive"
+          :class="{
+            'waterfall-responsive': waterfallResponsive
+          }"
           ref="waterfall"
+          :key="waterfallResponsive"
           :images="images"
           @card-clicked="handleCardClicked"
           :cardWidth="cardWidth"
           imageType="medium"
-        />
-      </div>
-      <div class="waterfall-wrapper" v-if="!waterfallResponsive">
-        <Waterfall
-          class="waterfall"
-          ref="waterfall"
-          :images="images"
-          @card-clicked="handleCardClicked"
-          :cardWidth="cardWidth"
-          imageType="medium"
-          :fitWidth="true"
+          :style="waterfallResponsive ? null : { width: `${mobileWaterfallWidth}px` }"
         />
       </div>
     </div>
@@ -130,23 +123,31 @@ export default {
     "$route.params.keyword": "handleKeywordChanged",
     /* Watch screen width */
     screenWidth(width) {
-      this.screenWidth = width;
-      this.scrollTop = document.documentElement.scrollTop;
-      if (this.screenWidth <= 767) {
-        this.waterfallResponsive = false;
-      } else {
-        this.waterfallResponsive = true;
+      if (this.resizeTimer) {
+        clearTimeout(this.resizeTimer);
       }
-      this.$nextTick(() => {
-        this.cardWidth = this.getCardWidth(this.screenWidth);
-        document.documentElement.scrollTop = this.scrollTop;
-      });
+      this.resizeTimer = setTimeout(() => {
+        this.screenWidth = width;
+        this.scrollTop = document.documentElement.scrollTop;
+        if (this.screenWidth <= 767) {
+          this.waterfallResponsive = false;
+        } else {
+          this.waterfallResponsive = true;
+        }
+        this.$nextTick(() => {
+          this.cardWidth = this.getCardWidth(this.screenWidth);
+          document.documentElement.scrollTop = this.scrollTop;
+        });
+      }, 300);
     }
   },
   computed: {
     showContent() {
       return !this.keywordBlocked && !this.sensitiveBlocked;
-    }
+    },
+    mobileWaterfallWidth() {
+      return this.cardWidth * 2 + 32;
+    },
   },
   mounted() {
     // 检查屏蔽

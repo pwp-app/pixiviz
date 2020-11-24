@@ -1,5 +1,5 @@
 <template>
-  <div class="image-card-wrapper image-card-fade">
+  <div class="image-card-wrapper image-card-fade" :style="positionStyle">
     <a :href="loadError || block || !image ? 'javascript:;' : `/pic/${image.id}`" :class="['image-card', loadError || block ? 'image-card-status-error' : '']" @click.prevent="handleClick" :style="{width: cardWidth + 'px', height: loadHeight + 'px'}">
       <div class="image-card-overlay image-card-block" v-if="block">
         <div class="image-card-overlay-icon" v-if="loadHeight >= 128">
@@ -35,27 +35,28 @@ export default {
   name: 'Common.ImageCard',
   props: {
     image: {
-      type: Object
+      type: Object,
+      default: () => {},
+    },
+    imageType: {
+      type: String,
+      default: 'medium'
     },
     cardWidth: {
       type: Number,
-      default: 280
+      default: 100,
     },
-    imageType: {
-      type: String
+    position: {
+      type: Object,
+      default: () => {},
     },
-    squaredImage: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {
       loading: true,
       loadError: false,
-      loadHeight: this.getHeight(),
       block: this.image.x_strict ? true : this.image.sanity_level > 5 ? true : false,
-      countIcon: require('@/assets/images/count.svg')
+      countIcon: require('@/assets/images/count.svg'),
     }
   },
   computed: {
@@ -69,7 +70,22 @@ export default {
         }
         return url;
       }
-    }
+    },
+    positionStyle() {
+      const top = this.position ? this.position.top : 0;
+      const left = this.position ? this.position.left : 0;
+      return {
+        position: 'absolute',
+        top: `${top}px`,
+        left: `${left}px`,
+      };
+    },
+    loadHeight() {
+      if (!this.position) {
+        return 0;
+      }
+      return this.position.height;
+    },
   },
   created() {
     this.$Lazyload.$on('loaded', this.loadedHandler);
@@ -97,13 +113,6 @@ export default {
         return CONFIG.IMAGE_PROXY_HOST;
       } else {
         return CONFIG.IMAGE_PROXY_HOST;
-      }
-    },
-    getHeight() {
-      if (this.squaredImage) {
-        return this.cardWidth;
-      } else {
-        return this.image.height / (this.image.width / this.cardWidth);
       }
     },
     handleClick() {

@@ -19,7 +19,6 @@
           :cardWidth="cardWidth"
           imageType="square_medium"
           :squaredImage="true"
-          :fitWidth="true"
           />
       </div>
     </div>
@@ -104,12 +103,6 @@ export default {
     // Window & Screen
     windowResized() {
       this.screenWidth = window.innerWidth;
-      // 只有6个元素，重绘确保正确性
-      if (this.screenWidth >= 1366) {
-        this.$nextTick(() => {
-          this.$redrawVueMasonry();
-        });
-      }
     },
     // Event
     handleCardClicked(imageId) {

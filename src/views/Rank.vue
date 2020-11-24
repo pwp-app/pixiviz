@@ -53,28 +53,18 @@
       <div class="rank-body-content">
         <div
           class="waterfall-wrapper"
-          :key="waterfallResponsive"
-          v-if="waterfallResponsive"
         >
           <Waterfall
-            class="waterfall waterfall-responsive"
+            :class="{
+              'waterfall-responsive': waterfallResponsive
+            }"
+            :key="waterfallResponsive"
             ref="waterfall"
             :images="images"
             @card-clicked="handleCardClicked"
             :cardWidth="cardWidth"
             imageType="medium"
-          />
-        </div>
-        <!-- 针对移动端渲染一个不同的组件 -->
-        <div class="waterfall-wrapper" v-if="!waterfallResponsive">
-          <Waterfall
-            class="waterfall"
-            ref="waterfall"
-            :images="images"
-            @card-clicked="handleCardClicked"
-            :cardWidth="cardWidth"
-            imageType="medium"
-            :fitWidth="true"
+            :style="waterfallResponsive ? null : { width: `${mobileWaterfallWidth}px` }"
           />
         </div>
       </div>
@@ -178,6 +168,9 @@ export default {
       return (
         (dayjs().startOf('day').unix() - this.dateObject.unix()) / 86400 > 2
       );
+    },
+    mobileWaterfallWidth() {
+      return this.cardWidth * 2 + 32;
     }
   },
   watch: {
@@ -193,18 +186,23 @@ export default {
     },
     /* Watch screen width */
     screenWidth(width) {
-      this.screenWidth = width;
-      // After waterfall rerendered, keep the scroll state
-      this.scrollTop = document.documentElement.scrollTop;
-      if (this.screenWidth <= 767) {
-        this.waterfallResponsive = false;
-      } else {
-        this.waterfallResponsive = true;
-      }
-      this.$nextTick(() => {
-        this.cardWidth = this.getCardWidth(this.screenWidth);
-        document.documentElement.scrollTop = this.scrollTop
-      });
+      if (this.resizeTimer) {
+				clearTimeout(this.resizeTimer);
+			}
+      this.resizeTimer = setTimeout(() => {
+        this.screenWidth = width;
+        // After waterfall rerendered, keep the scroll state
+        this.scrollTop = document.documentElement.scrollTop;
+        if (this.screenWidth <= 767) {
+          this.waterfallResponsive = false;
+        } else {
+          this.waterfallResponsive = true;
+        }
+        this.$nextTick(() => {
+          this.cardWidth = this.getCardWidth(this.screenWidth);
+          document.documentElement.scrollTop = this.scrollTop
+        });
+      }, 300);
     }
   },
   created() {
