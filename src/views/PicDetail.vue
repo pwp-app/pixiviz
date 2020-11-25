@@ -250,12 +250,7 @@ export default {
       // 重置related
       this.relatedPage = 1;
       this.realRelatedPage = 1;
-      this.$nextTick(() => {
-        if (this.$refs.related) {
-          this.$refs.related.reset();
-        }
-        this.relatedImages = [];
-      });
+      this.relatedImages = [];
       // change title
       document.title = `图片${this.imageId} - Pixiviz`;
       // reset var
@@ -287,15 +282,9 @@ export default {
     handleScreenRotate() {
       if (this.screenOrientation === 0 && window.orientation !== 0) {
         // 切割显示的数组
-        this.$nextTick(() => {
-          this.$refs.related.reset();
-          this.showPart = true;
-        });
+        this.showPart = true;
       } else if (this.screenOrientation !== 0 && window.orientation === 0) {
-        this.$nextTick(() => {
-          this.$refs.related.reset();
-          this.showPart = false;
-        });
+        this.showPart = false;
       }
       this.screenOrientation = window.orientation;
     },

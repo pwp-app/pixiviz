@@ -45,7 +45,8 @@ export default {
   },
   data() {
     return {
-      screenWidth: window.innerWidth,
+      screenWidth: document.documentElement.clientWidth,
+      screenHeight: document.documentElement.clientHeight,
       // Waterfall
       waterfallIdentifier: Math.round(Math.random() * 100)
     }
@@ -57,16 +58,23 @@ export default {
     cardWidth() {
       if (this.screenWidth > 1366) {
         this.$emit('change-page-size', 6);
-        return 204;
+        return 208;
       } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
         if (this.orientation === 0) {
           this.$emit('change-page-size', 20);
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
           this.$emit('change-page-size', 6);
-          return 181;
+          return 184;
         }
       } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
+        if (this.orientation === 0 || this.screenWidth < this.screenHeight) {
+          this.$emit('change-page-size', 20);
+          return Math.floor((this.screenWidth - 32) / 4) - 16;
+        } else {
+          this.$emit('change-page-size', 6);
+          return 151;
+        }
         this.$emit('change-page-size', 30);
         return Math.floor((this.screenWidth - 32) / 4) - 16;
       } else if (this.screenWidth > 567 && this.screenWidth <= 768) {
@@ -84,6 +92,12 @@ export default {
     });
   },
   watch: {
+    images() {
+      this.screenWidth = document.documentElement.clientWidth;
+    },
+    oimages() {
+      this.screenWidth = document.documentElement.clientWidth;
+    },
     screenWidth(width) {
       this.screenWidth = width;
     }
@@ -92,16 +106,10 @@ export default {
     window.removeEventListener("resize", this.windowResized, false);
   },
   methods: {
-    reset() {
-      // avoid error when waterfall ref is undefined
-      if (!this.$refs.waterfall)  {
-        return;
-      }
-      this.$refs.waterfall.$el.innerHTML = '';
-    },
     // Window & Screen
     windowResized() {
-      this.screenWidth = window.innerWidth;
+      this.screenWidth = document.documentElement.clientWidth;
+      this.screenHeight = document.documentElement.clientHeight;
     },
     // Event
     handleCardClicked(imageId) {
