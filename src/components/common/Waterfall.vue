@@ -53,6 +53,7 @@ export default {
 			sections: [{}],
 			sectionsIdx: 0,
 			displayImages: [],
+			storedImagesLength: 0,
 			currentSectionCount: 0,
 			containerWidth: 0,
 			maxHeight: 0,
@@ -117,9 +118,14 @@ export default {
 		},
 		// waterfall items
 		imagesChanged() {
-			this.computePosition();
-			this.setMaxHeight();
-			this.setDisplay();
+			if (this.images.length < this.storedImagesLength) {
+				this.renderWaterfall();
+			} else {
+				this.computePosition();
+				this.setMaxHeight();
+				this.setDisplay();
+			}
+			this.storedImagesLength = this.images.length;
 		},
 		columnsChanged() {
 			this.renderWaterfall();
@@ -277,10 +283,16 @@ export default {
 			this.containerOffset = this.getContainerOffset();
 		},
 		handleScroll() {
-			if (this.lastScroll && Date.now() - this.lastScroll < 100) {
-			 	return;
-			}
-			this.lastScroll = Date.now();
+			if (!timeout && this.lastScroll && Date.now() - this.lastScroll < 200) {
+        return;
+      }
+      if (!this.scrollTimer) {
+        clearTimeout(this.scrollTimer);
+      }
+      this.scrollTimer = setTimeout(() => {
+        this.handleScroll.apply(this, [ true ]);
+      }, 200);
+      this.lastScroll = Date.now();
 			this.containerOffset = this.getContainerOffset();
 			this.scrollTop = document.documentElement.scrollTop - this.containerOffset;
 		},
