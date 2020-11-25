@@ -23,11 +23,12 @@
         </div>
       </div>
       <div class="image-card-count" v-if="image && image.page_count > 1">
-        <img :src="countIcon"><span>{{image && image.page_count}}</span>
+        <img :src="countIcon"><span>{{image ? image.page_count : ''}}</span>
       </div>
       <div
         ref="image"
         class="image-card-image"
+        :data-index="image ? image.index : ''"
         v-if="!block"
         v-loading="loading"
         v-lazy:background-image="source"
@@ -133,7 +134,7 @@ export default {
       }
     },
     loadedHandler({el, src}) {
-      if (el.getAttribute('data-src') === this.source || src === this.source) {
+      if (el.getAttribute('data-index') === this.image.index.toString()) {
         this.loading = false;
         this.loadError = false;
         this.$Lazyload.$off('loaded', this.loadedHandler);
@@ -141,7 +142,7 @@ export default {
       }
     },
     errorHandler({el, src}) {
-      if (el.getAttribute('data-src') === this.source || src === this.source) {
+      if (el.getAttribute('data-index') === this.image.index.toString()) {
         this.loading = false;
         this.loadError = true;
         this.$Lazyload.$off('loaded', this.errorHandler);
