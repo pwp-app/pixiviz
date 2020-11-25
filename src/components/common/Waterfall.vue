@@ -89,7 +89,7 @@ export default {
 		this.resetHeightStore();
 		this.resetPositionMap();
 		window.addEventListener('resize', this.handleWindowResize);
-		window.addEventListener('scroll', this.handleScroll);
+		window.addEventListener('scroll', this.handleScroll, true);
 	},
 	mounted() {
 		this.containerWidth = this.getContainerWidth();
@@ -282,16 +282,18 @@ export default {
 			this.screenHeight = document.documentElement.clientHeight;
 			this.containerOffset = this.getContainerOffset();
 		},
-		handleScroll() {
+		handleScroll(timeout = false) {
 			if (!timeout && this.lastScroll && Date.now() - this.lastScroll < 200) {
         return;
       }
-      if (!this.scrollTimer) {
-        clearTimeout(this.scrollTimer);
-      }
-      this.scrollTimer = setTimeout(() => {
-        this.handleScroll.apply(this, [ true ]);
-      }, 200);
+			if (!timeout) {
+				if (this.scrollTimer) {
+					clearTimeout(this.scrollTimer);
+				}
+				this.scrollTimer = setTimeout(() => {
+					this.handleScroll.apply(this, [ true ]);
+				}, 200);
+			}
       this.lastScroll = Date.now();
 			this.containerOffset = this.getContainerOffset();
 			this.scrollTop = document.documentElement.scrollTop - this.containerOffset;
