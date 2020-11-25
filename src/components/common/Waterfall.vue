@@ -98,9 +98,9 @@ export default {
 	updated() {
 		this.containerWidth = this.getContainerWidth();
 	},
-	destroyed() {
+	beforeDestroy() {
 		window.removeEventListener('resize', this.handleWindowResize);
-		window.removeEventListener('scroll', this.handleScroll);
+		window.removeEventListener('scroll', this.handleScroll, true);
 	},
   methods: {
 		// waterfall container
