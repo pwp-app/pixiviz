@@ -74,6 +74,9 @@ export default {
   created() {
     // 检测Safari
     window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    // 图片懒加载统一handle
+    this.$Lazyload.$on('loaded', this.imageLoadedHandler);
+    this.$Lazyload.$on('error', this.imageLoadErrorHandler);
   },
   mounted() {
     // add save loadmap listener
@@ -102,6 +105,19 @@ export default {
       }
       window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
       window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+    },
+    // 图片加载处理
+    imageLoadedHandler({ el, src }) {
+      const type = el.getAttribute('data-type');
+      if (type === 'card') {
+        this.$bus.$emit(`image-loaded-card-${el.getAttribute('data-index')}`);
+      }
+    },
+    imageLoadErrorHandler({ el, src }) {
+      const type = el.getAttribute('data-type');
+      if (type === 'card') {
+        this.$bus.$emit(`image-error-card-${el.getAttribute('data-index')}`);
+      }
     }
   }
 }

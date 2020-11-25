@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="pic-related-content" v-if="!completed">
+    <div class="pic-related-content">
       <div class="waterfall-wrapper">
         <Waterfall ref="waterfall"
           :images="images"
@@ -19,11 +19,10 @@
           :cardWidth="cardWidth"
           imageType="square_medium"
           :squaredImage="true"
-          :fitWidth="true"
           />
       </div>
     </div>
-    <div class="pic-related-content-completed" v-else>
+    <div class="pic-related-content-completed" v-if="completed && images.length < 1">
       <span>没有相关图片...</span>
     </div>
     <infinite-loading
@@ -46,7 +45,8 @@ export default {
   },
   data() {
     return {
-      screenWidth: window.innerWidth,
+      screenWidth: document.documentElement.clientWidth,
+      screenHeight: document.documentElement.clientHeight,
       // Waterfall
       waterfallIdentifier: Math.round(Math.random() * 100)
     }
@@ -56,27 +56,33 @@ export default {
       return this.page > 1;
     },
     cardWidth() {
-      const width = this.screenWidth;
-      if (width > 1366) {
+      if (this.screenWidth > 1366) {
         this.$emit('change-page-size', 6);
-        return 204;
-      } else if (width > 1024 && width <= 1366) {
+        return 208;
+      } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
         if (this.orientation === 0) {
           this.$emit('change-page-size', 20);
-          return Math.floor((width - 48) / 4) - 16;
+          return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
           this.$emit('change-page-size', 6);
-          return 181;
+          return 184;
         }
-      } else if (width > 768 && width <= 1024) {
+      } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
+        if (this.orientation === 0 || this.screenWidth < this.screenHeight) {
+          this.$emit('change-page-size', 20);
+          return Math.floor((this.screenWidth - 32) / 4) - 16;
+        } else {
+          this.$emit('change-page-size', 6);
+          return 151;
+        }
         this.$emit('change-page-size', 30);
-        return Math.floor((width - 48) / 4) - 16;
-      } else if (width > 567 && width <= 768) {
+        return Math.floor((this.screenWidth - 32) / 4) - 16;
+      } else if (this.screenWidth > 567 && this.screenWidth <= 768) {
         this.$emit('change-page-size', 30);
-        return Math.floor((width - 48) / 3) - 16;
-      } else if (width <= 567) {
+        return Math.floor((this.screenWidth - 32) / 3) - 16;
+      } else if (this.screenWidth <= 567) {
         this.$emit('change-page-size', 30);
-        return Math.floor((width - 48) / 2) - 16;
+        return Math.floor((this.screenWidth - 32) / 2) - 16;
       }
     }
   },
@@ -86,6 +92,12 @@ export default {
     });
   },
   watch: {
+    images() {
+      this.screenWidth = document.documentElement.clientWidth;
+    },
+    oimages() {
+      this.screenWidth = document.documentElement.clientWidth;
+    },
     screenWidth(width) {
       this.screenWidth = width;
     }
@@ -94,22 +106,10 @@ export default {
     window.removeEventListener("resize", this.windowResized, false);
   },
   methods: {
-    reset() {
-      // avoid error when waterfall ref is undefined
-      if (!this.$refs.waterfall)  {
-        return;
-      }
-      this.$refs.waterfall.$el.innerHTML = '';
-    },
     // Window & Screen
     windowResized() {
-      this.screenWidth = window.innerWidth;
-      // 只有6个元素，重绘确保正确性
-      if (this.screenWidth >= 1366) {
-        this.$nextTick(() => {
-          this.$redrawVueMasonry();
-        });
-      }
+      this.screenWidth = document.documentElement.clientWidth;
+      this.screenHeight = document.documentElement.clientHeight;
     },
     // Event
     handleCardClicked(imageId) {

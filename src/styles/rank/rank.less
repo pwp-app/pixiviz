@@ -43,6 +43,7 @@
   &-close {
     float: right;
     transition: 200ms ease-in-out;
+    transform: translateX(6px);
   }
   &-close:hover {
     color: lighten(@color-text-primary, 10%);
@@ -134,6 +135,11 @@
           color: lighten(@color-text-primary, 2.5%);
         }
       }
+    }
+  }
+  .infinite-loading-container {
+    .infinite-status-prompt {
+      color: darken(@color-text-primary, 2.5%) !important;
     }
   }
 }

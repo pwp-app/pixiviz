@@ -16,7 +16,8 @@
 			height: 34px;
 		}
     .pic-related-paginator {
-			height: 32px;
+      height: 32px;
+      transform: translateX(4px);
       &-item {
 				height: 32px;
         display: inline-block;
@@ -34,12 +35,26 @@
   &-content {
     margin-top: 16px;
     margin-left: -8px;
+    .waterfall-wrapper {
+      .waterfall-container {
+        position: relative;
+      }
+    }
   }
   &-content-completed {
     font-weight: 600;
     margin: 32px 0 72px 0;
     color: @color-text-primary;
     user-select: none;
+  }
+  .infinite-loading-container {
+    .infinite-status-prompt {
+      padding: 32px 0 16px 0 !important;
+      color: @color-text-primary !important;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      .no-select();
+    }
   }
 }
 
@@ -58,6 +73,11 @@
         color: lighten(@color-text-primary, 2.5%);
       }
     }
+    .infinite-loading-container {
+      .infinite-status-prompt {
+        color: darken(@color-text-primary, 2.5%) !important;
+      }
+    }
   }
 }
 
@@ -72,6 +92,7 @@
         width: 100%;
         .waterfall-container {
           margin: 0 auto;
+          transform: translate3d(0, 0, 0);
         }
       }
     }

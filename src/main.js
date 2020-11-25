@@ -2,12 +2,10 @@ import Vue from 'vue';
 
 // Import dependencies
 import qs from 'qs';
-import VueAxios from 'vue-axios/dist/vue-axios.min';
 import axios from 'axios';
 import VueCookies from 'vue-cookies';
 import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
-import { VueMasonryPlugin } from 'vue-masonry';
 import InfiniteLoading from 'vue-infinite-loading';
 import VueMeta from 'vue-meta';
 
@@ -41,7 +39,8 @@ axios.defaults.transformRequest = [
   },
 ];
 
-Vue.use(VueAxios, axios);
+Vue.prototype.axios = axios;
+Vue.prototype.$http = axios;
 
 // Set up lazyload
 Vue.use(VueLazyload, {
@@ -58,7 +57,6 @@ Vue.use(VueLazyload, {
 Vue.use(Vue2TouchEvents);
 
 // Set up things for waterfall
-Vue.use(VueMasonryPlugin);
 Vue.use(InfiniteLoading, {
   slots: {
     noResults: '这里没有图片...',
@@ -87,6 +85,9 @@ if (downloadSettings) {
     multiFileName: '{title}-{id}-{index}',
   };
 }
+
+// Set up bus
+Vue.prototype.$bus = new Vue();
 
 new Vue({
   router,

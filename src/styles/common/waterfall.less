@@ -1,18 +1,20 @@
 .waterfall-wrapper-mixin(@col) {
-    position: relative;
-    .waterfall-container {
-        margin: 0 auto;
-        width: @col * @image-card-width + @image-card-margin * 2 * @col;
-    }
+  position: relative;
+  .waterfall-container {
+		position: relative;
+    margin: 0 auto;
+		width: @col * @image-card-width + @image-card-margin * 2 * @col;
+		transform: translate3d(0, 0, 0);
+  }
 }
 
 .waterfall-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
-    @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
-    @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
-    @media(max-width: @trigger-width) {
-        .waterfall-responsive {
-            width: @container-width !important;
-        }
+  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
+  @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+  @media(max-width: @trigger-width) {
+    .waterfall-responsive {
+      width: @container-width !important;
     }
-    .waterfall-responsive-mixin(@col - 1, @min-col, @margin);
+  }
+  .waterfall-responsive-mixin(@col - 1, @min-col, @margin);
 }
