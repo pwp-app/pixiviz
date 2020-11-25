@@ -29,6 +29,7 @@
         ref="image"
         class="image-card-image"
         :data-index="image ? image.index : ''"
+        data-type="card"
         v-if="!block"
         v-loading="loading"
         v-lazy:background-image="source"
@@ -72,6 +73,14 @@ export default {
       countIcon: require('@/assets/images/count.svg'),
     }
   },
+  created() {
+    this.$bus.$on(`image-loaded-card-${this.image.index}`, this.loadedHandler);
+    this.$bus.$on(`image-error-card-${this.image.index}`, this.errorHandler);
+  },
+  beforeDestroy() {
+    this.$bus.$off(`image-loaded-card-${this.image.index}`, this.loadedHandler);
+    this.$bus.$off(`image-error-card-${this.image.index}`, this.errorHandler);
+  },
   computed: {
     source() {
       if (this.block || !this.image) {
@@ -99,10 +108,6 @@ export default {
       }
       return this.position.height;
     },
-  },
-  created() {
-    this.$Lazyload.$on('loaded', this.loadedHandler);
-    this.$Lazyload.$on('error', this.errorHandler);
   },
   methods: {
     getHost() {
@@ -133,21 +138,15 @@ export default {
         this.$emit('clicked', this.image.id);
       }
     },
-    loadedHandler({el, src}) {
-      if (el.getAttribute('data-index') === this.image.index.toString()) {
-        this.loading = false;
-        this.loadError = false;
-        this.$Lazyload.$off('loaded', this.loadedHandler);
-        this.$Lazyload.$off('error', this.loadedHandler);
-      }
+    loadedHandler() {
+      this.loading = false;
+      this.loadError = false;
+      this.$forceUpdate();
     },
-    errorHandler({el, src}) {
-      if (el.getAttribute('data-index') === this.image.index.toString()) {
-        this.loading = false;
-        this.loadError = true;
-        this.$Lazyload.$off('loaded', this.errorHandler);
-        this.$Lazyload.$off('error', this.errorHandler);
-      }
+    errorHandler() {
+      this.loading = false;
+      this.loadError = true;
+      this.$forceUpdate();
     }
   }
 }

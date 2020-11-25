@@ -86,6 +86,9 @@ if (downloadSettings) {
   };
 }
 
+// Set up bus
+Vue.prototype.$bus = new Vue();
+
 new Vue({
   router,
   store,
