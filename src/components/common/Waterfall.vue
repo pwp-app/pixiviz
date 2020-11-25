@@ -277,7 +277,7 @@ export default {
 			this.containerOffset = this.getContainerOffset();
 		},
 		handleScroll() {
-			if (this.lastScroll && Date.now() - this.lastScroll < 200) {
+			if (this.lastScroll && Date.now() - this.lastScroll < 100) {
 			 	return;
 			}
 			this.lastScroll = Date.now();
