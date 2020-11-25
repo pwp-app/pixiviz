@@ -268,7 +268,7 @@ export default {
             return;
           }
           let images = response.data.illusts.filter(img => {
-            if (img.x_restrict || img.sanity_level > 5) {
+            if (img.x_restrict || img.sanity_level > 4) {
               return false;
             }
             if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
@@ -293,13 +293,10 @@ export default {
     },
     refreshWaterfall() {
       // 提前清空 dom
-      this.$refs.waterfall.$el.innerHTML = "";
-      this.$nextTick(() => {
-        // 重置瀑布流参数
-        this.page = 1;
-        this.images = [];
-        this.waterfallIdentifier = this.waterfallIdentifier + 1;
-      });
+      this.page = 1;
+      this.images = [];
+      this.waterfallIdentifier = this.waterfallIdentifier + 1;
+      this.$forceUpdate();
     },
     reset() {
       // 提前清空 dom

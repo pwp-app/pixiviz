@@ -225,15 +225,11 @@ export default {
         });
     },
     refreshWaterfall() {
-      // 提前清空 dom
-      this.$refs.waterfall.$el.innerHTML = "";
-      this.$nextTick(() => {
-        // 考虑缓存
-        this.page = this.$store.state.artist.page[this.id] || 1;
-        this.images = this.$store.state.artist.images[this.id] || [];
-        // 刷新无限加载id
-        this.waterfallIdentifier = this.waterfallIdentifier + 1;
-      });
+      // 考虑缓存
+      this.page = this.$store.state.artist.page[this.id] || 1;
+      this.images = this.$store.state.artist.images[this.id] || [];
+      // 刷新无限加载id
+      this.waterfallIdentifier = this.waterfallIdentifier + 1;
     },
     handleCardClicked(imageId) {
       const picFrom = this.$cookies.get('pic-from');
