@@ -24,7 +24,16 @@ Image.prototype.load = function (url) {
   req.onloadend = function () {
     thisImg.percent = 100;
   }
+  thisImg.xhrReq = req;
   req.send();
+}
+
+Image.prototype.cancel = function () {
+  if (this.xhrReq) {
+    this.xhrReq.abort();
+  }
+  this.onload = () => {};
+  this.onerror = () => {};
 }
 
 Image.prototype.percent = 0;

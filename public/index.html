@@ -25,14 +25,15 @@
         }
         const darkEnabled = window.localStorage.getItem('enable-dark');
         const darkPersist = window.localStorage.getItem('dark-persist');
-        window.pixiviz.darkEnabled = darkEnabled ? true : false;
-        window.pixiviz.darkPersist = darkPersist ? true : false;
-        if (darkEnabled !== 'true') {
+        window.pixiviz.darkEnabled = darkEnabled === 'true';
+        window.pixiviz.darkPersist = darkPersist === 'true';
+        if (!window.pixiviz.darkEnabled) {
           return;
         }
         const hour = new Date().getHours();
-        if (darkPersist === 'true' || hour < 6 || hour >= 18) {
+        if (window.pixiviz.darkPersist || hour < 6 || hour >= 18) {
           document.documentElement.setAttribute('class', 'dark');
+          window.pixiviz.darkMode = true;
         }
       })();
     </script>

@@ -34,8 +34,8 @@ module.exports = {
       clientsClaim: true,
       importWorkboxFrom: 'local',
       importsDirectory: 'js',
-      navigateFallback: '/',
-      navigateFallbackBlacklist: [/\/api\//],
+      navigateFallback: '/offline',
+      navigateFallbackBlacklist: [/^\/api\//],
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
@@ -81,25 +81,6 @@ module.exports = {
             expiration: {
               maxAgeSeconds: 86400 * 14,
               maxEntries: 200,
-            },
-            fetchOptions: {
-              credentials: 'omit',
-              mode: 'cors',
-            },
-          },
-        },
-        {
-          // 大图缓存，本地资源优先，7天过期，最多存100张
-          urlPattern: new RegExp('^https:\\/\\/pixiv-image\\.pwp\\.link\\/img-original\\/.*$'),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'big-picture',
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-            expiration: {
-              maxAgeSeconds: 86400 * 7,
-              maxEntries: 100,
             },
             fetchOptions: {
               credentials: 'omit',
