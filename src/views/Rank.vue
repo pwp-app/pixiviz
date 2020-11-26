@@ -231,7 +231,7 @@ export default {
     // Recheck rank mode
     const reset = this.$cookies.get("rank-reset");
     if (reset === 'true') {
-      this.resetImmediate();
+      this.reset();
     }
     this.$cookies.remove('rank-reset');
     // Add window event listener
@@ -292,34 +292,20 @@ export default {
         });
     },
     refreshWaterfall() {
-      // 提前清空 dom
       this.page = 1;
       this.images = [];
       this.waterfallIdentifier = this.waterfallIdentifier + 1;
       this.$forceUpdate();
     },
     reset() {
-      // 提前清空 dom
-      this.$refs.waterfall.$el.innerHTML = "";
-      this.$nextTick(() => {
-        // 重置参数
-        this.page = 1;
-        const storedMode = this.$cookies.get('rank-mode');
-        this.mode = storedMode || 'day';
-        this.dateObject = dayjs().subtract(2, 'day');
-        this.images = [];
-        this.waterfallIdentifier = this.waterfallIdentifier + 1;
-      });
-    },
-    resetImmediate() {
-      this.$refs.waterfall.$el.innerHTML = "";
       this.page = 1;
       const storedMode = this.$cookies.get('rank-mode');
       this.mode = storedMode || 'day';
       this.dateObject = dayjs().subtract(2, 'day');
       this.images = [];
       this.waterfallIdentifier = this.waterfallIdentifier + 1;
-		},
+      this.$forceUpdate();
+    },
 		initMode() {
 			const query = this.$route.query.mode;
 			if (query) {
@@ -336,6 +322,7 @@ export default {
       return 'day';
 		},
     handleModeChanged(mode) {
+      console.log(mode);
       this.mode = mode || 'day';
       document.title = `${this.modeText} - Pixiviz`;
       this.refreshWaterfall();
