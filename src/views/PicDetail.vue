@@ -14,8 +14,9 @@
           v-show="image"
           :image="image"
           :block="block"
-					@load="handleImageLoad"
-					@loaded="handleImageLoaded"
+          :loaded="imageLoaded"
+					@image-load="handleImageLoad"
+					@image-loaded="handleImageLoaded"
           @lightbox-open="handleLightBoxOpen"
           @lightbox-close="handleLightBoxClose"
           />
@@ -257,7 +258,10 @@ export default {
       lastOffset = 0;
 		},
 		handleImageLoad() {
-			this.imageLoaded = false;
+      setTimeout(() => {
+        this.imageLoaded = false;
+        this.$forceUpdate();
+      }, 50);
 		},
 		handleImageLoaded() {
 			this.imageLoaded = true;

@@ -5,7 +5,7 @@
       <i class="pic-download-title-icon el-icon-s-tools" @click="openDownloadSettings"></i>
     </div>
     <div class="pic-download-items">
-      <el-button type="primary" @click="downloadCurrent" :disabled="disableDownloadCurrent">{{ downloadCurrentText }}</el-button>
+      <el-button type="primary" @click="downloadCurrent" :disabled="disableDownloadCurrent" :style="downloadCurrentStyle">{{ downloadCurrentText }}</el-button>
       <el-button type="primary" @click="downloadAll" v-if="showDownloadAll" :disabled="downloadStarted">下载所有</el-button>
     </div>
     <el-dialog
@@ -52,6 +52,7 @@ export default {
       // download
 			downloadStarted: false,
       downloadCurrentLock: false,
+      downloadCurrentStyle: null,
       // dialog
       settingsVisible: false,
       settingsForm: {
@@ -70,14 +71,27 @@ export default {
     },
     downloadCurrentText() {
       if (!this.image) return '';
-      return this.image.page_count > 1 ? '下载当前' : '点我下载';
-		},
+      if (!this.loaded && this.$store.state.pic.progress && this.$store.state.pic.progress < 100) {
+        return `加载中（${this.$store.state.pic.progress}%）...`;
+      }
+      return this.image.page_count > 1 ? '保存当前' : '点我保存';
+    },
 		showDownloadAll() {
       if (!this.image) return false;
 			return this.image.page_count > 1;
     },
     disableDownloadCurrent() {
       return this.downloadCurrentLock || !this.loaded;
+    }
+  },
+  watch: {
+    '$store.state.pic.progress': function(value) {
+      if (window.pixiviz.darkMode) {
+        this.downloadCurrentStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
+      } else {
+        this.downloadCurrentStyle = `background-image: linear-gradient(to right, #da7a85 0%, #da7a85 ${value}%, #999 ${value}%, #999 100%) !important;`;
+      }
+      this.$forceUpdate();
     }
   },
   methods: {

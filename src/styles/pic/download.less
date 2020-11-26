@@ -34,7 +34,12 @@
     margin-top: 18px;
     .el-button {
       flex: 1;
-      flex-grow: 1;
+			flex-grow: 1;
+			border: none;
+		}
+		.el-button:hover {
+			filter: brightness(1.125);
+			background-color: @color-text-primary;
 		}
 		.el-button+.el-button {
 			margin-left: 16px;
@@ -76,7 +81,13 @@
 			.el-button {
 				filter: brightness(0.875);
 				background-color: darken(@color-text-primary, 2.5%);
-				border-color: darken(@color-text-primary, 2%);
+			}
+			.el-button:hover {
+				filter: brightness(1);
+				background-color: darken(@color-text-primary, 2.5%);
+			}
+			.el-button.is-disabled:hover {
+				filter: brightness(0.875) !important;
 			}
 		}
 	}

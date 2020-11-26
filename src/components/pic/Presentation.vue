@@ -1,9 +1,11 @@
 <template>
   <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
     <div v-loading="imageLoading" class="pic-presentation-image"
-      :style="{width: imageWidth + 'px', height: imageHeight + 'px'}">
-      <img ref="image" v-lazy="source"
-        :style="{width: imageWidth + 'px', height: imageHeight + 'px'}"
+      :style="{width: `${imageWidth}px`, height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`}">
+      <img
+        ref="image"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        :style="{width: `${imageWidth}px`, height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`}"
         @click="openLightBox"
         >
       <div style="clear: both;"></div>
@@ -62,7 +64,7 @@ import LightBox  from './LightBox';
 
 export default {
   name: 'Pic.Presentation',
-  props: ['image', 'block'],
+  props: ['image', 'block', 'loaded'],
   components: {
     Paginator,
     LightBox,
@@ -76,6 +78,7 @@ export default {
       screenHeight: document.documentElement.clientHeight,
       imageEl: null,
       imageSize: {},
+      imageObjs: {},
       imageWidth: 0,
       imageHeight: 0,
       imageLoading: true,
@@ -94,35 +97,17 @@ export default {
   mounted() {
     // image
     this.imageEl = this.$refs.image;
-    // lazyload
-    this.$Lazyload.$on('loaded', ({el, src}) => {
-      if (src === this.source) {
-				this.imageLoading = false;
-				this.$emit('loaded');
-        if (!this.sizeCache[this.page]) {
-          this.sizeCache[this.page] = {};
-          this.sizeCache[this.page] = {
-            x: el.naturalWidth,
-            y: el.naturalHeight
-          }
-        }
-        this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
-        this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
-      }
-    });
-    this.$Lazyload.$on('error', ({el, src}) => {
-      if (src === this.source) {
-        this.imageLoading = false;
-        this.imageLoadError = true;
-      }
-    });
     // 绑定 Resize
     window.addEventListener('resize', this.windowResized, false);
     // 设定初始大小限制
     this.setLimitWidth(this.screenWidth);
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('resize', this.windowResized, false);
+    this.cancelAllLoad();
+    if (this.progressInterval) {
+      clearInterval(this.progressInterval);
+    }
   },
   watch: {
     image: {
@@ -132,12 +117,16 @@ export default {
         this.imageLoadError = false;
         this.page = 1;
         this.sizeCache = {};
+        this.cancelAllLoad();
+        this.imageObjs = {};
         this.imageSize.x = image ? image.width : 0;
         this.imageSize.y = image ? image.height : 0;
-        this.setLimitWidth(document.documentElement.clientWidth);
-        this.imageWidth = this.computeWidth(image ? image.width : 0, image ? image.height : 0);
-        this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
-        this.$emit('load');
+        const screenWidth = document.documentElement.clientWidth;
+        this.setLimitWidth(screenWidth);
+        this.checkMobileMode(screenWidth);
+        this.setImageSize(image);
+        this.tryLoad();
+        this.$emit('image-load');
       }
     },
     screenWidth() {
@@ -193,6 +182,79 @@ export default {
     },
   },
   methods: {
+    tryLoad() {
+      if (!this.imageObjs[this.page]) {
+        this.$store.commit('pic/setProgress', 0);
+        const img = new Image();
+        img.onload = () => this.onLoaded(img);
+        img.onerror = () => this.onLoadError();
+        img.load(this.source);
+        this.imageObjs[this.page] = img;
+        this.progressInterval = setInterval(() => {
+          this.progressCheck();
+        }, 200);
+      } else {
+        this.onLoaded(this.imageObjs[this.page]);
+      }
+      if (this.imageEl) {
+        this.imageEl.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+      }
+    },
+    cancelAllLoad() {
+      Object.keys(this.imageObjs).forEach((key) => {
+        const img = this.imageObjs[key];
+        if (!img) {
+          return;
+        }
+        img.cancel();
+      });
+    },
+    progressCheck() {
+      this.$store.commit('pic/setProgress', this.imageObjs[this.page].percent);
+    },
+    onLoaded(img) {
+      this.imageLoading = false;
+      this.$store.commit('pic/setProgress', 100);
+      if (this.progressInterval) {
+        clearInterval(this.progressInterval);
+        this.progressInterval = null;
+        this.loadProgress = 100;
+      }
+			this.$emit('image-loaded');
+      if (!this.sizeCache[this.page]) {
+        this.sizeCache[this.page] = {};
+        this.sizeCache[this.page] = {
+          x: img.width,
+          y: img.height,
+        }
+      }
+      this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+      this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+      this.imageEl.setAttribute('src', img.src);
+    },
+    onLoadError() {
+      this.imageLoading = false;
+      this.imageLoadError = true;
+    },
+    checkMobileMode() {
+      const mobileModeCond_1 = window.matchMedia('(orientation: portrait) and (max-width: 1024px)');
+      const mobileModeCond_2 = window.matchMedia('(max-width: 767px)');
+      if (mobileModeCond_1.matches || mobileModeCond_2.matches) {
+        this.mobileMode = true;
+      } else {
+        this.mobileMode = false;
+      }
+    },
+    setImageSize(image) {
+      if (this.mobileMode) {
+        this.containerWidth = this.$refs.image ? this.$refs.image.clientWidth : document.documentElement.clientWidth - 48;
+        this.imageWidth = this.containerWidth;
+        this.imageHeight = this.computeHeight(this.imageWidth, image ? image.height : 0);
+      } else {
+        this.imageWidth = this.computeWidth(image ? image.width : 0, image ? image.height : 0);
+        this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
+      }
+    },
     setLimitWidth() {
       const { screenWidth: width, screenHeight: height } = this;
       if (width >= 2400) {
@@ -242,16 +304,21 @@ export default {
       }
     },
     computeHeight(o_width, o_height) {
-      let height = o_height / (o_width / this.limitWidth);
-      if (height > this.limitHeight) {
-        return this.limitHeight;
+      if (!this.mobileMode) {
+        let height = o_height / (o_width / this.limitWidth);
+        if (height > this.limitHeight) {
+          return this.limitHeight;
+        } else {
+          return height;
+        }
       } else {
-        return height;
+        return o_height / (o_width / this.containerWidth);
       }
     },
     handlePageChanged(toward) {
       this.page = this.page + toward * 1;
-      this.$emit('load');
+      this.tryLoad();
+      this.$emit('image-load');
       this.imageLoading = true;
       this.imageLoadError = false;
     },
