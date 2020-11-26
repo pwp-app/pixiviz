@@ -183,22 +183,23 @@ export default {
   },
   methods: {
     tryLoad() {
-      if (!this.imageObjs[this.page]) {
-        this.$store.commit('pic/setProgress', 0);
-        const img = new Image();
-        img.onload = () => this.onLoaded(img);
-        img.onerror = () => this.onLoadError();
-        img.load(this.source);
-        this.imageObjs[this.page] = img;
-        this.progressInterval = setInterval(() => {
-          this.progressCheck();
-        }, 200);
-      } else {
-        this.onLoaded(this.imageObjs[this.page]);
+      if (this.imageObjs[this.page]) {
+        const stored = this.imageObjs[this.page];
+        if (/^blob:/.test(stored.src)) {
+          this.onLoaded(this.imageObjs[this.page]);
+          return;
+        }
       }
-      if (this.imageEl) {
-        this.imageEl.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
-      }
+      this.imageEl && this.imageEl.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+      this.$store.commit('pic/setProgress', 0);
+      const img = new Image();
+      img.onload = () => this.onLoaded(img);
+      img.onerror = () => this.onLoadError();
+      img.load(this.source);
+      this.imageObjs[this.page] = img;
+      this.progressInterval = setInterval(() => {
+        this.progressCheck();
+      }, 200);
     },
     cancelAllLoad() {
       Object.keys(this.imageObjs).forEach((key) => {
@@ -213,7 +214,6 @@ export default {
       this.$store.commit('pic/setProgress', this.imageObjs[this.page].percent);
     },
     onLoaded(img) {
-      this.imageLoading = false;
       this.$store.commit('pic/setProgress', 100);
       if (this.progressInterval) {
         clearInterval(this.progressInterval);
@@ -231,6 +231,9 @@ export default {
       this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
       this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
       this.imageEl.setAttribute('src', img.src);
+      this.$nextTick(() => {
+        this.imageLoading = false;
+      });
     },
     onLoadError() {
       this.imageLoading = false;
@@ -316,6 +319,10 @@ export default {
       }
     },
     handlePageChanged(toward) {
+      const prevPageImgObj = this.imageObjs[this.page];
+      if (prevPageImgObj) {
+        prevPageImgObj.cancel();
+      }
       this.page = this.page + toward * 1;
       this.tryLoad();
       this.$emit('image-load');
