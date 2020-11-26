@@ -8,6 +8,7 @@ import search from './modules/search';
 import imageCache from './modules/imageCache';
 import artist from './modules/artist';
 import download from './modules/download';
+import pic from './modules/pic';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     search,
     imageCache,
 		artist,
-		download,
+    download,
+    pic,
   },
 });
