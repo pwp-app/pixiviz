@@ -1,10 +1,11 @@
 {
   "name": "pixiviz",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "private": true,
   "scripts": {
     "start": "npm run serve",
     "dev": "npm run serve",
+    "dev:built": "npm run build && http-server ./dist -b",
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
     "build": "node ./tools/processVersion.js && vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
@@ -62,5 +63,5 @@
     "last 1 versions",
     "last 4 Android versions",
     "last 3 iOS versions"
-  ],
+  ]
 }
