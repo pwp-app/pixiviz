@@ -101,6 +101,11 @@
 // dark mode
 
 .dark {
+  .pic-container {
+    & > .el-loading-mask {
+      background-color: lighten(@color-background-dark, 2.5%) !important;
+    }
+  }
   .pic-action {
     background: #3e3e3e;
     i {

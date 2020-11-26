@@ -30,6 +30,9 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-track {
   background: @color-background-primary;
 }
+body::-webkit-scrollbar-corner {
+  background: @color-background-primary;
+}
 
 .no-scrollbar {
   overflow: hidden;
@@ -83,13 +86,16 @@ button:focus {
 
 // dark mode
 .dark {
-  body {
+  html, body, #app {
     background: @color-background-dark;
   }
   body::-webkit-scrollbar-thumb {
     background: darken(@color-primary, 5%);
   }
   body::-webkit-scrollbar-track {
+    background: @color-background-dark;
+  }
+  body::-webkit-scrollbar-corner {
     background: @color-background-dark;
   }
   .el-date-editor {
