@@ -55,7 +55,7 @@ export default {
         }
       };
 			this.$router.push(`/search/${search}`);
-			this.$cookies.set('search-from', `/`);
+			this.$cookies.set('search-from', '', '1h');
     },
     handleSearchClick() {
       this.submitSearch();
