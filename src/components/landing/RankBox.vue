@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     toRank(mode) {
+      this.$cookies.set('rank-from', '', '1h');
       this.$cookies.set('rank-mode', mode, '1h');
       this.$cookies.set('rank-scroll', 0, '1h');
       this.$cookies.set('rank-reset', 'true', '1h');
