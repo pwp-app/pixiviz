@@ -47,30 +47,28 @@ module.exports = {
               statuses: [0, 200],
             },
             expiration: {
-              maxAgeSeconds: 86400 * 14,
+              maxAgeSeconds: 86400 * 7,
             },
             networkTimeoutSeconds: 10,
           },
         },
         {
-          // API缓存，本地资源优先，7天过期，最多1w条
+          // API缓存，本地资源优先，7天过期，最多3w条
           urlPattern: new RegExp('^https:\\/\\/pixiviz\\.pwp\\.app\\/api\\/.*$'),
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
             cacheableResponse: {
-              headers: {
-                'pixiviz-cache': 'true'
-              },
+              statuses: [0, 200],
             },
             expiration: {
-              maxAgeSeconds: 86400 * 7,
-              maxEntries: 10000,
+              maxAgeSeconds: 86400 * 14,
+              maxEntries: 30000,
             },
           },
         },
         {
-          // 作者头像缓存，14天过期，最多缓存200个
+          // 作者头像缓存，14天过期，最多缓存1000个
           urlPattern: new RegExp('^https:\\/\\/pixiv-image\\.pwp\\.link\\/user-profile\\/.*$'),
           handler: 'CacheFirst',
           options: {
@@ -79,8 +77,8 @@ module.exports = {
               statuses: [0, 200],
             },
             expiration: {
-              maxAgeSeconds: 86400 * 14,
-              maxEntries: 200,
+              maxAgeSeconds: 86400 * 30,
+              maxEntries: 1000,
             },
             fetchOptions: {
               credentials: 'omit',
