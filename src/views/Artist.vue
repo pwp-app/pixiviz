@@ -72,7 +72,6 @@ export default {
       infoLoadFailed: false,
       // waterfall
       waterfallIdentifier: Math.round(Math.random() * 100),
-      from: this.$cookies.get('artist-from') || null,
       // Misc
       screenWidth: document.documentElement.clientWidth,
       cardWidth: this.getCardWidth(document.documentElement.clientWidth),
@@ -136,6 +135,13 @@ export default {
       document.title = this.artistName + ' - Pixiviz';
     } else {
       document.title = `画师${this.id || ''} - Pixiviz`;
+    }
+    // 路由数据栈检查
+    const storedRoutes = window.localStorage.getItem('pic-routes');
+    const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+    const prev = routes.pop();
+    if (prev.type === 'artist' && prev.from === this.id) {
+      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
     }
   },
   destroyed() {
@@ -232,24 +238,19 @@ export default {
       this.waterfallIdentifier = this.waterfallIdentifier + 1;
     },
     handleCardClicked(imageId) {
-      const picFrom = this.$cookies.get('pic-from');
-      const entryPicFrom = window.localStorage.getItem('entry-pic-from');
-      // 保存原始的pic-from
-      if (picFrom && !entryPicFrom) {
-        window.localStorage.setItem('entry-pic-from', picFrom);
-      }
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
         this.$store.commit('imageCache/setCache', info);
       }
       // 设置路由信息
-      this.$cookies.set(
-        'pic-from',
-        `artist/${this.id}`,
-        "1h"
-      );
-      window.localStorage.setItem('is-entry-pic', false);
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      routes.push({
+        type: 'artist',
+        from: this.id,
+      });
+      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       this.$router.push(`/pic/${imageId}`);
     },
     // info
@@ -264,12 +265,18 @@ export default {
     },
     // 组件
     handleBack() {
-      if (this.from) {
-        if (this.from.includes('pic')) {
-          window.localStorage.setItem('is-entry-pic', true);
-        }
-        this.$router.push(`/${this.from}`);
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      if (routes.length < 1) {
+        this.$router.push('/');
+        return;
+      }
+      const prev = routes.pop();
+      if (prev.type === 'pic') {
+        window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+        this.$router.push(`/pic/${prev.from}`);
       } else {
+        window.localStorage.removeItem('pic-routes');
         this.$router.push('/');
       }
     },

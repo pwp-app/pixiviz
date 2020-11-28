@@ -67,9 +67,8 @@ export default {
     }, () => {
       console.log('Cannot fetch proxy config.');
     });
-    // 重置entry-pic
-    window.localStorage.removeItem('is-entry-pic');
-    window.localStorage.removeItem('entry-pic-from');
+    // 重置图片-画师路由数据
+    window.localStorage.removeItem('pic-routes');
   },
   created() {
     // 检测Safari

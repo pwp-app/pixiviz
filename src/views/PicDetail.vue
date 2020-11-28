@@ -26,6 +26,7 @@
 					:author="author"
 					:imageId="image ? image.id : null"
 					v-show="author"
+          @navigate="handleArtistNavigate"
 					/>
         <Download
 					ref="download"
@@ -155,7 +156,14 @@ export default {
     // scroll to top
     window.scrollTo({
       top: 0,
-		});
+    });
+    // 路由数据栈检查，用户可能是通过浏览器back的
+    const storedRoutes = window.localStorage.getItem('pic-routes');
+    const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+    const prev = routes.pop();
+    if (prev.type === 'pic' && prev.from === this.imageId) {
+      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+    }
   },
   destroyed() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
@@ -296,23 +304,39 @@ export default {
       this.realRelatedPage = this.realRelatedPage + 1;
       this.fetchRelated(state);
     },
+    handleArtistNavigate(id) {
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      if (routes.length < 1) {
+        routes.push({
+          type: 'entry',
+          from: this.from,
+        });
+      }
+      routes.push({
+        type: 'pic',
+        from: this.imageId,
+      });
+      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+      this.$router.push(`/artist/${id}`);
+    },
     handleClose() {
-      if (this.from) {
-        const isEntryPic = window.localStorage.getItem('is-entry-pic');
-        if (isEntryPic === 'true') {
-          const entryFrom = window.localStorage.getItem('entry-pic-from');
-          if (entryFrom) {
-            this.$router.push(`/${entryFrom}`);
-            window.localStorage.removeItem('is-entry-pic');
-            window.localStorage.removeItem('entry-pic-from');
-            return;
-          } else {
-            this.$router.push(`/${this.from}`);
-          }
-        } else {
-          this.$router.push(`/${this.from}`);
-        }
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      if (routes.length < 1) {
+        this.$router.push(this.from ? `/${this.from}` : '/');
+        return;
+      }
+      const prev = routes.pop();
+      if (prev.type === 'entry') {
+        window.localStorage.removeItem('pic-routes');
+        this.$router.push(`/${prev.from}`);
+      } else if (prev.type === 'artist') {
+        window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+        this.$router.push(`/artist/${prev.from}`)
       } else {
+        // 不符合正常跳转逻辑，直接回首页，清掉路由
+        window.localStorage.removeItem('pic-routes');
         this.$router.push('/');
       }
 		},
