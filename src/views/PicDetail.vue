@@ -26,6 +26,7 @@
 					:author="author"
 					:imageId="image ? image.id : null"
 					v-show="author"
+          @navigate="handleArtistNavigate"
 					/>
         <Download
 					ref="download"
@@ -82,8 +83,6 @@ import BackIcon from '../components/icons/back';
 // config
 import CONFIG from '../config.json';
 
-let lastOffset = 0;
-
 export default {
   name: 'Pic',
   data() {
@@ -105,6 +104,7 @@ export default {
       screenOrientation: window.orientation,
       showPart: window.orientation !== 0,
       // action
+      lastOffset: 0,
       actionShow: false,
       actionShowClass: false,
       link: window.location.href,
@@ -152,11 +152,20 @@ export default {
     window.addEventListener('orientationchange', this.handleScreenRotate, false);
     window.addEventListener('scroll', this.handleScroll);
     // reset var
-    lastOffset = 0;
+    this.lastOffset = 0;
     // scroll to top
     window.scrollTo({
       top: 0,
-		});
+    });
+    // 路由数据栈检查，用户可能是通过浏览器back的
+    const storedRoutes = window.localStorage.getItem('pic-routes');
+    const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+    if (routes && routes.length > 0) {
+      const prev = routes.pop();
+      if (prev.type === 'pic' && prev.from === this.imageId) {
+        window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+      }
+    }
   },
   destroyed() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
@@ -255,7 +264,8 @@ export default {
       // change title
       document.title = `图片${this.imageId} - Pixiviz`;
       // reset var
-      lastOffset = 0;
+      this.lastOffset = 0;
+      this.closeActionFloat();
 		},
 		handleImageLoad() {
       setTimeout(() => {
@@ -296,23 +306,39 @@ export default {
       this.realRelatedPage = this.realRelatedPage + 1;
       this.fetchRelated(state);
     },
+    handleArtistNavigate(id) {
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      if (routes.length < 1) {
+        routes.push({
+          type: 'entry',
+          from: this.from,
+        });
+      }
+      routes.push({
+        type: 'pic',
+        from: this.imageId,
+      });
+      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+      this.$router.push(`/artist/${id}`);
+    },
     handleClose() {
-      if (this.from) {
-        const isEntryPic = window.localStorage.getItem('is-entry-pic');
-        if (isEntryPic === 'true') {
-          const entryFrom = window.localStorage.getItem('entry-pic-from');
-          if (entryFrom) {
-            this.$router.push(`/${entryFrom}`);
-            window.localStorage.removeItem('is-entry-pic');
-            window.localStorage.removeItem('entry-pic-from');
-            return;
-          } else {
-            this.$router.push(`/${this.from}`);
-          }
-        } else {
-          this.$router.push(`/${this.from}`);
-        }
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      if (routes.length < 1) {
+        this.$router.push(this.from ? `/${this.from}` : '/');
+        return;
+      }
+      const prev = routes.pop();
+      if (prev.type === 'entry') {
+        window.localStorage.removeItem('pic-routes');
+        this.$router.push(`/${prev.from}`);
+      } else if (prev.type === 'artist') {
+        window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+        this.$router.push(`/artist/${prev.from}`)
       } else {
+        // 不符合正常跳转逻辑，直接回首页，清掉路由
+        window.localStorage.removeItem('pic-routes');
         this.$router.push('/');
       }
 		},
@@ -323,23 +349,32 @@ export default {
       this.lightboxShow = false;
     },
     // action
+    closeActionFloat() {
+      if (this.actionShow) {
+        this.actionShowClass = false;
+        setTimeout(function() {
+          this.actionShow = false;
+        }.bind(this), 300);
+      }
+    },
+    showActionFloat() {
+      if (!this.actionShow) {
+        this.actionShow = true;
+        setTimeout(function() {
+          this.actionShowClass = this.actionShow;
+        }.bind(this), 0);
+      }
+    },
     handleScroll() {
-      if (window.pageYOffset - lastOffset < -50) {
-        if (this.actionShow) {
-          this.actionShowClass = false;
-          setTimeout(function() {
-            this.actionShow = false;
-          }.bind(this), 300);
+      if (window.pageYOffset - this.lastOffset < -50) {
+        this.closeActionFloat();
+        this.lastOffset = window.pageYOffset;
+      } else if (window.pageYOffset - this.lastOffset > 50) {
+        if (document.documentElement.scrollTop < 100) {
+          return;
         }
-        lastOffset = window.pageYOffset;
-      } else if (window.pageYOffset - lastOffset > 50) {
-        if (!this.actionShow) {
-          this.actionShow = true;
-          setTimeout(function() {
-            this.actionShowClass = this.actionShow;
-          }.bind(this), 0);
-          }
-        lastOffset = window.pageYOffset;
+        this.showActionFloat();
+        this.lastOffset = window.pageYOffset;
       }
     },
     handleAction(action) {

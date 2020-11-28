@@ -5,7 +5,10 @@
       <img
         ref="image"
         src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        :style="{width: `${imageWidth}px`, height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`}"
+        :style="{
+          width: `${imageWidth}px`,
+          height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`
+        }"
         @click="openLightBox"
         >
       <div style="clear: both;"></div>
@@ -107,6 +110,7 @@ export default {
     this.cancelAllLoad();
     if (this.progressInterval) {
       clearInterval(this.progressInterval);
+      this.progressInterval = null;
     }
   },
   watch: {
@@ -197,6 +201,11 @@ export default {
       img.onerror = () => this.onLoadError();
       img.load(this.source);
       this.imageObjs[this.page] = img;
+      // 清理之前的interval重新set
+      if (this.progressInterval) {
+        clearInterval(this.progressInterval);
+        this.progressInterval = null;
+      }
       this.progressInterval = setInterval(() => {
         this.progressCheck();
       }, 200);
@@ -252,7 +261,7 @@ export default {
       if (this.mobileMode) {
         this.containerWidth = this.$refs.image ? this.$refs.image.clientWidth : document.documentElement.clientWidth - 48;
         this.imageWidth = this.containerWidth;
-        this.imageHeight = this.computeHeight(this.imageWidth, image ? image.height : 0);
+        this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
       } else {
         this.imageWidth = this.computeWidth(image ? image.width : 0, image ? image.height : 0);
         this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
