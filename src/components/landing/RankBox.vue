@@ -5,15 +5,27 @@
         <span>排行榜</span>
       </div>
       <div class="rankbox-options">
-        <div class="rankbox-options-text" @click.prevent="toRank('month')">
+        <div
+          class="rankbox-options-text"
+          data-mode="month"
+          @click.prevent="toRank('month')"
+          >
           <a href="/rank?mode=month">月</a>
         </div>
         <span class="rankbox-options-split">/</span>
-        <div class="rankbox-options-text" @click.prevent="toRank('week')">
+        <div
+          class="rankbox-options-text"
+          @click.prevent="toRank('week')"
+          data-mode="week"
+          >
           <a href="/rank?mode=week">周</a>
         </div>
         <span class="rankbox-options-split">/</span>
-        <div class="rankbox-options-text" @click.prevent="toRank('day')">
+        <div
+          class="rankbox-options-text"
+          @click.prevent="toRank('day')"
+          data-mode="day"
+          >
           <a href="/rank?mode=day">日</a>
         </div>
       </div>
