@@ -110,6 +110,7 @@ export default {
     this.cancelAllLoad();
     if (this.progressInterval) {
       clearInterval(this.progressInterval);
+      this.progressInterval = null;
     }
   },
   watch: {
@@ -200,6 +201,11 @@ export default {
       img.onerror = () => this.onLoadError();
       img.load(this.source);
       this.imageObjs[this.page] = img;
+      // 清理之前的interval重新set
+      if (this.progressInterval) {
+        clearInterval(this.progressInterval);
+        this.progressInterval = null;
+      }
       this.progressInterval = setInterval(() => {
         this.progressCheck();
       }, 200);
