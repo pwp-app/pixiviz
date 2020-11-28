@@ -139,9 +139,11 @@ export default {
     // 路由数据栈检查
     const storedRoutes = window.localStorage.getItem('pic-routes');
     const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
-    const prev = routes.pop();
-    if (prev.type === 'artist' && prev.from === this.id) {
-      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+    if (routes && routes.length > 0) {
+      const prev = routes.pop();
+      if (prev.type === 'artist' && prev.from === this.id) {
+        window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+      }
     }
   },
   destroyed() {
