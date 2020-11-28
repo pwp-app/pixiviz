@@ -274,6 +274,10 @@ export default {
       const prev = routes.pop();
       if (prev.type === 'pic') {
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+        const info = window.pixiviz.infoMap[prev.from];
+        if (info) {
+          this.$store.commit('imageCache/setCache', info);
+        }
         this.$router.push(`/pic/${prev.from}`);
       } else {
         window.localStorage.removeItem('pic-routes');
