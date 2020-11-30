@@ -14,6 +14,8 @@
 <script>
 import ImageCard from './ImageCard';
 
+// 组分割大小
+const GROUP_SIZE = 500;
 // 瀑布流可视区额外距离
 const ADDITIONAL_DISTANCE = 500;
 
@@ -50,6 +52,8 @@ export default {
 			positionMap: {},
 			widthStore: {},
 			heightStore: {},
+			group: {},
+			inGroup: {},
 			sections: [{}],
 			sectionsIdx: 0,
 			displayImages: [],
@@ -61,6 +65,8 @@ export default {
 			screenHeight: document.documentElement.clientHeight,
 			scrollTop: document.documentElement.scrollTop,
 			containerOffset: 0,
+			groupSize: GROUP_SIZE,
+			additionalDistance: ADDITIONAL_DISTANCE,
 		};
 	},
 	computed: {
@@ -82,7 +88,6 @@ export default {
 				this.screenWidthChanged(value);
 			}, 300);
 		},
-		scrollTop: 'pageScrolled',
 	},
 	created() {
 		this.resetWidthStore();
@@ -136,10 +141,8 @@ export default {
 		screenWidthChanged() {
 			this.containerWidth = this.getContainerWidth();
 		},
-		pageScrolled() {
-			this.setDisplay();
-		},
 		renderWaterfall() {
+			this.resetGroup();
 			this.resetSections();
 			this.resetWidthStore();
 			this.resetHeightStore();
@@ -148,27 +151,40 @@ export default {
 			this.setDisplay();
 		},
 		setDisplay() {
-			const countPerSection = this.columns * this.rowsPerSection;
-			let list = [];
-			for (let i = 0; i < this.sections.length; i++) {
-				const section = this.sections[i];
-				const { head, tail } = section;
-				// console.log('index', i, 'head', head, 'tail', tail);
-				// console.log('scrollTop', this.scrollTop, 'cond', head <= this.scrollTop + this.screenHeight + ADDITIONAL_DISTANCE && tail > this.scrollTop - ADDITIONAL_DISTANCE);
-				const showCondHead = this.scrollTop + this.screenHeight + ADDITIONAL_DISTANCE;
-				const showCondTail = this.scrollTop - ADDITIONAL_DISTANCE;
-				if (head <= showCondHead && tail > showCondTail) {
-					list = list.concat(this.images.slice(i * countPerSection, (i + 1) * countPerSection));
-				}
-				if (head > showCondHead) {
-					// 有序数据，后面的都不会显示出来没必要遍历了
-					break;
-				}
-			}
-			window.requestAnimationFrame(() => {
-				this.$set(this, 'displayImages', list);
-				this.$forceUpdate();
-			});
+			const countPerSection = this.rowsPerSection * this.columns;
+      const showCondHead = this.scrollTop - this.additionalDistance;
+      const showCondTail =
+        this.scrollTop + this.screenHeight + this.additionalDistance;
+      const start = Math.floor(showCondHead / this.groupSize);
+      const end = Math.floor(showCondTail / this.groupSize);
+
+      let list = [];
+			let inList = {};
+
+      for (let i = start; i <= end; i++) {
+        if (!this.group[i]) {
+          continue;
+        }
+        this.group[i].forEach(idx => {
+          if (inList[idx]) {
+            return;
+          }
+          list = list.concat(
+            this.images.slice(idx * countPerSection, (idx + 1) * countPerSection)
+          );
+          inList[idx] = true;
+        });
+      }
+
+      if (window.requestAnimationFrame) {
+        window.requestAnimationFrame(() => {
+          this.displayImages = list;
+          this.$forceUpdate();
+        });
+      } else {
+        this.displayImages = list;
+        this.$forceUpdate();
+      }
 		},
 		resetWidthStore() {
 			this.widthStore = {};
@@ -186,6 +202,10 @@ export default {
 			this.positionMap = {};
 			this.computePosition();
 		},
+		resetGroup() {
+      this.group = {};
+      this.inGroup = {};
+    },
 		resetSections() {
 			this.sections = [{}];
 			this.currentSectionCount = 0;
@@ -245,6 +265,25 @@ export default {
 					this.sections[sectionIdx].tail = bottom;
 				}
 			});
+			this.sections.forEach((section, idx) => {
+        // 把所有的section放到groupMap里面
+        if (this.inGroup[idx]) {
+          return;
+        }
+				const { head, tail } = section;
+				if (typeof head === 'undefined' || typeof tail === 'undefined') {
+					return;
+				}
+        const start = Math.floor(head / this.groupSize);
+				const end = Math.floor(tail / this.groupSize);
+        for (let i = start; i <= end; i++) {
+          if (!this.group[i]) {
+            this.group[i] = [];
+          }
+          this.group[i].push(idx);
+        }
+        this.inGroup[idx] = true;
+      });
 		},
 		getLoadHeight(image) {
       return Math.floor(image.height / (image.width / this.cardWidth));
@@ -297,6 +336,7 @@ export default {
       this.lastScroll = Date.now();
 			this.containerOffset = this.getContainerOffset();
 			this.scrollTop = document.documentElement.scrollTop - this.containerOffset;
+			this.setDisplay();
 		},
   }
 }
