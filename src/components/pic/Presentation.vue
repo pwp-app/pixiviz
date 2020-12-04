@@ -49,7 +49,7 @@
     <transition>
       <LightBox
         v-if="lightBoxShow"
-        :src="source"
+        :src="imageBlobUrl"
         :isLanding="imageWidth < imageHeight"
         :isOverHeight="imageHeight / (imageWidth / screenWidth) > screenHeight"
         @close="onLightBoxClose"
@@ -80,6 +80,7 @@ export default {
       screenWidth: document.documentElement.clientWidth,
       screenHeight: document.documentElement.clientHeight,
       imageEl: null,
+      imageBlobUrl: '',
       imageSize: {},
       imageObjs: {},
       imageWidth: 0,
@@ -240,6 +241,7 @@ export default {
       this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
       this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
       this.imageEl.setAttribute('src', img.src);
+      this.imageBlobUrl = img.src;
       this.$nextTick(() => {
         this.imageLoading = false;
       });
