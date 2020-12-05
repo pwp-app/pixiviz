@@ -94,11 +94,6 @@ import CONFIG from '../config.json';
 
 export default {
   name: "Rank",
-  metaInfo: {
-    htmlAttrs: {
-      lang: 'zh-CN',
-    }
-  },
   components: {
     Waterfall,
     BackToTop,
@@ -240,7 +235,7 @@ export default {
       window.addEventListener("scroll", this.handleScroll, false);
     });
     // Change title
-    document.title = this.modeText + ' - Pixiviz';
+    document.title = `${this.modeText} - Pixiviz`;
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll, false);

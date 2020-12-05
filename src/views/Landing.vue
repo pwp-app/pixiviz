@@ -43,12 +43,6 @@ import { version } from '../version';
 
 export default {
   name: 'Landing',
-  metaInfo: {
-    title: 'Pixiviz',
-    htmlAttrs: {
-      lang: 'zh-CN'
-    }
-  },
   components: {
     Banner,
     SearchBox,
@@ -68,6 +62,9 @@ export default {
       showAnnounce: false,
       announceContent: false,
     }
+  },
+  created() {
+    document.title = 'Pixiviz';
   },
   mounted() {
     this.fetchAnnounce();

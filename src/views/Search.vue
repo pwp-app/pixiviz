@@ -179,7 +179,7 @@ export default {
       window.addEventListener("scroll", this.handleScroll, false);
     });
     // change title
-    document.title = this.keyword + ' - Pixiviz';
+    document.title = `${this.keyword} - Pixiviz`;
   },
   beforeDestroy() {
     if (this.illustNotice) {
@@ -375,7 +375,7 @@ export default {
       this.fetchSuggestion();
       this.checkIfId();
       // change title
-      document.title = this.keyword + ' - Pixiviz';
+      document.title = `${this.keyword} - Pixiviz`;
     },
     handleCardClicked(imageId) {
       this.$cookies.set(
