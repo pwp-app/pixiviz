@@ -6,8 +6,8 @@ import axios from 'axios';
 import VueCookies from 'vue-cookies';
 import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
+import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
-import VueMeta from 'vue-meta';
 
 // Import element ui and styles
 
@@ -68,8 +68,11 @@ Vue.use(InfiniteLoading, {
 Vue.use(VueCookies);
 Vue.$cookies.config('7d');
 
-// Set up meta
-Vue.use(VueMeta);
+// Set up context menu
+Vue.use(VueContextMenu, {
+  useItem: true,
+  mobileSupport: false,
+});
 
 // 获取下载设置
 const downloadSettings = window.localStorage.getItem('download-settings');

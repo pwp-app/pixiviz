@@ -122,6 +122,7 @@ module.exports = {
       ...config.resolve.alias,
       'element-ui': '@pwp-app/better-element-ui',
       'vue-lazyload': '@pwp-app/vue-lazyload',
+      'vue-context-menu': "@pwp-app/vue-context-menu",
     };
     config.optimization = {
       splitChunks: {
