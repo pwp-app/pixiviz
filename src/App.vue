@@ -28,6 +28,8 @@ export default {
     DownloadListTag,
   },
   beforeCreate() {
+    // 检测Safari
+    window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     // 全局构建
     if (!window.pixiviz) {
       window.pixiviz = {};
@@ -69,10 +71,17 @@ export default {
     });
     // 重置图片-画师路由数据
     window.localStorage.removeItem('pic-routes');
+    // Safari vh 优化
+    if (window.isSafari) {
+      const setVh = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      };
+      window.addEventListener('load', setVh);
+      window.addEventListener('resize', setVh);
+    }
   },
   created() {
-    // 检测Safari
-    window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     // 图片懒加载统一handle
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
