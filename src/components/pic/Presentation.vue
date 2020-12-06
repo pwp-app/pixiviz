@@ -10,6 +10,7 @@
           height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`
         }"
         @click="openLightBox"
+        v-context="'context'"
         >
       <div style="clear: both;"></div>
       <div class="pic-presentation-image-error" v-if="imageLoadError">
@@ -46,19 +47,28 @@
         <span>{{createTime}}</span>
       </div>
     </div>
-    <transition>
-      <LightBox
-        v-if="lightBoxShow"
-        :src="imageBlobUrl"
-        :isLanding="imageWidth < imageHeight"
-        :isOverHeight="imageHeight / (imageWidth / screenWidth) > screenHeight"
-        @close="onLightBoxClose"
-        />
-    </transition>
+    <LightBox
+      v-if="lightBoxShow"
+      :src="imageBlobUrl"
+      :isLanding="isLanding"
+      :isOverHeight="isOverHeight"
+      @close="onLightBoxClose"
+      @download="callDownload"
+      @copy="copyLink"
+      />
+    <ContextMenu
+      ref="context"
+      :width="142"
+      @item-clicked="handleContextClicked"
+      >
+      <ContextMenuItem name="down">下载</ContextMenuItem>
+      <ContextMenuItem name="copy-link">复制图片链接</ContextMenuItem>
+    </ContextMenu>
   </div>
 </template>
 
 <script>
+import * as clipboard from "clipboard-polyfill/dist/text/clipboard-polyfill.text";
 import CONFIG from '@/config.json';
 import dayjs from 'dayjs';
 /* Components */
@@ -185,6 +195,12 @@ export default {
         return null;
       }
     },
+    isLanding() {
+      return this.imageWidth < this.imageHeight;
+    },
+    isOverHeight() {
+      return this.imageHeight / (this.imageWidth / this.screenWidth) > this.screenHeight;
+    }
   },
   methods: {
     tryLoad() {
@@ -343,6 +359,30 @@ export default {
     handleTagClicked(e) {
       this.$cookies.set('search-from', `pic/${this.image.id}`);
       this.$router.push(`/search/${e.currentTarget.dataset.tag}`);
+    },
+    handleContextClicked(name) {
+      if (name === 'down') {
+        this.callDownload();
+      } else if (name === 'copy-link') {
+        this.copyLink();
+      }
+    },
+    callDownload() {
+      this.$emit('download-current');
+    },
+    copyLink() {
+      navigator.clipboard.writeText(this.source);
+      this.$notify({
+        title: '',
+        position: 'top-right',
+        customClass: 'oneline-notice-container',
+        dangerouslyUseHTMLString: true,
+        duration: 2000,
+        message: `
+          <div class="oneline-notice">
+            <span data-name="oneline-notice">图片链接已复制到剪贴板~</span>
+          </div>`
+      });
     },
     // lightbox
     openLightBox() {
