@@ -1,51 +1,51 @@
 .lightbox {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: calc(var(--vh, 1vh) * 100);
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  &-content {
     width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    &-content {
-        width: 100vw;
-        box-shadow: 0 0 24px rgba(0, 0, 0, 0.15);
-    }
-    &-content-landing {
-        width: auto;
-        height: 100vh;
-    }
-    &-content-overheight {
-        width: auto;
-        height: 100vh;
-    }
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.15);
+  }
+  &-content-landing {
+    width: auto;
+    height: calc(var(--vh, 1vh) * 100);
+  }
+  &-content-overheight {
+    width: auto;
+    height: calc(var(--vh, 1vh) * 100);
+  }
 }
 
 .dark {
-    .lightbox {
-        filter: brightness(0.875);
-    }
+  .lightbox {
+    filter: brightness(0.875);
+  }
 }
 
 @media screen and (orientation: portrait) and (max-width: 768px) {
-    .lightbox {
-        &-content {
-            width: 100vh;
-            transform: rotateZ(90deg);
-        }
-        &-content-landing {
-            width: 100vw;
-            height: auto;
-            transform: none;
-        }
-        &-content-overheight {
-            width: auto;
-            height: 100vh;
-            transform: none;
-        }
+  .lightbox {
+    &-content {
+      width: calc(var(--vh, 1vh) * 100);
+      transform: rotateZ(90deg);
     }
+    &-content-landing {
+      width: 100vw;
+      height: auto;
+      transform: none;
+    }
+    &-content-overheight {
+      width: auto;
+      height: calc(var(--vh, 1vh) * 100);
+      transform: none;
+    }
+  }
 }

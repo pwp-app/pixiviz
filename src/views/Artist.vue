@@ -51,11 +51,6 @@ import CONFIG from '../config.json';
 
 export default {
   name: "Artist",
-  metaInfo: {
-    htmlAttrs: {
-      lang: 'zh-CN',
-    }
-  },
   components: {
     Waterfall,
     BackToTop,

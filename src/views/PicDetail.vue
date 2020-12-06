@@ -17,6 +17,7 @@
           :loaded="imageLoaded"
 					@image-load="handleImageLoad"
 					@image-loaded="handleImageLoaded"
+          @download-current="startDownloadCurrent"
           @lightbox-open="handleLightBoxOpen"
           @lightbox-close="handleLightBoxClose"
           />
@@ -33,7 +34,7 @@
 					v-show="image"
 					:image="image"
 					:loaded="imageLoaded"
-					@download="downloadCurrent"
+					@download-current="startDownloadCurrent"
 					/>
         <Related
           ref="related"
@@ -67,7 +68,6 @@
 
 <script>
 import * as clipboard from "clipboard-polyfill/dist/text/clipboard-polyfill.text";
-
 import Presentation from '../components/pic/Presentation';
 import Author from '../components/pic/Author';
 import Download from '../components/pic/Download';
@@ -213,8 +213,8 @@ export default {
       this.$nextTick(() => {
         document.title = `${this.image.title} - Pixiviz`;
       });
-		},
-		downloadCurrent(name) {
+    },
+		startDownloadCurrent() {
       const url = this.$refs.presentation.source;
       const page = this.$refs.presentation.page;
       if (page > 1) {
@@ -395,7 +395,7 @@ export default {
             duration: 2000,
             message: `
               <div class="oneline-notice">
-                <span data-name="oneline-notice">当前页面的链接已经复制到剪贴板啦~</span>
+                <span data-name="oneline-notice">当前页面的链接已复制到剪贴板~</span>
               </div>`
           });
           break;

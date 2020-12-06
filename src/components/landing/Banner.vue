@@ -105,10 +105,8 @@ export default {
         if (!this.expanded) {
           this.expanded = true;
           // Hide scrollbar
-					const classes = document.body.getAttribute('class');
-          if (!classes || !classes.includes('no-scrollbar')) {
-						const prefix = classes ? `${classes} ` : '';
-            document.body.setAttribute('class', `${prefix}no-scrollbar`);
+          if (!document.body.classList.contains('no-scrollbar')) {
+						document.body.classList.add('no-scrollbar');
           }
           this.$store.commit('landingBanner/setExpanded', this.expanded);
           this.$emit('expanded', true);
@@ -122,8 +120,9 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-								const classes = document.body.getAttribute('class');
-                document.body.setAttribute('class', classes.replace(/\s?(no\-scrollbar)/gi, ''));
+								if (document.body.classList.contains('no-scrollbar')) {
+                  document.body.classList.remove('no-scrollbar');
+                }
               }, 500);
             }, 350);
           }, 350);
@@ -131,10 +130,8 @@ export default {
           this.aboutShow = false;
           this.clearMarginBottom = false;
           // Hide scrollbar
-          const classes = document.body.getAttribute('class');
-          if (!classes || !classes.includes('no-scrollbar')) {
-						const prefix = classes ? `${classes} ` : '';
-            document.body.setAttribute('class', `${prefix}no-scrollbar`);
+          if (!document.body.classList.contains('no-scrollbar')) {
+						document.body.classList.add('no-scrollbar');
           }
           this.$emit('expanded', false);
           setTimeout(() => {
@@ -145,8 +142,9 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-								const classes = document.body.getAttribute('class');
-                document.body.setAttribute('class', classes.replace(/\s?(no\-scrollbar)/gi, ''));
+								if (document.body.classList.contains('no-scrollbar')) {
+                  document.body.classList.remove('no-scrollbar');
+                }
               }, 500);
             }, 350);
           }, 350);
@@ -156,19 +154,29 @@ export default {
     handleDoubleTap() {
       handleDblClick();
     },
+    addDarkClass() {
+      if (!document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.add('dark');
+      }
+    },
+    removeDarkClass() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+      }
+    },
     themeChanged(value) {
       if (value) {
         const now = dayjs();
 				const hour = now.hour();
 				if (!this.darkPersist) {
 					if (hour < 6 || hour >= 18) {
-						document.documentElement.setAttribute('class', 'dark');
+            this.addDarkClass();
 					}
 				} else {
-					document.documentElement.setAttribute('class', 'dark');
+          this.addDarkClass();
 				}
       } else {
-        document.documentElement.removeAttribute('class');
+        this.removeDarkClass();
       }
       window.localStorage.setItem('enable-dark', value);
     },
@@ -176,16 +184,14 @@ export default {
       if (value) {
         // 开启永久黑暗模式
         window.localStorage.setItem('dark-persist', true);
-        if (!document.documentElement.getAttribute('class')) {
-          document.documentElement.setAttribute('class', 'dark');
-        }
+        this.addDarkClass();
       } else {
         // 自动黑暗模式
         window.localStorage.setItem('dark-persist', false);
         const now = dayjs();
         const hour = now.hour();
         if (hour >= 6 && hour < 18) {
-          document.documentElement.removeAttribute('class');
+          this.removeDarkClass();
         }
       }
     },

@@ -30,7 +30,7 @@
         }
         const hour = new Date().getHours();
         if (window.pixiviz.darkPersist || hour < 6 || hour >= 18) {
-          document.documentElement.setAttribute('class', 'dark');
+          document.documentElement.classList.add('dark');
           window.pixiviz.darkMode = true;
         }
       })();

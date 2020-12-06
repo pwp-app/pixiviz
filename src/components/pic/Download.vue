@@ -181,7 +181,7 @@ export default {
 					this.downloadCurrentLock = false;
 				}, 1000);
       }
-			this.$emit('download');
+			this.$emit('download-current');
 		},
     downloadAll() {
       if (!this.originalUrls) {
