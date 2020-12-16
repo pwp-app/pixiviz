@@ -95,7 +95,7 @@ export default {
   },
   computed: {
     showDownloadList() {
-      return this.$store.state.download.list.length > 1;
+      return this.$store.state.download.list.length > 0;
     }
   },
   methods: {

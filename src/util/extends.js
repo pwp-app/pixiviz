@@ -5,14 +5,18 @@ Image.prototype.load = function (url) {
   req.open('GET', url, true);
   req.responseType = 'arraybuffer';
   req.onload = function() {
-    if (this.status == 200) {
+    if (this.status === 200) {
       const h = req.getAllResponseHeaders();
       const m = h.match( /^Content-Type\:\s*(.*?)$/mi );
       const mimeType = m[1] || 'image/png';
       const blob = new Blob([this.response], { mimeType });
       thisImg.src = window.URL.createObjectURL(blob);
+      thisImg.blobLoaded = true;
     } else {
       thisImg.failed = true;
+      if (typeof thisImg.onerror === 'function') {
+        thisImg.onerror();
+      }
     }
   }
   req.onprogress = function (e) {
@@ -24,8 +28,29 @@ Image.prototype.load = function (url) {
   req.onloadend = function () {
     thisImg.percent = 100;
   }
+  req.onerror = function () {
+    if (typeof thisImg.onerror === 'function') {
+      thisImg.onerror();
+    }
+  }
   thisImg.xhrReq = req;
   req.send();
+}
+
+Image.prototype.getSize = function (url) {
+  return new Promise((resolve, reject) => {
+    const req = new XMLHttpRequest();
+    req.open('HEAD', url, true);
+    req.onreadystatechange = function () {
+      if (this.readyState == this.DONE) {
+        resolve(parseInt(req.getResponseHeader('Content-Length'), 10));
+      }
+    };
+    req.onerror = function () {
+      reject(new Error('Image head request failed.'));
+    }
+    req.send();
+  });
 }
 
 Image.prototype.cancel = function () {

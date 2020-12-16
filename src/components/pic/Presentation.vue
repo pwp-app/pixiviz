@@ -49,7 +49,7 @@
     </div>
     <LightBox
       v-if="lightBoxShow"
-      :src="imageBlobUrl"
+      :src="lightBoxSource"
       :isLanding="isLanding"
       :isOverHeight="isOverHeight"
       @close="onLightBoxClose"
@@ -75,6 +75,8 @@ import dayjs from 'dayjs';
 import Paginator from './Pagniator';
 import LightBox  from './LightBox';
 
+const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
+
 export default {
   name: 'Pic.Presentation',
   props: ['image', 'block', 'loaded'],
@@ -90,7 +92,8 @@ export default {
       screenWidth: document.documentElement.clientWidth,
       screenHeight: document.documentElement.clientHeight,
       imageEl: null,
-      imageBlobUrl: '',
+      lightBoxSource: '',
+      useLarge: false,
       imageSize: {},
       imageObjs: {},
       imageWidth: 0,
@@ -167,6 +170,26 @@ export default {
         return '';
       }
     },
+    largeSource() {
+      if (this.image && this.image.meta_single_page) {
+        if (this.block) {
+          return '';
+        } else {
+          let url = ''
+          if (this.image && this.image.page_count < 2) {
+            url = this.image.image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+          } else if (this.image && this.image.page_count >= 2) {
+            url = this.image.meta_pages[this.page - 1].image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+          }
+          if (window.isSafari) {
+            url = url.replace('_webp', '');
+          }
+          return url;
+        }
+      } else {
+        return '';
+      }
+    },
     tags() {
       if (this.image) {
         return this.image.tags;
@@ -203,7 +226,11 @@ export default {
     }
   },
   methods: {
-    tryLoad() {
+    async tryLoad() {
+      // init vars
+      this.lightBoxSource = '';
+      this.useLarge = false;
+      // check if existed
       if (this.imageObjs[this.page]) {
         const stored = this.imageObjs[this.page];
         if (/^blob:/.test(stored.src)) {
@@ -216,16 +243,22 @@ export default {
       const img = new Image();
       img.onload = () => this.onLoaded(img);
       img.onerror = () => this.onLoadError();
-      img.load(this.source);
-      this.imageObjs[this.page] = img;
-      // 清理之前的interval重新set
-      if (this.progressInterval) {
-        clearInterval(this.progressInterval);
-        this.progressInterval = null;
+      const imgSize = await img.getSize(this.source);
+      if (imgSize > LARGE_SIZE_LIMIT) {
+        img.load(this.largeSource);
+        this.useLarge = true;
+      } else {
+        img.load(this.source);
+        // 清理之前的interval重新set
+        if (this.progressInterval) {
+          clearInterval(this.progressInterval);
+          this.progressInterval = null;
+        }
+        this.progressInterval = setInterval(() => {
+          this.progressCheck();
+        }, 200);
       }
-      this.progressInterval = setInterval(() => {
-        this.progressCheck();
-      }, 200);
+      this.imageObjs[this.page] = img;
     },
     cancelAllLoad() {
       Object.keys(this.imageObjs).forEach((key) => {
@@ -237,6 +270,9 @@ export default {
       });
     },
     progressCheck() {
+      if (!this.imageObjs || !this.imageObjs[this.page] || !this.imageObjs[this.page].percent) {
+        return;
+      }
       this.$store.commit('pic/setProgress', this.imageObjs[this.page].percent);
     },
     onLoaded(img) {
@@ -257,7 +293,11 @@ export default {
       this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
       this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
       this.imageEl.setAttribute('src', img.src);
-      this.imageBlobUrl = img.src;
+      if (this.useLarge) {
+        this.lightBoxSource = this.source;
+      } else {
+        this.lightBoxSource = img.src;
+      }
       this.$nextTick(() => {
         this.imageLoading = false;
       });
@@ -386,7 +426,7 @@ export default {
     },
     // lightbox
     openLightBox() {
-      if (this.imageLoading || this.imageLoadError) {
+      if (this.imageLoading || this.imageLoadError || !this.lightBoxSource) {
         return;
       }
       this.lightBoxShow = true;
