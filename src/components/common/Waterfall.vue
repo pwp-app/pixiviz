@@ -17,7 +17,7 @@ import ImageCard from './ImageCard';
 // 组分割大小
 const GROUP_SIZE = 500;
 // 瀑布流可视区额外距离
-const ADDITIONAL_DISTANCE = 500;
+const ADDITIONAL_DISTANCE = 1000;
 
 export default {
   name: 'Common.Waterfall',

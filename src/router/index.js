@@ -58,9 +58,6 @@ const router = new VueRouter({
 });
 
 router.afterEach(() => {
-  if (window.MtaH5) {
-    window.MtaH5.pgv();
-  }
   // check dark mode
   if (window.pixiviz) {
     if (window.pixiviz.darkEnabled && !window.pixiviz.darkPersist) {

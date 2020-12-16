@@ -85,6 +85,14 @@ export default {
       this.$refs.bannerPlaceholder.expandedChanged(expanded);
     },
     // announce
+    checkVersionMatch(vers) {
+      for (const ver of vers) {
+        if (!version.startsWith(ver)) {
+          return false;
+        }
+      }
+      return true;
+    },
     fetchAnnounce() {
       this.axios.get('https://config.backrunner.top/pixiviz/announcement.json', {
         withCredentials: false,
@@ -95,10 +103,11 @@ export default {
         for (let announcement of res.data) {
           const { id, title, content, footer, expires, matchVersion } = announcement;
           const announceLog = window.localStorage.getItem('announce-read-id');
+          const versionMatched = matchVersion && this.checkVersionMatch(matchVersion);
           if (
             (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
             (dayjs(expires).unix() <= dayjs().unix()) ||
-            (matchVersion && !matchVersion.includes(version))
+            !versionMatched
           ) {
             continue;
           }
@@ -179,8 +188,6 @@ export default {
           window.open(CONFIG.USE_GUIDE, '_blank');
         }
         this.guideNotice.close();
-        // 数据上报
-        if (window.MtaH5) window.MtaH5.clickStat("guide_clicked");
       }
     },
     guideNoticeClosed() {
@@ -194,8 +201,6 @@ export default {
           window.open(CONFIG.DONATE, '_blank');
         }
         this.donateNotice.close();
-        // 数据上报
-        if (window.MtaH5) window.MtaH5.clickStat("donate_clicked");
       }
     },
     donateNoticeClosed() {
