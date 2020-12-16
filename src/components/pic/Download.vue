@@ -166,15 +166,22 @@ export default {
         a.href = url;
         a.click();
         a = null;
-        this.$store.commit('download/removeItem', name);
+        if (this.$store.getters['download/hasName'](name)) {
+          this.$store.commit('download/removeItem', name);
+        }
       };
-      this.$store.commit('download/addItem', {
-        name,
-        image,
-      });
+      setTimeout(() => {
+        if (!image.blobLoaded) {
+          this.$store.commit('download/addItem', {
+            name,
+            image,
+          });
+        }
+      }, 1000);
       image.load(src);
 		},
 		downloadCurrent() {
+      this.downloadCurrentStyle = null;
 			if (!this.downloadCurrentLock) {
 				this.downloadCurrentLock = true;
 				setTimeout(() => {

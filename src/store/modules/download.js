@@ -14,8 +14,15 @@ const mutations = {
   },
 };
 
+const getters = {
+  hasName: (state) => (name) => {
+    return state.list.findIndex(item => item.name === name) > -1;
+  }
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
-}
+  getters,
+};
