@@ -175,13 +175,16 @@ export default {
         if (this.block) {
           return '';
         } else {
+          let url = ''
           if (this.image && this.image.page_count < 2) {
-            return this.image.image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+            url = this.image.image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
           } else if (this.image && this.image.page_count >= 2) {
-            return this.image.meta_pages[this.page - 1].image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
-          } else {
-            return '';
+            url = this.image.meta_pages[this.page - 1].image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
           }
+          if (window.isSafari) {
+            url = url.replace('_webp', '');
+          }
+          return url;
         }
       } else {
         return '';
