@@ -188,8 +188,6 @@ export default {
           window.open(CONFIG.USE_GUIDE, '_blank');
         }
         this.guideNotice.close();
-        // 数据上报
-        if (window.MtaH5) window.MtaH5.clickStat("guide_clicked");
       }
     },
     guideNoticeClosed() {
@@ -203,8 +201,6 @@ export default {
           window.open(CONFIG.DONATE, '_blank');
         }
         this.donateNotice.close();
-        // 数据上报
-        if (window.MtaH5) window.MtaH5.clickStat("donate_clicked");
       }
     },
     donateNoticeClosed() {
