@@ -98,7 +98,7 @@ export default {
           if (
             (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
             (dayjs(expires).unix() <= dayjs().unix()) ||
-            (matchVersion && !matchVersion.includes(version))
+            (matchVersion && !matchVersion.startsWith(version))
           ) {
             continue;
           }
