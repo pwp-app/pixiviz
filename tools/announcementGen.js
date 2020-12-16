@@ -32,9 +32,13 @@ dir.forEach((file) => {
   const footers = [];
 
   let contentFlag = false;
+  let skipFlag = false;
   let footerFlag = false;
 
   content.forEach((item) => {
+    if (skipFlag) {
+      return;
+    }
     if (!contentFlag) {
       if (!item) {
         contentFlag = true;
@@ -45,13 +49,14 @@ dir.forEach((file) => {
         anno[entry[0]] = parseInt(entry[1].trim(), 10);
       } else if (entry[0] === 'expires') {
         // 已经过期的不处理
-        const date = dayjs(entry[1], 'YYYY-MM-DD HH-mm-ss');
+        const date = dayjs(entry[1].trim(), 'YYYY-MM-DD HH-mm-ss');
         if (date.unix() <= dayjs().unix()) {
+          skipFlag = true;
           return;
         }
         anno[entry[0]] = date.format('YYYY-MM-DD HH:mm:ss');
       } else if (entry[0] === 'matchVersion') {
-        const temp = entry[1].split(',');
+        const temp = entry[1].trim().split(',');
         const versions = [];
         temp.forEach((v) => {
           versions.push(v.trim());
@@ -73,6 +78,8 @@ dir.forEach((file) => {
     }
     footers.push(`${item}\r\n`);
   });
+
+  if (skipFlag) return;
 
   anno.footer = footers.join('').replace(/\r\n$/, '');
 
