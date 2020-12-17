@@ -160,7 +160,7 @@ export default {
         canvas.height = image.height;
         const context = canvas.getContext('2d');
         context.drawImage(image, 0, 0, image.width, image.height);
-        const url = canvas.toDataURL('image/jpeg');
+        const url = canvas.toDataURL('image/png');
         let a = document.createElement('a');
         a.download = name;
         a.href = url;
