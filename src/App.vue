@@ -22,6 +22,9 @@ import dayjs from 'dayjs';
 import CONFIG from './config.json';
 import DownloadListTag from './components/common/DownloadList';
 
+const LOADMAP_ENTRIES_LIMIT = 1000;
+const LOADMAP_DELETE_RATE = 0.5;
+
 export default {
   name: "app",
   components: {
@@ -105,10 +108,11 @@ export default {
       if (!window.pixiviz.loadMap && len < 1) {
         return;
       }
-      if (len > 500) {
-        // loadMap最多只存500条数据，避免localStorage爆掉
-        for (let i = 0; i < 500; i++) {
-          delete window.pixiviz.loadMap[keys[len]];
+      if (len > LOADMAP_ENTRIES_LIMIT) {
+        // 限制loadMap大小，避免localStorage爆掉
+        const deleteCount = Math.floor(LOADMAP_ENTRIES_LIMIT * LOADMAP_DELETE_RATE);
+        for (let i = 0; i < deleteCount; i++) {
+          delete window.pixiviz.loadMap[keys[i]];
         }
       }
       window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
