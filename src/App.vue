@@ -47,8 +47,8 @@ export default {
       const loadMapTime = window.localStorage.getItem('loadmap-save-time');
       if (!loadMap || !loadMapTime) {
         window.pixiviz.loadMap = {};
-        // loadMap有效期30分钟
-      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 1800) {
+        // loadMap有效期1天
+      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 24 * 3600) {
         window.pixiviz.loadMap = {};
         window.localStorage.removeItem('loadmap');
       } else if (loadMap) {
