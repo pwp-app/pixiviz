@@ -1,14 +1,16 @@
 <template>
   <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
-    <div v-loading="imageLoading" class="pic-presentation-image"
-      :style="{width: `${imageWidth}px`, height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`}">
+    <div
+      v-loading="imageLoading"
+      :class="{
+        'pic-presentation-image': true,
+        'pic-presentation-image__firstload': imageFirstLoad
+      }"
+      :style="imageSizeStyles">
       <img
         ref="image"
-        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        :style="{
-          width: `${imageWidth}px`,
-          height: `${imageHeight}px${!(loaded || false) ? ' !important' : ''}`
-        }"
+        :src="loadingSource"
+        :style="imageSizeStyles"
         @click="openLightBox"
         v-context="'context'"
         >
@@ -76,6 +78,7 @@ import Paginator from './Pagniator';
 import LightBox  from './LightBox';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
+const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 export default {
   name: 'Pic.Presentation',
@@ -92,12 +95,15 @@ export default {
       screenWidth: document.documentElement.clientWidth,
       screenHeight: document.documentElement.clientHeight,
       imageEl: null,
+      loadingSource: BLANK_IMAGE,
       lightBoxSource: '',
       useLarge: false,
       imageSize: {},
       imageObjs: {},
       imageWidth: 0,
       imageHeight: 0,
+      imageFirstLoad: false,
+      imageFirstLoaded: false,
       imageLoading: true,
       imageLoadError: false,
       page: 1,
@@ -143,6 +149,7 @@ export default {
         this.setLimitWidth(screenWidth);
         this.checkMobileMode(screenWidth);
         this.setImageSize(image);
+        this.checkFirstLoad(image);
         this.tryLoad();
         this.$emit('image-load');
       }
@@ -156,39 +163,28 @@ export default {
     source() {
       if (this.image && this.image.meta_single_page) {
         if (this.block) {
-          return '';
+          return BLANK_IMAGE;
         } else {
           if (this.image && this.image.page_count < 2) {
             return this.image.meta_single_page.original_image_url.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
           } else if (this.image && this.image.page_count >= 2) {
             return this.image.meta_pages[this.page - 1].image_urls.original.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
           } else {
-            return '';
+            return BLANK_IMAGE;
           }
         }
       } else {
-        return '';
+        return BLANK_IMAGE;
       }
     },
     largeSource() {
-      if (this.image && this.image.meta_single_page) {
-        if (this.block) {
-          return '';
-        } else {
-          let url = ''
-          if (this.image && this.image.page_count < 2) {
-            url = this.image.image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
-          } else if (this.image && this.image.page_count >= 2) {
-            url = this.image.meta_pages[this.page - 1].image_urls.large.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
-          }
-          if (window.isSafari) {
-            url = url.replace('_webp', '');
-          }
-          return url;
-        }
-      } else {
-        return '';
-      }
+      return this.getImageSource(this.image, 'large');
+    },
+    imageSizeStyles() {
+      return {
+        width: `${this.imageWidth}px`,
+        height: `${this.imageHeight}px${!(this.loaded || false) ? ' !important' : ''}`
+      };
     },
     tags() {
       if (this.image) {
@@ -238,7 +234,7 @@ export default {
           return;
         }
       }
-      this.imageEl && this.imageEl.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+      this.imageEl && this.imageEl.setAttribute('src', BLANK_IMAGE);
       this.$store.commit('pic/setProgress', 0);
       const img = new Image();
       img.onload = () => this.onLoaded(img);
@@ -281,6 +277,10 @@ export default {
         clearInterval(this.progressInterval);
         this.progressInterval = null;
         this.loadProgress = 100;
+      }
+      if (!this.imageFirstLoaded) {
+        this.imageFirstLoad = false;
+        this.imageFirstLoaded = true;
       }
 			this.$emit('image-loaded');
       if (!this.sizeCache[this.page]) {
@@ -384,6 +384,41 @@ export default {
       } else {
         return o_height / (o_width / this.containerWidth);
       }
+    },
+    getImageSource(image, type, useLoadMap = false) {
+      let proxyHost = CONFIG.IMAGE_PROXY_HOST;
+      if (useLoadMap) {
+        proxyHost = window.pixiviz.hostMap[window.pixiviz.loadMap[image.id]];
+      }
+      if (this.image && this.image.meta_single_page) {
+        if (this.block) {
+          return BLANK_IMAGE;
+        } else {
+          let url = BLANK_IMAGE;
+          if (this.image && this.image.page_count < 2) {
+            url = this.image.image_urls[type].replace('i.pximg.net', proxyHost);
+          } else if (this.image && this.image.page_count >= 2) {
+            url = this.image.meta_pages[this.page - 1].image_urls[type].replace('i.pximg.net', proxyHost);
+          }
+          if (window.isSafari) {
+            url = url.replace('_webp', '');
+          }
+          return url;
+        }
+      } else {
+        return BLANK_IMAGE;
+      }
+    },
+    checkFirstLoad(image) {
+      // 两个false是初始态，后面不可能双false
+      if (!this.imageFirstLoad && !this.imageFirstLoaded) {
+        this.imageFirstLoad = true;
+      }
+      if (!this.imageFirstLoad || this.imageFirstLoaded) {
+        this.loadingSource = BLANK_IMAGE;
+        return;
+      }
+      this.loadingSource = this.getImageSource(image, 'medium', true);
     },
     handlePageChanged(toward) {
       const prevPageImgObj = this.imageObjs[this.page];
