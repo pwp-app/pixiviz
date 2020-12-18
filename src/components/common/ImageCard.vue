@@ -65,21 +65,30 @@ export default {
       default: () => {},
     },
   },
+  watch: {
+    image: {
+      immediate: true,
+      handler(image) {
+        this.loading = true;
+        this.loadError = false;
+        this.removeEvents();
+        this.registerEvents();
+      },
+    },
+  },
   data() {
     return {
-      loading: true,
+      loading: false,
       loadError: false,
       block: this.image.x_strict ? true : this.image.sanity_level > 5 ? true : false,
       countIcon: require('@/assets/images/count.svg'),
     }
   },
   created() {
-    this.$bus.$on(`image-loaded-card-${this.image.index}`, this.loadedHandler);
-    this.$bus.$on(`image-error-card-${this.image.index}`, this.errorHandler);
+    this.registerEvents();
   },
   beforeDestroy() {
-    this.$bus.$off(`image-loaded-card-${this.image.index}`, this.loadedHandler);
-    this.$bus.$off(`image-error-card-${this.image.index}`, this.errorHandler);
+    this.removeEvents();
   },
   computed: {
     source() {
@@ -108,8 +117,22 @@ export default {
       }
       return this.position.height;
     },
+    cardIdentifier() {
+      if (!this.image) {
+        return '';
+      }
+      return `${this.image.index}_${this.image.id}`;
+    }
   },
   methods: {
+    registerEvents() {
+      this.$bus.$on(`image-loaded-card-${this.cardIdentifier}`, this.loadedHandler);
+      this.$bus.$on(`image-error-card-${this.cardIdentifier}`, this.errorHandler);
+    },
+    removeEvents() {
+      this.$bus.$off(`image-loaded-card-${this.cardIdentifier}`, this.loadedHandler);
+      this.$bus.$off(`image-error-card-${this.cardIdentifier}`, this.errorHandler);
+    },
     getHost() {
       if (window.pixiviz.proxyMap && window.pixiviz.hostMap && window.pixiviz.loadMap) {
         const hostLog = window.pixiviz.loadMap[this.image.id];

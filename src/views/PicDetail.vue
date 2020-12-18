@@ -232,7 +232,7 @@ export default {
           id: this.imageId,
           page: this.realRelatedPage,
         }
-      }).then(response => {
+      }).then((response) => {
         if (!response.data.illusts || response.data.illusts.length === 0) {
           this.relatedLoading = false;
           this.relatedCompleted = true;
@@ -251,6 +251,11 @@ export default {
         if (state) {
           state.loaded();
         }
+      }, () => {
+        // 针对加载失败的情况
+        this.relatedLoading = false;
+        this.relatedCompleted = true;
+        if (state) state.complete();
       });
     },
     handleIdChanged() {
@@ -283,13 +288,14 @@ export default {
       if (toward < 0) {
         this.relatedPage = this.relatedPage - 1;
       } else {
-        if (!this.relatedLoading) {
-          this.relatedPage = this.relatedPage + 1;
-          // 提前2页load
-          if (this.relatedPage * this.relatedPageSize > this.relatedImages.length - this.relatedPageSize) {
+        // 提前2页load
+        if (this.relatedPage * this.relatedPageSize >= this.relatedImages.length - this.relatedPageSize) {
+          if (!this.relatedLoading) {
             this.realRelatedPage = this.realRelatedPage + 1;
             this.fetchRelated();
           }
+        } else {
+          this.relatedPage = this.relatedPage + 1;
         }
       }
     },

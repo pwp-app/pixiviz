@@ -5,19 +5,7 @@
 
 一个具有清新画风，支持一定程度响应式的 Pixiv 代理站。
 
-项目基于 Vue CLI + Element UI 编写。
-
-## 开发目标
-
-- [x] 完成Landing界面
-- [x] 完成排行榜界面
-- [x] 完成画作详情界面
-- [x] 完成搜索界面
-- [x] 榜单、搜索页面移动端适配
-- [x] 查看大图窗口
-- [x] 画师页面
-- [x] Tag 跳转搜索
-- [ ] 动图解析
+项目基于 Vue + Element UI (修改版) 编写。
 
 ## 使用方式
 
@@ -31,21 +19,19 @@ npm install
 npm run serve
 ```
 
-推荐使用 Vue CLI 的 GUI 来管理本项目。
-
 ## 说明
 
-该项目更多是作为技术探索，觉得这个项目不错，可以点个star~
+该项目更多是作为技术探索，觉得这个项目不错，可以点个 star~
 
-一些我个人觉得这个项目里值得你参考的东西：
+如果你觉得站点有什么可以改进的地方，或者有技术问题想要深入探讨，欢迎开 issue。
 
-- 大量图片Lazyload的错误处理
-- Lazyload下元素预占位的计算与处理
-- 瀑布流的响应式渲染和定位控制
-- 瀑布流的状态缓存与其控制
-- 细粒度响应式UI设计
+## 相关项目
 
-如果你觉得站点有什么可以改进的地方，或者有技术问题想要深入探讨，欢迎开issue。
+[vue-context-menu](https://github.com/backrunner/vue-context-menu)
+
+[vue-virtual-masonry](https://github.com/backrunner/vue-virtual-masonry)
+
+[better-element-ui](https://github.com/backrunner/vue-virtual-masonry)
 
 ## 许可
 

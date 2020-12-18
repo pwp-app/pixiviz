@@ -72,7 +72,7 @@ export default {
     downloadCurrentText() {
       if (!this.image) return '';
       if (!this.loaded && this.$store.state.pic.progress && this.$store.state.pic.progress < 100) {
-        return `加载中（${this.$store.state.pic.progress}%）...`;
+        return `大图加载中（${this.$store.state.pic.progress}%）...`;
       }
       return this.image.page_count > 1 ? '保存当前' : '点我保存';
     },

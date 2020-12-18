@@ -47,8 +47,8 @@ export default {
       const loadMapTime = window.localStorage.getItem('loadmap-save-time');
       if (!loadMap || !loadMapTime) {
         window.pixiviz.loadMap = {};
-        // loadMap有效期30分钟
-      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 1800) {
+        // loadMap有效期1天
+      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 24 * 3600) {
         window.pixiviz.loadMap = {};
         window.localStorage.removeItem('loadmap');
       } else if (loadMap) {
@@ -119,16 +119,19 @@ export default {
       window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
     },
     // 图片加载处理
-    imageLoadedHandler({ el, src }) {
-      const type = el.getAttribute('data-type');
-      if (type === 'card') {
-        this.$bus.$emit(`image-loaded-card-${el.getAttribute('data-index')}`);
-      }
+    imageLoadedHandler(e) {
+      this.emitImageCardEvent({ ...e, eventType: 'loaded' });
     },
-    imageLoadErrorHandler({ el, src }) {
+    imageLoadErrorHandler(e) {
+      this.emitImageCardEvent({ ...e, eventType: 'error' });
+    },
+    emitImageCardEvent({ el, src, eventType }) {
       const type = el.getAttribute('data-type');
       if (type === 'card') {
-        this.$bus.$emit(`image-error-card-${el.getAttribute('data-index')}`);
+        const matched = /(\d+)_p/.exec(src);
+        if (!matched || matched.length < 1) return;
+        const eventKey = `image-${eventType}-card-${el.getAttribute('data-index')}_${matched[1]}`;
+        this.$bus.$emit(eventKey);
       }
     }
   }
