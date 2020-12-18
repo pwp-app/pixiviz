@@ -386,10 +386,13 @@ export default {
       }
     },
     getImageSource(image, type, useLoadMap = false) {
-      let proxyHost = CONFIG.IMAGE_PROXY_HOST;
+      let proxyHost;
       if (useLoadMap) {
-        proxyHost = window.pixiviz.hostMap[window.pixiviz.loadMap[image.id]];
+        if (window.pixiviz.hostMap && window.pixiviz.loadMap) {
+          proxyHost = window.pixiviz.hostMap[window.pixiviz.loadMap[image.id]];
+        }
       }
+      proxyHost = proxyHost || CONFIG.IMAGE_PROXY_HOST;
       if (this.image && this.image.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
