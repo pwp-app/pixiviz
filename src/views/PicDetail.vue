@@ -288,13 +288,14 @@ export default {
       if (toward < 0) {
         this.relatedPage = this.relatedPage - 1;
       } else {
-        if (!this.relatedLoading) {
-          this.relatedPage = this.relatedPage + 1;
-          // 提前2页load
-          if (this.relatedPage * this.relatedPageSize > this.relatedImages.length - this.relatedPageSize) {
+        // 提前2页load
+        if (this.relatedPage * this.relatedPageSize >= this.relatedImages.length - this.relatedPageSize) {
+          if (!this.relatedLoading) {
             this.realRelatedPage = this.realRelatedPage + 1;
             this.fetchRelated();
           }
+        } else {
+          this.relatedPage = this.relatedPage + 1;
         }
       }
     },
