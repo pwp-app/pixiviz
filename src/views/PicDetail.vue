@@ -232,7 +232,7 @@ export default {
           id: this.imageId,
           page: this.realRelatedPage,
         }
-      }).then(response => {
+      }).then((response) => {
         if (!response.data.illusts || response.data.illusts.length === 0) {
           this.relatedLoading = false;
           this.relatedCompleted = true;
@@ -251,6 +251,11 @@ export default {
         if (state) {
           state.loaded();
         }
+      }, () => {
+        // 针对加载失败的情况
+        this.relatedLoading = false;
+        this.relatedCompleted = true;
+        if (state) state.complete();
       });
     },
     handleIdChanged() {
