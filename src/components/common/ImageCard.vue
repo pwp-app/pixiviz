@@ -50,7 +50,7 @@ export default {
   props: {
     image: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     imageType: {
       type: String,
@@ -62,7 +62,7 @@ export default {
     },
     position: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
   watch: {

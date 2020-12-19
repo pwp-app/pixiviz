@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.16.6",
+  "version": "1.17.0",
   "private": true,
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
@@ -24,7 +24,7 @@
     "upload:proxy-dev": "npm run push:proxy-dev"
   },
   "dependencies": {
-    "@pwp-app/better-element-ui": "^2.14.0-fix-1",
+    "@pwp-app/better-element-ui": "^2.14.1-fix-3",
     "@pwp-app/vue-context-menu": "^1.2.1",
     "@pwp-app/vue-lazyload": "^1.3.3-fix-1",
     "axios": "^0.21.0",

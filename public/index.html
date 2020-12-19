@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <link rel="icon" href="<%= BASE_URL %>favicon.png">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.png" />
     <title>Pixiviz</title>
-    <meta name="description" content="一个连接到 Pixiv 的站点"/>
-    <meta name="keywords" content="pixiv,pixiviz,Pixiv,Pixiviz,ACG,p站,pixiv排行,二次元插图,二次元插画,动漫图片,动漫插图,动漫插画"/>
+    <meta name="description" content="一个连接到 Pixiv 的站点" />
+    <meta name="keywords" content="pixiv,pixiviz,Pixiv,Pixiviz,ACG,p站,pixiv排行,二次元插图,二次元插画,动漫图片,动漫插图,动漫插画" />
   </head>
   <body>
     <noscript>
       <strong>很抱歉，Pixiviz 需要在您浏览器启用 JavaScript 支持的情况下才能正常使用。</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
     <script>
       // dark mode enhancement
       (() => {
@@ -35,12 +34,15 @@
         }
       })();
     </script>
-    <script async>
+    <!-- built files will be auto injected -->
+    <script async defer>
       var _hmt = _hmt || [];
       (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?fdac5b4d15bb044856c7f88655ffc8aa";
-        var s = document.getElementsByTagName("script")[0];
+        var hm = document.createElement('script');
+        hm.async = true;
+        hm.defer = true;
+        hm.src = 'https://hm.baidu.com/hm.js?fdac5b4d15bb044856c7f88655ffc8aa';
+        var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(hm, s);
       })();
     </script>

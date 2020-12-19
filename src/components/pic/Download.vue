@@ -86,7 +86,7 @@ export default {
   },
   watch: {
     '$store.state.pic.progress': function(value) {
-      if (window.pixiviz.darkMode) {
+      if (this.$store.state.darkMode.enabled) {
         this.downloadCurrentStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
       } else {
         this.downloadCurrentStyle = `background-image: linear-gradient(to right, #da7a85 0%, #da7a85 ${value}%, #999 ${value}%, #999 100%) !important;`;

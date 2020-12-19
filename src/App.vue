@@ -14,13 +14,15 @@
       >
       <DownloadListTag key="downloadList" v-if="showDownloadList"/>
     </transition-group>
+    <DownloadList />
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs';
 import CONFIG from './config.json';
-import DownloadListTag from './components/common/DownloadList';
+import DownloadListTag from './components/common/DownloadListTag';
+import DownloadList from './components/common/DownloadList';
 
 const LOADMAP_ENTRIES_LIMIT = 1000;
 const LOADMAP_DELETE_RATE = 0.5;
@@ -28,6 +30,7 @@ const LOADMAP_DELETE_RATE = 0.5;
 export default {
   name: "app",
   components: {
+    DownloadList,
     DownloadListTag,
   },
   beforeCreate() {
@@ -85,6 +88,9 @@ export default {
     }
   },
   created() {
+    // 黑暗模式监听
+    this.$bus.$on('dark-mode-enable', this.handleDarkModeEnable);
+    this.$bus.$on('dark-mode-disable', this.handleDarkModeDisable);
     // 图片懒加载统一handle
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
@@ -133,6 +139,13 @@ export default {
         const eventKey = `image-${eventType}-card-${el.getAttribute('data-index')}_${matched[1]}`;
         this.$bus.$emit(eventKey);
       }
+    },
+    // 黑暗模式监听
+    handleDarkModeEnable() {
+      this.$store.commit('darkMode/setEnabled', true);
+    },
+    handleDarkModeDisable() {
+      this.$store.commit('darkMode/setEnabled', false);
     }
   }
 }

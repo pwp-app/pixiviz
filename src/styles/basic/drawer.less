@@ -1,0 +1,41 @@
+.el-drawer__wrapper {
+  z-index: 9999 !important;
+}
+
+.el-drawer {
+  background: @color-accent;
+  &__header {
+    color: @color-text-primary;
+    padding: 18px 24px 0;
+    user-select: none;
+    margin-bottom: 24px;
+    button {
+      transition: 100ms;
+      padding: 0;
+      transform: translateX(3px);
+    }
+    button:hover {
+      color: lighten(@color-text-primary, 10%) !important;
+    }
+  }
+  &__body {
+    padding-bottom: 24px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  &__body::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.dark {
+  .el-drawer {
+    background: @color-background-dark;
+    &__header {
+      color: darken(@color-text-primary, 2.5%);
+      button:hover {
+        color: lighten(@color-text-primary, 3.75%) !important;
+      }
+    }
+  }
+}

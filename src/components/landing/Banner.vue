@@ -156,11 +156,13 @@ export default {
     },
     addDarkClass() {
       if (!document.documentElement.classList.contains('dark')) {
+        this.$bus.$emit('dark-mode-enable');
         document.documentElement.classList.add('dark');
       }
     },
     removeDarkClass() {
       if (document.documentElement.classList.contains('dark')) {
+        this.$bus.$emit('dark-mode-disable');
         document.documentElement.classList.remove('dark');
       }
     },
@@ -178,22 +180,23 @@ export default {
       } else {
         this.removeDarkClass();
       }
+      window.pixiviz.darkEnabled = value;
       window.localStorage.setItem('enable-dark', value);
     },
     themeModeChanged(value) {
       if (value) {
-        // 开启永久黑暗模式
-        window.localStorage.setItem('dark-persist', true);
+        // 永久黑暗模式
         this.addDarkClass();
       } else {
         // 自动黑暗模式
-        window.localStorage.setItem('dark-persist', false);
         const now = dayjs();
         const hour = now.hour();
         if (hour >= 6 && hour < 18) {
           this.removeDarkClass();
         }
       }
+      window.pixiviz.darkPersist = value;
+      window.localStorage.setItem('dark-persist', value);
     },
     goGitHub() {
       window.open('https://github.com/pwp-app/pixiviz');
