@@ -33,11 +33,6 @@ export default {
     DownloadList,
     DownloadListTag,
   },
-  data() {
-    return {
-      darkModeEnabled: window.pixiviz.darkMode,
-    }
-  },
   beforeCreate() {
     // 检测Safari
     window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
@@ -147,10 +142,10 @@ export default {
     },
     // 黑暗模式监听
     handleDarkModeEnable() {
-      this.darkModeEnabled = true;
+      this.$store.commit('darkMode/setEnabled', true);
     },
     handleDarkModeDisable() {
-      this.darkModeEnabled = false;
+      this.$store.commit('darkMode/setEnabled', false);
     }
   }
 }

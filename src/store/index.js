@@ -1,7 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 // import modules
+import darkMode from './modules/darkMode';
 import landingBanner from './modules/landingBanner';
 import rank from './modules/rank';
 import search from './modules/search';
@@ -14,11 +15,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
+    darkMode,
     landingBanner,
     rank,
     search,
     imageCache,
-		artist,
+    artist,
     download,
     pic,
   },
