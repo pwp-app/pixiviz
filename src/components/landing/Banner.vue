@@ -156,11 +156,13 @@ export default {
     },
     addDarkClass() {
       if (!document.documentElement.classList.contains('dark')) {
+        this.$root.darkModeEnabled = true;
         document.documentElement.classList.add('dark');
       }
     },
     removeDarkClass() {
       if (document.documentElement.classList.contains('dark')) {
+        this.$root.darkModeEnabled = false;
         document.documentElement.classList.remove('dark');
       }
     },

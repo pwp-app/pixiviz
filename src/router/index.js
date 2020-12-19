@@ -63,7 +63,13 @@ router.afterEach(() => {
     if (window.pixiviz.darkEnabled && !window.pixiviz.darkPersist) {
       const hour = new Date().getHours();
       if (hour < 6 || hour >= 18) {
-        document.documentElement.setAttribute('class', 'dark');
+        Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-enable');
+        document.documentElement.classList.add('dark');
+      } else {
+        if (document.documentElement.classList.contains('dark')) {
+          Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-disable');
+          document.documentElement.classList.remove('dark');
+        }
       }
     }
   }
