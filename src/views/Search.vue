@@ -179,7 +179,7 @@ export default {
       window.addEventListener("scroll", this.handleScroll, false);
     });
     // change title
-    document.title = `${this.keyword} - Pixiviz`;
+    document.title = `搜索 - ${this.keyword} - Pixiviz`;
   },
   beforeDestroy() {
     if (this.illustNotice) {
@@ -452,15 +452,23 @@ export default {
         // this.keyword此处等同于pic id
         this.$router.push(`/pic/${this.keyword}`);
         this.illustNotice.close();
+        if (this.artistNotice) {
+          this.artistNotice.close();
+          this.artistNotice = null;
+        }
       }
     },
     illustNoticeClose() {
       document.body.removeEventListener('click', this.illustNoticeClick, false);
     },
-    artistNoticeClick() {
+    artistNoticeClick(e) {
       if (e.target.dataset.name && e.target.dataset.name === 'search-notify-artist') {
         this.$router.push(`/artist/${this.keyword}`);
         this.artistNotice.close();
+        if (this.illustNotice) {
+          this.illustNotice.close();
+          this.illustNotice = null;
+        }
       }
     },
     artistNoticeClose() {
