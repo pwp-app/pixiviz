@@ -21,7 +21,7 @@
       class="landing-announcement"
       top="8.5vh"
       >
-      <pre>{{announceContent}}</pre>
+      <pre v-html="announceContent"></pre>
       <pre class="announce-footer">{{announceFooter}}</pre>
     </el-dialog>
   </div>

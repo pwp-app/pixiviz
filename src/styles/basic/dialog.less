@@ -40,6 +40,21 @@
       line-height: 28px;
       word-break: break-all;
       white-space: pre-wrap;
+      color: @color-text-black;
+      a {
+        font-size: 14px;
+        word-break: break-all;
+        white-space: pre-wrap;
+        color: @color-text-black;
+        text-decoration: underline;
+        transition: 100ms ease;
+      }
+      a:hover {
+        color: lighten(@color-text-black, 10%) !important;
+      }
+      a:visited {
+        color: @color-text-black;
+      }
     }
     .announce-footer {
       text-align: right;
@@ -86,6 +101,16 @@
     .el-dialog__header, .el-dialog__body {
       span, pre {
         color: darken(@color-text-accent, 15%);
+        a {
+          color: darken(@color-text-accent, 15%);
+          text-decoration: underline;
+        }
+        a:hover {
+          color: darken(@color-text-accent, 5%) !important;
+        }
+        a:visited {
+          color: darken(@color-text-accent, 15%);
+        }
       }
     }
   }
