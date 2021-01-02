@@ -73,7 +73,12 @@ dir.forEach((file) => {
       return;
     }
     if (!footerFlag) {
-      contents.push(`${item}\r\n`);
+      let textContent = item;
+      const matched = /{{(.*)}}/.exec(textContent);
+      if (matched) {
+        textContent = textContent.replace(matched[0], `<a href="${matched[1]}">${matched[1]}</a>`);
+      }
+      contents.push(`${textContent}\r\n`);
       return;
     }
     footers.push(`${item}\r\n`);
