@@ -26,6 +26,14 @@
     letter-spacing: 0.1em;
     text-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   }
+  a {
+    transition: 100ms ease;
+    text-decoration: none;
+  }
+  a:hover {
+    color: darken(@color-text-accent, 5%);
+    text-decoration: underline;
+  }
   &-title {
     font-size: 5rem;
     letter-spacing: 0.1rem;
@@ -55,12 +63,6 @@
         span {
           .no-select();
         }
-        a {
-          text-decoration: none;
-        }
-      }
-      &-link:hover {
-        text-decoration: underline;
       }
     }
     &-theme {
@@ -105,6 +107,9 @@
           cursor: pointer;
           filter: brightness(0.9);
         }
+      }
+      &-split {
+        margin: 0 0.5rem;
       }
     }
   }
