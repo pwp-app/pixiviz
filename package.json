@@ -54,7 +54,7 @@
     "compression-webpack-plugin": "^6.1.1",
     "cross-env": "^7.0.3",
     "cypress": "^6.2.1",
-    "image-webpack-loader": "^6.0.0",
+    "image-webpack-loader": "^7.0.1",
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
     "qiniu": "^7.3.2",
