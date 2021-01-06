@@ -179,7 +179,7 @@ export default {
       window.addEventListener("scroll", this.handleScroll, false);
     });
     // check search from
-    if (this.from.startsWith('pic/')) {
+    if (this.from && this.from.startsWith('pic/')) {
       this.from = null;
     }
     // change title
