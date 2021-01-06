@@ -2,6 +2,7 @@
   <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
     <div
       v-loading="imageLoading"
+      :element-loading-text="imageLoadingText"
       :class="{
         'pic-presentation-image': true,
         'pic-presentation-image__firstload': imageFirstLoad
@@ -54,6 +55,7 @@
       :src="lightBoxSource"
       :isLanding="isLanding"
       :isOverHeight="isOverHeight"
+      @loaded="handleLightBoxLoaded"
       @close="onLightBoxClose"
       @download="callDownload"
       @copy="copyLink"
@@ -219,7 +221,14 @@ export default {
     },
     isOverHeight() {
       return this.imageHeight / (this.imageWidth / this.screenWidth) > this.screenHeight;
-    }
+    },
+    imageLoadingText() {
+      if (this.mobileMode) {
+        return `大图加载中（${this.$store.state.pic.progress}%）`;
+      } else {
+        return null;
+      }
+    },
   },
   methods: {
     async tryLoad() {
@@ -355,6 +364,11 @@ export default {
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
       this.screenHeight = document.documentElement.clientHeight;
+      if (this.image) {
+        this.setLimitWidth(this.screenWidth);
+        this.checkMobileMode(this.screenWidth);
+        this.setImageSize(this.image);
+      }
     },
     updateDisplaySize() {
       if (this.sizeCache[this.page]) {
@@ -473,7 +487,12 @@ export default {
     onLightBoxClose() {
       this.lightBoxShow = false;
       this.$emit('lightbox-close');
-    }
+    },
+    handleLightBoxLoaded() {
+      if (this.useLarge && this.lightBoxShow) {
+        this.imageEl.setAttribute('src', this.lightBoxSource);
+      }
+    },
   }
 }
 </script>

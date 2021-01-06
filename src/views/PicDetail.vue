@@ -6,6 +6,7 @@
         lightboxShow ? 'pic-container-lockscroll' : null,
       ]"
     v-loading="infoLoading"
+    element-loading-text="正在获取图片信息"
   >
     <div class="pic" v-if="!infoLoading">
       <div class="pic-presentation">

@@ -62,13 +62,13 @@ module.exports = {
               statuses: [0, 200],
             },
             expiration: {
-              maxAgeSeconds: 86400 * 14,
+              maxAgeSeconds: 86400 * 7,
               maxEntries: 30000,
             },
           },
         },
         {
-          // 作者头像缓存，14天过期，最多缓存1000个
+          // 作者头像缓存，14天过期，最多缓存3000个
           urlPattern: new RegExp('^https:\\/\\/pixiv-image\\.pwp\\.link\\/user-profile\\/.*$'),
           handler: 'CacheFirst',
           options: {
@@ -78,7 +78,7 @@ module.exports = {
             },
             expiration: {
               maxAgeSeconds: 86400 * 30,
-              maxEntries: 1000,
+              maxEntries: 3000,
             },
             fetchOptions: {
               credentials: 'omit',
