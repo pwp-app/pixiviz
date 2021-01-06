@@ -363,6 +363,11 @@ export default {
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
       this.screenHeight = document.documentElement.clientHeight;
+      if (this.image) {
+        this.setLimitWidth(this.screenWidth);
+        this.checkMobileMode(this.screenWidth);
+        this.setImageSize(this.image);
+      }
     },
     updateDisplaySize() {
       if (this.sizeCache[this.page]) {
