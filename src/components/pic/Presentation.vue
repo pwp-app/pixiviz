@@ -55,6 +55,7 @@
       :src="lightBoxSource"
       :isLanding="isLanding"
       :isOverHeight="isOverHeight"
+      @loaded="handleLightBoxLoaded"
       @close="onLightBoxClose"
       @download="callDownload"
       @copy="copyLink"
@@ -486,7 +487,12 @@ export default {
     onLightBoxClose() {
       this.lightBoxShow = false;
       this.$emit('lightbox-close');
-    }
+    },
+    handleLightBoxLoaded() {
+      if (this.useLarge && this.lightBoxShow) {
+        this.imageEl.setAttribute('src', this.lightBoxSource);
+      }
+    },
   }
 }
 </script>

@@ -8,6 +8,7 @@
       ]"
       :src="src"
       v-context="'context'"
+      @load="handleOnLoad"
     />
     <ContextMenu
       ref="context"
@@ -34,7 +35,10 @@ export default {
       } else if (name === 'copy-link') {
         this.$emit('copy');
       }
-    }
+    },
+    handleOnLoad() {
+      this.$emit('loaded');
+    },
   },
 };
 </script>
