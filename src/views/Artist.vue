@@ -1,5 +1,12 @@
 <template>
-  <div :class="['artist-container', iPadStyle ? 'artist-ipad-only' : null]" v-loading="!infoLoaded">
+  <div
+    :class="{
+      'artist-container': true,
+      'artist-ipad-only': iPadStyle,
+    }"
+    v-loading="!infoLoaded"
+    element-loading-text="正在获取画师信息"
+    >
     <div class="artist-header">
       <div class="artist-header-close">
         <i class="el-icon-close" @click="handleBack"></i>
