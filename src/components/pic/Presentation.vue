@@ -2,6 +2,7 @@
   <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
     <div
       v-loading="imageLoading"
+      :element-loading-text="imageLoadingText"
       :class="{
         'pic-presentation-image': true,
         'pic-presentation-image__firstload': imageFirstLoad
@@ -219,7 +220,14 @@ export default {
     },
     isOverHeight() {
       return this.imageHeight / (this.imageWidth / this.screenWidth) > this.screenHeight;
-    }
+    },
+    imageLoadingText() {
+      if (this.mobileMode) {
+        return `大图加载中（${this.$store.state.pic.progress}%）`;
+      } else {
+        return null;
+      }
+    },
   },
   methods: {
     async tryLoad() {

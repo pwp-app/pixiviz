@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.17.2",
+  "version": "1.17.3",
   "private": true,
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
