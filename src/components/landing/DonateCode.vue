@@ -30,7 +30,6 @@ export default {
   created() {
     this.$bus.$on('qrcode-wxdonate-loaded', this.donateCodeLoaded);
     this.$bus.$on('qrcode-wxdonate-error', this.donateCodeLoadError);
-    console.log(0);
   },
   beforeDestroy() {
     this.$bus.$off('qrcode-wxdonate-loaded', this.donateCodeLoaded);
@@ -39,7 +38,6 @@ export default {
   methods: {
     // donate
     donateCodeLoaded() {
-      console.log(2);
       this.donateLoading = false;
     },
     donateCodeLoadError() {
