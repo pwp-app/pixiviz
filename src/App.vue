@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs';
-import CONFIG from './config.json';
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 
@@ -141,7 +139,6 @@ export default {
       } else if (type) {
         const id = el.getAttribute('id');
         this.$bus.$emit(`${type}-${id}-${eventType}`);
-        console.log(1);
       }
     },
     // 黑暗模式监听

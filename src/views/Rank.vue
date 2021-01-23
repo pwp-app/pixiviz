@@ -317,7 +317,6 @@ export default {
       return 'day';
 		},
     handleModeChanged(mode) {
-      console.log(mode);
       this.mode = mode || 'day';
       document.title = `${this.modeText} - Pixiviz`;
       this.refreshWaterfall();
