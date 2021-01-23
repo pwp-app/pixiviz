@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs';
-import CONFIG from './config.json';
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 
