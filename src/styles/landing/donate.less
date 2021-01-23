@@ -1,0 +1,57 @@
+.wxdonate {
+  display: none;
+  position: absolute;
+  padding: 6px;
+  width: 132px;
+  height: max-content;
+  background-color: #fff;
+  box-sizing: border-box;
+  cursor: default;
+  user-select: none;
+  -webkit-user-drag: none;
+  border-radius: 12px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.125);
+  transform: translate(-84.5%, -107.5%);
+  &-code {
+    width: 120px;
+    height: 120px;
+    background-size: cover;
+  }
+  &-code-error {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+      font-size: 12px;
+      color: #4e4e4e;
+    }
+  }
+  &-tip {
+    line-height: 28px;
+    font-size: 8px !important;
+    color: #4e4e4e !important;
+  }
+  .el-loading-mask {
+    border-radius: 12px;
+    background-color: #fff !important;
+  }
+}
+
+.wxdonate::after {
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  transform: translate(-50%, 7px) rotate(45deg);
+  position: absolute;
+  content: '';
+  bottom: 0;
+  left: 50%;
+  z-index: -1;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.125);
+}
+
+#wxdonate-trigger:hover .wxdonate {
+  display: inline-block;
+}
