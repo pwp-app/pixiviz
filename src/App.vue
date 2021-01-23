@@ -138,6 +138,10 @@ export default {
         if (!matched || matched.length < 1) return;
         const eventKey = `image-${eventType}-card-${el.getAttribute('data-index')}_${matched[1]}`;
         this.$bus.$emit(eventKey);
+      } else if (type) {
+        const id = el.getAttribute('id');
+        this.$bus.$emit(`${type}-${id}-${eventType}`);
+        console.log(1);
       }
     },
     // 黑暗模式监听
