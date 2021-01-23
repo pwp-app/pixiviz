@@ -54,11 +54,11 @@
           <div class="about-copyright-item">
             <span>Copyright &copy; 2021 pwp.app.</span>
           </div>
-          <div class="about-copyright-item mobile-hide">
+          <div class="about-copyright-item">
             <span>
               <a href="https://afdian.net/@backrunner" target="_blank">发电通道</a>
-              <span class="about-copyright-split">|</span>
-              <a href="javascript:;" id="wxdonate-trigger">
+              <span class="about-copyright-split mobile-hide">|</span>
+              <a href="javascript:;" class="mobile-hide" id="wxdonate-trigger">
                 <span>发电二维码</span>
                 <DonateCode />
               </a>

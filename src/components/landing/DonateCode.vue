@@ -16,12 +16,13 @@
 </template>
 
 <script>
-import donateCode from '../../assets/images/donateCode.jpg';
+import donateCodeJpeg from '../../assets/images/donateCode.jpg';
+import donateCodeWebp from '../../assets/images/donateCode.webp';
 
 export default {
   data() {
     return {
-      donateCode,
+      donateCode: window.isSafari ? donateCodeJpeg : donateCodeWebp,
       donateLoading: true,
       donateLoadError: false,
     };
