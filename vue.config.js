@@ -101,7 +101,6 @@ module.exports = {
         pngquant: { quality: [0.65, 0.9], speed: 4 },
         gifsicle: { interlaced: false },
       });
-    config.optimization.delete("splitChunks");
     // drop debug lines
     if (process.env.NODE_ENV === 'production') {
       config.optimization.minimizer('terser').tap((args) => {
@@ -124,35 +123,33 @@ module.exports = {
       'vue-lazyload': '@pwp-app/vue-lazyload',
       'vue-context-menu': "@pwp-app/vue-context-menu",
     };
-    config.optimization = {
-      splitChunks: {
-        cacheGroups: {
-          common: {
-            name: 'chunk-common',
-            chunks: 'initial',
-            minChunks: 2,
-            maxInitialRequests: 5,
-            minSize: 0,
-            priority: 1,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-          vendors: {
-            name: 'chunk-vendors',
-            test: /[\\/]node_modules[\\/]/,
-            chunks: 'initial',
-            priority: 2,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-          elementUI: {
-            name: 'chunk-element',
-            test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
-            chunks: 'all',
-            priority: 3,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
+    config.optimization.splitChunks = {
+      cacheGroups: {
+        common: {
+          name: 'chunk-common',
+          chunks: 'initial',
+          minChunks: 2,
+          maxInitialRequests: 5,
+          minSize: 0,
+          priority: 1,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        vendors: {
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'initial',
+          priority: 2,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        elementUI: {
+          name: 'chunk-element',
+          test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
+          chunks: 'all',
+          priority: 3,
+          reuseExistingChunk: true,
+          enforce: true,
         },
       },
     };

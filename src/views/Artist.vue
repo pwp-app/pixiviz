@@ -53,6 +53,7 @@ import ArtistDetail from '../components/artist/ArtistDetail';
 import Overlay from '../components/pic/Overlay';
 // Util
 import MobileResponsive from "../util/MobileResponsive";
+import { filterImages } from '../util/filter';
 // config
 import CONFIG from '../config.json';
 
@@ -195,7 +196,7 @@ export default {
             page: this.page,
           }
         })
-        .then(response => {
+        .then((response) => {
           if (!response.data.illusts) {
             // 加载失败
             $state.complete();
@@ -206,13 +207,7 @@ export default {
             $state.complete();
             return;
           }
-          let images = response.data.illusts.filter(img => {
-            if (img.x_restrict || img.sanity_level > 5) {
-              return false;
-            }
-            if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
-            return true;
-          });
+          const images = filterImages(response.data.illusts, false);
           this.images = this.images.concat(images);
           // 缓存 images
           this.$store.commit('artist/setImages', {

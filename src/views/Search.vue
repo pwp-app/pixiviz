@@ -75,10 +75,11 @@
 
 <script>
 // Common components
-import Waterfall from "../components/common/Waterfall";
-import BackToTop from "../components/common/BackToTop";
+import Waterfall from '../components/common/Waterfall';
+import BackToTop from '../components/common/BackToTop';
 // Util
-import MobileResponsive from "../util/MobileResponsive";
+import MobileResponsive from '../util/MobileResponsive';
+import { filterImage, filterImages } from '../util/filter';
 // config
 import CONFIG from '../config.json';
 
@@ -226,13 +227,7 @@ export default {
             $state.complete();
             return;
           }
-          let images = response.data.illusts.filter(img => {
-            if (img.x_restrict || img.sanity_level > 4) {
-              return false;
-            }
-            if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
-            return true;
-          });
+          const images = filterImages(response.data.illusts);
           this.images = this.images.concat(images);
           // 缓存 images
           this.$store.commit("search/setImages", this.images);
@@ -277,6 +272,9 @@ export default {
           return;
         }
         const { data: { illust } } = res;
+        if (!filterImage(illust)) {
+          return;
+        }
         // bind event to search notify
         document.body.addEventListener('click', this.illustNoticeClick, false);
         this.illustNotice = this.$notify({
