@@ -81,13 +81,14 @@
 <script>
 import dayjs from "dayjs";
 // Common components
-import Waterfall from "../components/common/Waterfall";
-import BackToTop from "../components/common/BackToTop";
+import Waterfall from '../components/common/Waterfall';
+import BackToTop from '../components/common/BackToTop';
 // Rank components
-import ModeSwitcher from "../components/rank/ModeSwitcher";
-import DateSwitcher from "../components/rank/DateSwitcher";
+import ModeSwitcher from '../components/rank/ModeSwitcher';
+import DateSwitcher from '../components/rank/DateSwitcher';
 // Util
-import MobileResponsive from "../util/MobileResponsive";
+import MobileResponsive from '../util/MobileResponsive';
+import { filterImages } from '../util/filter';
 
 // config
 import CONFIG from '../config.json';
@@ -251,7 +252,7 @@ export default {
             page: this.page
           }
         })
-        .then((response, state) => {
+        .then((response) => {
           if (!response.data || !response.data.illusts) {
             // 加载失败
             $state.complete();
@@ -262,13 +263,7 @@ export default {
             $state.complete();
             return;
           }
-          let images = response.data.illusts.filter(img => {
-            if (img.x_restrict || img.sanity_level > 4) {
-              return false;
-            }
-            if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
-            return true;
-          });
+          const images = filterImages(response.data.illusts);
           this.images = this.images.concat(images);
           // 缓存 images
           this.$store.commit("rank/setImages", this.images);

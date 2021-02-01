@@ -75,8 +75,6 @@ export default {
           this.$emit('change-page-size', 6);
           return 151;
         }
-        this.$emit('change-page-size', 30);
-        return Math.floor((this.screenWidth - 32) / 4) - 16;
       } else if (this.screenWidth > 567 && this.screenWidth <= 768) {
         this.$emit('change-page-size', 30);
         return Math.floor((this.screenWidth - 32) / 3) - 16;

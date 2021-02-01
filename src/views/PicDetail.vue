@@ -6,7 +6,7 @@
         lightboxShow ? 'pic-container-lockscroll' : null,
       ]"
     v-loading="infoLoading"
-    element-loading-text="正在获取图片信息"
+    element-loading-text="正在获取画作信息"
   >
     <div class="pic" v-if="!infoLoading">
       <div class="pic-presentation">
@@ -74,6 +74,9 @@ import Author from '../components/pic/Author';
 import Download from '../components/pic/Download';
 import Related from '../components/pic/Related';
 import Overlay from '../components/pic/Overlay';
+
+// utils
+import { filterImages } from '../util/filter';
 
 // icons
 import HomeIcon from '../components/icons/home';
@@ -240,13 +243,7 @@ export default {
           if (state) state.complete();
           return;
         }
-        let images = response.data.illusts.filter(img => {
-          if (img.x_restrict || img.sanity_level > 5) {
-            return false;
-          }
-          if (!window.pixiviz.infoMap[img.id]) window.pixiviz.infoMap[img.id] = img;
-          return true;
-        });
+        const images = filterImages(response.data.illusts);
         this.relatedImages = this.relatedImages.concat(images);
         this.relatedLoading = false;
         if (state) {
