@@ -14,7 +14,8 @@ const filterImages = (imgs, dropManga = true) => {
     if (
       img.x_restrict ||
       img.sanity_level >= 4 ||
-      (img.type !== 'illust' && dropManga)
+      (img.type !== 'illust' && dropManga) ||
+      (img.title.includes('漫画') && dropManga)
     ) {
       return false;
     }
