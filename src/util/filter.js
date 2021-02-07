@@ -3,7 +3,7 @@ const mangaTags = ['漫画'];
 const filterImage = (img) => {
   if (
     img.x_restrict ||
-    img.sanity_level >= 4
+    img.sanity_level > 4
   ) {
     return false;
   }
