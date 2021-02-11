@@ -7,8 +7,9 @@
     v-touch:doubletap="handleDoubleTap"
     >
     <div class="banner">
-      <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
+      <div :class="['banner-title', titleUp ? 'banner-title-up' : '']" style="margin-top: 4px;">
         <span>Pixiviz</span>
+        <span style="display: block; font-size: 20px; text-align: center; line-height: 32px; letter-spacing: 0.15em; margin-top: 4px;">新年快乐</span>
       </div>
       <div :class="['about', aboutShow ? 'about-show' : '']" v-show="expanded">
         <div class="about-borrow">
@@ -16,10 +17,7 @@
             <span>借物</span>
           </div>
           <div class="about-borrow-item">
-            <span>Proxy: <a target="_blank" class="about-borrow-link" href="https://pixiv.cat">Pixivcat</a></span>
-          </div>
-          <div class="about-borrow-item">
-            <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/86334188">▲富士山</a></span>
+            <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/87630694">烟火之邀</a></span>
           </div>
         </div>
         <div class="about-theme">
