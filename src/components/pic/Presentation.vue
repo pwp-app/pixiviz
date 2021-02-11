@@ -238,7 +238,8 @@ export default {
       // check if existed
       if (this.imageObjs[this.page]) {
         const stored = this.imageObjs[this.page];
-        if (/^blob:/.test(stored.src)) {
+        if (/^blob:/.test(stored.src) || stored.lightboxShowed) {
+          this.useLarge = !!this.imageObjs[this.page].useLarge;
           this.onLoaded(this.imageObjs[this.page]);
           return;
         }
@@ -264,6 +265,7 @@ export default {
         }, 200);
       }
       this.imageObjs[this.page] = img;
+      this.imageObjs[this.page].useLarge = this.useLarge;
     },
     cancelAllLoad() {
       Object.keys(this.imageObjs).forEach((key) => {
@@ -491,6 +493,9 @@ export default {
     handleLightBoxLoaded() {
       if (this.useLarge && this.lightBoxShow) {
         this.imageEl.setAttribute('src', this.lightBoxSource);
+        this.imageObjs[this.page].src = this.lightBoxSource;
+        this.imageObjs[this.page].useLarge = false;
+        this.imageObjs[this.page].lightboxShowed = true;
       }
     },
   }
