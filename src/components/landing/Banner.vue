@@ -7,7 +7,7 @@
     v-touch:doubletap="handleDoubleTap"
     >
     <div class="banner">
-      <div :class="['banner-title', titleUp ? 'banner-title-up' : '']" style="margin-top: 4px;">
+      <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
         <span>Pixiviz</span>
       </div>
       <div :class="['about', aboutShow ? 'about-show' : '']" v-show="expanded">
