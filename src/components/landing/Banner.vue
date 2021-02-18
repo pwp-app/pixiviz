@@ -7,9 +7,8 @@
     v-touch:doubletap="handleDoubleTap"
     >
     <div class="banner">
-      <div :class="['banner-title', titleUp ? 'banner-title-up' : '']" style="margin-top: 4px;">
+      <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
         <span>Pixiviz</span>
-        <span style="display: block; font-size: 20px; text-align: center; line-height: 32px; letter-spacing: 0.15em; margin-top: 4px;">新年快乐</span>
       </div>
       <div :class="['about', aboutShow ? 'about-show' : '']" v-show="expanded">
         <div class="about-borrow">
@@ -17,7 +16,7 @@
             <span>借物</span>
           </div>
           <div class="about-borrow-item">
-            <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/87630694">烟火之邀</a></span>
+            <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/87162332">longing</a></span>
           </div>
         </div>
         <div class="about-theme">
@@ -29,8 +28,8 @@
               v-model="darkmode"
               active-color="#2e2e2e"
               inactive-color="#E3A7A1"
-              active-text="深色"
-              inactive-text="黑暗"
+              active-text="黑暗"
+              inactive-text="浅色"
               @change="themeChanged"
               >
             </el-switch>
