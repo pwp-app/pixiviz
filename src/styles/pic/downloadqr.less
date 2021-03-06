@@ -1,0 +1,59 @@
+.downloadqr-wrapper {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 10000;
+  background: rgba(25, 25, 25, 0.9);
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  display: flex;
+  .downloadqr {
+    width: max-content;
+    margin-bottom: 64px;
+    &-code {
+      text-align: center;
+      svg {
+        border-radius: 24px;
+      }
+    }
+    &-tip {
+      color: @color-text-primary;
+      text-align: center;
+      font-weight: 600;
+      font-size: 28px;
+      margin-top: 36px;
+    }
+  }
+}
+
+.downloadqr-fade-enter-active {
+  animation: downloadqr-fade-in;
+  animation-duration: 200ms;
+}
+.downloadqr-fade-leave-active {
+  animation: downloadqr-fade-out;
+  animation-duration: 200ms;
+}
+
+@keyframes downloadqr-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes downloadqr-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

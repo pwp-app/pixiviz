@@ -16,7 +16,7 @@
             <span>借物</span>
           </div>
           <div class="about-borrow-item">
-            <span>主页背景: <a target="_blank" class="about-borrow-link" href="https://pixiviz.pwp.app/pic/87162332">longing</a></span>
+            <span>主页背景: <a target="_blank" class="about-borrow-link" :href="`https://pixiviz.pwp.app/pic/${landingBgId}`">{{ landingBgName }}</a></span>
           </div>
         </div>
         <div class="about-theme">
@@ -55,7 +55,7 @@
             <span>
               <a href="https://afdian.net/@backrunner" target="_blank">发电通道</a>
               <span class="about-copyright-split mobile-hide">|</span>
-              <a href="javascript:;" class="mobile-hide" id="wxdonate-trigger">
+              <a href="javascript:;" class="mobile-hide qrpopup-trigger">
                 <span>发电二维码</span>
                 <DonateCode />
               </a>
@@ -82,6 +82,7 @@ import dayjs from 'dayjs';
 import { version } from '../../version.js';
 import GitHubIcon from '../icons/github';
 import DonateCode from './DonateCode';
+import CONFIG from '@/config.json';
 
 export default {
   name: "Landing.Banner",
@@ -99,6 +100,8 @@ export default {
       version,
       darkmode: false,
       darkPersist: false, // 永久禁用
+      landingBgId: CONFIG.landingBgId,
+      landingBgName: CONFIG.landingBgName,
     }
   },
   created() {

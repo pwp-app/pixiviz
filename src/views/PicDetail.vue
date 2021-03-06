@@ -114,6 +114,8 @@ export default {
       link: window.location.href,
       // lightbox
 			lightboxShow: false,
+      // mobile download
+      mobileDownload: false,
     }
   },
   components: {
@@ -170,6 +172,13 @@ export default {
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       }
     }
+    // 检查二维码下载
+    if (this.$route.query && this.$route.query.mobileDownload === 'true') {
+      this.mobileDownload = true;
+      this.$router.replace({
+        query: null,
+      });
+    }
   },
   destroyed() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
@@ -185,7 +194,7 @@ export default {
         this.image = this.$store.state.imageCache.image;
         this.afterLoad();
         // 用完就丢
-        this.$store.commit('imageCache/destory');
+        this.$store.commit('imageCache/destroy');
         this.infoLoading = false;
         return;
       }
@@ -193,7 +202,7 @@ export default {
         params: {
           id: this.imageId,
         }
-      }).then(response => {
+      }).then((response) => {
         if (!response.data || !response.data.illust) {
           this.infoLoading = false;
           this.loadFailed = true;
@@ -216,6 +225,10 @@ export default {
       // change title
       this.$nextTick(() => {
         document.title = `${this.image.title} - Pixiviz`;
+        if (this.mobileDownload) {
+          this.mobileDownload = false;
+          this.startDownloadCurrent();
+        }
       });
     },
 		startDownloadCurrent() {

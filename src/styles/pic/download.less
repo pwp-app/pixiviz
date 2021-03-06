@@ -23,10 +23,29 @@
 			justify-content: center;
 			color: @color-text-primary;
 			transition: 200ms;
+			margin-left: 8px;
+			svg {
+				path {
+					transition: 200ms;
+					fill: @color-text-primary;
+				}
+			}
 		}
 		&-icon:hover {
 			cursor: pointer;
 			color: lighten(@color-text-primary, 10%);
+			svg {
+				path {
+					fill: lighten(@color-text-primary, 10%);
+				}
+			}
+		}
+		.el-icon-setting {
+			transform: translateX(2px);
+		}
+		.icon-qrcode {
+			width: 26px;
+			height: 26px;
 		}
   }
   &-items {
@@ -72,9 +91,19 @@
 			color: darken(@color-text-primary, 2.5%);
 			&-icon {
 				color: darken(@color-text-primary, 2.5%);
+				svg {
+					path {
+						fill: darken(@color-text-primary, 2.5%);
+					}
+				}
 			}
 			&-icon:hover {
 				color: lighten(@color-text-primary, 2.5%);
+				svg {
+					path {
+						fill: lighten(@color-text-primary, 2.5%);
+					}
+				}
 			}
     }
     &-items {
@@ -146,3 +175,5 @@
 		}
 	}
 }
+
+@import './downloadqr.less';

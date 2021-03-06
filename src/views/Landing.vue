@@ -155,13 +155,13 @@ export default {
       if (!this.notFirstUse) {
         return;
       }
-      // 同一个设备7天内只展示一次
+      // 同一个设备5天内只展示一次
       const lastShowDonate = window.localStorage.getItem('last-show-donate');
-      if (lastShowDonate && (new Date().valueOf() - parseInt(lastShowDonate, 10)) / 1000 < 604800) {
+      if (lastShowDonate && (new Date().valueOf() - parseInt(lastShowDonate, 10)) / 1000 < 432000) {
         return;
       }
-      // 50%的概率展示通知
-      if (Math.random() < 0.5) {
+      // 60%的概率展示通知
+      if (Math.random() <= 0.6) {
         window.localStorage.setItem('last-show-donate', new Date().valueOf());
 				document.body.addEventListener('click', this.donateNoticeClicked, false);
 				this.$nextTick(() => {
@@ -170,11 +170,11 @@ export default {
 						position: 'top-right',
 						customClass: 'oneline-notice-container',
 						dangerouslyUseHTMLString: true,
-						duration: 10000,
+						duration: 15000,
 						onClose: this.donateNoticeClosed,
 						message: `
 							<div class="oneline-notice">
-								<span data-name="notice-donate">感谢您使用 Pixiviz，欢迎您通过捐赠来帮助我们维持无广告运营 -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
+								<span data-name="notice-donate">通过发电帮助我们给服务器续命，维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
 							</div>`
 					});
 				});
