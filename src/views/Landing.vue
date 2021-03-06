@@ -157,7 +157,6 @@ export default {
       }
       // 同一个设备5天内只展示一次
       const lastShowDonate = window.localStorage.getItem('last-show-donate');
-      console.log((new Date().valueOf() - parseInt(lastShowDonate, 10)) / 1000);
       if (lastShowDonate && (new Date().valueOf() - parseInt(lastShowDonate, 10)) / 1000 < 432000) {
         return;
       }
