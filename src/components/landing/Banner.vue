@@ -55,7 +55,7 @@
             <span>
               <a href="https://afdian.net/@backrunner" target="_blank">发电通道</a>
               <span class="about-copyright-split mobile-hide">|</span>
-              <a href="javascript:;" class="mobile-hide" id="wxdonate-trigger">
+              <a href="javascript:;" class="mobile-hide qrpopup-trigger">
                 <span>发电二维码</span>
                 <DonateCode />
               </a>

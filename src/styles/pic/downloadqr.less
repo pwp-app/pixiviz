@@ -1,0 +1,31 @@
+.downloadqr-wrapper {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 10000;
+  background: rgba(25, 25, 25, 0.9);
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  .downloadqr {
+    width: max-content;
+    margin-bottom: 64px;
+    &-code {
+      text-align: center;
+      svg {
+        border-radius: 24px;
+      }
+    }
+    &-tip {
+      color: @color-text-primary;
+      text-align: center;
+      font-weight: 600;
+      font-size: 28px;
+      margin-top: 36px;
+    }
+  }
+}

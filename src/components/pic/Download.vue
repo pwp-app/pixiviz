@@ -2,7 +2,10 @@
   <div class="pic-download">
     <div class="pic-download-title">
       <span>下载</span>
-      <i class="pic-download-title-icon el-icon-s-tools" @click="openDownloadSettings"></i>
+      <i class="pic-download-title-icon mobile-hide icon-qrcode" @click="openDownloadQRCode">
+        <QRCodeIcon />
+      </i>
+      <i class="pic-download-title-icon el-icon-setting" @click="openDownloadSettings"></i>
     </div>
     <div class="pic-download-items">
       <el-button type="primary" @click="downloadCurrent" :disabled="disableDownloadCurrent" :style="downloadCurrentStyle">{{ downloadCurrentText }}</el-button>
@@ -39,14 +42,21 @@
         <el-button type="primary" @click="handleSettingsSubmit">确定</el-button>
       </div>
     </el-dialog>
+    <DownloadQRCode ref="downloadQR" />
   </div>
 </template>
 
 <script>
 import CONFIG from '../../config.json';
+import QRCodeIcon from '../icons/qrcode';
+import DownloadQRCode from './DownloadQRCode';
 
 export default {
   props: ['image', 'loaded'],
+  components: {
+    QRCodeIcon,
+    DownloadQRCode,
+  },
   data() {
     return {
       // download
@@ -95,6 +105,9 @@ export default {
     }
   },
   methods: {
+    openDownloadQRCode() {
+      this.$refs.downloadQR.open();
+    },
     openDownloadSettings() {
       this.settingsVisible = true;
     },

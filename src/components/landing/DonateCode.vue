@@ -1,17 +1,17 @@
 <template>
-  <div class="wxdonate">
+  <div class="qrpopup">
     <div
-      class="wxdonate-code"
+      class="qrpopup-code"
       id="wxdonate"
       data-type="qrcode"
       v-if="!donateLoadError"
       v-loading="donateLoading"
       v-lazy:background-image="donateCode"
     ></div>
-    <div class="wxdonate-code-error" v-else>
+    <div class="qrpopup-code-error" v-else>
       <span>加载失败</span>
     </div>
-    <span class="wxdonate-tip" v-if="!donateLoadError">使用微信扫码</span>
+    <span class="qrpopup-tip" v-if="!donateLoadError">使用微信扫码</span>
   </div>
 </template>
 
