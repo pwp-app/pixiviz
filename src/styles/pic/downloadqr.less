@@ -11,6 +11,7 @@
   align-items: center;
   justify-content: center;
   user-select: none;
+  display: flex;
   .downloadqr {
     width: max-content;
     margin-bottom: 64px;
@@ -27,5 +28,32 @@
       font-size: 28px;
       margin-top: 36px;
     }
+  }
+}
+
+.downloadqr-fade-enter-active {
+  animation: downloadqr-fade-in;
+  animation-duration: 200ms;
+}
+.downloadqr-fade-leave-active {
+  animation: downloadqr-fade-out;
+  animation-duration: 200ms;
+}
+
+@keyframes downloadqr-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes downloadqr-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
