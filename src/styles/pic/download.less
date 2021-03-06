@@ -24,6 +24,12 @@
 			color: @color-text-primary;
 			transition: 200ms;
 			margin-left: 8px;
+			svg {
+				path {
+					transition: 200ms;
+					fill: @color-text-primary;
+				}
+			}
 		}
 		&-icon:hover {
 			cursor: pointer;
@@ -40,12 +46,6 @@
 		.icon-qrcode {
 			width: 26px;
 			height: 26px;
-			svg {
-				path {
-					transition: 200ms;
-					fill: @color-text-primary;
-				}
-			}
 		}
   }
   &-items {
@@ -91,19 +91,17 @@
 			color: darken(@color-text-primary, 2.5%);
 			&-icon {
 				color: darken(@color-text-primary, 2.5%);
+				svg {
+					path {
+						fill: darken(@color-text-primary, 2.5%);
+					}
+				}
 			}
 			&-icon:hover {
 				color: lighten(@color-text-primary, 2.5%);
 				svg {
 					path {
 						fill: lighten(@color-text-primary, 2.5%);
-					}
-				}
-			}
-			.icon-qrcode {
-				svg {
-					path {
-						fill: darken(@color-text-primary, 2.5%);
 					}
 				}
 			}
