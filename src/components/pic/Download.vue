@@ -200,12 +200,19 @@ export default {
         canvas.height = image.height;
         const context = canvas.getContext("2d");
         context.drawImage(image, 0, 0, image.width, image.height);
-        const url = canvas.toDataURL("image/png");
-        let a = document.createElement("a");
-        a.download = name;
-        a.href = url;
-        a.click();
-        a = null;
+        canvas.toBlob((blob) => {
+          const blobUrl = window.URL.createObjectURL(blob);
+          const saveLink = document.createElementNS(
+            "http://www.w3.org/1999/xhtml",
+            "a"
+          );
+          saveLink.download = name;
+          saveLink.href = blobUrl;
+          const event = new MouseEvent("click");
+          setTimeout(() => {
+            saveLink.dispatchEvent(event);
+          });
+        });
         if (this.$store.getters["download/hasName"](name)) {
           this.$store.commit("download/removeItem", name);
         }
