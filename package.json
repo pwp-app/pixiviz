@@ -24,7 +24,7 @@
     "upload:proxy-dev": "npm run push:proxy-dev"
   },
   "dependencies": {
-    "@pwp-app/better-element-ui": "^2.14.1-fix-3",
+    "@pwp-app/better-element-ui": "^2.15.1-prev-2",
     "@pwp-app/vue-context-menu": "^1.2.4",
     "@pwp-app/vue-lazyload": "^1.3.3-fix-1",
     "axios": "^0.21.1",
