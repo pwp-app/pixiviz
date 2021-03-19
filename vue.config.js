@@ -34,7 +34,6 @@ module.exports = {
       clientsClaim: true,
       importWorkboxFrom: 'local',
       importsDirectory: 'js',
-      navigateFallback: '/offline',
       navigateFallbackBlacklist: [/^\/api\//],
       runtimeCaching: [
         {
