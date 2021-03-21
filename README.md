@@ -31,8 +31,8 @@ npm run serve
 
 [vue-virtual-masonry](https://github.com/backrunner/vue-virtual-masonry)
 
-[better-element-ui](https://github.com/backrunner/vue-virtual-masonry)
+[better-element-ui](https://github.com/backrunner/better-element-ui)
 
 ## 许可
 
-Apache License 2.0
+Apache License, Version 2.0.
