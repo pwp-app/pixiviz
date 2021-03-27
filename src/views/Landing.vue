@@ -103,7 +103,8 @@ export default {
         for (let announcement of res.data) {
           const { id, title, content, footer, expires, matchVersion } = announcement;
           const announceLog = window.localStorage.getItem('announce-read-id');
-          const versionMatched = matchVersion && this.checkVersionMatch(matchVersion);
+          // if matchVersion not exists, apply for all version
+          const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
           if (
             (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
             (dayjs(expires).unix() <= dayjs().unix()) ||
