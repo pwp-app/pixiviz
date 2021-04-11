@@ -108,7 +108,6 @@ export default {
       screenOrientation: window.orientation,
       showPart: window.orientation !== 0,
       // action
-      lastOffset: 0,
       actionShow: false,
       actionShowClass: false,
       link: window.location.href,
@@ -154,11 +153,13 @@ export default {
     } else {
       document.title = `${this.image.title} - Pixiviz`;
     }
+    // float
+    this.showFloatTimeout = setTimeout(() => {
+      this.showActionFloat();
+    }, 2000);
     // add event listener
     window.addEventListener('orientationchange', this.handleScreenRotate, false);
     window.addEventListener('scroll', this.handleScroll);
-    // reset var
-    this.lastOffset = 0;
     // scroll to top
     window.scrollTo({
       top: 0,
@@ -280,7 +281,6 @@ export default {
       // change title
       document.title = `图片${this.imageId} - Pixiviz`;
       // reset var
-      this.lastOffset = 0;
       this.closeActionFloat();
 		},
 		handleImageLoad() {
@@ -369,30 +369,28 @@ export default {
     closeActionFloat() {
       if (this.actionShow) {
         this.actionShowClass = false;
-        setTimeout(function() {
+        setTimeout(() => {
           this.actionShow = false;
-        }.bind(this), 300);
+          this.showFloatTimeout = null;
+        }, 300);
       }
     },
     showActionFloat() {
       if (!this.actionShow) {
         this.actionShow = true;
-        setTimeout(function() {
-          this.actionShowClass = this.actionShow;
-        }.bind(this), 0);
+        setTimeout(() => {
+          this.actionShowClass = true;
+        }, 100);
       }
     },
     handleScroll() {
-      if (window.pageYOffset - this.lastOffset < -50) {
-        this.closeActionFloat();
-        this.lastOffset = window.pageYOffset;
-      } else if (window.pageYOffset - this.lastOffset > 50) {
-        if (document.documentElement.scrollTop < 100) {
-          return;
-        }
-        this.showActionFloat();
-        this.lastOffset = window.pageYOffset;
+      this.closeActionFloat();
+      if (this.showFloatTimeout) {
+        clearTimeout(this.showFloatTimeout);
       }
+      this.showFloatTimeout = setTimeout(() => {
+        this.showActionFloat();
+      }, 1000);
     },
     handleAction(action) {
       switch (action) {
