@@ -108,6 +108,7 @@ export default {
       screenOrientation: window.orientation,
       showPart: window.orientation !== 0,
       // action
+      lastOffset: 0,
       actionShow: false,
       actionShowClass: false,
       link: window.location.href,
@@ -164,6 +165,7 @@ export default {
     window.scrollTo({
       top: 0,
     });
+    this.lastOffset = 0;
     // 路由数据栈检查，用户可能是通过浏览器back的
     const storedRoutes = window.localStorage.getItem('pic-routes');
     const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
@@ -281,6 +283,7 @@ export default {
       // change title
       document.title = `图片${this.imageId} - Pixiviz`;
       // reset var
+      this.lastOffset = 0;
       this.closeActionFloat();
 		},
 		handleImageLoad() {
@@ -384,13 +387,21 @@ export default {
       }
     },
     handleScroll() {
-      this.closeActionFloat();
+      if (
+        window.pageYOffset - this.lastOffset < 0 ||
+        document.documentElement.scrollTop < 120
+      ) {
+        this.closeActionFloat();
+      }
       if (this.showFloatTimeout) {
         clearTimeout(this.showFloatTimeout);
       }
-      this.showFloatTimeout = setTimeout(() => {
-        this.showActionFloat();
-      }, 1000);
+      if (document.documentElement.scrollTop >= 120) {
+        this.showFloatTimeout = setTimeout(() => {
+          this.showActionFloat();
+        }, 1000);
+      }
+      this.lastOffset = window.pageYOffset;
     },
     handleAction(action) {
       switch (action) {
