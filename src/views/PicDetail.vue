@@ -154,15 +154,18 @@ export default {
     } else {
       document.title = `${this.image.title} - Pixiviz`;
     }
+    // float
+    this.showFloatTimeout = setTimeout(() => {
+      this.showActionFloat();
+    }, 2000);
     // add event listener
     window.addEventListener('orientationchange', this.handleScreenRotate, false);
     window.addEventListener('scroll', this.handleScroll);
-    // reset var
-    this.lastOffset = 0;
     // scroll to top
     window.scrollTo({
       top: 0,
     });
+    this.lastOffset = 0;
     // 路由数据栈检查，用户可能是通过浏览器back的
     const storedRoutes = window.localStorage.getItem('pic-routes');
     const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
@@ -369,30 +372,36 @@ export default {
     closeActionFloat() {
       if (this.actionShow) {
         this.actionShowClass = false;
-        setTimeout(function() {
+        setTimeout(() => {
           this.actionShow = false;
-        }.bind(this), 300);
+          this.showFloatTimeout = null;
+        }, 300);
       }
     },
     showActionFloat() {
       if (!this.actionShow) {
         this.actionShow = true;
-        setTimeout(function() {
-          this.actionShowClass = this.actionShow;
-        }.bind(this), 0);
+        setTimeout(() => {
+          this.actionShowClass = true;
+        }, 100);
       }
     },
     handleScroll() {
-      if (window.pageYOffset - this.lastOffset < -50) {
+      if (
+        window.pageYOffset - this.lastOffset < 0 ||
+        document.documentElement.scrollTop < 120
+      ) {
         this.closeActionFloat();
-        this.lastOffset = window.pageYOffset;
-      } else if (window.pageYOffset - this.lastOffset > 50) {
-        if (document.documentElement.scrollTop < 100) {
-          return;
-        }
-        this.showActionFloat();
-        this.lastOffset = window.pageYOffset;
       }
+      if (this.showFloatTimeout) {
+        clearTimeout(this.showFloatTimeout);
+      }
+      if (document.documentElement.scrollTop >= 120) {
+        this.showFloatTimeout = setTimeout(() => {
+          this.showActionFloat();
+        }, 1000);
+      }
+      this.lastOffset = window.pageYOffset;
     },
     handleAction(action) {
       switch (action) {
