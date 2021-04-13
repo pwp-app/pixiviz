@@ -370,11 +370,14 @@ export default {
     },
     // action
     closeActionFloat() {
-      if (this.actionShow) {
+      if (this.actionShowClass) {
         this.actionShowClass = false;
         setTimeout(() => {
           this.actionShow = false;
-          this.showFloatTimeout = null;
+          if (this.showFloatTimeout) {
+            clearTimeout(this.showFloatTimeout);
+            this.showFloatTimeout = null;
+          }
         }, 300);
       }
     },
@@ -387,20 +390,19 @@ export default {
       }
     },
     handleScroll() {
+      const { scrollTop } = document.documentElement;
       if (
-        window.pageYOffset - this.lastOffset < 0 ||
-        document.documentElement.scrollTop < 120
+        window.pageYOffset - this.lastOffset < 0 && scrollTop > 200
       ) {
         this.closeActionFloat();
       }
       if (this.showFloatTimeout) {
         clearTimeout(this.showFloatTimeout);
+        this.showFloatTimeout = null;
       }
-      if (document.documentElement.scrollTop >= 120) {
-        this.showFloatTimeout = setTimeout(() => {
-          this.showActionFloat();
-        }, 1000);
-      }
+      this.showFloatTimeout = setTimeout(() => {
+        this.showActionFloat();
+      }, 1500);
       this.lastOffset = window.pageYOffset;
     },
     handleAction(action) {
