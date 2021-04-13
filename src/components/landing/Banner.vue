@@ -1,11 +1,13 @@
 <template>
   <div
-    :class="['banner-wrapper',
+    :class="[
+      'banner-wrapper',
       expanded ? 'banner-expanded' : '',
-      clearMarginBottom ? 'clear-margin-bottom' : '']"
+      clearMarginBottom ? 'clear-margin-bottom' : '',
+    ]"
     @dblclick="handleDblClick"
     v-touch:doubletap="handleDoubleTap"
-    >
+  >
     <div class="banner">
       <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
         <span>Pixiviz</span>
@@ -16,7 +18,15 @@
             <span>借物</span>
           </div>
           <div class="about-borrow-item">
-            <span>主页背景: <a target="_blank" class="about-borrow-link" :href="`https://pixiviz.pwp.app/pic/${landingBgId}`">{{ landingBgName }}</a></span>
+            <span
+              >主页背景:
+              <a
+                target="_blank"
+                class="about-borrow-link"
+                :href="`https://pixiviz.pwp.app/pic/${landingBgId}`"
+                >{{ landingBgName }}</a
+              ></span
+            >
           </div>
         </div>
         <div class="about-theme">
@@ -31,7 +41,7 @@
               active-text="黑暗"
               inactive-text="浅色"
               @change="themeChanged"
-              >
+            >
             </el-switch>
           </div>
           <div class="about-theme-switch">
@@ -43,7 +53,7 @@
               inactive-text="自动"
               :disabled="!darkmode"
               @change="themeModeChanged"
-              >
+            >
             </el-switch>
           </div>
         </div>
@@ -66,7 +76,7 @@
             </span>
           </div>
           <div class="about-copyright-item">
-            <span>v {{version}}</span>
+            <span>v {{ version }}</span>
           </div>
           <div class="about-copyright-item" @click="goGitHub">
             <GitHubIcon />
@@ -85,7 +95,7 @@ import DonateCode from './DonateCode';
 import CONFIG from '@/config.json';
 
 export default {
-  name: "Landing.Banner",
+  name: 'Landing.Banner',
   components: {
     GitHubIcon,
     DonateCode,
@@ -102,18 +112,17 @@ export default {
       darkPersist: false, // 永久禁用
       landingBgId: CONFIG.landingBgId,
       landingBgName: CONFIG.landingBgName,
-    }
+    };
   },
   created() {
     const darkEnabled = window.localStorage.getItem('enable-dark');
-    this.darkmode = darkEnabled === 'true' ? true : false;
+    this.darkmode = darkEnabled === 'true';
     const darkPersist = window.localStorage.getItem('dark-persist');
-    this.darkPersist = darkPersist === 'true' ? true : false;
+    this.darkPersist = darkPersist === 'true';
   },
   methods: {
     handleDblClick(e) {
-      if (e.target.getAttribute('class') &&
-        e.target.getAttribute('class').includes('el-switch')) {
+      if (e.target.getAttribute('class') && e.target.getAttribute('class').includes('el-switch')) {
         return;
       }
       // Banner Anim
@@ -123,7 +132,7 @@ export default {
           this.expanded = true;
           // Hide scrollbar
           if (!document.body.classList.contains('no-scrollbar')) {
-						document.body.classList.add('no-scrollbar');
+            document.body.classList.add('no-scrollbar');
           }
           this.$store.commit('landingBanner/setExpanded', this.expanded);
           this.$emit('expanded', true);
@@ -137,7 +146,7 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-								if (document.body.classList.contains('no-scrollbar')) {
+                if (document.body.classList.contains('no-scrollbar')) {
                   document.body.classList.remove('no-scrollbar');
                 }
               }, 500);
@@ -148,7 +157,7 @@ export default {
           this.clearMarginBottom = false;
           // Hide scrollbar
           if (!document.body.classList.contains('no-scrollbar')) {
-						document.body.classList.add('no-scrollbar');
+            document.body.classList.add('no-scrollbar');
           }
           this.$emit('expanded', false);
           setTimeout(() => {
@@ -159,7 +168,7 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-								if (document.body.classList.contains('no-scrollbar')) {
+                if (document.body.classList.contains('no-scrollbar')) {
                   document.body.classList.remove('no-scrollbar');
                 }
               }, 500);
@@ -169,7 +178,7 @@ export default {
       }
     },
     handleDoubleTap() {
-      handleDblClick();
+      this.handleDblClick();
     },
     addDarkClass() {
       if (!document.documentElement.classList.contains('dark')) {
@@ -186,14 +195,14 @@ export default {
     themeChanged(value) {
       if (value) {
         const now = dayjs();
-				const hour = now.hour();
-				if (!this.darkPersist) {
-					if (hour < 6 || hour >= 18) {
+        const hour = now.hour();
+        if (!this.darkPersist) {
+          if (hour < 6 || hour >= 18) {
             this.addDarkClass();
-					}
-				} else {
+          }
+        } else {
           this.addDarkClass();
-				}
+        }
       } else {
         this.removeDarkClass();
       }

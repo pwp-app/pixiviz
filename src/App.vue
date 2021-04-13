@@ -11,8 +11,8 @@
       mode="out-in"
       enter-active-class="right-tag-in"
       leave-to-class="right-tag-out"
-      >
-      <DownloadListTag key="downloadList" v-if="showDownloadList"/>
+    >
+      <DownloadListTag key="downloadList" v-if="showDownloadList" />
     </transition-group>
     <DownloadList />
   </div>
@@ -26,7 +26,7 @@ const LOADMAP_ENTRIES_LIMIT = 1000;
 const LOADMAP_DELETE_RATE = 0.5;
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     DownloadList,
     DownloadListTag,
@@ -57,22 +57,28 @@ export default {
       }
     }
     // 异步获取分流配置
-    this.axios.get('https://config.backrunner.top/pixiviz/proxy-config.json', {
-      withCredentials: false,
-    }).then((res) => {
-      if (res.data) {
-        let index = 0;
-        window.pixiviz.hostMap = {};
-        Object.keys(res.data).forEach((key) => {
-          window.pixiviz.hostMap[index] = key;
-          window.pixiviz.hostMap[key] = index;
-          index++;
-        });
-        window.pixiviz.proxyMap = res.data;
-      }
-    }, () => {
-      console.log('Cannot fetch proxy config.');
-    });
+    this.axios
+      .get('https://config.backrunner.top/pixiviz/proxy-config.json', {
+        withCredentials: false,
+      })
+      .then(
+        (res) => {
+          if (res.data) {
+            let index = 0;
+            window.pixiviz.hostMap = {};
+            Object.keys(res.data).forEach((key) => {
+              window.pixiviz.hostMap[index] = key;
+              window.pixiviz.hostMap[key] = index;
+              index++;
+            });
+            window.pixiviz.proxyMap = res.data;
+          }
+        },
+        (err) => {
+          // eslint-disable-next-line no-console
+          console.error('Cannot fetch proxy config.', err);
+        },
+      );
     // 重置图片-画师路由数据
     window.localStorage.removeItem('pic-routes');
     // Safari vh 优化
@@ -103,7 +109,7 @@ export default {
   computed: {
     showDownloadList() {
       return this.$store.state.download.list.length > 0;
-    }
+    },
   },
   methods: {
     saveLoadMap() {
@@ -147,9 +153,9 @@ export default {
     },
     handleDarkModeDisable() {
       this.$store.commit('darkMode/setEnabled', false);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

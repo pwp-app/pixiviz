@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['search-container', iPadStyle ? 'ipad-only' : null]"
-    :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px`} : null"
+    :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px` } : null"
   >
     <div class="search-header">
       <div class="search-header-title">
@@ -43,7 +43,7 @@
       <div class="waterfall-wrapper">
         <Waterfall
           :class="{
-            'waterfall-responsive': waterfallResponsive
+            'waterfall-responsive': waterfallResponsive,
           }"
           ref="waterfall"
           :key="waterfallResponsive"
@@ -89,16 +89,15 @@ const id_matcher = /^\d{2,8}$/;
 const BLOCK_WORDS = [/r-?18/i, /18-?r/i, /^色图$/];
 
 export default {
-  name: "Search",
+  name: 'Search',
   components: {
     Waterfall,
-    BackToTop
+    BackToTop,
   },
   data() {
     return {
       page: this.$store.state.search.page !== null ? this.$store.state.search.page : 1,
-      images: this.$store.state.search.keyword === this.$route.params.keyword ?
-        this.$store.state.search.images ? this.$store.state.search.images : [] : [],
+      images: this.initImages(),
       suggestions: this.$store.state.search.suggestions ? this.$store.state.search.suggestions : [],
       keyword: this.$route.params.keyword,
       keywordInput: this.$route.params.keyword,
@@ -106,7 +105,7 @@ export default {
       sensitiveBlocked: false,
       blockedCount: 0,
       waterfallIdentifier: Math.round(Math.random() * 100),
-      from: this.$cookies.get("search-from"),
+      from: this.$cookies.get('search-from'),
       // Misc
       screenWidth: document.documentElement.clientWidth,
       cardWidth: this.getCardWidth(document.documentElement.clientWidth),
@@ -121,7 +120,7 @@ export default {
     };
   },
   watch: {
-    "$route.params.keyword": "handleKeywordChanged",
+    '$route.params.keyword': 'handleKeywordChanged',
     /* Watch screen width */
     screenWidth(width) {
       if (this.resizeTimer) {
@@ -140,7 +139,7 @@ export default {
           document.documentElement.scrollTop = this.scrollTop;
         });
       }, 300);
-    }
+    },
   },
   computed: {
     showContent() {
@@ -161,7 +160,7 @@ export default {
     // update store
     this.$store.commit('search/setKeyword', this.keyword);
     // Set scroll to last state
-    const scrollTop = parseInt(this.$cookies.get("search-scroll"), 10);
+    const scrollTop = parseInt(this.$cookies.get('search-scroll'), 10);
     if (this.images.length > 0) {
       if (scrollTop) {
         this.$nextTick(() => {
@@ -176,8 +175,8 @@ export default {
     }
     // Add resize event listener
     this.$nextTick(() => {
-      window.addEventListener("resize", this.windowResized, false);
-      window.addEventListener("scroll", this.handleScroll, false);
+      window.addEventListener('resize', this.windowResized, false);
+      window.addEventListener('scroll', this.handleScroll, false);
     });
     // check search from
     if (this.from && this.from.startsWith('pic/')) {
@@ -197,10 +196,16 @@ export default {
   destroyed() {
     // 清除监听器
     this.leaveSuggestion();
-    window.removeEventListener("resize", this.windowResized, false);
-    window.removeEventListener("scroll", this.handleScroll, false);
+    window.removeEventListener('resize', this.windowResized, false);
+    window.removeEventListener('scroll', this.handleScroll, false);
   },
   methods: {
+    initImages() {
+      if (this.$store.state.search.keyword === this.$route.params.keyword) {
+        return this.$store.state.search.images || [];
+      }
+      return [];
+    },
     infiniteHandler($state) {
       // 屏蔽了就不发包
       if (this.keywordBlocked || !this.keyword) {
@@ -211,49 +216,54 @@ export default {
           params: {
             word: this.keyword,
             page: this.page,
-          }
+          },
         })
-        .then(response => {
-          if (!response.data.illusts) {
-            // 加载失败
-            $state.complete();
-            if (response.data.sensitive) {
-              this.sensitiveBlocked = true;
+        .then(
+          (response) => {
+            if (!response.data.illusts) {
+              // 加载失败
+              $state.complete();
+              if (response.data.sensitive) {
+                this.sensitiveBlocked = true;
+              }
+              return;
             }
-            return;
-          }
-          if (response.data.illusts.length === 0) {
-            // 无数据
+            if (response.data.illusts.length === 0) {
+              // 无数据
+              $state.complete();
+              return;
+            }
+            const images = filterImages(response.data.illusts);
+            this.images = this.images.concat(images);
+            // 缓存 images
+            this.$store.commit('search/setImages', this.images);
+            // 设置 Load 状态为 false
+            if (this.$refs.waterfall) {
+              this.$refs.waterfall.firstLoad = false;
+            }
+            // Page + 1
+            this.page += 1;
+            this.$store.commit('search/setPage', this.page);
+            $state.loaded();
+          },
+          () => {
             $state.complete();
-            return;
-          }
-          const images = filterImages(response.data.illusts);
-          this.images = this.images.concat(images);
-          // 缓存 images
-          this.$store.commit("search/setImages", this.images);
-          // 设置 Load 状态为 false
-          if (this.$refs.waterfall) {
-            this.$refs.waterfall.firstLoad = false;
-          }
-          // Page + 1
-          this.page = this.page + 1;
-          this.$store.commit("search/setPage", this.page);
-          $state.loaded();
-        }, () => {
-          $state.complete();
-        });
+          },
+        );
     },
     fetchSuggestion() {
-      this.axios.get(`${CONFIG.OWN_API}/search/suggestions`, {
-        params: {
-          keyword: this.keyword,
-        }
-      }).then((res) => {
-        if (res.data && Array.isArray(res.data)) {
-          this.suggestions = res.data.filter(item => item !== this.keyword);
-          this.$store.commit('search/setSuggestions', this.suggestions);
-        }
-      });
+      this.axios
+        .get(`${CONFIG.OWN_API}/search/suggestions`, {
+          params: {
+            keyword: this.keyword,
+          },
+        })
+        .then((res) => {
+          if (res.data && Array.isArray(res.data)) {
+            this.suggestions = res.data.filter((item) => item !== this.keyword);
+            this.$store.commit('search/setSuggestions', this.suggestions);
+          }
+        });
     },
     checkIfId() {
       // 检查关键词是不是纯数字
@@ -263,61 +273,69 @@ export default {
       }
     },
     checkIfIllust() {
-      this.axios.get(`${CONFIG.OWN_API}/illust/detail`, {
-        params: {
-          id: parseInt(this.keyword, 10),
-        },
-      }).then((res) => {
-        if (!res || !res.data || !res.data.illust) {
-          return;
-        }
-        const { data: { illust } } = res;
-        if (!filterImage(illust)) {
-          return;
-        }
-        // bind event to search notify
-        document.body.addEventListener('click', this.illustNoticeClick, false);
-        this.illustNotice = this.$notify({
-          title: '您要找的可能是：',
-          position: 'bottom-left',
-          dangerouslyUseHTMLString: true,
-          duration: 5000,
-          onClose: this.illustNoticeClose,
-          message: `
+      this.axios
+        .get(`${CONFIG.OWN_API}/illust/detail`, {
+          params: {
+            id: parseInt(this.keyword, 10),
+          },
+        })
+        .then((res) => {
+          if (!res || !res.data || !res.data.illust) {
+            return;
+          }
+          const {
+            data: { illust },
+          } = res;
+          if (!filterImage(illust)) {
+            return;
+          }
+          // bind event to search notify
+          document.body.addEventListener('click', this.illustNoticeClick, false);
+          this.illustNotice = this.$notify({
+            title: '您要找的可能是：',
+            position: 'bottom-left',
+            dangerouslyUseHTMLString: true,
+            duration: 5000,
+            onClose: this.illustNoticeClose,
+            message: `
             <div class="search-notify">
               <span data-name="search-notify-illust">画作 ${illust.title} （ID: ${this.keyword}）</span>
-            </div>`
+            </div>`,
+          });
         });
-      });
     },
     checkIfArtist() {
-      this.axios.get(`${CONFIG.OWN_API}/user/detail`, {
-        params: {
-          id: parseInt(this.keyword, 10),
-        },
-      }).then((res) => {
-        if (!res || !res.data || !res.data.user) {
-          return;
-        }
-        const { data: { user } } = res;
-        document.body.addEventListener('click', this.artistNoticeClick, false);
-        this.artistNotice = this.$notify({
-          title: '您要找的可能是：',
-          position: 'bottom-left',
-          dangerouslyUseHTMLString: true,
-          duration: 5000,
-          onClose: this.artistNoticeClose,
-          message: `
+      this.axios
+        .get(`${CONFIG.OWN_API}/user/detail`, {
+          params: {
+            id: parseInt(this.keyword, 10),
+          },
+        })
+        .then((res) => {
+          if (!res || !res.data || !res.data.user) {
+            return;
+          }
+          const {
+            data: { user },
+          } = res;
+          document.body.addEventListener('click', this.artistNoticeClick, false);
+          this.artistNotice = this.$notify({
+            title: '您要找的可能是：',
+            position: 'bottom-left',
+            dangerouslyUseHTMLString: true,
+            duration: 5000,
+            onClose: this.artistNoticeClose,
+            message: `
             <div class="search-notify">
               <span data-name="search-notify-artist">画师 ${user.name} （ID: ${this.keyword}）</span>
-            </div>`
+            </div>`,
+          });
         });
-      });
     },
     refreshWaterfall() {
       this.page = 1;
       this.images = [];
-      this.waterfallIdentifier = this.waterfallIdentifier + 1;
+      this.waterfallIdentifier += 1;
     },
     submitSearch() {
       this.keywordInput = this.keywordInput.trim();
@@ -337,7 +355,7 @@ export default {
     checkBlocked() {
       // 检查屏蔽
       let flag_blocked = false;
-      this.blockedCountTime = parseInt(window.localStorage.getItem('blocked_count_time'));
+      this.blockedCountTime = parseInt(window.localStorage.getItem('blocked_count_time'), 10);
       if (new Date().valueOf() - this.blockedCountTime > 180000) {
         this.blockedCount = 1;
         window.localStorage.setItem('blocked_count', 1);
@@ -352,7 +370,7 @@ export default {
           window.localStorage.setItem('blocked_count_time', new Date().valueOf());
         }
       }
-      for (let pattern of BLOCK_WORDS) {
+      for (const pattern of BLOCK_WORDS) {
         if (pattern.test(this.keyword)) {
           flag_blocked = true;
         }
@@ -380,11 +398,7 @@ export default {
       document.title = `${this.keyword} - Pixiviz`;
     },
     handleCardClicked(imageId) {
-      this.$cookies.set(
-        "pic-from",
-        `search/${this.$route.params.keyword}`,
-        "1h"
-      );
+      this.$cookies.set('pic-from', `search/${this.$route.params.keyword}`, '1h');
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
@@ -407,40 +421,44 @@ export default {
     scrollSuggesion(e) {
       e.preventDefault();
       e.stopPropagation();
-      this.suggestionTranslate = this.suggestionTranslate + e.deltaY * 2.5;
+      this.suggestionTranslate += e.deltaY * 2.5;
       if (this.suggestionTranslate < 0) {
         this.suggestionTranslate = 0;
       }
-      if (this.suggestionTranslate > this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth) {
-        this.suggestionTranslate = this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth;
+      if (
+        this.suggestionTranslate >
+        this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth
+      ) {
+        this.suggestionTranslate =
+          this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth;
       }
-      this.$refs.suggestionItems.setAttribute('style', `transform: translateX(-${this.suggestionTranslate}px)`);
+      this.$refs.suggestionItems.setAttribute(
+        'style',
+        `transform: translateX(-${this.suggestionTranslate}px)`,
+      );
     },
     enterSuggesion() {
       if (!this.$refs.suggestions) {
         return;
       }
-      if (
-        this.$refs.suggestions.scrollWidth >
-        this.$refs.suggestions.clientWidth
-      ) {
-        window.addEventListener("mousewheel", this.scrollSuggesion, {
-          passive: false
+      if (this.$refs.suggestions.scrollWidth > this.$refs.suggestions.clientWidth) {
+        window.addEventListener('mousewheel', this.scrollSuggesion, {
+          passive: false,
         });
       }
     },
     leaveSuggestion() {
-      window.removeEventListener("mousewheel", this.scrollSuggesion, {
-        passive: false
+      window.removeEventListener('mousewheel', this.scrollSuggesion, {
+        passive: false,
       });
     },
     // 窗口事件
     handleScroll() {
-      this.$cookies.set("search-scroll", document.documentElement.scrollTop, "1h");
+      this.$cookies.set('search-scroll', document.documentElement.scrollTop, '1h');
     },
     resetScrollState() {
       this.scrollTop = 0;
-      this.$cookies.set("search-scroll", 0, "1h");
+      this.$cookies.set('search-scroll', 0, '1h');
     },
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
@@ -476,6 +494,6 @@ export default {
     artistNoticeClose() {
       document.body.removeEventListener('click', this.artistNoticeClick, false);
     },
-  }
+  },
 };
 </script>

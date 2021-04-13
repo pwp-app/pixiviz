@@ -17,7 +17,8 @@
   margin: 0 auto;
   .rank-component-width-mixin(6);
   .rank-component-width-responsive-mixin(5, 2, 72px);
-  span, i {
+  span,
+  i {
     .no-select();
   }
   &-title {
@@ -57,7 +58,8 @@
     .rank-component-width-mixin(6);
     .rank-component-width-responsive-mixin(5, 2, 72px);
     position: relative;
-    span, i {
+    span,
+    i {
       color: @color-text-primary;
       font-size: 18px;
       font-weight: 600;
@@ -68,7 +70,8 @@
     }
     &-item:hover {
       cursor: pointer;
-      span, i {
+      span,
+      i {
         color: lighten(@color-text-primary, 10%);
       }
     }
@@ -127,11 +130,13 @@
   }
   .rank-body {
     &-date {
-      span, i {
+      span,
+      i {
         color: darken(@color-text-primary, 2.5%);
       }
       &-item:hover {
-        span, i {
+        span,
+        i {
           color: lighten(@color-text-primary, 2.5%);
         }
       }
@@ -239,7 +244,7 @@
 
 /* Mobile */
 
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .rank-header {
     width: auto !important;
     padding: 18px 24px 18px 24px;
@@ -261,7 +266,8 @@
     &-date {
       width: auto !important;
       padding: 0 4px;
-      span, i {
+      span,
+      i {
         font-size: 16px;
       }
       &-back {
@@ -306,9 +312,10 @@
 }
 
 .rank-component-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
-  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
+  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin -
+    1px;
   @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
-  @media(max-width: @trigger-width) {
+  @media (max-width: @trigger-width) {
     width: @container-width - 8px !important;
   }
   .rank-component-width-responsive-mixin(@col - 1, @min-col, @margin);

@@ -4,17 +4,13 @@
     title="下载列表"
     :visible.sync="showDrawer"
     @before-close="handleClose"
-    >
-      <template v-if="!empty">
-        <DonwloadListItem
-          v-for="item in items"
-          :key="item.key"
-          :item="item"
-          />
-      </template>
-      <template v-else>
-        <span class="download-list-empty">当前没有进行中的下载...</span>
-      </template>
+  >
+    <template v-if="!empty">
+      <DonwloadListItem v-for="item in items" :key="item.key" :item="item" />
+    </template>
+    <template v-else>
+      <span class="download-list-empty">当前没有进行中的下载...</span>
+    </template>
   </el-drawer>
 </template>
 
@@ -37,7 +33,7 @@ export default {
   computed: {
     empty() {
       return this.$store.state.download.list < 1;
-    }
+    },
   },
   methods: {
     show() {
@@ -48,11 +44,11 @@ export default {
       this.timer = setInterval(this.refreshList, 1000);
     },
     handleClose() {
-      clearInterval(timer);
-      timer = null;
+      clearInterval(this.timer);
+      this.timer = null;
     },
     refreshList() {
-      const list = this.$store.state.download.list;
+      const { list } = this.$store.state.download;
       if (list.length < 1) {
         return;
       }
@@ -65,7 +61,7 @@ export default {
         });
       });
       this.items = items;
-    }
-  }
-}
+    },
+  },
+};
 </script>

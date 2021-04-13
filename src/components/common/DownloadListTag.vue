@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="right-tag right-tag-clickable tag-download"
-    @click="handleClick"
-    >
+  <div class="right-tag right-tag-clickable tag-download" @click="handleClick">
     <span>图片下载中 ({{ donwloadCount }})</span>
   </div>
 </template>
@@ -17,7 +14,7 @@ export default {
   methods: {
     handleClick() {
       this.$bus.$emit('openDownloadList');
-    }
-  }
+    },
+  },
 };
 </script>

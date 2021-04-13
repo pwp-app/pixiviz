@@ -2,16 +2,10 @@
   <div class="pic-download">
     <div class="pic-download-title">
       <span>下载</span>
-      <i
-        class="pic-download-title-icon mobile-hide icon-qrcode"
-        @click="openDownloadQRCode"
-      >
+      <i class="pic-download-title-icon mobile-hide icon-qrcode" @click="openDownloadQRCode">
         <QRCodeIcon />
       </i>
-      <i
-        class="pic-download-title-icon el-icon-setting"
-        @click="openDownloadSettings"
-      ></i>
+      <i class="pic-download-title-icon el-icon-setting" @click="openDownloadSettings"></i>
     </div>
     <div class="pic-download-items">
       <el-button
@@ -65,12 +59,12 @@
 </template>
 
 <script>
-import CONFIG from "../../config.json";
-import QRCodeIcon from "../icons/qrcode";
-import DownloadQRCode from "./DownloadQRCode";
+import CONFIG from '../../config.json';
+import QRCodeIcon from '../icons/qrcode';
+import DownloadQRCode from './DownloadQRCode';
 
 export default {
-  props: ["image", "loaded"],
+  props: ['image', 'loaded'],
   components: {
     QRCodeIcon,
     DownloadQRCode,
@@ -98,15 +92,11 @@ export default {
       }
     },
     downloadCurrentText() {
-      if (!this.image) return "";
-      if (
-        !this.loaded &&
-        this.$store.state.pic.progress &&
-        this.$store.state.pic.progress < 100
-      ) {
+      if (!this.image) return '';
+      if (!this.loaded && this.$store.state.pic.progress && this.$store.state.pic.progress < 100) {
         return `大图加载中（${this.$store.state.pic.progress}%）...`;
       }
-      return this.image.page_count > 1 ? "保存当前" : "点我保存";
+      return this.image.page_count > 1 ? '保存当前' : '点我保存';
     },
     showDownloadAll() {
       if (!this.image) return false;
@@ -117,7 +107,7 @@ export default {
     },
   },
   watch: {
-    "$store.state.pic.progress": function (value) {
+    '$store.state.pic.progress': function (value) {
       if (this.$store.state.darkMode.enabled) {
         this.downloadCurrentStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
       } else {
@@ -134,26 +124,22 @@ export default {
       this.settingsVisible = true;
     },
     handleSettingsClose() {
-      const keys = ["singleFileName", "multiFileName"];
+      const keys = ['singleFileName', 'multiFileName'];
       keys.forEach((key) => {
         this.settingsForm[key] = this.$downloadSettings[key];
       });
     },
     handleSettingsSubmit() {
-      const keys = ["singleFileName", "multiFileName"];
+      const keys = ['singleFileName', 'multiFileName'];
       const defaultValue = {
-        singleFileName: "{title}-{id}",
-        multiFileName: "{title}-{id}-{index}",
+        singleFileName: '{title}-{id}',
+        multiFileName: '{title}-{id}-{index}',
       };
       keys.forEach((key) => {
-        this.$downloadSettings[key] =
-          this.settingsForm[key] || defaultValue[key];
+        this.$downloadSettings[key] = this.settingsForm[key] || defaultValue[key];
       });
       // 写入localStorage
-      window.localStorage.setItem(
-        "download-settings",
-        JSON.stringify(this.$downloadSettings)
-      );
+      window.localStorage.setItem('download-settings', JSON.stringify(this.$downloadSettings));
       this.settingsVisible = false;
     },
     createDownloadTimer() {
@@ -173,53 +159,50 @@ export default {
     },
     getDownloadName(type) {
       let name;
-      if (type === "single") {
+      if (type === 'single') {
         name = this.$downloadSettings.singleFileName;
       } else {
         name = this.$downloadSettings.multiFileName;
       }
       name = name
-        .replace("{title}", this.image.title)
-        .replace("{id}", this.image.id)
-        .replace("{author}", this.image.user.name);
+        .replace('{title}', this.image.title)
+        .replace('{id}', this.image.id)
+        .replace('{author}', this.image.user.name);
       return name;
     },
     downloadImage(src, name, queue = false) {
       if (queue) {
         window.pixiviz.downloadQueue.push({
           url: src,
-          name: name,
+          name,
         });
         return;
       }
       const image = new Image();
-      image.setAttribute("crossOrigin", "*");
+      image.setAttribute('crossOrigin', '*');
       image.onload = () => {
-        const canvas = document.createElement("canvas");
+        const canvas = document.createElement('canvas');
         canvas.width = image.width;
         canvas.height = image.height;
-        const context = canvas.getContext("2d");
+        const context = canvas.getContext('2d');
         context.drawImage(image, 0, 0, image.width, image.height);
         canvas.toBlob((blob) => {
           const blobUrl = window.URL.createObjectURL(blob);
-          const saveLink = document.createElementNS(
-            "http://www.w3.org/1999/xhtml",
-            "a"
-          );
+          const saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
           saveLink.download = name;
           saveLink.href = blobUrl;
-          const event = new MouseEvent("click");
+          const event = new MouseEvent('click');
           setTimeout(() => {
             saveLink.dispatchEvent(event);
           });
         });
-        if (this.$store.getters["download/hasName"](name)) {
-          this.$store.commit("download/removeItem", name);
+        if (this.$store.getters['download/hasName'](name)) {
+          this.$store.commit('download/removeItem', name);
         }
       };
       setTimeout(() => {
         if (!image.blobLoaded) {
-          this.$store.commit("download/addItem", {
+          this.$store.commit('download/addItem', {
             name,
             image,
           });
@@ -235,18 +218,18 @@ export default {
           this.downloadCurrentLock = false;
         }, 1000);
       }
-      this.$emit("download-current");
+      this.$emit('download-current');
     },
     downloadAll() {
       if (!this.originalUrls) {
-        this.$message.error("无法获取所有图片的文件地址");
+        this.$message.error('无法获取所有图片的文件地址');
         return;
       }
       // notice
       this.notification = this.$notify({
-        title: "",
-        position: "top-right",
-        customClass: "oneline-notice-container",
+        title: '',
+        position: 'top-right',
+        customClass: 'oneline-notice-container',
         dangerouslyUseHTMLString: true,
         duration: 2000,
         message: `
@@ -254,15 +237,15 @@ export default {
             <span data-name="notice-download">您的下载已经开始了~</span>
           </div>`,
       });
-      const name = this.getDownloadName("multi");
+      const name = this.getDownloadName('multi');
       for (let i = 0; i < this.originalUrls.length; i++) {
         const {
           image_urls: { original: url },
         } = this.originalUrls[i];
         this.downloadImage(
-          url.replace("i.pximg.net", CONFIG.DOWNLOAD_HOST),
-          name.replace("{index}", i),
-          window.isSafari
+          url.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST),
+          name.replace('{index}', i),
+          window.isSafari,
         );
       }
       if (window.isSafari) {

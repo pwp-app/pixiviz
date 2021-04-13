@@ -6,7 +6,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
-    box-shadow: 0px 4px 12px rgba(0,0,0, .175);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.175);
     border-radius: 0 0 16px 16px;
     img {
       display: block;
@@ -157,7 +157,8 @@
       .pic-stat {
         display: inline-block;
         margin-right: 8px;
-        span, i {
+        span,
+        i {
           font-size: 14px;
           color: lighten(@color-text-primary, 5%);
           .no-select();
@@ -188,16 +189,19 @@
       filter: brightness(0.875);
     }
     .pic-presentation-page {
-      span, i {
+      span,
+      i {
         color: darken(@color-text-primary, 2.5%);
       }
       &-back:hover {
-        span, i {
+        span,
+        i {
           color: lighten(@color-text-primary, 2.5%);
         }
       }
       &-next:hover {
-        span, i {
+        span,
+        i {
           color: lighten(@color-text-primary, 2.5%);
         }
       }
@@ -223,7 +227,8 @@
       }
       &-stat {
         .pic-stat {
-          span, i {
+          span,
+          i {
             color: @color-text-primary;
           }
         }
@@ -240,7 +245,7 @@
 /* Responsive */
 
 // 2k
-@media(min-width: 2400px) and (min-height: 1280px) {
+@media (min-width: 2400px) and (min-height: 1280px) {
   .pic-presentation-image-wrapper {
     position: relative;
     .pic-presentation-image {
@@ -251,7 +256,7 @@
 }
 
 // smaller screen
-@media(max-width: 1680px) {
+@media (max-width: 1680px) {
   .pic-presentation-image-wrapper {
     .pic-presentation-image {
       max-width: 920px;
@@ -260,7 +265,7 @@
   }
 }
 
-@media(max-width: 1430px) {
+@media (max-width: 1430px) {
   .pic-presentation-image-wrapper {
     .pic-presentation-image {
       max-width: 802px;
@@ -269,7 +274,7 @@
   }
 }
 
-@media(max-width: 1366px) {
+@media (max-width: 1366px) {
   .pic-presentation-image-wrapper {
     .pic-presentation-image {
       max-width: 740px;
@@ -278,7 +283,7 @@
   }
 }
 
-@media(max-width: 1024px) {
+@media (max-width: 1024px) {
   .pic-presentation-image-wrapper {
     .pic-presentation-image {
       max-width: 600px;
@@ -303,7 +308,7 @@
       box-shadow: none;
       img {
         width: calc(100vw - 48px) !important;
-        box-shadow: 0px 4px 12px rgba(0,0,0, .175);
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.175);
       }
     }
     .pic-presentation-page {
@@ -330,7 +335,7 @@
       box-shadow: none;
       img {
         width: calc(100vw - 48px) !important;
-        box-shadow: 0px 4px 12px rgba(0,0,0, .175);
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.175);
       }
     }
     .pic-presentation-image-error {

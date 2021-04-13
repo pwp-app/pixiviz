@@ -16,18 +16,19 @@
   }
 
   .artist-header {
-		padding-top: @header-padding-top;
+    padding-top: @header-padding-top;
     margin: 0 auto;
     .artist-component-width-mixin(3);
-		.artist-component-width-responsive-mixin(2, 2, 72px);
-		position: relative;
-    span, i {
+    .artist-component-width-responsive-mixin(2, 2, 72px);
+    position: relative;
+    span,
+    i {
       .no-select();
     }
     &-close {
-			position: absolute;
-			right: 0;
-			top: @header-padding-top;
+      position: absolute;
+      right: 0;
+      top: @header-padding-top;
       transition: 200ms ease-in-out;
       color: @color-text-primary;
       font-size: 32px;
@@ -162,9 +163,10 @@
 }
 
 .artist-component-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
-  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin - 1px;
+  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin -
+    1px;
   @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
-  @media(max-width: @trigger-width) {
+  @media (max-width: @trigger-width) {
     width: @container-width - 8px !important;
   }
   .artist-component-width-responsive-mixin(@col - 1, @min-col, @margin);

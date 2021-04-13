@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.18.1",
+  "version": "1.18.2",
   "private": true,
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
@@ -21,7 +21,9 @@
     "upload:anno": "npm run push:anno",
     "upload:anno-dev": "npm run push:anno-dev",
     "upload:proxy": "npm run push:proxy",
-    "upload:proxy-dev": "npm run push:proxy-dev"
+    "upload:proxy-dev": "npm run push:proxy-dev",
+    "f2elint-scan": "f2elint scan",
+    "f2elint-fix": "f2elint fix"
   },
   "dependencies": {
     "@pwp-app/better-element-ui": "^2.15.1-prev-2",
@@ -55,6 +57,7 @@
     "compression-webpack-plugin": "^6.1.1",
     "cross-env": "^7.0.3",
     "cypress": "^6.2.1",
+    "f2elint": "^1.1.2",
     "image-webpack-loader": "^7.0.1",
     "less": "^3.12.2",
     "less-loader": "^6.2.0",

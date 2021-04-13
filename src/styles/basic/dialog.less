@@ -83,7 +83,7 @@
       padding: 12px 22px;
       border-radius: 6px;
       letter-spacing: 0.05rem;
-      box-shadow: 2px 2px 6px rgba(0, 0, 0, .02);
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.02);
     }
   }
 }
@@ -98,8 +98,10 @@
         }
       }
     }
-    .el-dialog__header, .el-dialog__body {
-      span, pre {
+    .el-dialog__header,
+    .el-dialog__body {
+      span,
+      pre {
         color: darken(@color-text-accent, 15%);
         a {
           color: darken(@color-text-accent, 15%);

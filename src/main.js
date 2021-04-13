@@ -85,6 +85,7 @@ if (downloadSettings) {
   try {
     Vue.prototype.$downloadSettings = JSON.parse(downloadSettings);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('Cannot parse download settings.', err);
   }
 } else {
@@ -98,7 +99,7 @@ if (downloadSettings) {
 Vue.prototype.$bus = new Vue();
 
 // hmt
-_hmt.push(['_setCustomVar', 1, 'appVer', version, 2]);
+window._hmt.push(['_setCustomVar', 1, 'appVer', version, 2]);
 
 new Vue({
   router,

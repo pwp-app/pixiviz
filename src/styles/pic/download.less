@@ -1,134 +1,134 @@
 .pic-download {
   margin-top: 28px;
   &-title {
-		display: flex;
-		font-size: 26px;
-		height: 34px;
+    display: flex;
+    font-size: 26px;
+    height: 34px;
     color: @color-text-primary;
     font-weight: 600;
-		letter-spacing: 0.05em;
-		align-items: center;
-		.no-select();
-		span {
-			flex: 1;
-			display: block;
-			height: 32px;
-		}
-		&-icon {
-			justify-self: flex-end;
-			display: block;
-			height: 34px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			color: @color-text-primary;
-			transition: 200ms;
-			margin-left: 8px;
-			svg {
-				path {
-					transition: 200ms;
-					fill: @color-text-primary;
-				}
-			}
-		}
-		&-icon:hover {
-			cursor: pointer;
-			color: lighten(@color-text-primary, 10%);
-			svg {
-				path {
-					fill: lighten(@color-text-primary, 10%);
-				}
-			}
-		}
-		.el-icon-setting {
-			transform: translateX(2px);
-		}
-		.icon-qrcode {
-			width: 26px;
-			height: 26px;
-		}
+    letter-spacing: 0.05em;
+    align-items: center;
+    .no-select();
+    span {
+      flex: 1;
+      display: block;
+      height: 32px;
+    }
+    &-icon {
+      justify-self: flex-end;
+      display: block;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: @color-text-primary;
+      transition: 200ms;
+      margin-left: 8px;
+      svg {
+        path {
+          transition: 200ms;
+          fill: @color-text-primary;
+        }
+      }
+    }
+    &-icon:hover {
+      cursor: pointer;
+      color: lighten(@color-text-primary, 10%);
+      svg {
+        path {
+          fill: lighten(@color-text-primary, 10%);
+        }
+      }
+    }
+    .el-icon-setting {
+      transform: translateX(2px);
+    }
+    .icon-qrcode {
+      width: 26px;
+      height: 26px;
+    }
   }
   &-items {
     display: flex;
     margin-top: 18px;
     .el-button {
       flex: 1;
-			flex-grow: 1;
-			border: none;
-		}
-		.el-button:hover {
-			filter: brightness(1.125);
-			background-color: @color-text-primary;
-		}
-		.el-button+.el-button {
-			margin-left: 16px;
-		}
-		.el-button.is-disabled {
-			background-color: #999 !important;
-			border-color: #999 !important;
-		}
+      flex-grow: 1;
+      border: none;
+    }
+    .el-button:hover {
+      filter: brightness(1.125);
+      background-color: @color-text-primary;
+    }
+    .el-button + .el-button {
+      margin-left: 16px;
+    }
+    .el-button.is-disabled {
+      background-color: #999 !important;
+      border-color: #999 !important;
+    }
   }
 }
 
 .pic-download-dialog {
-	.el-dialog {
-		width: 580px;
-	}
-	&-tips {
-		margin-top: 24px;
-		p {
-			margin: 0;
-			span {
-				color: #999 !important;
-			}
-		}
-	}
+  .el-dialog {
+    width: 580px;
+  }
+  &-tips {
+    margin-top: 24px;
+    p {
+      margin: 0;
+      span {
+        color: #999 !important;
+      }
+    }
+  }
 }
 
 .dark {
   .pic-download {
     &-title {
-			color: darken(@color-text-primary, 2.5%);
-			&-icon {
-				color: darken(@color-text-primary, 2.5%);
-				svg {
-					path {
-						fill: darken(@color-text-primary, 2.5%);
-					}
-				}
-			}
-			&-icon:hover {
-				color: lighten(@color-text-primary, 2.5%);
-				svg {
-					path {
-						fill: lighten(@color-text-primary, 2.5%);
-					}
-				}
-			}
+      color: darken(@color-text-primary, 2.5%);
+      &-icon {
+        color: darken(@color-text-primary, 2.5%);
+        svg {
+          path {
+            fill: darken(@color-text-primary, 2.5%);
+          }
+        }
+      }
+      &-icon:hover {
+        color: lighten(@color-text-primary, 2.5%);
+        svg {
+          path {
+            fill: lighten(@color-text-primary, 2.5%);
+          }
+        }
+      }
     }
     &-items {
-			.el-button {
-				filter: brightness(0.875);
-				background-color: darken(@color-text-primary, 2.5%);
-			}
-			.el-button:hover {
-				filter: brightness(1);
-				background-color: darken(@color-text-primary, 2.5%);
-			}
-			.el-button.is-disabled:hover {
-				filter: brightness(0.875) !important;
-			}
-		}
-	}
-	.pic-download-dialog {
-		.el-button {
-			filter: brightness(0.875);
-		}
-	}
+      .el-button {
+        filter: brightness(0.875);
+        background-color: darken(@color-text-primary, 2.5%);
+      }
+      .el-button:hover {
+        filter: brightness(1);
+        background-color: darken(@color-text-primary, 2.5%);
+      }
+      .el-button.is-disabled:hover {
+        filter: brightness(0.875) !important;
+      }
+    }
+  }
+  .pic-download-dialog {
+    .el-button {
+      filter: brightness(0.875);
+    }
+  }
 }
 
 /* Responsive */
-@media(max-width: 1024px) {
+@media (max-width: 1024px) {
   .pic-download {
     &-title {
       font-size: 24px;
@@ -146,34 +146,34 @@
 }
 
 /* Mobile */
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .pic-download {
     margin-top: 28px;
     &-title {
       font-size: 22px;
     }
-	}
-	.pic-download-dialog {
-		.el-dialog {
-			width: 360px;
-		}
-	}
+  }
+  .pic-download-dialog {
+    .el-dialog {
+      width: 360px;
+    }
+  }
 }
 
-@media(max-width: 375px) {
-	.pic-download-dialog {
-		.el-dialog {
-			width: 332px;
-		}
-	}
+@media (max-width: 375px) {
+  .pic-download-dialog {
+    .el-dialog {
+      width: 332px;
+    }
+  }
 }
 
-@media(max-width: 320px) {
-	.pic-download-dialog {
-		.el-dialog {
-			width: 296px;
-		}
-	}
+@media (max-width: 320px) {
+  .pic-download-dialog {
+    .el-dialog {
+      width: 296px;
+    }
+  }
 }
 
 @import './downloadqr.less';
