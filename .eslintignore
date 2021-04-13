@@ -3,6 +3,7 @@ build/
 dist/
 tools/
 plugins/
+tests/
 **/*.min.js
 **/*-min.js
 **/*.bundle.js
