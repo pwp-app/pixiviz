@@ -1,9 +1,5 @@
 <template>
-  <div
-    :class="['back2top', showClass ? 'back2top-show' : '']"
-    v-show="show"
-    @click="handleClick"
-  >
+  <div :class="['back2top', showClass ? 'back2top-show' : '']" v-show="show" @click="handleClick">
     <i class="el-icon-top"></i>
   </div>
 </template>
@@ -12,7 +8,7 @@
 let lastOffset = 0;
 
 export default {
-  name: "Common.BackToTop",
+  name: 'Common.BackToTop',
   data() {
     return {
       show: false,
@@ -20,34 +16,28 @@ export default {
     };
   },
   created() {
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll);
   },
   destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     // event
     hide() {
       if (this.show) {
         this.showClass = false;
-        setTimeout(
-          function () {
-            this.show = false;
-          }.bind(this),
-          300
-        );
+        setTimeout(() => {
+          this.show = false;
+        }, 300);
       }
       lastOffset = window.pageYOffset;
     },
     display() {
       if (!this.show) {
         this.show = true;
-        setTimeout(
-          function () {
-            this.showClass = this.show;
-          }.bind(this),
-          0
-        );
+        setTimeout(() => {
+          this.showClass = this.show;
+        }, 0);
       }
     },
     handleScroll() {
@@ -61,7 +51,7 @@ export default {
     handleClick() {
       window.scrollTo({
         top: 0,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     },
   },

@@ -2,10 +2,10 @@
   <div class="pic-overlay">
     <div class="pic-overlay-wrapper">
       <div class="pic-overlay-icon">
-        <i class="el-icon-warning-outline"/>
+        <i class="el-icon-warning-outline" />
       </div>
       <div class="pic-overlay-tip">
-        <span>{{text}}</span>
+        <span>{{ text }}</span>
       </div>
       <div class="pic-overlay-back" v-if="showBack">
         <el-button type="primary" round @click="handleRefresh" v-if="showRefresh">刷新</el-button>
@@ -25,8 +25,8 @@ export default {
   props: ['text', 'showRefresh'],
   data() {
     return {
-      showBack: false
-    }
+      showBack: false,
+    };
   },
   mounted() {
     if (this.$cookies.get('pic-from')) {
@@ -42,7 +42,7 @@ export default {
     },
     handleBackLanding() {
       this.$router.push('/');
-    }
-  }
-}
+    },
+  },
+};
 </script>

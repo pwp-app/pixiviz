@@ -1,81 +1,81 @@
 .rank-mode-switcher {
-    span {
-        color: @color-text-primary;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        .no-select();
-    }
+  span {
+    color: @color-text-primary;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    .no-select();
+  }
 }
 .rank-mode-item-row {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 .rank-mode-item-row:last-child {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 .rank-mode-item-tag {
-    margin-bottom: 8px;
-    font-size: 17px;
+  margin-bottom: 8px;
+  font-size: 17px;
 }
 .rank-mode-item {
-    display: inline-block;
-    margin-right: 8px;
-    font-size: 15px;
-    span {
-        transition: 100ms;
-    }
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 15px;
+  span {
+    transition: 100ms;
+  }
 }
 .rank-mode-item:hover {
-    cursor: pointer;
-    span {
-        color: lighten(@color-text-primary, 10%);
-    }
+  cursor: pointer;
+  span {
+    color: lighten(@color-text-primary, 10%);
+  }
 }
 .rank-mode-item-picked {
-    span {
-        color: lighten(@color-text-primary, 17.5%);
-    }
+  span {
+    color: lighten(@color-text-primary, 17.5%);
+  }
 }
 .rank-mode-item-picked:hover {
-    cursor: no-drop;
-    span {
-        color: lighten(@color-text-primary, 17.5%);
-    }
+  cursor: no-drop;
+  span {
+    color: lighten(@color-text-primary, 17.5%);
+  }
 }
 
 // dark mode
 
 .dark {
-    .rank-mode-switcher {
-        span {
-            color: darken(@color-text-primary, 2.5%);
-        }
+  .rank-mode-switcher {
+    span {
+      color: darken(@color-text-primary, 2.5%);
     }
-    .rank-mode-item:hover {
-        cursor: pointer;
-        span {
-            color: lighten(@color-text-primary, 3.5%);
-        }
+  }
+  .rank-mode-item:hover {
+    cursor: pointer;
+    span {
+      color: lighten(@color-text-primary, 3.5%);
     }
-    .rank-mode-item-picked {
-        span {
-            color: lighten(@color-text-primary, 3.5%);
-        }
+  }
+  .rank-mode-item-picked {
+    span {
+      color: lighten(@color-text-primary, 3.5%);
     }
-    .rank-mode-item-picked:hover {
-        cursor: no-drop;
-        span {
-            color: lighten(@color-text-primary, 3.5%);
-        }
+  }
+  .rank-mode-item-picked:hover {
+    cursor: no-drop;
+    span {
+      color: lighten(@color-text-primary, 3.5%);
     }
+  }
 }
 
 /* Mobile */
 
-@media(max-width: 767px) {
-    .rank-mode-item-tag {
-        margin-bottom: 2px;
-    }
-    .rank-mode-item {
-        line-height: 28px;
-    }
+@media (max-width: 767px) {
+  .rank-mode-item-tag {
+    margin-bottom: 2px;
+  }
+  .rank-mode-item {
+    line-height: 28px;
+  }
 }

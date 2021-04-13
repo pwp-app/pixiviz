@@ -16,16 +16,16 @@
 
 <script>
 export default {
-  name: "Landing.SearchBox",
+  name: 'Landing.SearchBox',
   data() {
     return {
       show: true,
       search: '',
-      bannerExpanded: false
-    }
+      bannerExpanded: false,
+    };
   },
   watch: {
-    "$store.state.landingBanner.expanded": function(expanded) {
+    '$store.state.landingBanner.expanded': function (expanded) {
       if (expanded) {
         this.bannerExpanded = expanded;
         setTimeout(() => {
@@ -37,7 +37,7 @@ export default {
           this.bannerExpanded = expanded;
         }, 150);
       }
-    }
+    },
   },
   methods: {
     submitSearch() {
@@ -53,13 +53,13 @@ export default {
           this.search = '';
           return;
         }
-      };
-			this.$router.push(`/search/${search}`);
-			this.$cookies.set('search-from', '', '1h');
+      }
+      this.$router.push(`/search/${search}`);
+      this.$cookies.set('search-from', '', '1h');
     },
     handleSearchClick() {
       this.submitSearch();
-    }
-  }
-}
+    },
+  },
+};
 </script>

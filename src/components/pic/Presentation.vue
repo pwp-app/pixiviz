@@ -1,53 +1,58 @@
 <template>
-  <div class="pic-presentation-image-wrapper" :style="{width: imageWidth + 'px'}">
+  <div class="pic-presentation-image-wrapper" :style="{ width: imageWidth + 'px' }">
     <div
       v-loading="imageLoading"
       :element-loading-text="imageLoadingText"
       :class="{
         'pic-presentation-image': true,
-        'pic-presentation-image__firstload': imageFirstLoad
+        'pic-presentation-image__firstload': imageFirstLoad,
       }"
-      :style="imageSizeStyles">
+      :style="imageSizeStyles"
+    >
       <img
         ref="image"
         :src="loadingSource"
         :style="imageSizeStyles"
         @click="openLightBox"
         v-context="'context'"
-        >
-      <div style="clear: both;"></div>
+      />
+      <div style="clear: both"></div>
       <div class="pic-presentation-image-error" v-if="imageLoadError">
         <div class="pic-presentation-image-error-icon">
-          <i class="el-icon-warning-outline"/>
+          <i class="el-icon-warning-outline" />
         </div>
         <div class="pic-presentation-image-error-tip">
           <span>图片加载失败</span>
         </div>
       </div>
     </div>
-    <Paginator :page="page" :pageCount="image ? image.page_count : 0" @page-turn="handlePageChanged"/>
+    <Paginator
+      :page="page"
+      :pageCount="image ? image.page_count : 0"
+      @page-turn="handlePageChanged"
+    />
     <div class="pic-presentation-info" v-if="image">
       <div class="pic-presentation-info-title">
-        <span>{{image ? image.title : ''}}</span>
+        <span>{{ image ? image.title : '' }}</span>
       </div>
       <div class="pic-presentation-info-caption">
         <span v-html="image ? image.caption : ''"></span>
       </div>
       <div class="pic-presentation-info-tags">
         <div class="pic-tag" v-for="tag in tags" :key="tag.id">
-          <span :data-tag="tag.name" @click="handleTagClicked">#{{tag.name}}</span>
+          <span :data-tag="tag.name" @click="handleTagClicked">#{{ tag.name }}</span>
         </div>
       </div>
       <div class="pic-presentation-info-stat">
         <div class="pic-stat">
-          <i class="el-icon-view"></i><span>{{views}}</span>
+          <i class="el-icon-view"></i><span>{{ views }}</span>
         </div>
         <div class="pic-stat">
-          <i class="el-icon-star-on"></i><span>{{bookmarks}}</span>
+          <i class="el-icon-star-on"></i><span>{{ bookmarks }}</span>
         </div>
       </div>
       <div class="pic-presentation-info-time">
-        <span>{{createTime}}</span>
+        <span>{{ createTime }}</span>
       </div>
     </div>
     <LightBox
@@ -59,12 +64,8 @@
       @close="onLightBoxClose"
       @download="callDownload"
       @copy="copyLink"
-      />
-    <ContextMenu
-      ref="context"
-      :width="142"
-      @item-clicked="handleContextClicked"
-      >
+    />
+    <ContextMenu ref="context" :width="142" @item-clicked="handleContextClicked">
       <ContextMenuItem name="down">下载</ContextMenuItem>
       <ContextMenuItem name="copy-link">复制图片链接</ContextMenuItem>
     </ContextMenu>
@@ -72,15 +73,17 @@
 </template>
 
 <script>
-import * as clipboard from "clipboard-polyfill/dist/text/clipboard-polyfill.text";
 import CONFIG from '@/config.json';
 import dayjs from 'dayjs';
 /* Components */
 import Paginator from './Pagniator';
-import LightBox  from './LightBox';
+import LightBox from './LightBox';
+
+import 'clipboard-polyfill/dist/text/clipboard-polyfill.text';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
-const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+const BLANK_IMAGE =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 export default {
   name: 'Pic.Presentation',
@@ -111,7 +114,7 @@ export default {
       page: 1,
       // lightbox
       lightBoxShow: false,
-    }
+    };
   },
   beforeCreate() {
     if (window.isSafari) {
@@ -139,7 +142,7 @@ export default {
     image: {
       immediate: true,
       handler(image) {
-				this.imageLoading = true;
+        this.imageLoading = true;
         this.imageLoadError = false;
         this.page = 1;
         this.sizeCache = {};
@@ -154,26 +157,30 @@ export default {
         this.checkFirstLoad(image);
         this.tryLoad();
         this.$emit('image-load');
-      }
+      },
     },
     screenWidth() {
       this.setLimitWidth();
       this.updateDisplaySize();
-    }
+    },
   },
   computed: {
     source() {
       if (this.image && this.image.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
+        } else if (this.image && this.image.page_count < 2) {
+          return this.image.meta_single_page.original_image_url.replace(
+            'i.pximg.net',
+            CONFIG.IMAGE_PROXY_HOST,
+          );
+        } else if (this.image && this.image.page_count >= 2) {
+          return this.image.meta_pages[this.page - 1].image_urls.original.replace(
+            'i.pximg.net',
+            CONFIG.IMAGE_PROXY_HOST,
+          );
         } else {
-          if (this.image && this.image.page_count < 2) {
-            return this.image.meta_single_page.original_image_url.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
-          } else if (this.image && this.image.page_count >= 2) {
-            return this.image.meta_pages[this.page - 1].image_urls.original.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
-          } else {
-            return BLANK_IMAGE;
-          }
+          return BLANK_IMAGE;
         }
       } else {
         return BLANK_IMAGE;
@@ -185,7 +192,7 @@ export default {
     imageSizeStyles() {
       return {
         width: `${this.imageWidth}px`,
-        height: `${this.imageHeight}px${!(this.loaded || false) ? ' !important' : ''}`
+        height: `${this.imageHeight}px${!(this.loaded || false) ? ' !important' : ''}`,
       };
     },
     tags() {
@@ -293,16 +300,19 @@ export default {
         this.imageFirstLoad = false;
         this.imageFirstLoaded = true;
       }
-			this.$emit('image-loaded');
+      this.$emit('image-loaded');
       if (!this.sizeCache[this.page]) {
         this.sizeCache[this.page] = {};
         this.sizeCache[this.page] = {
           x: img.width,
           y: img.height,
-        }
+        };
       }
       this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
-      this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+      this.imageHeight = this.computeHeight(
+        this.sizeCache[this.page].x,
+        this.sizeCache[this.page].y,
+      );
       this.imageEl.setAttribute('src', img.src);
       if (this.useLarge) {
         this.lightBoxSource = this.source;
@@ -328,7 +338,9 @@ export default {
     },
     setImageSize(image) {
       if (this.mobileMode) {
-        this.containerWidth = this.$refs.image ? this.$refs.image.clientWidth : document.documentElement.clientWidth - 48;
+        this.containerWidth = this.$refs.image
+          ? this.$refs.image.clientWidth
+          : document.documentElement.clientWidth - 48;
         this.imageWidth = this.containerWidth;
         this.imageHeight = this.computeHeight(image ? image.width : 0, image ? image.height : 0);
       } else {
@@ -374,15 +386,21 @@ export default {
     },
     updateDisplaySize() {
       if (this.sizeCache[this.page]) {
-        this.imageWidth = this.computeWidth(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
-        this.imageHeight = this.computeHeight(this.sizeCache[this.page].x, this.sizeCache[this.page].y);
+        this.imageWidth = this.computeWidth(
+          this.sizeCache[this.page].x,
+          this.sizeCache[this.page].y,
+        );
+        this.imageHeight = this.computeHeight(
+          this.sizeCache[this.page].x,
+          this.sizeCache[this.page].y,
+        );
       } else {
         this.imageWidth = this.computeWidth(this.imageSize.x, this.imageSize.y);
         this.imageHeight = this.computeHeight(this.imageSize.x, this.imageSize.y);
       }
     },
     computeWidth(o_width, o_height) {
-      let height = o_height / (o_width / this.limitWidth);
+      const height = o_height / (o_width / this.limitWidth);
       if (height > this.limitHeight) {
         return o_width / (o_height / this.limitHeight);
       } else {
@@ -391,7 +409,7 @@ export default {
     },
     computeHeight(o_width, o_height) {
       if (!this.mobileMode) {
-        let height = o_height / (o_width / this.limitWidth);
+        const height = o_height / (o_width / this.limitWidth);
         if (height > this.limitHeight) {
           return this.limitHeight;
         } else {
@@ -417,7 +435,10 @@ export default {
           if (this.image && this.image.page_count < 2) {
             url = this.image.image_urls[type].replace('i.pximg.net', proxyHost);
           } else if (this.image && this.image.page_count >= 2) {
-            url = this.image.meta_pages[this.page - 1].image_urls[type].replace('i.pximg.net', proxyHost);
+            url = this.image.meta_pages[this.page - 1].image_urls[type].replace(
+              'i.pximg.net',
+              proxyHost,
+            );
           }
           if (window.isSafari) {
             url = url.replace('_webp', '');
@@ -444,7 +465,7 @@ export default {
       if (prevPageImgObj) {
         prevPageImgObj.cancel();
       }
-      this.page = this.page + toward * 1;
+      this.page += toward * 1;
       this.tryLoad();
       this.$emit('image-load');
       this.imageLoading = true;
@@ -475,7 +496,7 @@ export default {
         message: `
           <div class="oneline-notice">
             <span data-name="oneline-notice">图片链接已复制到剪贴板~</span>
-          </div>`
+          </div>`,
       });
     },
     // lightbox
@@ -498,6 +519,6 @@ export default {
         this.imageObjs[this.page].lightboxShowed = true;
       }
     },
-  }
-}
+  },
+};
 </script>

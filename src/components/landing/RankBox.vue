@@ -5,27 +5,15 @@
         <span>排行榜</span>
       </div>
       <div class="rankbox-options">
-        <div
-          class="rankbox-options-text"
-          data-mode="month"
-          @click.prevent="toRank('month')"
-          >
+        <div class="rankbox-options-text" data-mode="month" @click.prevent="toRank('month')">
           <a href="/rank?mode=month">月</a>
         </div>
         <span class="rankbox-options-split">/</span>
-        <div
-          class="rankbox-options-text"
-          @click.prevent="toRank('week')"
-          data-mode="week"
-          >
+        <div class="rankbox-options-text" @click.prevent="toRank('week')" data-mode="week">
           <a href="/rank?mode=week">周</a>
         </div>
         <span class="rankbox-options-split">/</span>
-        <div
-          class="rankbox-options-text"
-          @click.prevent="toRank('day')"
-          data-mode="day"
-          >
+        <div class="rankbox-options-text" @click.prevent="toRank('day')" data-mode="day">
           <a href="/rank?mode=day">日</a>
         </div>
       </div>
@@ -39,11 +27,11 @@ export default {
   data() {
     return {
       show: true,
-      bannerExpanded: false
-    }
+      bannerExpanded: false,
+    };
   },
   watch: {
-    "$store.state.landingBanner.expanded": function(expanded) {
+    '$store.state.landingBanner.expanded': function (expanded) {
       if (expanded) {
         this.bannerExpanded = expanded;
         setTimeout(() => {
@@ -55,7 +43,7 @@ export default {
           this.bannerExpanded = expanded;
         }, 150);
       }
-    }
+    },
   },
   methods: {
     toRank(mode) {
@@ -64,7 +52,7 @@ export default {
       this.$cookies.set('rank-scroll', 0, '1h');
       this.$cookies.set('rank-reset', 'true', '1h');
       this.$router.push('/rank');
-    }
-  }
-}
+    },
+  },
+};
 </script>

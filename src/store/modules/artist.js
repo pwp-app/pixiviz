@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 const state = {
   id: null,
   images: {},
-	page: {},
-	map: {},
-}
+  page: {},
+  map: {},
+};
 
 const mutations = {
   setId(state, id) {
@@ -17,11 +19,11 @@ const mutations = {
   },
   setMapItem(state, info) {
     state.map[info.id] = info.content;
-  }
-}
+  },
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
-}
+};

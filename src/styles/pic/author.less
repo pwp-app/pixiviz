@@ -1,12 +1,13 @@
 .pic-author {
-  span, a {
+  span,
+  a {
     color: @color-text-primary;
     font-weight: 600;
     letter-spacing: 0.05em;
   }
   &-title {
-		font-size: 26px;
-		height: 34px;
+    font-size: 26px;
+    height: 34px;
     .no-select();
   }
   &-info {
@@ -20,7 +21,7 @@
       background-size: cover;
       background-repeat: no-repeat;
       border-radius: 24px;
-      box-shadow: 0 4px 8px rgba(0,0,0, .175);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.175);
     }
     a {
       margin-left: 16px;
@@ -53,7 +54,7 @@
 }
 
 /* Responsive */
-@media(max-width: 1024px) {
+@media (max-width: 1024px) {
   .pic-author {
     &-title {
       font-size: 24px;
@@ -71,7 +72,7 @@
 }
 
 /* Mobile */
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .pic-author {
     &-title {
       font-size: 22px;

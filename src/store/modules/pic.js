@@ -1,5 +1,7 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 const state = {
-  progress: 0
+  progress: 0,
 };
 
 const mutations = {

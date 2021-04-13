@@ -2,11 +2,11 @@
   <div class="artist-detail" v-if="loaded">
     <div class="artist-overview">
       <div class="artist-overview-avatar">
-        <div id="avatar" :style="{backgroundImage: `url(${this.avatar})`}"></div>
+        <div id="avatar" :style="{ backgroundImage: `url(${this.avatar})` }"></div>
       </div>
       <div class="artist-overview-content">
         <div class="artist-overview-content-name">
-          <span>{{name}}</span>
+          <span>{{ name }}</span>
         </div>
         <div class="artist-overview-content-data">
           <div class="overview-data">
@@ -14,7 +14,7 @@
               <span>插画</span>
             </div>
             <div class="overview-data-number">
-              <span>{{totalIllusts}}</span>
+              <span>{{ totalIllusts }}</span>
             </div>
           </div>
           <div class="overview-data">
@@ -22,7 +22,7 @@
               <span>漫画</span>
             </div>
             <div class="overview-data-number">
-              <span>{{totalManga}}</span>
+              <span>{{ totalManga }}</span>
             </div>
           </div>
           <div class="overview-data">
@@ -30,14 +30,14 @@
               <span>小说</span>
             </div>
             <div class="overview-data-number">
-              <span>{{totalNovel}}</span>
+              <span>{{ totalNovel }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="artist-comment" v-if="comment">
-      <pre>{{comment}}</pre>
+      <pre>{{ comment }}</pre>
     </div>
     <div class="artist-comment-empty" v-else></div>
   </div>
@@ -66,37 +66,42 @@ export default {
   computed: {
     avatar() {
       if (this.artist) {
-        return this.artist.user.profile_image_urls.medium.replace('i.pximg.net', CONFIG.IMAGE_PROXY_HOST);
+        return this.artist.user.profile_image_urls.medium.replace(
+          'i.pximg.net',
+          CONFIG.IMAGE_PROXY_HOST,
+        );
       } else {
         return '';
       }
-    }
+    },
   },
   methods: {
     fetchDetail() {
-			const stored = this.$store.state.artist.map[this.artistId];
+      const stored = this.$store.state.artist.map[this.artistId];
       if (stored) {
         this.artist = stored;
         this.afterLoad();
         return;
       }
-      this.axios.get(`${CONFIG.OWN_API}/user/detail`, {
-        params: {
-          id: this.artistId,
-        },
-      }).then(res => {
-        if (res.status !== 200 || !res.data) {
-          this.$emit('failed');
-          return;
-        }
-        this.artist = res.data;
-        this.$store.commit('artist/setMapItem', { id: this.artistId, content: this.artist });
-        this.afterLoad();
-      });
+      this.axios
+        .get(`${CONFIG.OWN_API}/user/detail`, {
+          params: {
+            id: this.artistId,
+          },
+        })
+        .then((res) => {
+          if (res.status !== 200 || !res.data) {
+            this.$emit('failed');
+            return;
+          }
+          this.artist = res.data;
+          this.$store.commit('artist/setMapItem', { id: this.artistId, content: this.artist });
+          this.afterLoad();
+        });
     },
     afterLoad() {
       // 拆解
-      const profile = this.artist.profile;
+      const { profile } = this.artist;
       if (!profile) {
         this.$emit('failed');
         return;
@@ -104,13 +109,13 @@ export default {
       this.totalIllusts = profile.total_illusts;
       this.totalManga = profile.total_manga;
       this.totalNovel = profile.total_novels;
-      const user = this.artist.user;
+      const { user } = this.artist;
       this.name = user.name;
       this.comment = user.comment;
       this.loaded = true;
       // 触发事件
       this.$emit('loaded', this.name);
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -1,0 +1,8 @@
+node_modules/
+build/
+dist/
+tools/
+plugins/
+**/*.min.js
+**/*-min.js
+**/*.bundle.js

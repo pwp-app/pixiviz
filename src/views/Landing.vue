@@ -1,8 +1,6 @@
 <template>
   <div class="landing-container">
-    <div class="landing"
-      v-lazy:background-image="landingBG"
-      >
+    <div class="landing" v-lazy:background-image="landingBG">
       <div class="landing-content">
         <BannerPlaceholder class="landing-card" ref="bannerPlaceholder" />
         <SearchPlaceholder class="landing-card" />
@@ -20,9 +18,9 @@
       :before-close="handleAnnounceClose"
       class="landing-announcement"
       top="8.5vh"
-      >
+    >
       <pre v-html="announceContent"></pre>
-      <pre class="announce-footer">{{announceFooter}}</pre>
+      <pre class="announce-footer">{{ announceFooter }}</pre>
     </el-dialog>
   </div>
 </template>
@@ -49,7 +47,7 @@ export default {
     RankBox,
     BannerPlaceholder,
     SearchPlaceholder,
-    RankPlaceholder
+    RankPlaceholder,
   },
   data() {
     return {
@@ -61,7 +59,7 @@ export default {
       announceFooter: '',
       showAnnounce: false,
       announceContent: false,
-    }
+    };
   },
   created() {
     document.title = 'Pixiviz';
@@ -94,32 +92,34 @@ export default {
       return true;
     },
     fetchAnnounce() {
-      this.axios.get('https://config.backrunner.top/pixiviz/announcement.json', {
-        withCredentials: false,
-      }).then((res) => {
-        if (!res.data) {
-          return;
-        }
-        for (let announcement of res.data) {
-          const { id, title, content, footer, expires, matchVersion } = announcement;
-          const announceLog = window.localStorage.getItem('announce-read-id');
-          // if matchVersion not exists, apply for all version
-          const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
-          if (
-            (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
-            (dayjs(expires).unix() <= dayjs().unix()) ||
-            !versionMatched
-          ) {
-            continue;
+      this.axios
+        .get('https://config.backrunner.top/pixiviz/announcement.json', {
+          withCredentials: false,
+        })
+        .then((res) => {
+          if (!res.data) {
+            return;
           }
-          this.announceId = id;
-          this.announceTitle = title;
-          this.announceContent = content;
-          this.announceFooter = footer;
-          this.showAnnounce = true;
-          break;
-        }
-      });
+          for (const announcement of res.data) {
+            const { id, title, content, footer, expires, matchVersion } = announcement;
+            const announceLog = window.localStorage.getItem('announce-read-id');
+            // if matchVersion not exists, apply for all version
+            const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
+            if (
+              (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
+              dayjs(expires).unix() <= dayjs().unix() ||
+              !versionMatched
+            ) {
+              continue;
+            }
+            this.announceId = id;
+            this.announceTitle = title;
+            this.announceContent = content;
+            this.announceFooter = footer;
+            this.showAnnounce = true;
+            break;
+          }
+        });
     },
     handleAnnounceClose(done) {
       window.localStorage.setItem('announce-read-id', this.announceId);
@@ -136,21 +136,21 @@ export default {
         return;
       }
       document.body.addEventListener('click', this.guideNoticeClicked, false);
-			window.localStorage.setItem('not-first-use', true);
-			this.$nextTick(() => {
-				this.guideNotice = this.$notify({
-        title: '',
-        position: 'top-right',
-        customClass: 'oneline-notice-container',
-        dangerouslyUseHTMLString: true,
-        duration: 8000,
-        onClose: this.guideNoticeClosed,
-        message: `
+      window.localStorage.setItem('not-first-use', true);
+      this.$nextTick(() => {
+        this.guideNotice = this.$notify({
+          title: '',
+          position: 'top-right',
+          customClass: 'oneline-notice-container',
+          dangerouslyUseHTMLString: true,
+          duration: 8000,
+          onClose: this.guideNoticeClosed,
+          message: `
           <div class="oneline-notice">
             <span data-name="notice-firstuse">第一次使用 Pixiviz？你可能需要<span class="notice-link" data-name="link-guide">食用指南</span></span>
-          </div>`
-      	});
-			});
+          </div>`,
+        });
+      });
     },
     displayDonate() {
       if (!this.notFirstUse) {
@@ -164,21 +164,21 @@ export default {
       // 60%的概率展示通知
       if (Math.random() <= 0.6) {
         window.localStorage.setItem('last-show-donate', new Date().valueOf());
-				document.body.addEventListener('click', this.donateNoticeClicked, false);
-				this.$nextTick(() => {
-					this.donateNotice = this.$notify({
-						title: '',
-						position: 'top-right',
-						customClass: 'oneline-notice-container',
-						dangerouslyUseHTMLString: true,
-						duration: 15000,
-						onClose: this.donateNoticeClosed,
-						message: `
+        document.body.addEventListener('click', this.donateNoticeClicked, false);
+        this.$nextTick(() => {
+          this.donateNotice = this.$notify({
+            title: '',
+            position: 'top-right',
+            customClass: 'oneline-notice-container',
+            dangerouslyUseHTMLString: true,
+            duration: 15000,
+            onClose: this.donateNoticeClosed,
+            message: `
 							<div class="oneline-notice">
 								<span data-name="notice-donate">通过发电帮助我们给服务器续命，维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
-							</div>`
-					});
-				});
+							</div>`,
+          });
+        });
       }
     },
     guideNoticeClicked(e) {
@@ -206,7 +206,7 @@ export default {
     },
     donateNoticeClosed() {
       document.body.addEventListener('click', this.donateNoticeClicked, false);
-    }
-  }
-}
+    },
+  },
+};
 </script>

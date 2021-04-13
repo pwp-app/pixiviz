@@ -6,7 +6,7 @@
     }"
     v-loading="!infoLoaded"
     element-loading-text="正在获取画师信息"
-    >
+  >
     <div class="artist-header">
       <div class="artist-header-close">
         <i class="el-icon-close" @click="handleBack"></i>
@@ -15,15 +15,13 @@
         :artistId="$route.params.id"
         @loaded="handleInfoLoaded"
         @failed="handleLoadFailed"
-        />
+      />
     </div>
     <div class="artist-content" v-if="infoLoaded && !infoLoadFailed">
-      <div
-        class="waterfall-wrapper"
-      >
+      <div class="waterfall-wrapper">
         <Waterfall
           :class="{
-            'waterfall-responsive': waterfallResponsive
+            'waterfall-responsive': waterfallResponsive,
           }"
           ref="waterfall"
           :key="waterfallResponsive"
@@ -47,18 +45,18 @@
 </template>
 <script>
 // Common components
-import Waterfall from "../components/common/Waterfall";
-import BackToTop from "../components/common/BackToTop";
+import Waterfall from '../components/common/Waterfall';
+import BackToTop from '../components/common/BackToTop';
 import ArtistDetail from '../components/artist/ArtistDetail';
 import Overlay from '../components/pic/Overlay';
 // Util
-import MobileResponsive from "../util/MobileResponsive";
+import MobileResponsive from '../util/MobileResponsive';
 import { filterImages } from '../util/filter';
 // config
 import CONFIG from '../config.json';
 
 export default {
-  name: "Artist",
+  name: 'Artist',
   components: {
     Waterfall,
     BackToTop,
@@ -81,11 +79,11 @@ export default {
       waterfallResponsive: document.documentElement.clientWidth > 767,
       scrollTop: 0,
       // style
-      iPadStyle: /iPad/i.test(navigator.userAgent)
-    }
+      iPadStyle: /iPad/i.test(navigator.userAgent),
+    };
   },
   watch: {
-    "$route.params.id": "handleIdChanged",
+    '$route.params.id': 'handleIdChanged',
     /* Watch screen width */
     screenWidth(width) {
       if (this.resizeTimer) {
@@ -104,7 +102,7 @@ export default {
           document.documentElement.scrollTop = this.scrollTop;
         });
       }, 300);
-    }
+    },
   },
   computed: {
     mobileWaterfallWidth() {
@@ -118,9 +116,9 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('resize', this.windowResized, false);
       window.addEventListener('scroll', this.handleScroll, false);
-		});
-		// Set scroll to last state
-    const scrollTop = parseInt(this.$cookies.get("artist-scroll"), 10);
+    });
+    // Set scroll to last state
+    const scrollTop = parseInt(this.$cookies.get('artist-scroll'), 10);
     if (this.images.length > 0) {
       if (scrollTop) {
         this.$nextTick(() => {
@@ -135,7 +133,7 @@ export default {
     }
     // change title
     if (this.artistName) {
-      document.title = this.artistName + ' - Pixiviz';
+      document.title = `${this.artistName} - Pixiviz`;
     } else {
       document.title = `画师${this.id || ''} - Pixiviz`;
     }
@@ -194,47 +192,50 @@ export default {
           params: {
             id: this.id,
             page: this.page,
-          }
+          },
         })
-        .then((response) => {
-          if (!response.data.illusts) {
-            // 加载失败
+        .then(
+          (response) => {
+            if (!response.data.illusts) {
+              // 加载失败
+              $state.complete();
+              return;
+            }
+            if (response.data.illusts.length === 0) {
+              // 无数据
+              $state.complete();
+              return;
+            }
+            const images = filterImages(response.data.illusts, false);
+            this.images = this.images.concat(images);
+            // 缓存 images
+            this.$store.commit('artist/setImages', {
+              id: this.id,
+              images: this.images,
+            });
+            // 设置 Load 状态为 false
+            if (this.$refs.waterfall) {
+              this.$refs.waterfall.firstLoad = false;
+            }
+            // Page + 1
+            this.page += 1;
+            this.$store.commit('artist/setPage', {
+              id: this.id,
+              page: this.page,
+            });
+            $state.loaded();
+          },
+          () => {
             $state.complete();
-            return;
-          }
-          if (response.data.illusts.length === 0) {
-            // 无数据
-            $state.complete();
-            return;
-          }
-          const images = filterImages(response.data.illusts, false);
-          this.images = this.images.concat(images);
-          // 缓存 images
-          this.$store.commit('artist/setImages', {
-            id: this.id,
-            images: this.images,
-          });
-          // 设置 Load 状态为 false
-          if (this.$refs.waterfall) {
-            this.$refs.waterfall.firstLoad = false;
-          }
-          // Page + 1
-          this.page = this.page + 1;
-          this.$store.commit('artist/setPage', {
-            id: this.id,
-            page: this.page,
-          });
-          $state.loaded();
-        }, () => {
-          $state.complete();
-        });
+          },
+        );
     },
     refreshWaterfall() {
       // 考虑缓存
       this.page = this.$store.state.artist.page[this.id] || 1;
       this.images = this.$store.state.artist.images[this.id] || [];
       // 刷新无限加载id
-      this.waterfallIdentifier = this.waterfallIdentifier + 1;
+      this.waterfallIdentifier += 1;
     },
     handleCardClicked(imageId) {
       // 设置图片缓存
@@ -285,11 +286,11 @@ export default {
     },
     // 窗口事件
     handleScroll() {
-      this.$cookies.set("artist-scroll", document.documentElement.scrollTop, "1h");
+      this.$cookies.set('artist-scroll', document.documentElement.scrollTop, '1h');
     },
     resetScrollState() {
       this.scrollTop = 0;
-      this.$cookies.set("artist-scroll", 0, "1h");
+      this.$cookies.set('artist-scroll', 0, '1h');
     },
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
@@ -297,6 +298,6 @@ export default {
     getCardWidth(width) {
       return MobileResponsive.getCardWidth(width);
     },
-  }
-}
+  },
+};
 </script>

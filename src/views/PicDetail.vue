@@ -1,42 +1,43 @@
 <template>
   <div
-    :class="['pic-container',
-        infoLoading ? 'pic-container-loading' : null,
-        block || loadFailed ? 'pic-container-failed' : null,
-        lightboxShow ? 'pic-container-lockscroll' : null,
-      ]"
+    :class="[
+      'pic-container',
+      infoLoading ? 'pic-container-loading' : null,
+      block || loadFailed ? 'pic-container-failed' : null,
+      lightboxShow ? 'pic-container-lockscroll' : null,
+    ]"
     v-loading="infoLoading"
     element-loading-text="正在获取画作信息"
   >
     <div class="pic" v-if="!infoLoading">
       <div class="pic-presentation">
         <Presentation
-					ref="presentation"
+          ref="presentation"
           v-show="image"
           :image="image"
           :block="block"
           :loaded="imageLoaded"
-					@image-load="handleImageLoad"
-					@image-loaded="handleImageLoaded"
+          @image-load="handleImageLoad"
+          @image-loaded="handleImageLoaded"
           @download-current="startDownloadCurrent"
           @lightbox-open="handleLightBoxOpen"
           @lightbox-close="handleLightBoxClose"
-          />
+        />
       </div>
       <div class="pic-side">
         <Author
-					:author="author"
-					:imageId="image ? image.id : null"
-					v-show="author"
+          :author="author"
+          :imageId="image ? image.id : null"
+          v-show="author"
           @navigate="handleArtistNavigate"
-					/>
+        />
         <Download
-					ref="download"
-					v-show="image"
-					:image="image"
-					:loaded="imageLoaded"
-					@download-current="startDownloadCurrent"
-					/>
+          ref="download"
+          v-show="image"
+          :image="image"
+          :loaded="imageLoaded"
+          @download-current="startDownloadCurrent"
+        />
         <Related
           ref="related"
           v-show="relatedImages.length > 0"
@@ -50,15 +51,18 @@
           @infite-load="handleRelatedInfiniteLoad"
           @change-page-size="handlePageSizeChanged"
           :orientation="screenOrientation"
-        	/>
+        />
       </div>
     </div>
     <Overlay text="图片无法展示" v-if="block" />
-    <Overlay text="图片信息加载失败" v-if="loadFailed" :showRefresh="true"/>
+    <Overlay text="图片信息加载失败" v-if="loadFailed" :showRefresh="true" />
     <div class="pic-close" @click="handleClose">
       <i class="el-icon-close"></i>
     </div>
-    <div :class="['pic-action', actionShowClass ? 'pic-action-show' : null]" v-if="!infoLoading && actionShow">
+    <div
+      :class="['pic-action', actionShowClass ? 'pic-action-show' : null]"
+      v-if="!infoLoading && actionShow"
+    >
       <HomeIcon @action="handleAction" />
       <RankIcon @action="handleAction" />
       <LinkIcon @action="handleAction" />
@@ -68,7 +72,7 @@
 </template>
 
 <script>
-import * as clipboard from "clipboard-polyfill/dist/text/clipboard-polyfill.text";
+import * as clipboard from 'clipboard-polyfill/dist/text/clipboard-polyfill.text';
 import Presentation from '../components/pic/Presentation';
 import Author from '../components/pic/Author';
 import Download from '../components/pic/Download';
@@ -92,10 +96,10 @@ export default {
   data() {
     return {
       image: null,
-			infoLoading: true,
-			loadFailed: false,
-			block: false,
-			imageLoaded: false,
+      infoLoading: true,
+      loadFailed: false,
+      block: false,
+      imageLoaded: false,
       relatedImages: [],
       relatedLoading: false,
       relatedCompleted: false,
@@ -113,17 +117,17 @@ export default {
       actionShowClass: false,
       link: window.location.href,
       // lightbox
-			lightboxShow: false,
+      lightboxShow: false,
       // mobile download
       mobileDownload: false,
-    }
+    };
   },
   components: {
-		// parts
+    // parts
     Presentation,
-		Author,
-		Download,
-		Related,
+    Author,
+    Download,
+    Related,
     Overlay,
     // icons
     HomeIcon,
@@ -136,7 +140,10 @@ export default {
       return this.$route.params.id;
     },
     imageSlice() {
-      return this.relatedImages.slice((this.relatedPage - 1) * this.relatedPageSize, this.relatedPage * this.relatedPageSize);
+      return this.relatedImages.slice(
+        (this.relatedPage - 1) * this.relatedPageSize,
+        this.relatedPage * this.relatedPageSize,
+      );
     },
     author() {
       if (this.image && this.image.user) {
@@ -144,10 +151,10 @@ export default {
       } else {
         return null;
       }
-		},
-	},
+    },
+  },
   mounted() {
-		// fetch image info
+    // fetch image info
     if (this.image === null) {
       this.fetchInfo();
       document.title = `图片${this.imageId} - Pixiviz`;
@@ -201,26 +208,31 @@ export default {
         this.infoLoading = false;
         return;
       }
-      this.axios.get(`${CONFIG.OWN_API}/illust/detail`, {
-        params: {
-          id: this.imageId,
-        }
-      }).then((response) => {
-        if (!response.data || !response.data.illust) {
-          this.infoLoading = false;
-          this.loadFailed = true;
-          return;
-        }
-        this.infoLoading = false;
-        this.image = response.data.illust;
-				this.afterLoad();
-      }, () => {
-        this.infoLoading = false;
-        this.loadFailed = true;
-      });
+      this.axios
+        .get(`${CONFIG.OWN_API}/illust/detail`, {
+          params: {
+            id: this.imageId,
+          },
+        })
+        .then(
+          (response) => {
+            if (!response.data || !response.data.illust) {
+              this.infoLoading = false;
+              this.loadFailed = true;
+              return;
+            }
+            this.infoLoading = false;
+            this.image = response.data.illust;
+            this.afterLoad();
+          },
+          () => {
+            this.infoLoading = false;
+            this.loadFailed = true;
+          },
+        );
     },
     afterLoad() {
-      if (this.image.x_restrict == 1 || this.image.sanity_level > 5) {
+      if (parseInt(this.image.x_restrict, 10) === 1 || this.image.sanity_level > 5) {
         this.block = true;
       }
       // fetch related
@@ -234,9 +246,9 @@ export default {
         }
       });
     },
-		startDownloadCurrent() {
+    startDownloadCurrent() {
       const url = this.$refs.presentation.source;
-      const page = this.$refs.presentation.page;
+      const { page } = this.$refs.presentation;
       if (page > 1) {
         const name = this.$refs.download.getDownloadName('multi');
         this.$refs.download.downloadImage(url, name.replace('{index}', page));
@@ -244,33 +256,38 @@ export default {
         const name = this.$refs.download.getDownloadName('single');
         this.$refs.download.downloadImage(url, name);
       }
-		},
+    },
     fetchRelated(state) {
       this.relatedLoading = true;
-      this.axios.get(`${CONFIG.OWN_API}/illust/related`, {
-        params: {
-          id: this.imageId,
-          page: this.realRelatedPage,
-        }
-      }).then((response) => {
-        if (!response.data.illusts || response.data.illusts.length === 0) {
-          this.relatedLoading = false;
-          this.relatedCompleted = true;
-          if (state) state.complete();
-          return;
-        }
-        const images = filterImages(response.data.illusts);
-        this.relatedImages = this.relatedImages.concat(images);
-        this.relatedLoading = false;
-        if (state) {
-          state.loaded();
-        }
-      }, () => {
-        // 针对加载失败的情况
-        this.relatedLoading = false;
-        this.relatedCompleted = true;
-        if (state) state.complete();
-      });
+      this.axios
+        .get(`${CONFIG.OWN_API}/illust/related`, {
+          params: {
+            id: this.imageId,
+            page: this.realRelatedPage,
+          },
+        })
+        .then(
+          (response) => {
+            if (!response.data.illusts || response.data.illusts.length === 0) {
+              this.relatedLoading = false;
+              this.relatedCompleted = true;
+              if (state) state.complete();
+              return;
+            }
+            const images = filterImages(response.data.illusts);
+            this.relatedImages = this.relatedImages.concat(images);
+            this.relatedLoading = false;
+            if (state) {
+              state.loaded();
+            }
+          },
+          () => {
+            // 针对加载失败的情况
+            this.relatedLoading = false;
+            this.relatedCompleted = true;
+            if (state) state.complete();
+          },
+        );
     },
     handleIdChanged() {
       this.infoLoading = true;
@@ -285,32 +302,33 @@ export default {
       // reset var
       this.lastOffset = 0;
       this.closeActionFloat();
-		},
-		handleImageLoad() {
+    },
+    handleImageLoad() {
       setTimeout(() => {
         this.imageLoaded = false;
         this.$forceUpdate();
       }, 50);
-		},
-		handleImageLoaded() {
-			this.imageLoaded = true;
-		},
+    },
+    handleImageLoaded() {
+      this.imageLoaded = true;
+    },
     handlePageSizeChanged(size) {
       this.relatedPageSize = size;
     },
     handleRelatedPageChanged(toward) {
       if (toward < 0) {
-        this.relatedPage = this.relatedPage - 1;
-      } else {
+        this.relatedPage -= 1;
+      } else if (
+        this.relatedPage * this.relatedPageSize >=
+        this.relatedImages.length - this.relatedPageSize
+      ) {
         // 提前2页load
-        if (this.relatedPage * this.relatedPageSize >= this.relatedImages.length - this.relatedPageSize) {
-          if (!this.relatedLoading) {
-            this.realRelatedPage = this.realRelatedPage + 1;
-            this.fetchRelated();
-          }
-        } else {
-          this.relatedPage = this.relatedPage + 1;
+        if (!this.relatedLoading) {
+          this.realRelatedPage += 1;
+          this.fetchRelated();
         }
+      } else {
+        this.relatedPage += 1;
       }
     },
     handleScreenRotate() {
@@ -323,7 +341,7 @@ export default {
       this.screenOrientation = window.orientation;
     },
     handleRelatedInfiniteLoad(state) {
-      this.realRelatedPage = this.realRelatedPage + 1;
+      this.realRelatedPage += 1;
       this.fetchRelated(state);
     },
     handleArtistNavigate(id) {
@@ -355,13 +373,13 @@ export default {
         this.$router.push(`/${prev.from}`);
       } else if (prev.type === 'artist') {
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
-        this.$router.push(`/artist/${prev.from}`)
+        this.$router.push(`/artist/${prev.from}`);
       } else {
         // 不符合正常跳转逻辑，直接回首页，清掉路由
         window.localStorage.removeItem('pic-routes');
         this.$router.push('/');
       }
-		},
+    },
     handleLightBoxOpen() {
       this.lightboxShow = true;
     },
@@ -391,9 +409,7 @@ export default {
     },
     handleScroll() {
       const { scrollTop } = document.documentElement;
-      if (
-        window.pageYOffset - this.lastOffset < 0 && scrollTop > 200
-      ) {
+      if (window.pageYOffset - this.lastOffset < 0 && scrollTop > 200) {
         this.closeActionFloat();
       }
       if (this.showFloatTimeout) {
@@ -424,14 +440,17 @@ export default {
             message: `
               <div class="oneline-notice">
                 <span data-name="oneline-notice">当前页面的链接已复制到剪贴板~</span>
-              </div>`
+              </div>`,
           });
           break;
         case 'back':
           this.handleClose();
           break;
+        default:
+          // do nothing
+          break;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

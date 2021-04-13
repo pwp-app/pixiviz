@@ -1,50 +1,50 @@
 .back2top {
-    position: fixed;
-    bottom: 36px;
-    right: 36px;
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    background: @color-primary;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: @shadow-small;
-    transform: translateY(24px);
-    transition: all 300ms ease-in-out;
-    opacity: 0;
-    z-index: 999;
-    i {
-        font-size: 24px;
-        color: @color-text-accent;
-        margin-right: 2px;  //修正图标的偏移
-    }
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: @color-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: @shadow-small;
+  transform: translateY(24px);
+  transition: all 300ms ease-in-out;
+  opacity: 0;
+  z-index: 999;
+  i {
+    font-size: 24px;
+    color: @color-text-accent;
+    margin-right: 2px; //修正图标的偏移
+  }
 }
 
 .back2top-show {
-    transform: translateY(0);
-    opacity: 1;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .back2top:hover {
-    cursor: pointer;
-    background: lighten(@color-primary, 10%);
+  cursor: pointer;
+  background: lighten(@color-primary, 10%);
 }
 
 .back2top:focus {
-    background: lighten(@color-primary, 5%);
+  background: lighten(@color-primary, 5%);
 }
 
 // dark mode
 .dark {
-    .back2top {
-        background: darken(@color-primary, 5%);
-    }
-    .back2top:hover {
-        cursor: pointer;
-        background: @color-primary;
-    }
-    .back2top:focus {
-        background: darken(@color-primary, 2.5%);
-    }
+  .back2top {
+    background: darken(@color-primary, 5%);
+  }
+  .back2top:hover {
+    cursor: pointer;
+    background: @color-primary;
+  }
+  .back2top:focus {
+    background: darken(@color-primary, 2.5%);
+  }
 }
