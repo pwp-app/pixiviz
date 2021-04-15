@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import Vue from 'vue';
 
 // Import dependencies
@@ -99,7 +100,7 @@ if (downloadSettings) {
 Vue.prototype.$bus = new Vue();
 
 // hmt
-window._hmt.push(['_setCustomVar', 1, 'appVer', version, 2]);
+_hmt.push(['_setCustomVar', 1, 'appVer', version, 2]);
 
 new Vue({
   router,

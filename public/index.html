@@ -20,6 +20,18 @@
       <strong>很抱歉，Pixiviz 需要在您浏览器启用 JavaScript 支持的情况下才能正常使用。</strong>
     </noscript>
     <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <script async defer>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement('script');
+        hm.async = true;
+        hm.defer = true;
+        hm.src = 'https://hm.baidu.com/hm.js?fdac5b4d15bb044856c7f88655ffc8aa';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
     <script>
       // dark mode enhancement
       (() => {
@@ -38,18 +50,13 @@
           document.documentElement.classList.add('dark');
           window.pixiviz.darkMode = true;
         }
-      })();
-    </script>
-    <!-- built files will be auto injected -->
-    <script async defer>
-      var _hmt = _hmt || [];
-      (function() {
-        var hm = document.createElement('script');
-        hm.async = true;
-        hm.defer = true;
-        hm.src = 'https://hm.baidu.com/hm.js?fdac5b4d15bb044856c7f88655ffc8aa';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(hm, s);
+        _hmt.push([
+          '_setCustomVar',
+          2,
+          'darkModeSetting',
+          `e: ${darkEnabled}, p: ${darkPersist}`,
+          2,
+        ]);
       })();
     </script>
   </body>
