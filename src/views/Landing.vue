@@ -103,8 +103,9 @@ export default {
           for (const announcement of res.data) {
             const { id, title, content, footer, expires, matchVersion } = announcement;
             const announceLog = window.localStorage.getItem('announce-read-id');
-            // eslint-disable-next-line no-undef
-            _hmt.push(['_setCustomVar', 2, 'anno-read-id', announceLog, 2]);
+            if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
+              window.FrontJS.addUserData('announceLog', announceLog);
+            }
             // if matchVersion not exists, apply for all version
             const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
             if (
@@ -160,8 +161,9 @@ export default {
       }
       // 同一个设备5天内只展示一次
       const lastShowDonate = window.localStorage.getItem('last-show-donate');
-      // eslint-disable-next-line no-undef
-      _hmt.push(['_setCustomVar', 3, 'lastShowDonate', lastShowDonate, 2]);
+      if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
+        window.FrontJS.addUserData('lastShowDonate', lastShowDonate);
+      }
       if (lastShowDonate && (new Date().valueOf() - parseInt(lastShowDonate, 10)) / 1000 < 432000) {
         return;
       }

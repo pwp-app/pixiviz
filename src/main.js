@@ -23,9 +23,6 @@ import store from './store';
 import App from './App.vue';
 import router from './router';
 
-// Import ver file
-import { version } from './version';
-
 // Import sw
 import './registerServiceWorker';
 
@@ -98,9 +95,6 @@ if (downloadSettings) {
 
 // Set up bus
 Vue.prototype.$bus = new Vue();
-
-// hmt
-_hmt.push(['_setCustomVar', 1, 'appVer', version, 2]);
 
 new Vue({
   router,

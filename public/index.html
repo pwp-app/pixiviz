@@ -14,23 +14,50 @@
       name="keywords"
       content="pixiv,pixiviz,Pixiv,Pixiviz,ACG,p站,pixiv排行,二次元插图,二次元插画,动漫图片,动漫插图,动漫插画"
     />
-  </head>
-  <body>
-    <noscript>
-      <strong>很抱歉，Pixiviz 需要在您浏览器启用 JavaScript 支持的情况下才能正常使用。</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-    <script async defer>
-      var _hmt = _hmt || [];
-      (function() {
-        var hm = document.createElement('script');
-        hm.async = true;
-        hm.defer = true;
-        hm.src = 'https://hm.baidu.com/hm.js?fdac5b4d15bb044856c7f88655ffc8aa';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
+    <script type="text/javascript">
+      (function(w) {
+        w.frontjsConfig = {
+          token: '0895802c5106769622a896b6d14df337',
+          behaviour: 13,
+          captureConsoleLog: true,
+          trustVendor: true,
+          optimisedForSPA: true,
+          useHistory: true,
+          FPSThreshold: 8,
+        };
+        w.frontjsTmpData = { r: [], e: [], l: [] };
+        w.frontjsTmpCollector = function(ev) {
+          (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([
+            new Date().getTime(),
+            ev,
+          ]);
+        };
+        w.FrontJS = {
+          addEventListener: function(t, f) {
+            w.frontjsTmpData.l.push([t, f]);
+            return f;
+          },
+          removeEventListener: function(t, f) {
+            for (var i = 0; i < w.frontjsTmpData.l.length; i++) {
+              t === w.frontjsTmpData.l[i][0] &&
+                f === w.frontjsTmpData.l[i][1] &&
+                w.frontjsTmpData.l.splice(i, 1);
+            }
+            return f;
+          },
+        };
+        w.document.addEventListener('error', w.frontjsTmpCollector, true);
+        w.addEventListener('error', w.frontjsTmpCollector, true);
+        w.addEventListener(
+          'load',
+          function() {
+            var n = w.document.createElement('script');
+            n.src = 'https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js';
+            w.document.body.appendChild(n);
+          },
+          true,
+        );
+      })(window);
     </script>
     <script>
       // dark mode enhancement
@@ -50,14 +77,14 @@
           document.documentElement.classList.add('dark');
           window.pixiviz.darkMode = true;
         }
-        _hmt.push([
-          '_setCustomVar',
-          2,
-          'darkModeSetting',
-          `e: ${darkEnabled}, p: ${darkPersist}`,
-          2,
-        ]);
       })();
     </script>
+  </head>
+  <body>
+    <noscript>
+      <strong>很抱歉，Pixiviz 需要在您浏览器启用 JavaScript 支持的情况下才能正常使用。</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
   </body>
 </html>
