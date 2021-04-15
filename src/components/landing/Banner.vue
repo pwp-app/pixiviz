@@ -120,6 +120,13 @@ export default {
     const darkPersist = window.localStorage.getItem('dark-persist');
     this.darkPersist = darkPersist === 'true';
   },
+  mounted() {
+    if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
+      window.FrontJS.addUserData('appVer', version);
+      window.FrontJS.addUserData('darkModeEnabled', this.darkmode);
+      window.FrontJS.addUserData('darkModePersist', this.darkPersist);
+    }
+  },
   methods: {
     handleDblClick(e) {
       if (e.target.getAttribute('class') && e.target.getAttribute('class').includes('el-switch')) {
