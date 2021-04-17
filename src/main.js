@@ -26,6 +26,7 @@ import router from './router';
 // Import sw
 import './registerServiceWorker';
 
+// frontjs intergration
 if (process.env.NODE_ENV !== 'development') {
   import('./util/frontjs');
 }

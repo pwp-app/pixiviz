@@ -8,7 +8,6 @@
     "test:e2e": "vue-cli-service test:e2e",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "dev": "npm run serve",
-    "dev:online": "cross-env NODE_DEV=production npm run serve",
     "dev:built": "npm run build && http-server ./dist -b",
     "gen:anno": "cross-env NODE_ENV=prod node ./tools/announcementGen.js",
     "gen:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementGen.js",
