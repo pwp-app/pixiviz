@@ -23,7 +23,7 @@
 export default {
   methods: {
     handleClick() {
-      this.$emit('action', 'copy-link');
+      this.$emit('action', 'copy-image');
     },
   },
 };

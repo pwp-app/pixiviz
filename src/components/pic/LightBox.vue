@@ -10,9 +10,9 @@
       v-context="'context'"
       @load="handleOnLoad"
     />
-    <ContextMenu ref="context" :width="142" @item-clicked="handleContextClicked">
+    <ContextMenu ref="context" :width="128" @item-clicked="handleContextClicked">
       <ContextMenuItem name="down">下载</ContextMenuItem>
-      <ContextMenuItem name="copy-link">复制图片链接</ContextMenuItem>
+      <ContextMenuItem name="copy-image" v-if="showCopyImage">复制图片</ContextMenuItem>
     </ContextMenu>
   </div>
 </template>
@@ -21,6 +21,25 @@
 export default {
   name: 'Pic.LightBox',
   props: ['src', 'isLanding', 'isOverHeight'],
+  watch: {
+    src: {
+      immediate: true,
+      handler() {
+        this.loaded = false;
+      },
+    },
+  },
+  data() {
+    return {
+      loaded: false,
+      supportCopyImage: !!window.ClipboardItem,
+    };
+  },
+  computed: {
+    showCopyImage() {
+      return this.supportCopyImage && this.loaded;
+    },
+  },
   methods: {
     handleClick() {
       this.$emit('close');
@@ -28,11 +47,12 @@ export default {
     handleContextClicked(name) {
       if (name === 'down') {
         this.$emit('download');
-      } else if (name === 'copy-link') {
+      } else if (name === 'copy-image') {
         this.$emit('copy');
       }
     },
     handleOnLoad() {
+      this.loaded = true;
       this.$emit('loaded');
     },
   },
