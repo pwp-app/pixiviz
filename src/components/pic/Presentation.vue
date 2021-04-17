@@ -63,11 +63,11 @@
       @loaded="handleLightBoxLoaded"
       @close="onLightBoxClose"
       @download="callDownload"
-      @copy="copyLink"
+      @copy="copyImage"
     />
-    <ContextMenu ref="context" :width="142" @item-clicked="handleContextClicked">
+    <ContextMenu ref="context" :width="128" @item-clicked="handleContextClicked">
       <ContextMenuItem name="down">下载</ContextMenuItem>
-      <ContextMenuItem name="copy-link">复制图片链接</ContextMenuItem>
+      <ContextMenuItem name="copy-image" v-if="showCopyImage">复制图片</ContextMenuItem>
     </ContextMenu>
   </div>
 </template>
@@ -78,8 +78,6 @@ import dayjs from 'dayjs';
 /* Components */
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
-
-import 'clipboard-polyfill/dist/text/clipboard-polyfill.text';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -114,6 +112,8 @@ export default {
       page: 1,
       // lightbox
       lightBoxShow: false,
+      // context
+      showCopyImage: !!window.ClipboardItem,
     };
   },
   beforeCreate() {
@@ -478,15 +478,46 @@ export default {
     handleContextClicked(name) {
       if (name === 'down') {
         this.callDownload();
-      } else if (name === 'copy-link') {
-        this.copyLink();
+      } else if (name === 'copy-image') {
+        this.copyImage();
       }
     },
     callDownload() {
       this.$emit('download-current');
     },
-    copyLink() {
-      navigator.clipboard.writeText(this.source);
+    async copyImage() {
+      if (
+        this.imageObjs[this.page].src.startsWith('http') ||
+        this.imageObjs[this.page].blob.type !== 'image/png'
+      ) {
+        // img el to blob
+        const image = new Image();
+        image.setAttribute('crossOrigin', '*');
+        image.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = image.width;
+          canvas.height = image.height;
+          const context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0, image.width, image.height);
+          canvas.toBlob(async (blob) => {
+            // eslint-disable-next-line no-param-reassign
+            await navigator.clipboard.write([
+              // eslint-disable-next-line no-undef
+              new window.ClipboardItem({
+                [blob.type]: blob,
+              }),
+            ]);
+          });
+        };
+        image.load(this.imageObjs[this.page].src);
+      } else {
+        await navigator.clipboard.write([
+          // eslint-disable-next-line no-undef
+          new window.ClipboardItem({
+            [this.imageObjs[this.page].blob.type]: this.imageObjs[this.page].blob,
+          }),
+        ]);
+      }
       this.$notify({
         title: '',
         position: 'top-right',
@@ -495,7 +526,7 @@ export default {
         duration: 2000,
         message: `
           <div class="oneline-notice">
-            <span data-name="oneline-notice">图片链接已复制到剪贴板~</span>
+            <span data-name="oneline-notice">图片已复制到剪贴板了~</span>
           </div>`,
       });
     },

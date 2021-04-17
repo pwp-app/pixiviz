@@ -26,6 +26,10 @@ import router from './router';
 // Import sw
 import './registerServiceWorker';
 
+if (process.env.NODE_ENV !== 'development') {
+  import('./util/frontjs');
+}
+
 Vue.config.productionTip = false;
 
 // Set up axios

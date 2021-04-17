@@ -9,8 +9,9 @@ Image.prototype.load = function(url) {
       const h = req.getAllResponseHeaders();
       const m = h.match(/^Content-Type:\s*(.*?)$/im);
       const mimeType = m[1] || 'image/png';
-      const blob = new Blob([this.response], { mimeType });
+      const blob = new Blob([this.response], { type: mimeType });
       thisImg.src = window.URL.createObjectURL(blob);
+      thisImg.blob = blob;
       thisImg.blobLoaded = true;
     } else {
       thisImg.failed = true;

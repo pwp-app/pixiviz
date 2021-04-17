@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import * as clipboard from 'clipboard-polyfill/dist/text/clipboard-polyfill.text';
 import Presentation from '../components/pic/Presentation';
 import Author from '../components/pic/Author';
 import Download from '../components/pic/Download';
@@ -90,6 +89,8 @@ import BackIcon from '../components/icons/back';
 
 // config
 import CONFIG from '../config.json';
+
+import * as clipboard from 'clipboard-polyfill/text';
 
 export default {
   name: 'Pic',
@@ -429,7 +430,7 @@ export default {
         case 'rank':
           this.$router.push('/rank');
           break;
-        case 'copy-link':
+        case 'copy-image':
           clipboard.writeText(window.location.href);
           this.$notify({
             title: '',
