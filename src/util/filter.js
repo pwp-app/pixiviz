@@ -1,10 +1,7 @@
 const mangaTags = ['漫画'];
 
 const filterImage = (img) => {
-  if (
-    img.x_restrict ||
-    img.sanity_level > 4
-  ) {
+  if (img.x_restrict || img.sanity_level > 4) {
     return false;
   }
 };
@@ -33,7 +30,4 @@ const filterImages = (imgs, dropManga = true) => {
   });
 };
 
-export {
-  filterImage,
-  filterImages,
-};
+export { filterImage, filterImages };

@@ -13,5 +13,5 @@ export default {
     } else if (width < 321) {
       return 128;
     }
-  }
-}
+  },
+};
