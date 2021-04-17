@@ -491,25 +491,60 @@ export default {
         this.imageObjs[this.page].blob.type !== 'image/png'
       ) {
         // img el to blob
-        const image = new Image();
-        image.setAttribute('crossOrigin', '*');
-        image.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = image.width;
-          canvas.height = image.height;
-          const context = canvas.getContext('2d');
-          context.drawImage(image, 0, 0, image.width, image.height);
-          canvas.toBlob(async (blob) => {
-            // eslint-disable-next-line no-param-reassign
-            await navigator.clipboard.write([
-              // eslint-disable-next-line no-undef
-              new window.ClipboardItem({
-                [blob.type]: blob,
-              }),
-            ]);
+        const writeClipboard = () => {
+          return new Promise((resolve) => {
+            const image = new Image();
+            const notifyTimeout = setTimeout(() => {
+              this.$notify({
+                title: '',
+                position: 'top-right',
+                customClass: 'oneline-notice-container',
+                dangerouslyUseHTMLString: true,
+                duration: 3000,
+                message: `
+                <div class="oneline-notice">
+                  <span data-name="oneline-notice">图片复制中，请不要切到其他窗口~</span>
+                </div>`,
+              });
+            }, 500);
+            image.setAttribute('crossOrigin', '*');
+            image.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = image.width;
+              canvas.height = image.height;
+              const context = canvas.getContext('2d');
+              context.drawImage(image, 0, 0, image.width, image.height);
+              canvas.toBlob(async (blob) => {
+                // eslint-disable-next-line no-param-reassign
+                try {
+                  await navigator.clipboard.write([
+                    // eslint-disable-next-line no-undef
+                    new window.ClipboardItem({
+                      [blob.type]: blob,
+                    }),
+                  ]);
+                  clearTimeout(notifyTimeout);
+                  resolve();
+                } catch (err) {
+                  this.$notify({
+                    title: '',
+                    position: 'top-right',
+                    customClass: 'oneline-notice-container',
+                    dangerouslyUseHTMLString: true,
+                    duration: 5000,
+                    message: `
+                    <div class="oneline-notice">
+                      <span data-name="oneline-notice">图片复制失败，复制成功前请不要切窗口</span>
+                    </div>`,
+                  });
+                  throw err;
+                }
+              });
+            };
+            image.load(this.imageObjs[this.page].src);
           });
         };
-        image.load(this.imageObjs[this.page].src);
+        await writeClipboard();
       } else {
         await navigator.clipboard.write([
           // eslint-disable-next-line no-undef
