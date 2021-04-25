@@ -92,7 +92,6 @@ import dayjs from 'dayjs';
 import { version } from '../../version.js';
 import GitHubIcon from '../icons/github';
 import DonateCode from './DonateCode';
-import CONFIG from '@/config.json';
 
 export default {
   name: 'Landing.Banner',
@@ -110,8 +109,8 @@ export default {
       version,
       darkmode: false,
       darkPersist: false, // 永久禁用
-      landingBgId: CONFIG.landingBgId,
-      landingBgName: CONFIG.landingBgName,
+      landingBgId: this.$config.landing_bg_id,
+      landingBgName: this.$config.landing_bg_name,
     };
   },
   created() {

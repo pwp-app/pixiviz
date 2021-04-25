@@ -59,9 +59,9 @@
 </template>
 
 <script>
-import CONFIG from '../../config.json';
 import QRCodeIcon from '../icons/qrcode';
 import DownloadQRCode from './DownloadQRCode';
+import { weightedRandom } from '@/util/random';
 
 export default {
   props: ['image', 'loaded'],
@@ -210,6 +210,31 @@ export default {
       }, 1000);
       image.load(src);
     },
+    getDownloadHost() {
+      const hosts = this.$config.download_proxy_host;
+      if (typeof hosts !== 'object') {
+        return hosts;
+      }
+      const record = this.$loadMap[this.image.id];
+      if (record) {
+        // check if exists
+        const recordHost = hosts[record.downloadHostIdx];
+        if (recordHost) {
+          record.time = Date.now();
+          return recordHost;
+        }
+      }
+      // random pick a host
+      const [host, hostIdx] = weightedRandom(hosts);
+      if (!this.$loadMap[this.image.id]) {
+        this.$loadMap[this.image.id] = {};
+      }
+      Object.assign(this.$loadMap[this.image.id], {
+        downloadHostIdx: hostIdx,
+        time: Date.now(),
+      });
+      return host;
+    },
     downloadCurrent() {
       this.downloadCurrentStyle = null;
       if (!this.downloadCurrentLock) {
@@ -243,7 +268,7 @@ export default {
           image_urls: { original: url },
         } = this.originalUrls[i];
         this.downloadImage(
-          url.replace('i.pximg.net', CONFIG.DOWNLOAD_HOST),
+          url.replace('i.pximg.net', this.getDownloadHost()),
           name.replace('{index}', i),
           window.isSafari,
         );

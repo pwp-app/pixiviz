@@ -87,9 +87,6 @@ import RankIcon from '../components/icons/rank';
 import LinkIcon from '../components/icons/link';
 import BackIcon from '../components/icons/back';
 
-// config
-import CONFIG from '../config.json';
-
 import * as clipboard from 'clipboard-polyfill/text';
 
 export default {
@@ -210,7 +207,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${CONFIG.OWN_API}/illust/detail`, {
+        .get(`${this.$config.api_prefix}/illust/detail`, {
           params: {
             id: this.imageId,
           },
@@ -261,7 +258,7 @@ export default {
     fetchRelated(state) {
       this.relatedLoading = true;
       this.axios
-        .get(`${CONFIG.OWN_API}/illust/related`, {
+        .get(`${this.$config.api_prefix}/illust/related`, {
           params: {
             id: this.imageId,
             page: this.realRelatedPage,

@@ -10,11 +10,17 @@ import Vue2TouchEvents from 'vue2-touch-events';
 import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
 
+// Import config
+import config from './config.json';
+
 // Import element ui and styles
 
-import './plugins/element.js';
+import './plugins/element';
 import './styles/main.less';
-import './util/extends.js';
+import './util/extends';
+
+// Import idb
+import idb from './util/idb';
 
 // Import store
 import store from './store';
@@ -33,9 +39,12 @@ if (process.env.NODE_ENV !== 'development') {
 
 Vue.config.productionTip = false;
 
+// Set up config
+Vue.prototype.$config = config;
+
 // Set up axios
 axios.defaults.baseURL = '';
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = false;
 axios.defaults.timeout = 10000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -49,6 +58,32 @@ axios.defaults.transformRequest = [
 
 Vue.prototype.axios = axios;
 Vue.prototype.$http = axios;
+
+// Request remote config
+axios
+  .get('https://cfs.tigo.pwp.app/pixiviz-prod.json')
+  .then((res) => {
+    Object.assign(config, res.data);
+    const proxyHosts = (hosts) => {
+      if (typeof hosts === 'object') {
+        const hostArr = Object.keys(hosts);
+        hostArr.forEach((host, index) => {
+          // eslint-disable-next-line no-param-reassign
+          hosts[index] = host;
+        });
+      }
+    };
+    if (typeof config.image_proxy_host === 'object') {
+      proxyHosts(config.image_proxy_host);
+    }
+    if (typeof config.download_proxy_host === 'object') {
+      proxyHosts(config.download_proxy_host);
+    }
+  })
+  .catch(() => {
+    // eslint-disable-next-line no-console
+    console.warn('Failed to fetch remote configuration, use local values by default.');
+  });
 
 // Set up lazyload
 Vue.use(VueLazyload, {
@@ -101,11 +136,25 @@ if (downloadSettings) {
 // Set up bus
 Vue.prototype.$bus = new Vue();
 
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-  mounted() {
-    document.dispatchEvent(new Event('render-event'));
-  },
-}).$mount('#app');
+// Set up idb
+Vue.prototype.$idb = idb;
+
+// Set up loadmap
+idb
+  .get('loadMap')
+  .then((loadMap) => {
+    Vue.prototype.$loadMap = loadMap || {};
+  })
+  .catch(() => {
+    Vue.prototype.$loadMap = {};
+  })
+  .finally(() => {
+    new Vue({
+      router,
+      store,
+      render: (h) => h(App),
+      mounted() {
+        document.dispatchEvent(new Event('render-event'));
+      },
+    }).$mount('#app');
+  });

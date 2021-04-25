@@ -28,3 +28,5 @@ announcement
 announcement*.json
 .history
 proxy-config.*
+.tigo-cfs.json
+config-prod.json

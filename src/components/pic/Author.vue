@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import CONFIG from '@/config.json';
+import { getMaxWeightedHost } from '@/util/host';
 
 export default {
   name: 'Pic.Author',
@@ -24,10 +24,7 @@ export default {
   computed: {
     avatar() {
       if (this.author) {
-        return this.author.profile_image_urls.medium.replace(
-          'i.pximg.net',
-          CONFIG.IMAGE_PROXY_HOST,
-        );
+        return this.author.profile_image_urls.medium.replace('i.pximg.net', this.getProxyHost());
       } else {
         return '';
       }
@@ -41,6 +38,14 @@ export default {
     },
   },
   methods: {
+    getProxyHost() {
+      const hosts = this.$config.image_proxy_host;
+      if (typeof hosts !== 'object') {
+        return hosts;
+      }
+      const maxWeightedHost = getMaxWeightedHost(hosts);
+      return maxWeightedHost;
+    },
     toArtistPage() {
       this.$emit('navigate', this.author.id);
     },

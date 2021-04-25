@@ -79,9 +79,6 @@ import DateSwitcher from '../components/rank/DateSwitcher';
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImages } from '../util/filter';
 
-// config
-import CONFIG from '../config.json';
-
 export default {
   name: 'Rank',
   components: {
@@ -234,7 +231,7 @@ export default {
   methods: {
     infiniteHandler($state) {
       this.axios
-        .get(`${CONFIG.OWN_API}/illust/rank`, {
+        .get(`${this.$config.api_prefix}/illust/rank`, {
           params: {
             mode: this.mode,
             date: this.date,

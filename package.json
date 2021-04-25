@@ -33,6 +33,8 @@
     "clipboard-polyfill": "^3.0.3",
     "core-js": "^3.7.0",
     "dayjs": "^1.10.4",
+    "level-js": "^6.0.0",
+    "levelup": "^5.0.0",
     "qrcode-svg": "^1.1.0",
     "qs": "^6.10.1",
     "register-service-worker": "^1.7.2",
@@ -41,10 +43,11 @@
     "vue-infinite-loading": "^2.4.5",
     "vue-router": "^3.5.1",
     "vue-touch": "^2.0.0-beta.4",
-    "vue2-touch-events": "^3.2.1",
+    "vue2-touch-events": "^3.2.2",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.13.14",
     "@gfx/zopfli": "^1.0.15",
     "@vue/cli-plugin-babel": "^4.5.12",
     "@vue/cli-plugin-e2e-cypress": "^4.5.12",

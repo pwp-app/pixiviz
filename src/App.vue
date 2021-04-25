@@ -22,9 +22,6 @@
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 
-const LOADMAP_ENTRIES_LIMIT = 1000;
-const LOADMAP_DELETE_RATE = 0.5;
-
 export default {
   name: 'app',
   components: {
@@ -42,43 +39,6 @@ export default {
     if (!window.pixiviz.infoMap) {
       window.pixiviz.infoMap = {};
     }
-    // 初始化图片负载表
-    if (!window.pixiviz.loadMap) {
-      const loadMap = JSON.parse(window.localStorage.getItem('loadmap'));
-      const loadMapTime = window.localStorage.getItem('loadmap-save-time');
-      if (!loadMap || !loadMapTime) {
-        window.pixiviz.loadMap = {};
-        // loadMap有效期1天
-      } else if (loadMapTime && (new Date().valueOf() - loadMapTime) / 1000 > 24 * 3600) {
-        window.pixiviz.loadMap = {};
-        window.localStorage.removeItem('loadmap');
-      } else if (loadMap) {
-        window.pixiviz.loadMap = loadMap;
-      }
-    }
-    // 异步获取分流配置
-    this.axios
-      .get('https://config.backrunner.top/pixiviz/proxy-config.json', {
-        withCredentials: false,
-      })
-      .then(
-        (res) => {
-          if (res.data) {
-            let index = 0;
-            window.pixiviz.hostMap = {};
-            Object.keys(res.data).forEach((key) => {
-              window.pixiviz.hostMap[index] = key;
-              window.pixiviz.hostMap[key] = index;
-              index++;
-            });
-            window.pixiviz.proxyMap = res.data;
-          }
-        },
-        (err) => {
-          // eslint-disable-next-line no-console
-          console.error('Cannot fetch proxy config.', err);
-        },
-      );
     // 重置图片-画师路由数据
     window.localStorage.removeItem('pic-routes');
     // Safari vh 优化
@@ -112,21 +72,16 @@ export default {
     },
   },
   methods: {
-    saveLoadMap() {
-      const keys = Object.keys(window.pixiviz.loadMap);
-      const len = keys.length;
-      if (!window.pixiviz.loadMap && len < 1) {
-        return;
-      }
-      if (len > LOADMAP_ENTRIES_LIMIT) {
-        // 限制loadMap大小，避免localStorage爆掉
-        const deleteCount = Math.floor(LOADMAP_ENTRIES_LIMIT * LOADMAP_DELETE_RATE);
-        for (let i = 0; i < deleteCount; i++) {
-          delete window.pixiviz.loadMap[keys[i]];
+    async saveLoadMap() {
+      const keys = Object.keys(this.$loadMap);
+      const threeDays = 3 * 24 * 60 * 60 * 1000;
+      keys.forEach((key) => {
+        const item = this.$loadMap[key];
+        if (new Date().valueOf() - item.time > threeDays) {
+          delete this.$loadMap[key];
         }
-      }
-      window.localStorage.setItem('loadmap', JSON.stringify(window.pixiviz.loadMap));
-      window.localStorage.setItem('loadmap-save-time', new Date().valueOf());
+      });
+      await this.$idb.set(this.$loadMap);
     },
     // 图片加载处理
     imageLoadedHandler(e) {

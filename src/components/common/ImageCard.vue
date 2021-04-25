@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import CONFIG from '@/config.json';
+import { weightedRandom } from '@/util/random';
 
 export default {
   name: 'Common.ImageCard',
@@ -137,31 +137,31 @@ export default {
       this.$bus.$off(`image-error-card-${this.cardIdentifier}`, this.errorHandler);
     },
     getHost() {
-      if (window.pixiviz.proxyMap && window.pixiviz.hostMap && window.pixiviz.loadMap) {
-        const hostLog = window.pixiviz.loadMap[this.image.id];
-        if (typeof hostLog !== 'undefined' && hostLog !== null) {
-          return (
-            window.pixiviz.hostMap[window.pixiviz.loadMap[this.image.id]] ||
-            window.pixiviz.hostMap[0] ||
-            CONFIG.IMAGE_PROXY_HOST
-          );
-        } else {
-          const random = Math.random();
-          const hosts = Object.keys(window.pixiviz.proxyMap);
-          for (const host of hosts) {
-            if (
-              random >= window.pixiviz.proxyMap[host][0] &&
-              random < window.pixiviz.proxyMap[host][1]
-            ) {
-              window.pixiviz.loadMap[this.image.id] = window.pixiviz.hostMap[host];
-              return host;
-            }
-          }
-        }
-        return CONFIG.IMAGE_PROXY_HOST;
-      } else {
-        return CONFIG.IMAGE_PROXY_HOST;
+      const hosts = this.$config.image_proxy_host;
+      // no load balance, return host directly
+      if (typeof hosts !== 'object') {
+        return hosts;
       }
+      // check loadMap first
+      const record = this.$loadMap[this.image.id];
+      if (record) {
+        // check if exists
+        const recordHost = hosts[record.hostIdx];
+        if (recordHost) {
+          record.time = Date.now();
+          return recordHost;
+        }
+      }
+      // random pick a host
+      const [host, hostIdx] = weightedRandom(hosts);
+      if (!this.$loadMap[this.image.id]) {
+        this.$loadMap[this.image.id] = {};
+      }
+      Object.assign(this.$loadMap[this.image.id], {
+        hostIdx,
+        time: Date.now(),
+      });
+      return host;
     },
     handleClick() {
       if (!this.block && !this.loadError) {

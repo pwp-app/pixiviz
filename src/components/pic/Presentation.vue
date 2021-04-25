@@ -73,11 +73,10 @@
 </template>
 
 <script>
-import CONFIG from '@/config.json';
 import dayjs from 'dayjs';
-/* Components */
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
+import { weightedRandom } from '@/util/random';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -172,12 +171,12 @@ export default {
         } else if (this.image && this.image.page_count < 2) {
           return this.image.meta_single_page.original_image_url.replace(
             'i.pximg.net',
-            CONFIG.IMAGE_PROXY_HOST,
+            this.getProxyHost(this.image.id),
           );
         } else if (this.image && this.image.page_count >= 2) {
           return this.image.meta_pages[this.page - 1].image_urls.original.replace(
             'i.pximg.net',
-            CONFIG.IMAGE_PROXY_HOST,
+            this.getProxyHost(this.image.id),
           );
         } else {
           return BLANK_IMAGE;
@@ -419,26 +418,51 @@ export default {
         return o_height / (o_width / this.containerWidth);
       }
     },
-    getImageSource(image, type, useLoadMap = false) {
+    getProxyHost(imageId) {
+      const hosts = this.$config.download_proxy_host;
+      if (typeof hosts !== 'object') {
+        return hosts;
+      }
+      // random pick a host
+      const [host, hostIdx] = weightedRandom(hosts);
+      if (!this.$loadMap[imageId]) {
+        this.$loadMap[imageId] = {};
+      }
+      Object.assign(this.$loadMap[imageId], {
+        downloadHostIdx: hostIdx,
+        time: Date.now(),
+      });
+      return host;
+    },
+    getImageSource(image, type, page = this.page, useLoadMap = true) {
+      const hosts = this.$config.image_proxy_host;
       let proxyHost;
       if (useLoadMap) {
-        if (window.pixiviz.hostMap && window.pixiviz.loadMap) {
-          proxyHost = window.pixiviz.hostMap[window.pixiviz.loadMap[image.id]];
+        const record = this.$loadMap[image.id];
+        if (record) {
+          // check if exists
+          let recordHost;
+          if (type === 'medium' && record.hostIdx) {
+            recordHost = hosts[record.hostIdx];
+          } else if (record.downloadHostIdx) {
+            recordHost = hosts[record.downloadHostIdx];
+          }
+          if (recordHost) {
+            record.time = Date.now();
+            proxyHost = recordHost;
+          }
         }
       }
-      proxyHost = proxyHost || CONFIG.IMAGE_PROXY_HOST;
-      if (this.image && this.image.meta_single_page) {
+      proxyHost = proxyHost || this.getProxyHost(image.id);
+      if (image && image.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
         } else {
           let url = BLANK_IMAGE;
-          if (this.image && this.image.page_count < 2) {
-            url = this.image.image_urls[type].replace('i.pximg.net', proxyHost);
-          } else if (this.image && this.image.page_count >= 2) {
-            url = this.image.meta_pages[this.page - 1].image_urls[type].replace(
-              'i.pximg.net',
-              proxyHost,
-            );
+          if (image && image.page_count < 2) {
+            url = image.image_urls[type].replace('i.pximg.net', proxyHost);
+          } else if (image && image.page_count >= 2) {
+            url = image.meta_pages[page - 1].image_urls[type].replace('i.pximg.net', proxyHost);
           }
           if (window.isSafari) {
             url = url.replace('_webp', '');
@@ -458,7 +482,7 @@ export default {
         this.loadingSource = BLANK_IMAGE;
         return;
       }
-      this.loadingSource = this.getImageSource(image, 'medium', true);
+      this.loadingSource = this.getImageSource(image, 'medium');
     },
     handlePageChanged(toward) {
       const prevPageImgObj = this.imageObjs[this.page];
