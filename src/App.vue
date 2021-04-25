@@ -63,7 +63,7 @@ export default {
     // add save loadmap listener
     window.addEventListener('beforeunload', this.saveLoadMap);
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('beforeunload', this.saveLoadMap);
   },
   computed: {
@@ -81,7 +81,7 @@ export default {
           delete this.$loadMap[key];
         }
       });
-      await this.$idb.set(this.$loadMap);
+      await this.$idb.set('load-map', this.$loadMap);
     },
     // 图片加载处理
     imageLoadedHandler(e) {
