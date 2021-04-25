@@ -36,7 +36,6 @@ import BannerPlaceholder from '../components/landing/BannerPlaceholder';
 import SearchPlaceholder from '../components/landing/SearchBoxPlaceholder';
 import RankPlaceholder from '../components/landing/RankBoxPlaceholder';
 
-import CONFIG from '@/config.json';
 import { version } from '../version';
 
 export default {
@@ -190,9 +189,9 @@ export default {
     guideNoticeClicked(e) {
       if (e.target.dataset.name && e.target.dataset.name === 'link-guide') {
         if (window.isSafari) {
-          window.location.href = CONFIG.USE_GUIDE;
+          window.location.href = this.$config.guide_url;
         } else {
-          window.open(CONFIG.USE_GUIDE, '_blank');
+          window.open(this.$config.guide_url, '_blank');
         }
         this.guideNotice.close();
       }
@@ -203,9 +202,9 @@ export default {
     donateNoticeClicked(e) {
       if (e.target.dataset.name && e.target.dataset.name === 'link-donate') {
         if (window.isSafari) {
-          window.location.href = CONFIG.DONATE;
+          window.location.href = this.$config.donate_url;
         } else {
-          window.open(CONFIG.DONATE, '_blank');
+          window.open(this.$config.donate_url, '_blank');
         }
         this.donateNotice.close();
       }

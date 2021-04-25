@@ -52,8 +52,6 @@ import Overlay from '../components/pic/Overlay';
 // Util
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImages } from '../util/filter';
-// config
-import CONFIG from '../config.json';
 
 export default {
   name: 'Artist',
@@ -188,7 +186,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${CONFIG.OWN_API}/user/illusts`, {
+        .get(`${this.$config.api_prefix}/user/illusts`, {
           params: {
             id: this.id,
             page: this.page,

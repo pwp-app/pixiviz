@@ -80,8 +80,6 @@ import BackToTop from '../components/common/BackToTop';
 // Util
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImage, filterImages } from '../util/filter';
-// config
-import CONFIG from '../config.json';
 
 const id_matcher = /^\d{2,8}$/;
 
@@ -212,7 +210,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${CONFIG.OWN_API}/illust/search`, {
+        .get(`${this.$config.api_prefix}/illust/search`, {
           params: {
             word: this.keyword,
             page: this.page,
@@ -253,7 +251,7 @@ export default {
     },
     fetchSuggestion() {
       this.axios
-        .get(`${CONFIG.OWN_API}/search/suggestions`, {
+        .get(`${this.$config.api_prefix}/search/suggestions`, {
           params: {
             keyword: this.keyword,
           },
@@ -274,7 +272,7 @@ export default {
     },
     checkIfIllust() {
       this.axios
-        .get(`${CONFIG.OWN_API}/illust/detail`, {
+        .get(`${this.$config.api_prefix}/illust/detail`, {
           params: {
             id: parseInt(this.keyword, 10),
           },
@@ -306,7 +304,7 @@ export default {
     },
     checkIfArtist() {
       this.axios
-        .get(`${CONFIG.OWN_API}/user/detail`, {
+        .get(`${this.$config.api_prefix}/user/detail`, {
           params: {
             id: parseInt(this.keyword, 10),
           },

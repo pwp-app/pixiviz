@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import CONFIG from '../../config.json';
-
 export default {
   name: 'Artist.ArtistDetail',
   props: ['artistId'],
@@ -68,7 +66,7 @@ export default {
       if (this.artist) {
         return this.artist.user.profile_image_urls.medium.replace(
           'i.pximg.net',
-          CONFIG.IMAGE_PROXY_HOST,
+          this.getImageProxyHost(),
         );
       } else {
         return '';
@@ -76,6 +74,13 @@ export default {
     },
   },
   methods: {
+    getImageProxyHost() {
+      const hosts = this.$config.image_proxy_host;
+      if (typeof hosts !== 'object') {
+        return hosts;
+      }
+      return Object.keys(hosts)[0];
+    },
     fetchDetail() {
       const stored = this.$store.state.artist.map[this.artistId];
       if (stored) {
@@ -84,7 +89,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${CONFIG.OWN_API}/user/detail`, {
+        .get(`${this.$config.api_prefix}/user/detail`, {
           params: {
             id: this.artistId,
           },

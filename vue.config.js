@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
@@ -6,9 +8,7 @@ const BrotliPlugin = require('brotli-webpack-plugin');
 module.exports = {
   devServer: {
     https: true,
-    allowedHosts: [
-      'pixiviz.pwp.app',
-    ],
+    allowedHosts: ['pixiviz.pwp.app'],
     proxy: {
       '/api': {
         target: 'https://pixiviz.pwp.app/api',
@@ -38,7 +38,9 @@ module.exports = {
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
-          urlPattern: new RegExp('^https:\\/\\/pixiviz\\.pwp\\.app(\\/.*\\.(html|js|css|jpg|png|webp))?$'),
+          urlPattern: new RegExp(
+            '^https:\\/\\/pixiviz\\.pwp\\.app(\\/.*\\.(html|js|css|jpg|png|webp))?$',
+          ),
           handler: 'NetworkFirst',
           options: {
             cacheName: 'static-files',
@@ -86,7 +88,7 @@ module.exports = {
           },
         },
       ],
-    }
+    },
   },
   productionSourceMap: false,
   chainWebpack: (config) => {
@@ -111,7 +113,8 @@ module.exports = {
       });
     }
     if (process.env.NODE_ENV === 'production' && process.env.ANALYZE === 'true') {
-      config.plugin('webpack-bundle-analyzer')
+      config
+        .plugin('webpack-bundle-analyzer')
         .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
     }
   },
@@ -120,7 +123,7 @@ module.exports = {
       ...config.resolve.alias,
       'element-ui': '@pwp-app/better-element-ui',
       'vue-lazyload': '@pwp-app/vue-lazyload',
-      'vue-context-menu': "@pwp-app/vue-context-menu",
+      'vue-context-menu': '@pwp-app/vue-context-menu',
     };
     config.optimization.splitChunks = {
       cacheGroups: {
