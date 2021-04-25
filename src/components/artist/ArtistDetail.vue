@@ -74,7 +74,13 @@ export default {
     },
   },
   methods: {
-    getImageProxyHost() {},
+    getImageProxyHost() {
+      const hosts = this.$config.image_proxy_host;
+      if (typeof hosts !== 'object') {
+        return hosts;
+      }
+      return Object.keys(hosts)[0];
+    },
     fetchDetail() {
       const stored = this.$store.state.artist.map[this.artistId];
       if (stored) {
