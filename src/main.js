@@ -68,8 +68,12 @@ axios
       if (typeof hosts === 'object') {
         const hostArr = Object.keys(hosts);
         hostArr.forEach((host, index) => {
-          // eslint-disable-next-line no-param-reassign
-          hosts[index] = host;
+          Object.defineProperty(hosts, index, {
+            value: host,
+            enumerable: false,
+            writable: true,
+            configurable: true,
+          });
         });
       }
     };
