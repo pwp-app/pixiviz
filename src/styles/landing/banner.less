@@ -25,7 +25,7 @@
   a {
     color: @color-text-accent;
     letter-spacing: 0.1em;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.175);
   }
   a {
     transition: 100ms ease;
@@ -39,7 +39,6 @@
     font-size: 5rem;
     letter-spacing: 0.1rem;
     transition: transform 0.5s ease-in-out;
-    text-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
     .no-select();
   }
   &-title-up {
@@ -50,29 +49,42 @@
     bottom: 100px;
     opacity: 0;
     transition: all 500ms ease-in-out;
-    &-borrow {
+    &-my {
+      .no-select();
+      position: relative;
       &-title {
         text-align: center;
-        font-size: 32px;
+        font-size: 28px;
         line-height: 62px;
-        .no-select();
+        .indev {
+          font-size: 14px;
+          position: absolute;
+          letter-spacing: 0;
+          margin-left: -6px;
+          padding-top: 6px;
+        }
       }
-      &-item {
-        font-size: 24px;
+      &-link {
+        font-size: 22px;
         text-align: center;
         line-height: 48px;
-        span {
-          .no-select();
+        a {
+          margin-right: 24px;
+        }
+      }
+      &-link {
+        a:last-child {
+          margin-right: 0;
         }
       }
     }
     &-theme {
       margin-top: 1rem;
+      .no-select();
       &-title {
         text-align: center;
         font-size: 28px;
         line-height: 80px;
-        .no-select();
       }
       &-switch {
         display: flex;
@@ -92,12 +104,12 @@
     &-copyright {
       margin-top: 8.25rem;
       font-weight: 300;
+      .no-select();
       &-item {
         font-size: 1rem;
         text-align: center;
         line-height: 1.75rem;
         letter-spacing: 0;
-        .no-select();
         svg {
           width: 1.25rem;
           height: 1.25rem;
@@ -138,7 +150,7 @@
     &-title-up {
       transform: translateY(-22.5rem);
     }
-    &-borrow {
+    &-my {
       margin-top: 1.5rem;
     }
     .about {
@@ -167,19 +179,19 @@
     .about {
       position: absolute;
       bottom: 54px;
-      &-borrow {
+      &-my {
         &-title {
-          font-size: 28px;
+          font-size: 26px;
         }
       }
       &-theme {
-        margin-top: 0;
+        margin-top: 6px;
         &-title {
           font-size: 26px;
         }
       }
       &-copyright {
-        margin-top: 80px;
+        margin-top: 74px;
       }
     }
   }
@@ -220,16 +232,15 @@
     }
     .about {
       bottom: 42px;
-      &-borrow {
-        padding: 0 24px;
+      &-my {
         &-title {
-          font-size: 24px;
-          line-height: 48px;
+          font-size: 26px;
+          .indev {
+            font-size: 13px;
+          }
         }
-        &-item {
+        &-link {
           font-size: 18px;
-          line-height: 40px;
-          font-weight: 400;
         }
       }
       &-theme {
@@ -247,7 +258,7 @@
         }
       }
       &-copyright {
-        margin-top: 68px;
+        margin-top: 58px;
         &-item {
           font-size: 14px;
         }
