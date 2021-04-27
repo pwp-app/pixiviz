@@ -227,7 +227,7 @@ export default {
         position: 'top-right',
         customClass: 'oneline-notice-container',
         dangerouslyUseHTMLString: true,
-        duration: 10000000,
+        duration: 2000,
         message: `
           <div class="oneline-notice">
             <span data-name="notice-indev">功能正在开发中，敬请期待</span>
