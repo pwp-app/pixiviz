@@ -11,7 +11,7 @@
     background-color: lighten(@color-primary, 5%);
     background-position: top center;
     background-repeat: no-repeat;
-    background-size: 1680px auto;
+    background-size: 92.5rem auto;
     transition: background-color 0.5s ease-in-out, background-size 0.5s ease-in-out;
     filter: brightness(0.98);
     .landing-card {
@@ -57,13 +57,13 @@
 @media only screen and (max-aspect-ratio: ~'1/1') {
   .landing-container {
     .landing {
-      background-size: auto 960px;
+      background-size: auto 1120px;
     }
   }
   @media (max-width: 767px) {
     .landing-container {
       .landing {
-        background-size: auto 800px;
+        background-size: auto 920px;
       }
     }
   }
@@ -88,11 +88,12 @@
 
 // 2k
 
-@media (min-height: 1200px) and (min-width: 1960px) {
+@media (min-height: 1280px) and (min-width: 1960px) {
   .landing-container {
     padding: 3.5rem 8rem;
     .landing {
       max-width: 98rem;
+      background-size: 125rem auto;
     }
   }
 }

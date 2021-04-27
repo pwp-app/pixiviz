@@ -13,20 +13,14 @@
         <span>Pixiviz</span>
       </div>
       <div :class="['about', aboutShow ? 'about-show' : '']" v-show="expanded">
-        <div class="about-borrow">
-          <div class="about-borrow-title">
-            <span>借物</span>
+        <div class="about-my">
+          <div class="about-my-title">
+            <span>我的</span>
+            <span class="indev">（开发中）</span>
           </div>
-          <div class="about-borrow-item">
-            <span
-              >主页背景:
-              <a
-                target="_blank"
-                class="about-borrow-link"
-                :href="`https://pixiviz.pwp.app/pic/${landingBgId}`"
-                >{{ landingBgName }}</a
-              ></span
-            >
+          <div class="about-my-link">
+            <a href="javascript:;" @click="showInDev" @contextmenu.prevent>浏览历史</a>
+            <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
           </div>
         </div>
         <div class="about-theme">
@@ -64,15 +58,10 @@
           <div class="about-copyright-item">
             <span>
               <a href="https://afdian.net/@backrunner" target="_blank">发电通道</a>
-              <span class="about-copyright-split mobile-hide">|</span>
-              <a href="javascript:;" class="mobile-hide qrpopup-trigger">
-                <span>发电二维码</span>
-                <DonateCode />
-              </a>
               <span class="about-copyright-split">|</span>
-              <a href="mailto:pixiviz@pwp.app">问题反馈</a>
+              <a href="https://github.com/pwp-app/pixiviz/issues" target="_blank">问题反馈</a>
               <span class="about-copyright-split">|</span>
-              <a href="https://pwp.space" target="_blank">讨论交流</a>
+              <a :href="`https://pixiviz.pwp.app/pic/${landingBgId}`" target="_blank">主页背景</a>
             </span>
           </div>
           <div class="about-copyright-item">
@@ -91,13 +80,11 @@
 import dayjs from 'dayjs';
 import { version } from '../../version.js';
 import GitHubIcon from '../icons/github';
-import DonateCode from './DonateCode';
 
 export default {
   name: 'Landing.Banner',
   components: {
     GitHubIcon,
-    DonateCode,
   },
   data() {
     return {
@@ -232,6 +219,20 @@ export default {
     },
     goGitHub() {
       window.open('https://github.com/pwp-app/pixiviz');
+    },
+    // temp
+    showInDev() {
+      this.$notify({
+        title: '',
+        position: 'top-right',
+        customClass: 'oneline-notice-container',
+        dangerouslyUseHTMLString: true,
+        duration: 2000,
+        message: `
+          <div class="oneline-notice">
+            <span data-name="notice-indev">功能正在开发中，敬请期待</span>
+          </div>`,
+      });
     },
   },
 };

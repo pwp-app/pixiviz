@@ -25,7 +25,7 @@
   a {
     color: @color-text-accent;
     letter-spacing: 0.1em;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.175);
   }
   a {
     transition: 100ms ease;
@@ -39,40 +39,52 @@
     font-size: 5rem;
     letter-spacing: 0.1rem;
     transition: transform 0.5s ease-in-out;
-    text-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
     .no-select();
   }
   &-title-up {
-    transform: translateY(-272px);
+    transform: translateY(-17rem);
   }
   .about {
     position: absolute;
-    bottom: 100px;
+    bottom: 6.25rem;
     opacity: 0;
     transition: all 500ms ease-in-out;
-    &-borrow {
+    &-my {
+      .no-select();
+      position: relative;
       &-title {
         text-align: center;
-        font-size: 32px;
-        line-height: 62px;
-        .no-select();
+        font-size: 1.75rem;
+        line-height: 3.875rem;
+        .indev {
+          font-size: 0.875rem;
+          position: absolute;
+          letter-spacing: 0;
+          margin-left: -0.375rem;
+          padding-top: 0.375rem;
+        }
       }
-      &-item {
-        font-size: 24px;
+      &-link {
+        font-size: 1.375rem;
         text-align: center;
-        line-height: 48px;
-        span {
-          .no-select();
+        line-height: 3rem;
+        a {
+          margin-right: 1.5rem;
+        }
+      }
+      &-link {
+        a:last-child {
+          margin-right: 0;
         }
       }
     }
     &-theme {
       margin-top: 1rem;
+      .no-select();
       &-title {
         text-align: center;
-        font-size: 28px;
-        line-height: 80px;
-        .no-select();
+        font-size: 1.75rem;
+        line-height: 5rem;
       }
       &-switch {
         display: flex;
@@ -80,8 +92,8 @@
         justify-content: center;
         margin-bottom: 1.5rem;
         span {
-          font-size: 18px;
-          letter-spacing: 0.05em;
+          font-size: 1.125rem;
+          letter-spacing: 0.05rem;
           font-weight: 400;
         }
       }
@@ -92,12 +104,12 @@
     &-copyright {
       margin-top: 8.25rem;
       font-weight: 300;
+      .no-select();
       &-item {
         font-size: 1rem;
         text-align: center;
         line-height: 1.75rem;
         letter-spacing: 0;
-        .no-select();
         svg {
           width: 1.25rem;
           height: 1.25rem;
@@ -123,7 +135,7 @@
 
 // 2k
 
-@media (min-height: 1200px) and (min-width: 1960px) {
+@media (min-height: 1280px) and (min-width: 1960px) {
   .banner-wrapper {
     height: 68.5rem;
     max-height: 22rem;
@@ -138,7 +150,7 @@
     &-title-up {
       transform: translateY(-22.5rem);
     }
-    &-borrow {
+    &-my {
       margin-top: 1.5rem;
     }
     .about {
@@ -167,19 +179,19 @@
     .about {
       position: absolute;
       bottom: 54px;
-      &-borrow {
+      &-my {
         &-title {
-          font-size: 28px;
+          font-size: 26px;
         }
       }
       &-theme {
-        margin-top: 0;
+        margin-top: 6px;
         &-title {
           font-size: 26px;
         }
       }
       &-copyright {
-        margin-top: 80px;
+        margin-top: 74px;
       }
     }
   }
@@ -220,23 +232,24 @@
     }
     .about {
       bottom: 42px;
-      &-borrow {
-        padding: 0 24px;
+      &-my {
         &-title {
-          font-size: 24px;
-          line-height: 48px;
+          font-size: 22px;
+          line-height: 64px;
+          .indev {
+            font-size: 13px;
+          }
         }
-        &-item {
+        &-link {
           font-size: 18px;
-          line-height: 40px;
-          font-weight: 400;
+          line-height: 36px;
         }
       }
       &-theme {
-        margin-top: 0;
+        margin-top: 12px;
         &-title {
           font-size: 22px;
-          line-height: 68px;
+          line-height: 64px;
         }
         &-switch {
           .el-switch {
@@ -247,7 +260,7 @@
         }
       }
       &-copyright {
-        margin-top: 68px;
+        margin-top: 60px;
         &-item {
           font-size: 14px;
         }
