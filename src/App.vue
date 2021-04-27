@@ -58,12 +58,16 @@ export default {
     // 图片懒加载统一handle
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
+    // rem fit
+    this.fitHiRes();
   },
   mounted() {
     // add save loadmap listener
+    window.addEventListener('resize', this.fitHiRes);
     window.addEventListener('beforeunload', this.saveLoadMap);
   },
   beforeDestroy() {
+    window.removeEventListener('resize', this.fitHiRes);
     window.removeEventListener('beforeunload', this.saveLoadMap);
   },
   computed: {
@@ -108,6 +112,16 @@ export default {
     },
     handleDarkModeDisable() {
       this.$store.commit('darkMode/setEnabled', false);
+    },
+    // 高分屏适配
+    fitHiRes() {
+      if (window.innerWidth >= 1960 && window.innerHeight >= 1280) {
+        if (window.innerWidth <= 2560) {
+          document.documentElement.style.fontSize = '18px';
+        } else {
+          document.documentElement.style.fontSize = `${(window.innerWidth / 2330.0) * 16}px`;
+        }
+      }
     },
   },
 };
