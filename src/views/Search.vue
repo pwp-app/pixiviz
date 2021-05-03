@@ -419,6 +419,9 @@ export default {
     scrollSuggesion(e) {
       e.preventDefault();
       e.stopPropagation();
+      if (!this.$refs.suggestionItems) {
+        return;
+      }
       this.suggestionTranslate += e.deltaY * 2.5;
       if (this.suggestionTranslate < 0) {
         this.suggestionTranslate = 0;

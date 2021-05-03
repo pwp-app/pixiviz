@@ -9,7 +9,7 @@
     v-loading="infoLoading"
     element-loading-text="正在获取画作信息"
   >
-    <div class="pic" v-if="!infoLoading">
+    <div class="pic" v-if="showPic">
       <div class="pic-presentation">
         <Presentation
           ref="presentation"
@@ -134,6 +134,9 @@ export default {
     BackIcon,
   },
   computed: {
+    showPic() {
+      return !this.infoLoading && !this.block && !this.loadFailed;
+    },
     imageId() {
       return this.$route.params.id;
     },
