@@ -44,7 +44,6 @@ dir.forEach((file) => {
       return;
     }
     if (!contentFlag) {
-      console.log(!line);
       if (!line) {
         contentFlag = true;
         return;
