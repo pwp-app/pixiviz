@@ -19,13 +19,17 @@ const annoList = [];
 const dir = fs.readdirSync(dirPath);
 
 dir.forEach((file) => {
+  const filePath = path.resolve(dirPath, file);
+  const stat = fs.statSync(filePath);
+  if (stat.isDirectory()) {
+    return;
+  }
   if (path.extname(file) !== '.txt') {
     return;
   }
 
-  const filePath = path.resolve(dirPath, file);
-
-  const content = fs.readFileSync(filePath, { encoding: 'utf-8' }).split('\r\n');
+  const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
+  const lines = fileContent.includes('\r\n') ? fileContent.split('\r\n') : fileContent.split('\n');
 
   const anno = {};
   const contents = [];
@@ -35,16 +39,17 @@ dir.forEach((file) => {
   let skipFlag = false;
   let footerFlag = false;
 
-  content.forEach((item) => {
+  lines.forEach((line) => {
     if (skipFlag) {
       return;
     }
     if (!contentFlag) {
-      if (!item) {
+      console.log(!line);
+      if (!line) {
         contentFlag = true;
         return;
       }
-      const entry = item.split(':');
+      const entry = line.split(':');
       if (entry[0] === 'id') {
         anno[entry[0]] = parseInt(entry[1].trim(), 10);
       } else if (entry[0] === 'expires') {
@@ -67,21 +72,21 @@ dir.forEach((file) => {
       }
       return;
     }
-    if (item === '===') {
+    if (line === '===') {
       anno.content = contents.join('').replace(/\r\n$/, '');
       footerFlag = true;
       return;
     }
     if (!footerFlag) {
-      let textContent = item;
-      const matched = /{{(.*)}}/.exec(textContent);
+      let textContent = line;
+      const matched = /{{(.+)}}/.exec(textContent);
       if (matched) {
         textContent = textContent.replace(matched[0], `<a href="${matched[1]}">${matched[1]}</a>`);
       }
       contents.push(`${textContent}\r\n`);
       return;
     }
-    footers.push(`${item}\r\n`);
+    footers.push(`${line}\r\n`);
   });
 
   if (skipFlag) return;
