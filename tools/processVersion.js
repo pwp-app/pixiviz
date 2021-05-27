@@ -7,7 +7,7 @@ const packageInfo = require('../package.json');
 const versionInfo = `
 /* eslint-disable no-console */
 export const version = '${packageInfo.version}';
-console.log('%cPixiviz - v${packageInfo.version}\nEnvironment - ${
+console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
   process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 }', 'color:#da7a85');
 `;
