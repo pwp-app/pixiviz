@@ -1,9 +1,7 @@
 {
-  "image_proxy_host": {
-    "pixiv-image.pwp.link": 0.6,
-    "pixiv-image-jp.pwp.link": 0.4
-  },
-  "download_proxy_host": "pixiv-image-jp.pwp.link",
+  "image_proxy_host": "pixiv-image.pwp.link",
+  "download_proxy_host": "pixiv-image.pwp.link",
+  "remote_conf_url": "https://cfs.tigo.pwp.app/pixiviz-prod.json",
   "api_prefix": "/api/v1",
   "guide_url": "https://io.backrunner.top/2020/07/27/Pixiviz%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97.html",
   "donate_url": "https://afdian.net/@backrunner",
