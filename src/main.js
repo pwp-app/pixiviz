@@ -1,4 +1,5 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-console */
 import Vue from 'vue';
 
 // Import dependencies
@@ -9,6 +10,7 @@ import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
 import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
+import { sha256 } from 'hash-wasm';
 
 // Import config
 import config from './config.json';
@@ -59,36 +61,6 @@ axios.defaults.transformRequest = [
 Vue.prototype.axios = axios;
 Vue.prototype.$http = axios;
 
-// Request remote config
-axios
-  .get('https://cfs.tigo.pwp.app/pixiviz-prod.json')
-  .then((res) => {
-    Object.assign(config, res.data);
-    const proxyHosts = (hosts) => {
-      if (typeof hosts === 'object') {
-        const hostArr = Object.keys(hosts);
-        hostArr.forEach((host, index) => {
-          Object.defineProperty(hosts, index, {
-            value: host,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-          });
-        });
-      }
-    };
-    if (typeof config.image_proxy_host === 'object') {
-      proxyHosts(config.image_proxy_host);
-    }
-    if (typeof config.download_proxy_host === 'object') {
-      proxyHosts(config.download_proxy_host);
-    }
-  })
-  .catch(() => {
-    // eslint-disable-next-line no-console
-    console.warn('Failed to fetch remote configuration, use local values by default.');
-  });
-
 // Set up lazyload
 Vue.use(VueLazyload, {
   // set observer to true
@@ -138,27 +110,84 @@ if (downloadSettings) {
 }
 
 // Set up bus
-Vue.prototype.$bus = new Vue();
+const bus = new Vue();
+Vue.prototype.$bus = bus;
 
 // Set up idb
 Vue.prototype.$idb = idb;
 
-// Set up loadmap
-idb
-  .get('loadMap')
-  .then((loadMap) => {
-    Vue.prototype.$loadMap = loadMap || {};
-  })
-  .catch(() => {
-    Vue.prototype.$loadMap = {};
-  })
-  .finally(() => {
-    new Vue({
-      router,
-      store,
-      render: (h) => h(App),
-      mounted() {
-        document.dispatchEvent(new Event('render-event'));
-      },
-    }).$mount('#app');
-  });
+const requestRemoteConfig = async () => {
+  let res;
+  try {
+    res = await axios.get(config.remote_conf_url);
+  } catch (err) {
+    console.error('Failed to fetch remote configuration.', err);
+    return;
+  }
+  Object.assign(config, res.data);
+  const defineProxyHosts = (hosts) => {
+    if (typeof hosts === 'object') {
+      const hostArr = Object.keys(hosts);
+      hostArr.forEach((host, index) => {
+        Object.defineProperty(hosts, index, {
+          value: host,
+          enumerable: false,
+          writable: true,
+          configurable: true,
+        });
+      });
+    }
+  };
+  if (typeof config.image_proxy_host === 'object') {
+    defineProxyHosts(config.image_proxy_host);
+  }
+  if (typeof config.download_proxy_host === 'object') {
+    defineProxyHosts(config.download_proxy_host);
+  }
+};
+
+const getLoadMap = async () => {
+  // Set up loadmap
+  let loadMap;
+  try {
+    loadMap = await idb.get('loadMap');
+  } catch (err) {
+    console.error('Fetch loadmap error.', err);
+  }
+  const res = loadMap || {};
+  Vue.prototype.$loadMap = res;
+  return res;
+};
+
+const createInstance = () => {
+  new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+    mounted() {
+      document.dispatchEvent(new Event('render-event'));
+    },
+  }).$mount('#app');
+};
+
+// execute
+
+getLoadMap().then(async (loadMap) => {
+  createInstance();
+  await requestRemoteConfig();
+  // compare hash
+  const storedHash = window.localStorage.getItem('remote_conf_hash');
+  const hash = await sha256(JSON.stringify(config));
+  if (!storedHash) {
+    // init hash store
+    window.localStorage.setItem('remote_conf_hash', hash);
+    return;
+  }
+  if (hash !== storedHash) {
+    // clear loadmap
+    Object.keys(loadMap).forEach((key) => {
+      loadMap[key] = null;
+      delete loadMap[key];
+    });
+  }
+});
