@@ -178,6 +178,11 @@ getLoadMap().then(async (loadMap) => {
   // compare hash
   const storedHash = window.localStorage.getItem('remote_conf_hash');
   const hash = await sha256(JSON.stringify(config));
+  // log
+  console.log(`%cConfig hash: ${hash}`, 'color:#da7a85');
+  if (process.env.NODE_ENV === 'dev') {
+    console.log(`%cConfig content: `, 'color:#da7a85', config);
+  }
   if (!storedHash) {
     // init hash store
     window.localStorage.setItem('remote_conf_hash', hash);
