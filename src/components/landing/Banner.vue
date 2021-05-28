@@ -61,6 +61,8 @@
               <span class="about-copyright-split">|</span>
               <a href="https://github.com/pwp-app/pixiviz/issues" target="_blank">问题反馈</a>
               <span class="about-copyright-split">|</span>
+              <a href="https://github.com/pwp-app/pixiviz/discussions" target="_blank">讨论区</a>
+              <span class="about-copyright-split">|</span>
               <a :href="`https://pixiviz.pwp.app/pic/${landingBgId}`" target="_blank">主页背景</a>
             </span>
           </div>
