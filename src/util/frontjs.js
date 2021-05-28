@@ -10,6 +10,8 @@
       'pixiviz.pwp.app',
       'pixiv-image.pwp.link',
       'pixiv-image-jp.pwp.link',
+      'pixiv-image-ru.pwp.link',
+      'cfs.tigo.pwp.app',
       'config.backrunner.top',
     ],
     FPSThreshold: 8,
