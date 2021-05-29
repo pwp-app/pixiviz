@@ -150,7 +150,7 @@ const getLoadMap = async () => {
   // Set up loadmap
   let loadMap;
   try {
-    loadMap = await idb.get('loadMap');
+    loadMap = await idb.get('load-map');
   } catch (err) {
     console.error('Fetch loadmap error.', err);
   }
