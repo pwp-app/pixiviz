@@ -156,6 +156,9 @@ const getLoadMap = async () => {
   }
   const res = loadMap || {};
   Vue.prototype.$loadMap = res;
+  if (process.env.NODE_ENV === 'development') {
+    console.log('%cImages load map:', 'color:#da7185', res);
+  }
   return res;
 };
 
@@ -180,7 +183,7 @@ getLoadMap().then(async (loadMap) => {
   const hash = await sha256(JSON.stringify(config));
   // log
   console.log(`%cConfig hash: ${hash}`, 'color:#da7a85');
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'development') {
     console.log(`%cConfig content: `, 'color:#da7a85', config);
   }
   if (!storedHash) {
