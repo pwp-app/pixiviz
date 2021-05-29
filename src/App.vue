@@ -55,6 +55,7 @@ export default {
     // 黑暗模式监听
     this.$bus.$on('dark-mode-enable', this.handleDarkModeEnable);
     this.$bus.$on('dark-mode-disable', this.handleDarkModeDisable);
+    this.$bus.$on('save-load-map', this.saveLoadMap);
     // 图片懒加载统一handle
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
@@ -64,11 +65,11 @@ export default {
   mounted() {
     // add save loadmap listener
     window.addEventListener('resize', this.fitHiRes);
-    window.addEventListener('beforeunload', this.saveLoadMap);
+    window.addEventListener('beforeunload', this.cleanLoadMap);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.fitHiRes);
-    window.removeEventListener('beforeunload', this.saveLoadMap);
+    window.removeEventListener('beforeunload', this.cleanLoadMap);
   },
   computed: {
     showDownloadList() {
@@ -76,7 +77,23 @@ export default {
     },
   },
   methods: {
-    async saveLoadMap() {
+    clearLoadMapSaveTimeout() {
+      if (this.loadMapSaveTimeout) {
+        clearTimeout(this.loadMapSaveTimeout);
+        this.loadMapSaveTimeout = null;
+      }
+    },
+    async saveLoadMap(immediate = false) {
+      this.clearLoadMapSaveTimeout();
+      if (immediate) {
+        await this.$idb.set('load-map', this.$loadMap);
+      } else {
+        this.loadMapSaveTimeout = setTimeout(async () => {
+          await this.$idb.set('load-map', this.$loadMap);
+        }, 300);
+      }
+    },
+    async cleanLoadMap() {
       const keys = Object.keys(this.$loadMap);
       const threeDays = 3 * 24 * 60 * 60 * 1000;
       keys.forEach((key) => {
@@ -85,7 +102,7 @@ export default {
           delete this.$loadMap[key];
         }
       });
-      await this.$idb.set('load-map', this.$loadMap);
+      await this.saveLoadMap();
     },
     // 图片加载处理
     imageLoadedHandler(e) {

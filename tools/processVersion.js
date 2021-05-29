@@ -8,7 +8,7 @@ const versionInfo = `
 /* eslint-disable no-console */
 export const version = '${packageInfo.version}';
 console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
-  process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+  process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
 }', 'color:#da7a85');
 `;
 

@@ -161,6 +161,7 @@ export default {
         hostIdx,
         time: Date.now(),
       });
+      this.$bus.$emit('save-loadmap');
       return host;
     },
     handleClick() {
