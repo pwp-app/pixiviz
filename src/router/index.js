@@ -1,5 +1,5 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 import Landing from '../views/Landing.vue';
 import Rank from '../views/Rank.vue';
@@ -11,48 +11,48 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Landing",
+    path: '/',
+    name: 'Landing',
     component: Landing,
     meta: { keepAlive: false },
   },
   {
-    path: "/rank",
-    name: "Rank",
+    path: '/rank',
+    name: 'Rank',
     component: Rank,
     meta: { keepAlive: true },
   },
   {
-    path: "/pic/:id",
-    name: "Pic",
+    path: '/pic/:id',
+    name: 'Pic',
     component: Pic,
     meta: { keepAlive: false },
   },
   {
-    path: "/artist/:id",
-    name: "Artist",
+    path: '/artist/:id',
+    name: 'Artist',
     component: Artist,
     meta: { keepAlive: true },
   },
   {
-    path: "/search/:keyword",
-    name: "Search",
+    path: '/search/:keyword',
+    name: 'Search',
     component: Search,
     meta: { keepAlive: true },
   },
   {
-    path: "/404",
-    name: "Page not found",
-    component: () => import(/* webpackChunkName: "group-lazy" */ "../views/404.vue"),
+    path: '/404',
+    name: 'Page not found',
+    component: () => import(/* webpackChunkName: "group-lazy" */ '../views/404.vue'),
   },
   {
-    path: "*",
-    redirect: "/404"
-  }
+    path: '*',
+    redirect: '/404',
+  },
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes,
 });
@@ -65,11 +65,9 @@ router.afterEach(() => {
       if (hour < 6 || hour >= 18) {
         Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-enable');
         document.documentElement.classList.add('dark');
-      } else {
-        if (document.documentElement.classList.contains('dark')) {
-          Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-disable');
-          document.documentElement.classList.remove('dark');
-        }
+      } else if (document.documentElement.classList.contains('dark')) {
+        Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-disable');
+        document.documentElement.classList.remove('dark');
       }
     }
   }
