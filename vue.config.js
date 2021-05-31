@@ -54,14 +54,14 @@ module.exports = {
         // 统计代码缓存
         {
           urlPattern: /^(https:\/\/hm\.baidu\.com\/hm\.js)|(https:\/\/frontjs-static\.pgyer\.com\/dist\/current\/frontjs\.web\.min\.js)/,
-          handler: 'NetworkFirst',
+          handler: 'CacheFirst',
           options: {
             cacheName: 'stat-files',
             cacheableResponse: {
               statuses: [0, 200],
             },
             expiration: {
-              maxAgeSeconds: 86400 * 7,
+              maxAgeSeconds: 86400 * 3,
             },
             networkTimeoutSeconds: 10,
           },
