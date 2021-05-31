@@ -3,6 +3,7 @@
   w.frontjsConfig = {
     token: '0895802c5106769622a896b6d14df337',
     behaviour: 13,
+    trustVendor: true,
     ignoreVendor: true,
     optimisedForSPA: true,
     useHistory: true,
