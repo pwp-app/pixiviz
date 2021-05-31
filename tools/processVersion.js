@@ -5,11 +5,13 @@ const fs = require('fs');
 const packageInfo = require('../package.json');
 
 const versionInfo = `
+/* eslint-disable no-undef */
 /* eslint-disable no-console */
 export const version = '${packageInfo.version}';
 console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
   process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
 }', 'color:#da7a85');
+_hmt.push(['_setCustomVar', 1, 'siteVersion', '${packageInfo.version}', 1]);
 `;
 
 try {

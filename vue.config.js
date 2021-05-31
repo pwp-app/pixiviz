@@ -38,9 +38,7 @@ module.exports = {
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
-          urlPattern: new RegExp(
-            '^https:\\/\\/pixiviz\\.pwp\\.app(\\/.*\\.(html|js|css|jpg|png|webp))?$',
-          ),
+          urlPattern: /^https:\/\/pixiviz\.pwp\.app(\/.*\.(html|js|css|jpg|png|webp))?$/,
           handler: 'NetworkFirst',
           options: {
             cacheName: 'static-files',
@@ -53,9 +51,23 @@ module.exports = {
             networkTimeoutSeconds: 10,
           },
         },
+        // 统计代码缓存
+        {
+          urlPattern: /^(https:\/\/hm\.baidu\.com\/hm\.js)|(https:\/\/frontjs-static\.pgyer\.com\/dist\/current\/frontjs\.web\.min\.js)/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'stat-files',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 3,
+            },
+          },
+        },
         {
           // API缓存，本地资源优先，7天过期，最多3w条
-          urlPattern: new RegExp('^https:\\/\\/pixiviz\\.pwp\\.app\\/api\\/.*$'),
+          urlPattern: /^https:\/\/pixiviz\.pwp\.app\/api\/.*$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
@@ -70,7 +82,7 @@ module.exports = {
         },
         {
           // 作者头像缓存，14天过期，最多缓存3000个
-          urlPattern: new RegExp('^https:\\/\\/pixiv-image\\.pwp\\.link\\/user-profile\\/.*$'),
+          urlPattern: /^https:\/\/pixiv-image(-((ru)|(jp)))?\.pwp\.link\/user-profile\/.*$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'artist-avatar',
@@ -97,9 +109,9 @@ module.exports = {
       .use('image-webpack-loader')
       .loader('image-webpack-loader')
       .options({
-        mozjpeg: { progressive: true, quality: 70 },
+        mozjpeg: { progressive: true, quality: 80 },
         optipng: { enabled: false },
-        pngquant: { quality: [0.65, 0.9], speed: 4 },
+        pngquant: { quality: [0.7, 0.95], speed: 4 },
         gifsicle: { interlaced: false },
       });
     // drop debug lines
@@ -126,29 +138,30 @@ module.exports = {
     };
     config.optimization.splitChunks = {
       cacheGroups: {
-        common: {
-          name: 'chunk-common',
+        basic: {
+          name: 'chunk-basic',
+          test: /[\\/]node_modules[\\/]vue|babel|level|axios/,
           chunks: 'initial',
-          minChunks: 2,
-          maxInitialRequests: 5,
-          minSize: 0,
-          priority: 1,
+          priority: 5,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        element: {
+          name: 'chunk-element',
+          test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
+          chunks: 'all',
+          priority: 5,
           reuseExistingChunk: true,
           enforce: true,
         },
         vendors: {
           name: 'chunk-vendors',
           test: /[\\/]node_modules[\\/]/,
-          chunks: 'initial',
-          priority: 2,
-          reuseExistingChunk: true,
-          enforce: true,
-        },
-        elementUI: {
-          name: 'chunk-element',
-          test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
           chunks: 'all',
-          priority: 3,
+          minChunks: 1,
+          maxInitialRequests: 5,
+          minSize: 0,
+          priority: -1,
           reuseExistingChunk: true,
           enforce: true,
         },
