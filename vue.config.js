@@ -110,9 +110,9 @@ module.exports = {
       .use('image-webpack-loader')
       .loader('image-webpack-loader')
       .options({
-        mozjpeg: { progressive: true, quality: 70 },
+        mozjpeg: { progressive: true, quality: 80 },
         optipng: { enabled: false },
-        pngquant: { quality: [0.65, 0.9], speed: 4 },
+        pngquant: { quality: [0.7, 0.95], speed: 4 },
         gifsicle: { interlaced: false },
       });
     // drop debug lines
