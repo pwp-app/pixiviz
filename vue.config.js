@@ -63,7 +63,6 @@ module.exports = {
             expiration: {
               maxAgeSeconds: 86400 * 3,
             },
-            networkTimeoutSeconds: 10,
           },
         },
         {
