@@ -6,6 +6,7 @@ import Rank from '../views/Rank.vue';
 import Pic from '../views/PicDetail.vue';
 import Search from '../views/Search.vue';
 import Artist from '../views/Artist.vue';
+import NotFound from '../views/404.vue';
 
 Vue.use(VueRouter);
 
@@ -43,7 +44,7 @@ const routes = [
   {
     path: '/404',
     name: 'Page not found',
-    component: () => import(/* webpackChunkName: "group-lazy" */ '../views/404.vue'),
+    component: NotFound,
   },
   {
     path: '*',

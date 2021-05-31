@@ -34,10 +34,10 @@ import router from './router';
 // Import sw
 import './registerServiceWorker';
 
-// frontjs intergration
-if (process.env.NODE_ENV !== 'development') {
-  import('./util/frontjs');
-}
+// Import frontjs stat
+import { initFrontJs } from './util/frontjs';
+
+initFrontJs();
 
 Vue.config.productionTip = false;
 

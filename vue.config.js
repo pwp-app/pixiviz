@@ -138,29 +138,30 @@ module.exports = {
     };
     config.optimization.splitChunks = {
       cacheGroups: {
-        common: {
-          name: 'chunk-common',
+        basic: {
+          name: 'chunk-basic',
+          test: /[\\/]node_modules[\\/]vue|babel|level|axios/,
           chunks: 'initial',
-          minChunks: 2,
-          maxInitialRequests: 5,
-          minSize: 0,
-          priority: 1,
+          priority: 5,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        element: {
+          name: 'chunk-element',
+          test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
+          chunks: 'all',
+          priority: 5,
           reuseExistingChunk: true,
           enforce: true,
         },
         vendors: {
           name: 'chunk-vendors',
           test: /[\\/]node_modules[\\/]/,
-          chunks: 'initial',
-          priority: 2,
-          reuseExistingChunk: true,
-          enforce: true,
-        },
-        elementUI: {
-          name: 'chunk-element',
-          test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
           chunks: 'all',
-          priority: 3,
+          minChunks: 1,
+          maxInitialRequests: 5,
+          minSize: 0,
+          priority: -1,
           reuseExistingChunk: true,
           enforce: true,
         },
