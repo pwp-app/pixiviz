@@ -31,6 +31,10 @@ export default {
   beforeCreate() {
     // 检测Safari
     window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    // 检测standalone
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      window.isStandAlone = true;
+    }
     // 全局构建
     if (!window.pixiviz) {
       window.pixiviz = {};
@@ -42,7 +46,7 @@ export default {
     // 重置图片-画师路由数据
     window.localStorage.removeItem('pic-routes');
     // Safari vh 优化
-    if (window.isSafari) {
+    if (window.isSafari && !window.isStandAlone) {
       const setVh = () => {
         const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);

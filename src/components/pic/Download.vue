@@ -29,7 +29,7 @@
       :visible.sync="settingsVisible"
       @close="handleSettingsClose"
     >
-      <el-form label-position="left" label-width="118px" :model="settingsForm">
+      <el-form label-position="left" label-width="120px" :model="settingsForm">
         <el-form-item label="单张下载文件名">
           <el-input v-model="settingsForm.singleFileName"></el-input>
         </el-form-item>

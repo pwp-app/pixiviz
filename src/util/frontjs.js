@@ -3,6 +3,10 @@ export const initFrontJs = () => {
   if (process.env.NODE_ENV === 'development') {
     return;
   }
+  const privacyRemote = window.localStorage.getItem('privacy-remote');
+  if (privacyRemote === 'false') {
+    return;
+  }
   (function(w) {
     w.frontjsConfig = {
       token: '0895802c5106769622a896b6d14df337',
