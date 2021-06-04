@@ -276,7 +276,41 @@
     height: 540px;
     max-height: 182px;
   }
+  .banner {
+    &-title-up {
+      transform: translateY(-188px);
+    }
+  }
   .banner-expanded {
     max-height: 540px;
+    .about {
+      bottom: 42px;
+      &-my {
+        &-title {
+          line-height: 54px;
+          .indev {
+            font-size: 13px;
+          }
+        }
+        &-link {
+          line-height: 36px;
+        }
+      }
+      &-settings {
+        margin-top: 16px;
+        &-title {
+          line-height: 54px;
+        }
+        &-link {
+          line-height: 36px;
+        }
+      }
+      &-copyright {
+        margin-top: 42px;
+        &-item {
+          font-size: 14px;
+        }
+      }
+    }
   }
 }
