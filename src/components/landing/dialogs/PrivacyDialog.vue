@@ -57,9 +57,9 @@ export default {
     },
     labelWidth() {
       if (this.screenWidth <= 320) {
-        return '86px';
-      } else {
         return '108px';
+      } else {
+        return '120px';
       }
     },
   },
