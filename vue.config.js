@@ -38,7 +38,7 @@ module.exports = {
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
-          urlPattern: /^https:\/\/pixiviz\.pwp\.app(\/.*\.(html|js|css|jpg|png|webp))?$/,
+          urlPattern: /^https:\/\/pixiviz\.pwp\.app(\/.*\.(html|js|css))?$/,
           handler: 'NetworkFirst',
           options: {
             cacheName: 'static-files',
@@ -49,6 +49,20 @@ module.exports = {
               maxAgeSeconds: 86400 * 7,
             },
             networkTimeoutSeconds: 10,
+          },
+        },
+        {
+          // 静态图片缓存，本地资源优先，3天过期
+          urlPattern: /^https:\/\/pixiviz\.pwp\.app(\/.*\.(jpg|jpeg|png|webp|svg))?$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'static-imgs',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 3,
+            },
           },
         },
         // 统计代码缓存
