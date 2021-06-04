@@ -432,7 +432,7 @@ export default {
         downloadHostIdx: hostIdx,
         time: Date.now(),
       });
-      this.$bus.$emit('save-load-map');
+      this.$bus.$emit('save-loadmap');
       return host;
     },
     getImageSource(image, type, page = this.page, useLoadMap = true) {

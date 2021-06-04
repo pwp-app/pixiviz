@@ -6,7 +6,9 @@ const idb = levelup(leveljs('pixiviz-data'));
 export default {
   async get(key) {
     try {
-      const res = await idb.get(key);
+      const res = await idb.get(key, {
+        asBuffer: false,
+      });
       return JSON.parse(res);
     } catch (err) {
       if (err.notFound) {

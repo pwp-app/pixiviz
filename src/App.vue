@@ -59,7 +59,7 @@ export default {
     // 黑暗模式监听
     this.$bus.$on('dark-mode-enable', this.handleDarkModeEnable);
     this.$bus.$on('dark-mode-disable', this.handleDarkModeDisable);
-    this.$bus.$on('save-load-map', this.saveLoadMap);
+    this.$bus.$on('save-loadmap', this.saveLoadMap);
     // 图片懒加载统一handle
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);

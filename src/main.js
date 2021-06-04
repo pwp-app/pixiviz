@@ -157,7 +157,7 @@ const getLoadMap = async () => {
   const res = loadMap || {};
   Vue.prototype.$loadMap = res;
   if (process.env.NODE_ENV === 'development') {
-    console.log('%cImages load map:', 'color:#da7185', res);
+    console.log('%cImages load map:', 'color:#da7185', res, Object.keys(res).length);
   }
   return res;
 };
@@ -197,5 +197,6 @@ getLoadMap().then(async (loadMap) => {
       loadMap[key] = null;
       delete loadMap[key];
     });
+    window.localStorage.setItem('remote_conf_hash', hash);
   }
 });
