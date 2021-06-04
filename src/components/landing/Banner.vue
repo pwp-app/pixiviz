@@ -55,12 +55,14 @@
       </div>
     </div>
     <ThemeDialog ref="theme" />
+    <PrivacyDialog ref="privacy" />
   </div>
 </template>
 
 <script>
 import { version } from '../../version.js';
 import ThemeDialog from './dialogs/ThemeDialog';
+import PrivacyDialog from './dialogs/PrivacyDialog';
 import GitHubIcon from '../icons/github';
 
 export default {
@@ -68,6 +70,7 @@ export default {
   components: {
     GitHubIcon,
     ThemeDialog,
+    PrivacyDialog,
   },
   data() {
     return {
@@ -149,7 +152,9 @@ export default {
     openThemeDialog() {
       this.$refs.theme.open();
     },
-    openPrivacyDialog() {},
+    openPrivacyDialog() {
+      this.$refs.privacy.open();
+    },
     goGitHub() {
       window.open('https://github.com/pwp-app/pixiviz');
     },

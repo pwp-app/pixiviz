@@ -45,20 +45,21 @@ export default {
         darkMode: false,
         darkPersist: false, // 永久禁用
       },
+      screenWidth: document.documentElement.clientWidth,
     };
   },
   computed: {
     dialogWidth() {
-      if (document.documentElement.clientWidth <= 320) {
+      if (this.screenWidth <= 320) {
         return '308px';
-      } else if (document.documentElement.clientWidth < 768) {
+      } else if (this.screenWidth < 768) {
         return '320px';
       } else {
         return '480px';
       }
     },
     labelWidth() {
-      if (document.documentElement.clientWidth <= 320) {
+      if (this.screenWidth <= 320) {
         return '72px';
       } else {
         return '80px';
@@ -66,6 +67,7 @@ export default {
     },
   },
   created() {
+    window.addEventListener('resize', this.windowResized);
     const darkEnabled = window.localStorage.getItem('enable-dark');
     this.themeForm.darkMode = darkEnabled === 'true';
     const darkPersist = window.localStorage.getItem('dark-persist');
@@ -118,6 +120,9 @@ export default {
         this.$bus.$emit('dark-mode-disable');
         document.documentElement.classList.remove('dark');
       }
+    },
+    windowResized() {
+      this.screenWidth = document.documentElement.clientWidth;
     },
   },
 };
