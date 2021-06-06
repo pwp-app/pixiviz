@@ -90,6 +90,14 @@ export default {
       }
       return true;
     },
+    checkLastVisitTime(timeLimit) {
+      const record = window.localStorage.getItem('last-visit-time');
+      if (!record) {
+        return false;
+      }
+      const recordTime = parseInt(record, 10);
+      return recordTime >= timeLimit;
+    },
     fetchAnnounce() {
       this.axios
         .get('https://config.backrunner.top/pixiviz/announcement.json', {
@@ -100,17 +108,27 @@ export default {
             return;
           }
           for (const announcement of res.data) {
-            const { id, title, content, footer, expires, matchVersion } = announcement;
+            const {
+              id,
+              title,
+              content,
+              footer,
+              expires,
+              matchVersion,
+              lastVisitAfter,
+            } = announcement;
             const announceLog = window.localStorage.getItem('announce-read-id');
             if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
               window.FrontJS.addUserData('announceLog', announceLog);
             }
             // if matchVersion not exists, apply for all version
             const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
+            const visitTimeCheck = lastVisitAfter ? this.checkLastVisitTime(lastVisitAfter) : true;
             if (
               (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
               dayjs(expires).unix() <= dayjs().unix() ||
-              !versionMatched
+              !versionMatched ||
+              !visitTimeCheck
             ) {
               continue;
             }
