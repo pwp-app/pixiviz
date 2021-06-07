@@ -131,6 +131,19 @@ export default {
       ugoira: null,
       ugoiraSource: BLANK_IMAGE,
       ugoiraLoaded: false,
+      ugoiraObserver: IntersectionObserver
+        ? new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && this.ugoira && this.ugoira.status === 'stopped') {
+                this.ugoira.play();
+                return;
+              }
+              if (!entry.isIntersecting && this.ugoira && this.ugoira.status === 'playing') {
+                this.ugoira.stop();
+              }
+            });
+          })
+        : null,
     };
   },
   beforeCreate() {
@@ -163,6 +176,11 @@ export default {
     image: {
       immediate: true,
       handler(image) {
+        // ugoira observer
+        if (this.$refs.image) {
+          this.ugoiraObserver && this.ugoiraObserver.unobserve(this.$refs.image);
+        }
+        // init vars
         this.imageLoading = true;
         this.imageLoadError = false;
         this.page = 1;
@@ -376,6 +394,10 @@ export default {
       this.$bus.$emit('ugoira-loaded', this.image.id);
       this.ugoiraLoaded = true;
       this.ugoira.play();
+      this.$nextTick(() => {
+        // observe the image el
+        this.ugoiraObserver && this.ugoiraObserver.observe(this.$refs.image);
+      });
     },
     downloadUgoira() {
       if (!this.ugoira) {
