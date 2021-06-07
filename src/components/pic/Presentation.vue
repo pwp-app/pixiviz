@@ -384,7 +384,7 @@ export default {
       const gif = new window.GIF({
         worker: 10,
         workerScript: '/js/gif.worker.js',
-        quality: 10,
+        quality: this.mobileMode ? 5 : 2,
         width: this.image.width,
         height: this.image.height,
         background: '#fff',
