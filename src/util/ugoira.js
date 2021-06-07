@@ -7,6 +7,7 @@ class Ugoira {
     this.blobMap = null;
     this.currentFrame = 0;
     this.onFrame = null;
+    this.status = 'stopped';
   }
   load() {
     if (!this.zipUrl) {
@@ -65,9 +66,13 @@ class Ugoira {
       }),
     );
     this.blobMap = blobMap;
+    this.fullyLoaded = true;
     return blobMap;
   }
   play() {
+    if (!this.fullyLoaded) {
+      return;
+    }
     if (!this.blobMap) {
       throw new Error('blobMap is empty.');
     }
@@ -75,7 +80,7 @@ class Ugoira {
       throw new Error('Cannot locate the onFrame function.');
     }
     const playFrame = () => {
-      if (this.stopped) {
+      if (this.status === 'stopped') {
         return;
       }
       // current frame
@@ -109,6 +114,7 @@ class Ugoira {
         }, nextDelay);
       }
     };
+    this.status = 'playing';
     playFrame();
   }
   stop() {
@@ -116,7 +122,7 @@ class Ugoira {
       clearTimeout(this.frameTimeout);
       this.frameTimeout = null;
     }
-    this.stopped = true;
+    this.status = 'stopped';
   }
   cancel() {
     if (this.request) {
