@@ -305,10 +305,8 @@ export default {
       this.closeActionFloat();
     },
     handleImageLoad() {
-      setTimeout(() => {
-        this.imageLoaded = false;
-        this.$forceUpdate();
-      }, 50);
+      this.imageLoaded = false;
+      this.$forceUpdate();
     },
     handleImageLoaded() {
       this.imageLoaded = true;

@@ -20,22 +20,25 @@ class Ugoira {
         if (req.readyState === 4 && (req.status === 200 || req.status === 304)) {
           this.zipData = req.response;
           this.loaded = true;
+          this.progress = 100;
           resolve(req.response);
         }
       };
       req.onprogress = (e) => {
-        this.percent = parseInt((e.loaded / e.total) * 100, 10);
+        this.progress = parseInt((e.loaded / e.total) * 100, 10);
       };
       req.onloadstart = () => {
-        this.percent = 0;
+        this.progress = 0;
       };
       req.onloadend = () => {
-        this.percent = 100;
+        this.progress = 100;
       };
       req.onerror = function() {
+        this.progress = 0;
         resolve(null);
       };
       req.onabort = function() {
+        this.progress = 0;
         resolve(null);
       };
       this.request = req;
