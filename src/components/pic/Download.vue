@@ -105,9 +105,11 @@ export default {
     };
   },
   created() {
+    this.$bus.$on('start-download-ugoira', this.downloadUgoira);
     this.$bus.$on('ugoira-gif-rendered', this.saveUgoira);
   },
   beforeDestroy() {
+    this.$bus.$off('start-download-ugoira', this.downloadUgoira);
     this.$bus.$off('ugoira-gif-rendered', this.saveUgoira);
   },
   computed: {

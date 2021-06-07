@@ -373,6 +373,7 @@ export default {
       }
       this.$store.commit('pic/setUgoiraProgress', 100);
       this.$store.commit('pic/setUgoiraStatus', null);
+      this.$bus.$emit('ugoira-loaded', this.image.id);
       this.ugoiraLoaded = true;
       this.ugoira.play();
     },

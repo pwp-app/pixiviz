@@ -243,8 +243,21 @@ export default {
         document.title = `${this.image.title} - Pixiviz`;
         if (this.mobileDownload) {
           this.mobileDownload = false;
-          this.startDownloadCurrent();
+          if (this.type === 'ugoira') {
+            this.waitAndDownloadUgoira();
+          } else {
+            this.startDownloadCurrent();
+          }
         }
+      });
+    },
+    waitAndDownloadUgoira() {
+      this.$bus.$once('ugoira-loaded', (id) => {
+        this.mobileDownload = false;
+        if (id !== this.imageId) {
+          return;
+        }
+        this.$bus.$emit('start-download-ugoira');
       });
     },
     startDownloadCurrent() {
