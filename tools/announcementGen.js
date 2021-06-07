@@ -66,6 +66,8 @@ dir.forEach((file) => {
           versions.push(v.trim());
         });
         anno[entry[0]] = versions;
+      } else if (entry[0] === 'lastVisitAfter') {
+        anno[entry[0]] = dayjs(entry[1].trim(), 'YYYY-MM-DD HH-mm-ss').valueOf();
       } else {
         anno[entry[0]] = entry[1].trim();
       }

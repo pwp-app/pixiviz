@@ -13,15 +13,26 @@
         @click="downloadCurrent"
         :disabled="disableDownloadCurrent"
         :style="downloadCurrentStyle"
-        >{{ downloadCurrentText }}</el-button
       >
+        {{ downloadCurrentText }}
+      </el-button>
+      <el-button
+        type="primary"
+        @click="downloadUgoira"
+        v-if="image.type === 'ugoira'"
+        :disabled="disableDownloadUgoria"
+        :style="downloadUgoiraStyle"
+      >
+        {{ downloadUgoiraText }}
+      </el-button>
       <el-button
         type="primary"
         @click="downloadAll"
         v-if="showDownloadAll"
         :disabled="downloadStarted"
-        >下载所有</el-button
       >
+        下载所有
+      </el-button>
     </div>
     <el-dialog
       class="dialog pic-download-dialog"
@@ -62,9 +73,17 @@
 import QRCodeIcon from '../icons/qrcode';
 import DownloadQRCode from './DownloadQRCode';
 import { weightedRandom } from '@/util/random';
+import { downloadFromBlob } from '@/util/download';
 
 export default {
-  props: ['image', 'loaded'],
+  props: {
+    image: {
+      type: Object,
+    },
+    loaded: {
+      type: Boolean,
+    },
+  },
   components: {
     QRCodeIcon,
     DownloadQRCode,
@@ -75,6 +94,8 @@ export default {
       downloadStarted: false,
       downloadCurrentLock: false,
       downloadCurrentStyle: null,
+      downloadUgoiraLock: false,
+      downloadUgoiraStyle: null,
       // dialog
       settingsVisible: false,
       settingsForm: {
@@ -82,6 +103,14 @@ export default {
         multiFileName: this.$downloadSettings.multiFileName,
       },
     };
+  },
+  created() {
+    this.$bus.$on('start-download-ugoira', this.downloadUgoira);
+    this.$bus.$on('ugoira-gif-rendered', this.saveUgoira);
+  },
+  beforeDestroy() {
+    this.$bus.$off('start-download-ugoira', this.downloadUgoira);
+    this.$bus.$off('ugoira-gif-rendered', this.saveUgoira);
   },
   computed: {
     originalUrls() {
@@ -96,7 +125,32 @@ export default {
       if (!this.loaded && this.$store.state.pic.progress && this.$store.state.pic.progress < 100) {
         return `大图加载中（${this.$store.state.pic.progress}%）...`;
       }
-      return this.image.page_count > 1 ? '保存当前' : '点我保存';
+      if (this.image.type !== 'ugoira') {
+        return this.image.page_count > 1 ? '保存当前' : '点我保存';
+      } else {
+        return '保存静态图片';
+      }
+    },
+    downloadUgoiraText() {
+      if (this.$store.state.pic.ugoiraStatus) {
+        const status = this.$store.state.pic.ugoiraStatus;
+        if (status === 'downloadFailed') {
+          return '动图下载失败';
+        }
+        if (status === 'unzip') {
+          return '动图解析中...';
+        }
+        if (status === 'unzipFailed') {
+          return '动图解析失败';
+        }
+        if (status === 'renderGif') {
+          return '正在生成GIF...';
+        }
+      }
+      if (this.$store.state.pic.ugoiraProgress < 100) {
+        return `动图加载中（${this.$store.state.pic.progress}%）...`;
+      }
+      return '保存动图';
     },
     showDownloadAll() {
       if (!this.image) return false;
@@ -105,6 +159,13 @@ export default {
     disableDownloadCurrent() {
       return this.downloadCurrentLock || !this.loaded;
     },
+    disableDownloadUgoria() {
+      return (
+        this.$store.state.pic.ugoiraStatus !== null ||
+        this.downloadUgoiraLock ||
+        this.$store.state.pic.ugoiraProgress !== 100
+      );
+    },
   },
   watch: {
     '$store.state.pic.progress': function (value) {
@@ -112,6 +173,14 @@ export default {
         this.downloadCurrentStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
       } else {
         this.downloadCurrentStyle = `background-image: linear-gradient(to right, #da7a85 0%, #da7a85 ${value}%, #999 ${value}%, #999 100%) !important;`;
+      }
+      this.$forceUpdate();
+    },
+    '$store.state.pic.ugoiraProgress': function (value) {
+      if (this.$store.state.darkMode.enabled) {
+        this.downloadUgoiraStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
+      } else {
+        this.downloadUgoiraStyle = `background-image: linear-gradient(to right, #da7a85 0%, #da7a85 ${value}%, #999 ${value}%, #999 100%) !important;`;
       }
       this.$forceUpdate();
     },
@@ -153,6 +222,7 @@ export default {
           // 闲置超过10秒即销毁
           if (window.pixiviz.downloadIdleSeconds > 10) {
             clearInterval(window.pixiviz.downloadTimer);
+            window.pixivz.downloadTimer = null;
           }
         }
       }, 1000);
@@ -188,13 +258,7 @@ export default {
         context.drawImage(image, 0, 0, image.width, image.height);
         canvas.toBlob((blob) => {
           const blobUrl = window.URL.createObjectURL(blob);
-          const saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-          saveLink.download = name;
-          saveLink.href = blobUrl;
-          const event = new MouseEvent('click');
-          setTimeout(() => {
-            saveLink.dispatchEvent(event);
-          });
+          downloadFromBlob(blobUrl, name);
         });
         if (this.$store.getters['download/hasName'](name)) {
           this.$store.commit('download/removeItem', name);
@@ -245,6 +309,25 @@ export default {
       }
       this.$emit('download-current');
     },
+    downloadUgoira() {
+      this.downloadUgoiraStyle = null;
+      if (!this.downloadUgoiraLock) {
+        this.downloadUgoiraLock = true;
+        this.downloadUgoiraLockTimeout = setTimeout(() => {
+          this.downloadUgoiraLock = false;
+        }, 10000);
+      }
+      this.$bus.$emit('download-ugoira');
+    },
+    saveUgoira(blobUrl) {
+      if (this.downloadUgoiraLockTimeout) {
+        this.downloadUgoiraLock = false;
+        clearTimeout(this.downloadUgoiraLockTimeout);
+        this.downloadUgoiraLockTimeout = null;
+      }
+      const filename = this.getDownloadName('single');
+      downloadFromBlob(blobUrl, filename);
+    },
     downloadAll() {
       if (!this.originalUrls) {
         this.$message.error('无法获取所有图片的文件地址');
@@ -274,7 +357,7 @@ export default {
         );
       }
       if (window.isSafari) {
-        if (!window.downloadTimer) {
+        if (!window.pixiviz.downloadTimer) {
           this.createDownloadTimer();
         }
       }

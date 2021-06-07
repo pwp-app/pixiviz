@@ -65,6 +65,8 @@ export default {
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
     // rem fit
     this.fitHiRes();
+    // log visit time
+    window.localStorage.setItem('last-visit-time', Date.now());
   },
   mounted() {
     // add save loadmap listener
@@ -74,6 +76,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.fitHiRes);
     window.removeEventListener('beforeunload', this.cleanLoadMap);
+    window.localStorage.setItem('last-visit-time', Date.now());
   },
   computed: {
     showDownloadList() {

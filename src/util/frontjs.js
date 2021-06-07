@@ -10,7 +10,8 @@ export const initFrontJs = () => {
   (function(w) {
     w.frontjsConfig = {
       token: '0895802c5106769622a896b6d14df337',
-      behaviour: 13,
+      behaviour: 15,
+      captureConsoleLog: true,
       trustVendor: true,
       ignoreVendor: true,
       optimisedForSPA: true,

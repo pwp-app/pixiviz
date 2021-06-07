@@ -3,8 +3,6 @@
 import Vue from 'vue';
 
 // Import dependencies
-import qs from 'qs';
-import axios from 'axios';
 import VueCookies from 'vue-cookies';
 import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
@@ -31,6 +29,9 @@ import store from './store';
 import App from './App.vue';
 import router from './router';
 
+// Import axios
+import axios from './util/axios';
+
 // Import sw
 import './registerServiceWorker';
 
@@ -43,20 +44,6 @@ Vue.config.productionTip = false;
 
 // Set up config
 Vue.prototype.$config = config;
-
-// Set up axios
-axios.defaults.baseURL = '';
-axios.defaults.withCredentials = false;
-axios.defaults.timeout = 10000;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.transformRequest = [
-  function(data) {
-    return qs.stringify(data, {
-      arrayFormat: 'brackets',
-    });
-  },
-];
 
 Vue.prototype.axios = axios;
 Vue.prototype.$http = axios;

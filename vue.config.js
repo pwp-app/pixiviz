@@ -95,7 +95,7 @@ module.exports = {
           },
         },
         {
-          // 作者头像缓存，14天过期，最多缓存3000个
+          // 作者头像缓存，14天过期，最多缓存1000个
           urlPattern: /^https:\/\/pixiv-image(-((ru)|(jp)))?\.pwp\.link\/user-profile\/.*$/,
           handler: 'CacheFirst',
           options: {
@@ -105,7 +105,26 @@ module.exports = {
             },
             expiration: {
               maxAgeSeconds: 86400 * 30,
-              maxEntries: 3000,
+              maxEntries: 1000,
+            },
+            fetchOptions: {
+              credentials: 'omit',
+              mode: 'cors',
+            },
+          },
+        },
+        {
+          // zip缓存，最多缓存10个，有效期1天
+          urlPattern: /^https:\/\/pixiv-image(-((ru)|(jp)))?\.pwp\.link\/.*\.zip$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'ugoira-zip',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400,
+              maxEntries: 10,
             },
             fetchOptions: {
               credentials: 'omit',

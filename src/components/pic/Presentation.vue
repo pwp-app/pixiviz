@@ -15,7 +15,9 @@
         :style="imageSizeStyles"
         @click="openLightBox"
         v-context="'context'"
+        v-if="!isUgoira || !ugoiraLoaded"
       />
+      <img ref="image" :src="ugoiraSource" :style="imageSizeStyles" v-else />
       <div style="clear: both"></div>
       <div class="pic-presentation-image-error" v-if="imageLoadError">
         <div class="pic-presentation-image-error-icon">
@@ -76,6 +78,7 @@
 import dayjs from 'dayjs';
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
+import Ugoira from '@/util/ugoira';
 import { weightedRandom } from '@/util/random';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
@@ -84,7 +87,17 @@ const BLANK_IMAGE =
 
 export default {
   name: 'Pic.Presentation',
-  props: ['image', 'block', 'loaded'],
+  props: {
+    image: {
+      type: Object,
+    },
+    block: {
+      type: Boolean,
+    },
+    loaded: {
+      type: Boolean,
+    },
+  },
   components: {
     Paginator,
     LightBox,
@@ -113,6 +126,11 @@ export default {
       lightBoxShow: false,
       // context
       showCopyImage: !!window.ClipboardItem,
+      // ugoira
+      isUgoira: false,
+      ugoira: null,
+      ugoiraSource: BLANK_IMAGE,
+      ugoiraLoaded: false,
     };
   },
   beforeCreate() {
@@ -120,6 +138,9 @@ export default {
       if (!window.pixiviz.downloadQueue) window.pixiviz.downloadQueue = [];
       if (!window.pixiviz.downloadCounter) window.pixiviz.downloadCounter = 0;
     }
+  },
+  created() {
+    this.$bus.$on('download-ugoira', this.downloadUgoira);
   },
   mounted() {
     // image
@@ -136,6 +157,7 @@ export default {
       clearInterval(this.progressInterval);
       this.progressInterval = null;
     }
+    this.$bus.$off('download-ugoira', this.downloadUgoira);
   },
   watch: {
     image: {
@@ -149,11 +171,29 @@ export default {
         this.imageObjs = {};
         this.imageSize.x = image ? image.width : 0;
         this.imageSize.y = image ? image.height : 0;
+        // ugoira
+        if (image.type === 'ugoira') {
+          this.isUgoira = true;
+        } else {
+          this.isUgoira = false;
+        }
+        if (this.ugoira) {
+          this.ugoira.stop();
+          this.ugoira = null;
+        }
+        this.ugoiraSource = BLANK_IMAGE;
+        this.ugoiraLoaded = false;
+        // progress
+        this.$store.commit('pic/setProgress', 0);
+        this.$store.commit('pic/setUgoiraProgress', 0);
+        this.$store.commit('pic/setUgoiraStatus', null);
+        // width limit
         const screenWidth = document.documentElement.clientWidth;
         this.setLimitWidth(screenWidth);
         this.checkMobileMode(screenWidth);
         this.setImageSize(image);
         this.checkFirstLoad(image);
+        // start loading
         this.tryLoad();
         this.$emit('image-load');
       },
@@ -189,10 +229,17 @@ export default {
       return this.getImageSource(this.image, 'large');
     },
     imageSizeStyles() {
-      return {
+      const styles = {
         width: `${this.imageWidth}px`,
         height: `${this.imageHeight}px${!(this.loaded || false) ? ' !important' : ''}`,
       };
+      if (this.isUgoira) {
+        Object.assign(styles, {
+          transform: 'translate3d(0, 0, 0);',
+          cursor: 'default;',
+        });
+      }
+      return styles;
     },
     tags() {
       if (this.image) {
@@ -251,7 +298,6 @@ export default {
         }
       }
       this.imageEl && this.imageEl.setAttribute('src', BLANK_IMAGE);
-      this.$store.commit('pic/setProgress', 0);
       const img = new Image();
       img.onload = () => this.onLoaded(img);
       img.onerror = () => this.onLoadError();
@@ -272,6 +318,114 @@ export default {
       }
       this.imageObjs[this.page] = img;
       this.imageObjs[this.page].useLarge = this.useLarge;
+      // ugoira
+      if (this.isUgoira) {
+        this.getUgoira();
+      }
+    },
+    async getUgoira() {
+      // get ugoira meta
+      let metaRes;
+      try {
+        metaRes = await this.axios.get(`${this.$config.api_prefix}/ugoira/meta`, {
+          params: {
+            id: this.image.id,
+          },
+        });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to fetch ugoira meta data.', err);
+      }
+      const { ugoira_metadata: meta } = metaRes.data;
+      const { zip_urls: zipUrls } = meta;
+      // download zip
+      this.ugoira = new Ugoira({
+        url: this.getUgoiraSource(zipUrls.original || zipUrls.medium),
+        frames: meta.frames,
+      });
+      this.ugoiraProgressInterval = setInterval(() => {
+        this.$store.commit('pic/setUgoiraProgress', this.ugoira.progress);
+      }, 200);
+      this.ugoira.onFrame = (url) => {
+        this.ugoiraSource = url;
+      };
+      const ret = await this.ugoira.load();
+      if (!ret) {
+        clearInterval(this.ugoiraProgressInterval);
+        this.$store.commit('pic/setUgoiraProgress', 0);
+        this.$store.commit('pic/setUgoiraStatus', 'downloadFailed');
+        return;
+      }
+      this.$store.commit('pic/setUgoiraProgress', 99);
+      this.$store.commit('pic/setUgoiraStatus', 'unzip');
+      clearInterval(this.ugoiraProgressInterval);
+      try {
+        const parseRet = await this.ugoira.parse();
+        if (!parseRet) {
+          this.$store.commit('pic/setUgoiraProgress', 0);
+          this.$store.commit('pic/setUgoiraStatus', 'unzipFailed');
+          return;
+        }
+      } catch {
+        this.$store.commit('pic/setUgoiraProgress', 0);
+        this.$store.commit('pic/setUgoiraStatus', 'unzipFailed');
+        return;
+      }
+      this.$store.commit('pic/setUgoiraProgress', 100);
+      this.$store.commit('pic/setUgoiraStatus', null);
+      this.$bus.$emit('ugoira-loaded', this.image.id);
+      this.ugoiraLoaded = true;
+      this.ugoira.play();
+    },
+    downloadUgoira() {
+      if (!this.ugoira) {
+        return;
+      }
+      const gif = new window.GIF({
+        worker: 10,
+        workerScript: '/js/gif.worker.js',
+        quality: 10,
+        width: this.image.width,
+        height: this.image.height,
+        background: '#fff',
+      });
+      this.$store.commit('pic/setUgoiraStatus', 'renderGif');
+      // render gif
+      const images = [];
+      const addFrames = () => {
+        images.sort((a, b) => {
+          return a.index - b.index;
+        });
+        images.forEach((item, index) => {
+          gif.addFrame(item.img, {
+            delay: this.ugoira.frames[index].delay,
+            width: this.image.width,
+            height: this.image.height,
+          });
+        });
+        gif.render();
+      };
+      try {
+        this.ugoira.frames.forEach((frame, index) => {
+          const img = new Image();
+          img.src = this.ugoira.blobMap[frame.file];
+          img.onload = () => {
+            images.push({ img, index });
+            if (images.length === this.ugoira.frames.length) {
+              addFrames();
+            }
+          };
+        });
+        gif.on('finished', (blob) => {
+          this.$store.commit('pic/setUgoiraStatus', null);
+          this.$bus.$emit('ugoira-gif-rendered', window.URL.createObjectURL(blob));
+        });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Cannot generate gif.', err);
+        this.$store.commit('pic/setUgoiraStatus', null);
+        this.$message.error('动图GIF生成失败，请重试');
+      }
     },
     cancelAllLoad() {
       Object.keys(this.imageObjs).forEach((key) => {
@@ -281,6 +435,9 @@ export default {
         }
         img.cancel();
       });
+      if (this.ugoira) {
+        this.ugoira.cancel();
+      }
     },
     progressCheck() {
       if (!this.imageObjs || !this.imageObjs[this.page] || !this.imageObjs[this.page].percent) {
@@ -436,7 +593,8 @@ export default {
       return host;
     },
     getImageSource(image, type, page = this.page, useLoadMap = true) {
-      const hosts = this.$config.image_proxy_host;
+      const imageHosts = this.$config.image_proxy_host;
+      const downloadHosts = this.$config.download_proxy_host;
       let proxyHost;
       if (useLoadMap) {
         const record = this.$loadMap[image.id];
@@ -444,9 +602,12 @@ export default {
           // check if exists
           let recordHost;
           if (type === 'medium' && record.hostIdx) {
-            recordHost = hosts[record.hostIdx];
+            recordHost = typeof imageHosts === 'object' ? imageHosts[record.hostIdx] : imageHosts;
           } else if (record.downloadHostIdx) {
-            recordHost = hosts[record.downloadHostIdx];
+            recordHost =
+              typeof downloadHosts === 'object'
+                ? downloadHosts[record.downloadHostIdx]
+                : downloadHosts;
           }
           if (recordHost) {
             record.time = Date.now();
@@ -473,6 +634,26 @@ export default {
       } else {
         return BLANK_IMAGE;
       }
+    },
+    getUgoiraSource(zipUrl) {
+      const hosts = this.$config.image_proxy_host;
+      let proxyHost;
+      if (typeof hosts === 'object') {
+        const record = this.$loadMap[this.image.id];
+        if (record) {
+          // check if exists
+          let recordHost;
+          if (record.downloadHostIdx) {
+            recordHost = typeof hosts === 'object' ? hosts[record.downloadHostIdx] : hosts;
+          }
+          if (recordHost) {
+            record.time = Date.now();
+            proxyHost = recordHost;
+          }
+        }
+      }
+      proxyHost = proxyHost || this.getProxyHost(this.image.id);
+      return zipUrl.replace('i.pximg.net', proxyHost);
     },
     checkFirstLoad(image) {
       // 两个false是初始态，后面不可能双false
