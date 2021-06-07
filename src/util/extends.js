@@ -5,11 +5,11 @@ Image.prototype.load = function(url) {
   req.open('GET', url, true);
   req.responseType = 'arraybuffer';
   req.onload = function() {
-    if (this.status === 200) {
+    if (req.readyState === 4 && (req.status === 200 || req.status === 304)) {
       const h = req.getAllResponseHeaders();
       const m = h.match(/^Content-Type:\s*(.*?)$/im);
       const mimeType = m[1] || 'image/png';
-      const blob = new Blob([this.response], { type: mimeType });
+      const blob = new Blob([req.response], { type: mimeType });
       thisImg.src = window.URL.createObjectURL(blob);
       thisImg.blob = blob;
       thisImg.blobLoaded = true;
