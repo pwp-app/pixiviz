@@ -7,17 +7,23 @@
 
 项目基于 Vue + Element UI (修改版) 编写。
 
-## 使用方式
+## 开发环境搭建
 
-安装依赖：
-```
-npm install
-```
+1. 克隆本仓库。
 
-运行本地服务器，实时编译 & 热重载：
-```
-npm run serve
-```
+2. 安装依赖（需使用 npm 7 和官方源，使用旧版本 npm 或其他源可能会有问题）：
+
+   ```bash
+   npm install
+   ```
+
+3. 运行本地服务器：
+
+   ```bash
+   npm run serve
+   ```
+
+4. 代理 `pixiviz.pwp.app` 域名到本地服务器上，我们推荐使用 `whistle`。
 
 ## 说明
 
