@@ -450,6 +450,9 @@ export default {
       }
     },
     cancelAllLoad() {
+      if (!this.imageObjs) {
+        return;
+      }
       Object.keys(this.imageObjs).forEach((key) => {
         const img = this.imageObjs[key];
         if (!img) {
