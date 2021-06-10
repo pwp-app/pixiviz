@@ -336,12 +336,16 @@ export default {
       this.waterfallIdentifier += 1;
     },
     submitSearch() {
-      this.keywordInput = this.keywordInput.trim();
-      if (!this.keywordInput || this.keywordInput.length < 1) {
+      if (
+        !this.keywordInput ||
+        this.keywordInput.length < 1 ||
+        (this.keywordInput && this.keywordInput.trim().length < 1)
+      ) {
         this.$message.error('呐，输入关键词再搜索！！');
         this.keywordInput = '';
         return;
       }
+      this.keywordInput = this.keywordInput.trim();
       // avoid redundant navigation
       if (this.keywordInput === this.keyword) {
         return;
