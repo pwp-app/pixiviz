@@ -10,12 +10,16 @@ export const initFrontJs = () => {
   (function(w) {
     w.frontjsConfig = {
       token: '0895802c5106769622a896b6d14df337',
-      behaviour: 15,
-      captureConsoleLog: true,
+      behaviour: 7,
       trustVendor: true,
       ignoreVendor: true,
       optimisedForSPA: true,
       useHistory: true,
+      routeMapping: [
+        ['/pic\\/\\d+/gi', '/pic/$1'],
+        ['/artist\\/\\d+/gi', '/artist/$1'],
+        ['/search\\/\\w+/gi', '/search/$1'],
+      ],
       origin: [
         'pixiviz.pwp.app',
         'pixiv-image.pwp.link',
@@ -24,7 +28,7 @@ export const initFrontJs = () => {
         'cfs.tigo.pwp.app',
         'config.backrunner.top',
       ],
-      FPSThreshold: 8,
+      FPSThreshold: 6,
     };
     w.frontjsTmpData = { r: [], e: [], l: [] };
     w.frontjsTmpCollector = function(ev) {
