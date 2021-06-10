@@ -131,7 +131,7 @@ export default {
       ugoira: null,
       ugoiraSource: BLANK_IMAGE,
       ugoiraLoaded: false,
-      ugoiraObserver: IntersectionObserver
+      ugoiraObserver: window.IntersectionObserver
         ? new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting && this.ugoira && this.ugoira.status === 'stopped') {
