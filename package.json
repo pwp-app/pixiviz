@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.22.2",
+  "version": "1.22.3",
   "private": true,
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
@@ -26,9 +26,9 @@
     "f2elint-fix": "f2elint fix"
   },
   "dependencies": {
-    "@pwp-app/better-element-ui": "^2.15.1-prev-2",
+    "@pwp-app/better-element-ui": "^2.15.3-prev-1",
     "@pwp-app/vue-context-menu": "^1.3.1",
-    "@pwp-app/vue-lazyload": "^1.3.3-fix-1",
+    "@pwp-app/vue-lazyload": "^1.3.4",
     "axios": "^0.21.1",
     "clipboard-polyfill": "^3.0.3",
     "core-js": "^3.14.0",
@@ -37,11 +37,11 @@
     "hash-wasm": "^4.7.0",
     "jszip": "^3.6.0",
     "level-js": "^6.0.0",
-    "levelup": "^5.0.0",
+    "levelup": "^5.0.1",
     "qrcode-svg": "^1.1.0",
     "qs": "^6.10.1",
     "register-service-worker": "^1.7.2",
-    "vue": "^2.6.13",
+    "vue": "^2.6.14",
     "vue-cookies": "^1.7.4",
     "vue-infinite-loading": "^2.4.5",
     "vue-router": "^3.5.1",
@@ -50,7 +50,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.14.4",
+    "@babel/eslint-parser": "^7.14.5",
     "@gfx/zopfli": "^1.0.15",
     "@vue/cli-plugin-babel": "^4.5.13",
     "@vue/cli-plugin-e2e-cypress": "^4.5.13",
@@ -63,13 +63,13 @@
     "compression-webpack-plugin": "^6.1.1",
     "cross-env": "^7.0.3",
     "cypress": "^6.2.1",
-    "f2elint": "^1.1.2",
+    "f2elint": "^1.2.0",
     "image-webpack-loader": "^7.0.1",
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
     "qiniu": "^7.3.3",
     "vue-cli-plugin-element": "^1.0.1",
-    "vue-template-compiler": "^2.6.13"
+    "vue-template-compiler": "^2.6.14"
   },
   "browserslist": [
     "> 1%",
