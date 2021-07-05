@@ -19,7 +19,7 @@
             <span class="indev">（开发中）</span>
           </div>
           <div class="about-my-link">
-            <a href="javascript:;" @click="showInDev" @contextmenu.prevent>浏览历史</a>
+            <a href="javascript:;" @click="goHistory" @contextmenu.prevent>浏览历史</a>
             <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
           </div>
         </div>
@@ -154,6 +154,9 @@ export default {
     },
     openPrivacyDialog() {
       this.$refs.privacy.open();
+    },
+    goHistory() {
+      this.$router.push('/history');
     },
     goGitHub() {
       window.open('https://github.com/pwp-app/pixiviz');

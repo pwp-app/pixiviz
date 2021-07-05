@@ -1,0 +1,48 @@
+.history {
+  &-header {
+    padding: 32px 0 24px 0;
+    margin: 0 auto;
+    user-select: none;
+    .image-page-width-mixin(6);
+    .image-page-width-responsive-mixin(5, 2, 72px);
+    &-title {
+      font-size: 38px;
+      color: @color-text-primary;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    &-title--small {
+      font-size: 22px;
+      color: @color-text-primary;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-left: 4px;
+    }
+    &-close {
+      float: right;
+      transition: 200ms ease-in-out;
+      transform: translateX(6px);
+    }
+    &-close:hover {
+      color: lighten(@color-text-primary, 10%);
+      cursor: pointer;
+    }
+  }
+  &-body {
+    &-empty {
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 48px;
+      color: @color-text-primary;
+      user-select: none;
+    }
+    .waterfall-wrapper {
+      .waterfall-wrapper-mixin(6);
+      .waterfall-responsive-mixin(5, 2, 72px);
+      .waterfall {
+        overflow: hidden;
+      }
+    }
+  }
+}
