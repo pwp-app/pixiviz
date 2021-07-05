@@ -191,7 +191,7 @@ export default {
       });
     }
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
     window.removeEventListener('scroll', this.handleScroll);
   },
