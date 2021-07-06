@@ -50,12 +50,13 @@
       .waterfall {
         overflow: hidden;
       }
-    }
-    .waterfall-end {
-      font-size: 14px;
-      color: @color-text-primary;
-      width: 100%;
-      text-align: center;
+      .waterfall-end {
+        font-size: 14px;
+        color: @color-text-primary;
+        width: 100%;
+        text-align: center;
+        margin-top: 36px;
+      }
     }
   }
 }
@@ -84,8 +85,10 @@
       &-empty {
         color: darken(@color-text-primary, 2.5%);
       }
-      .waterfall-end {
-        color: darken(@color-text-primary, 2.5%);
+      .waterfall-wrapper {
+        .waterfall-end {
+          color: darken(@color-text-primary, 2.5%);
+        }
       }
     }
   }
