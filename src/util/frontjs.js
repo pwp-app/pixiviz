@@ -8,8 +8,8 @@ export function initFrontJs(config) {
     return;
   }
   if (
-    (Array.isArray(trustHost) && trustHost.includes(window.location.host)) ||
-    (typeof trustHost === 'string' && window.location.host === trustHost)
+    (Array.isArray(trustHost) && !trustHost.includes(window.location.host)) ||
+    (typeof trustHost === 'string' && window.location.host !== trustHost)
   ) {
     return;
   }
