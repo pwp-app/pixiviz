@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
 export function initBaiduStat(config) {
+  if (process.env.NODE_ENV === 'development') {
+    return;
+  }
   const trustHost = config?.statistics?.trust_host;
   if (!trustHost || !Array.isArray || typeof trustHost !== 'string') {
     return;
