@@ -94,6 +94,21 @@ export default {
     await this.getImages();
   },
   mounted() {
+    // do scroll
+    const scrollTop = parseInt(this.$cookies.get('user-history-scroll'), 10);
+    if (this.images.length > 0) {
+      if (scrollTop) {
+        this.$nextTick(() => {
+          window.scrollTo(0, scrollTop);
+          if (scrollTop > 300) {
+            this.$refs.backToTop && this.$refs.backToTop.display();
+          }
+        });
+      }
+    } else {
+      this.$cookies.set('user-history-scroll', 0, '1h');
+    }
+    // set event listeners
     this.$nextTick(() => {
       window.addEventListener('resize', this.windowResized, false);
       window.addEventListener('scroll', this.handleScroll, false);
