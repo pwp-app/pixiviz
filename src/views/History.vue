@@ -5,15 +5,20 @@
         <span>历史记录</span>
         <span class="history-header-title--small">（您最近浏览的 100 个作品）</span>
         <div class="history-header-close">
+          <i class="el-icon-delete" @click="clearHistory" v-if="!showEmpty"></i>
           <i class="el-icon-close" @click="handleBack"></i>
         </div>
       </div>
     </div>
     <div class="history-body">
-      <div class="history-body-empty">
-        <span>这里还没有历史记录，快去浏览你喜欢的作品吧~</span>
+      <div class="history-body-empty" v-if="showEmpty">
+        <span>
+          <span>这里还没有历史记录</span>
+          <span class="mobile-hide">，</span>
+          <span>快去浏览你喜欢的作品吧~</span>
+        </span>
       </div>
-      <div class="waterfall-wrapper">
+      <div class="waterfall-wrapper" v-else>
         <Waterfall
           :class="{
             'waterfall-responsive': waterfallResponsive,
@@ -26,6 +31,7 @@
           imageType="medium"
           :style="waterfallResponsive ? null : { width: `${mobileWaterfallWidth}px` }"
         />
+        <p class="waterfall-end">没有更多记录了</p>
       </div>
     </div>
     <BackToTop ref="backToTop" />
@@ -36,7 +42,7 @@
 import Waterfall from '../components/common/Waterfall';
 import BackToTop from '../components/common/BackToTop';
 import MobileResponsive from '../util/MobileResponsive';
-import { getUserHistory } from '../util/history';
+import { clearHistory, getUserHistory } from '../util/history';
 
 export default {
   components: {
@@ -67,7 +73,7 @@ export default {
           this.waterfallResponsive = true;
         }
         this.$nextTick(() => {
-          this.cardWidth = this.getCardWidth(this.screenWidth);
+          this.cardWidth = MobileResponsive.getCardWidth(this.screenWidth);
           document.documentElement.scrollTop = this.scrollTop;
         });
       }, 300);
@@ -101,10 +107,11 @@ export default {
   },
   methods: {
     async getImages() {
-      this.images = (await getUserHistory()) || [];
+      const history = await getUserHistory();
+      this.images = history || [];
     },
     handleCardClicked(imageId) {
-      this.$cookies.set('pic-from', 'user-history', '1h');
+      this.$cookies.set('pic-from', 'history', '1h');
       // set image cache
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
@@ -120,6 +127,15 @@ export default {
     },
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
+    },
+    async clearHistory() {
+      try {
+        await this.$confirm('您确定要清空历史记录吗？被清空的记录将无法恢复', '确认');
+      } catch {
+        return;
+      }
+      clearHistory();
+      this.images = [];
     },
   },
 };

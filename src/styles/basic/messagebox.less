@@ -1,0 +1,68 @@
+.el-message-box {
+  border-radius: 1rem;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10%;
+  border: none;
+  &__header {
+    display: flex;
+    align-items: center;
+    padding: 18px 18px 4px;
+    user-select: none;
+    span {
+      display: block;
+      flex: 1;
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+    }
+    i {
+      color: @color-primary !important;
+    }
+    i:hover {
+      color: lighten(@color-primary, 10%) !important;
+    }
+  }
+  &__content {
+    padding: 8px 18px;
+  }
+}
+
+.dark {
+  .el-message-box {
+    background: lighten(@color-background-dark, 5%);
+    &__header {
+      .el-message-box__headerbtn {
+        i:hover {
+          color: darken(@color-text-primary, 5%) !important;
+        }
+      }
+    }
+    &__header,
+    &__content {
+      p,
+      span {
+        color: darken(@color-text-accent, 15%);
+      }
+    }
+    &__btns {
+      .el-button {
+        border-radius: 4px;
+      }
+      .el-button--default {
+        background-color: lighten(@color-background-dark, 15%);
+        border: 1px solid lighten(@color-background-dark, 10%);
+        color: darken(@color-text-accent, 15%);
+      }
+      .el-button--default:hover {
+        background-color: lighten(@color-background-dark, 12.5%);
+        border: 1px solid lighten(@color-background-dark, 9.25%);
+      }
+      .el-button--primary {
+        background-color: darken(@color-text-primary, 2.5%);
+      }
+      .el-button--primary:hover {
+        background-color: darken(@color-text-primary, 7.5%);
+        border-color: darken(@color-text-primary, 8.5%);
+      }
+    }
+  }
+}
