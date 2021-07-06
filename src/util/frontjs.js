@@ -1,12 +1,24 @@
 /* eslint-disable no-param-reassign */
-export const initFrontJs = () => {
+export function initFrontJs(config) {
   if (process.env.NODE_ENV === 'development') {
     return;
   }
+  const trustHost = config?.frontjs?.trust_host;
+  if (!trustHost || (!Array.isArray(trustHost) && typeof trustHost !== 'string')) {
+    return;
+  }
+  if (
+    (Array.isArray(trustHost) && trustHost.includes(window.location.host)) ||
+    (typeof trustHost === 'string' && window.location.host === trustHost)
+  ) {
+    return;
+  }
+  // check privacy settings
   const privacyRemote = window.localStorage.getItem('privacy-remote');
   if (privacyRemote === 'false') {
     return;
   }
+  // init frontjs
   (function(w) {
     w.frontjsConfig = {
       token: '0895802c5106769622a896b6d14df337',
@@ -64,4 +76,4 @@ export const initFrontJs = () => {
       true,
     );
   })(window);
-};
+}

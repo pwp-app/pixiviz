@@ -125,7 +125,7 @@ export default {
               window.FrontJS.addUserData('announceLog', announceLog);
             }
             // check conditions
-            const started = start ? start >= Date.now() : true;
+            const started = start ? start <= Date.now() : true;
             const expired = expires ? expires < Date.now() : true;
             const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
             const visitAfter = lastVisitAfter ? this.checkLastVisitTime(lastVisitAfter) : true;
