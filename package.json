@@ -26,13 +26,13 @@
     "f2elint-fix": "f2elint fix"
   },
   "dependencies": {
-    "@pwp-app/better-element-ui": "^2.15.3-prev-1",
+    "@pwp-app/better-element-ui": "^2.15.3",
     "@pwp-app/vue-context-menu": "^1.3.1",
     "@pwp-app/vue-lazyload": "^1.3.4",
     "axios": "^0.21.1",
     "clipboard-polyfill": "^3.0.3",
     "core-js": "^3.15.2",
-    "dayjs": "^1.10.5",
+    "dayjs": "^1.10.6",
     "hash-wasm": "^4.8.0",
     "jszip": "^3.6.0",
     "level-js": "^6.0.0",
