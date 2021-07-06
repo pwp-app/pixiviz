@@ -89,6 +89,11 @@ export default {
       window.FrontJS.addUserData('appVer', version);
     }
   },
+  beforeDestroy() {
+    // reset to false
+    this.$emit('expanded', false);
+    this.$store.commit('landingBanner/setExpanded', false);
+  },
   methods: {
     handleDblClick(e) {
       if (e.target.getAttribute('class') && e.target.getAttribute('class').includes('el-switch')) {

@@ -79,6 +79,9 @@ export default {
   methods: {
     // event
     handleExpanded(expanded) {
+      if (!this.$refs.bannerPlaceholder) {
+        return;
+      }
       this.$refs.bannerPlaceholder.expandedChanged(expanded);
     },
     // announce
