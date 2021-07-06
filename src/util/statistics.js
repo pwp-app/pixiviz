@@ -1,9 +1,35 @@
 /* eslint-disable no-param-reassign */
+export function initBaiduStat(config) {
+  if (process.env.NODE_ENV === 'development') {
+    return;
+  }
+  const trustHost = config?.statistics?.trust_host;
+  if (!trustHost || !Array.isArray || typeof trustHost !== 'string') {
+    return;
+  }
+  if (
+    (Array.isArray(trustHost) && !trustHost.includes(window.location.host)) ||
+    (typeof trustHost === 'string' && window.location.host !== trustHost)
+  ) {
+    return;
+  }
+  const privacyStatistics = window.localStorage.getItem('privacy-statistics');
+  if (privacyStatistics !== 'false') {
+    window._hmt = window._hmt || [];
+    (function() {
+      const hm = document.createElement('script');
+      hm.src = 'https://hm.baidu.com/hm.js?86b00bd26cf7bf64316c0e31c783614b';
+      const s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  }
+}
+
 export function initFrontJs(config) {
   if (process.env.NODE_ENV === 'development') {
     return;
   }
-  const trustHost = config?.frontjs?.trust_host;
+  const trustHost = config?.statistics?.trust_host;
   if (!trustHost || (!Array.isArray(trustHost) && typeof trustHost !== 'string')) {
     return;
   }

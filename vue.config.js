@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-
-const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
+
+const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 
 module.exports = {
   devServer: {

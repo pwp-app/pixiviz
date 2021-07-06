@@ -36,8 +36,9 @@ import axios from './util/axios';
 import './registerServiceWorker';
 
 // Import frontjs stat
-import { initFrontJs } from './util/frontjs';
+import { initBaiduStat, initFrontJs } from './util/statistics';
 
+initBaiduStat(config);
 initFrontJs(config);
 
 Vue.config.productionTip = false;
