@@ -38,7 +38,7 @@ import './registerServiceWorker';
 // Import frontjs stat
 import { initFrontJs } from './util/frontjs';
 
-initFrontJs();
+initFrontJs(config);
 
 Vue.config.productionTip = false;
 

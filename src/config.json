@@ -6,5 +6,8 @@
   "guide_url": "https://io.backrunner.top/2020/07/27/Pixiviz%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97.html",
   "donate_url": "https://afdian.net/@backrunner",
   "landing_bg_id": 84165367,
-  "landing_bg_name": "木陰"
+  "landing_bg_name": "木陰",
+  "frontjs": {
+    "trust_host": "pixiviz.pwp.app"
+  }
 }
