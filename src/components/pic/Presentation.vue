@@ -78,8 +78,9 @@
 import dayjs from 'dayjs';
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
-import Ugoira from '@/util/ugoira';
-import { weightedRandom } from '@/util/random';
+import Ugoira from '../../util/ugoira';
+import { weightedRandom } from '../../util/random';
+import { getHistoryTop, addUserHistory } from '../../util/history';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -214,6 +215,8 @@ export default {
         // start loading
         this.tryLoad();
         this.$emit('image-load');
+        // set user history
+        this.pushUserHistory(image);
       },
     },
     screenWidth() {
@@ -815,6 +818,14 @@ export default {
         this.imageObjs[this.page].useLarge = false;
         this.imageObjs[this.page].lightboxShowed = true;
       }
+    },
+    // user history
+    async pushUserHistory(image) {
+      const historyTop = getHistoryTop();
+      if (historyTop && historyTop.id === image.id) {
+        return;
+      }
+      await addUserHistory(image);
     },
   },
 };

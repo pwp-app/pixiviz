@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs';
 // components
 import Banner from '../components/landing/Banner';
 import SearchBox from '../components/landing/SearchBox';
@@ -79,6 +78,9 @@ export default {
   methods: {
     // event
     handleExpanded(expanded) {
+      if (!this.$refs.bannerPlaceholder) {
+        return;
+      }
       this.$refs.bannerPlaceholder.expandedChanged(expanded);
     },
     // announce
@@ -113,6 +115,7 @@ export default {
               title,
               content,
               footer,
+              start,
               expires,
               matchVersion,
               lastVisitAfter,
@@ -121,14 +124,17 @@ export default {
             if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
               window.FrontJS.addUserData('announceLog', announceLog);
             }
-            // if matchVersion not exists, apply for all version
+            // check conditions
+            const started = start ? start >= Date.now() : true;
+            const expired = expires ? expires < Date.now() : true;
             const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
-            const visitTimeCheck = lastVisitAfter ? this.checkLastVisitTime(lastVisitAfter) : true;
+            const visitAfter = lastVisitAfter ? this.checkLastVisitTime(lastVisitAfter) : true;
             if (
               (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
-              dayjs(expires).unix() <= dayjs().unix() ||
+              !started ||
+              expired ||
               !versionMatched ||
-              !visitTimeCheck
+              !visitAfter
             ) {
               continue;
             }

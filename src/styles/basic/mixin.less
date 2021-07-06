@@ -1,0 +1,14 @@
+.image-page-width-mixin(@col) {
+  @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+  width: @container-width - 8px;
+}
+
+.image-page-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
+  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin -
+    1px;
+  @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
+  @media (max-width: @trigger-width) {
+    width: @container-width - 8px !important;
+  }
+  .image-page-width-responsive-mixin(@col - 1, @min-col, @margin);
+}

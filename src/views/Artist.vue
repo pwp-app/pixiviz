@@ -145,7 +145,7 @@ export default {
       }
     }
   },
-  destroyed() {
+  beforeDestroy() {
     // 清除监听器
     window.removeEventListener('resize', this.windowResized, false);
     window.removeEventListener('scroll', this.handleScroll, false);

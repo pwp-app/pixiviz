@@ -18,8 +18,8 @@
   .artist-header {
     padding-top: @header-padding-top;
     margin: 0 auto;
-    .artist-component-width-mixin(3);
-    .artist-component-width-responsive-mixin(2, 2, 72px);
+    .image-page-width-mixin(3);
+    .image-page-width-responsive-mixin(2, 2, 72px);
     position: relative;
     span,
     i {
@@ -155,23 +155,6 @@
   }
 }
 
-// mixin
-
-.artist-component-width-mixin(@col) {
-  @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
-  width: @container-width - 8px;
-}
-
-.artist-component-width-responsive-mixin(@col, @min-col, @margin) when (@col >= @min-col) {
-  @trigger-width: (@col + 1) * @image-card-width + @image-card-margin * 2 * (@col + 1) + 2 * @margin -
-    1px;
-  @container-width: @col * @image-card-width + @image-card-margin * 2 * @col;
-  @media (max-width: @trigger-width) {
-    width: @container-width - 8px !important;
-  }
-  .artist-component-width-responsive-mixin(@col - 1, @min-col, @margin);
-}
-
-// import
+// component
 
 @import './detail.less';

@@ -6,6 +6,7 @@ import Rank from '../views/Rank.vue';
 import Pic from '../views/PicDetail.vue';
 import Search from '../views/Search.vue';
 import Artist from '../views/Artist.vue';
+import History from '../views/History.vue';
 import NotFound from '../views/404.vue';
 
 Vue.use(VueRouter);
@@ -39,6 +40,12 @@ const routes = [
     path: '/search/:keyword',
     name: 'Search',
     component: Search,
+    meta: { keepAlive: true },
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: History,
     meta: { keepAlive: true },
   },
   {

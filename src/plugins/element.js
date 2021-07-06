@@ -1,5 +1,19 @@
 import Vue from 'vue';
-import { Button, Input, Loading, Popover, Drawer, DatePicker, Message, Switch, Notification, Dialog, Form, FormItem } from 'element-ui';
+import {
+  Button,
+  Input,
+  Loading,
+  Popover,
+  Drawer,
+  DatePicker,
+  Message,
+  Switch,
+  Notification,
+  Dialog,
+  Form,
+  FormItem,
+  MessageBox,
+} from 'element-ui';
 import './theme/index.css';
 
 Vue.use(Button);
@@ -13,5 +27,6 @@ Vue.use(Dialog);
 Vue.use(Form);
 Vue.use(FormItem);
 
+Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$message = Message;
 Vue.prototype.$notify = Notification;

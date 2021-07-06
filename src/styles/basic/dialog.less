@@ -123,12 +123,21 @@
       }
     }
     .el-dialog__footer {
+      .el-button--default {
+        background-color: lighten(@color-background-dark, 15%);
+        border: 1px solid lighten(@color-background-dark, 10%);
+        color: darken(@color-text-accent, 15%);
+      }
+      .el-button--default:hover {
+        background-color: lighten(@color-background-dark, 12.5%);
+        border: 1px solid lighten(@color-background-dark, 9.25%);
+      }
       .el-button--primary {
         background-color: darken(@color-text-primary, 2.5%);
       }
       .el-button--primary:hover {
         background-color: darken(@color-text-primary, 7.5%);
-        border-color: darken(@color-text-primary, 8.75%);
+        border-color: darken(@color-text-primary, 8.5%);
       }
     }
   }

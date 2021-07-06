@@ -107,7 +107,7 @@ export default {
       this.screenWidth = width;
     },
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('resize', this.windowResized, false);
   },
   methods: {

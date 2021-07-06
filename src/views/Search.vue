@@ -190,8 +190,6 @@ export default {
     if (this.artistNotice) {
       this.artistNotice.close();
     }
-  },
-  destroyed() {
     // 清除监听器
     this.leaveSuggestion();
     window.removeEventListener('resize', this.windowResized, false);

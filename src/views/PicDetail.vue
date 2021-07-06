@@ -191,7 +191,7 @@ export default {
       });
     }
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
     window.removeEventListener('scroll', this.handleScroll);
   },
@@ -383,6 +383,7 @@ export default {
       if (prev.type === 'entry') {
         window.localStorage.removeItem('pic-routes');
         this.$router.push(`/${prev.from}`);
+        this.$cookies.remove('pic-from');
       } else if (prev.type === 'artist') {
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
         this.$router.push(`/artist/${prev.from}`);

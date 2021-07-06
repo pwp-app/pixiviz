@@ -224,7 +224,7 @@ export default {
     // Change title
     document.title = `${this.modeText} - Pixiviz`;
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll, false);
     window.removeEventListener('resize', this.windowResized, false);
   },
