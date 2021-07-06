@@ -51,6 +51,13 @@ dir.forEach((file) => {
       const entry = line.split(':');
       if (entry[0] === 'id') {
         anno[entry[0]] = parseInt(entry[1].trim(), 10);
+      } else if (entry[0] === 'start') {
+        const date = dayjs(entry[1].trim(), 'YYYY-MM-DD HH-mm-ss');
+        if (date.unix() <= dayjs().unix()) {
+          skipFlag = true;
+          return;
+        }
+        anno[entry[0]] = date.valueOf();
       } else if (entry[0] === 'expires') {
         // 已经过期的不处理
         const date = dayjs(entry[1].trim(), 'YYYY-MM-DD HH-mm-ss');
@@ -58,7 +65,7 @@ dir.forEach((file) => {
           skipFlag = true;
           return;
         }
-        anno[entry[0]] = date.format('YYYY-MM-DD HH:mm:ss');
+        anno[entry[0]] = date.valueOf();
       } else if (entry[0] === 'matchVersion') {
         const temp = entry[1].trim().split(',');
         const versions = [];
