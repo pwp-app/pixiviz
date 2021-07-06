@@ -12,3 +12,17 @@ export const getMaxWeightedHost = (hosts) => {
   const maxWeight = Math.max(...weights);
   return weightHostMap[maxWeight][0];
 };
+
+export const checkTrustHost = (config) => {
+  const trustHost = config?.trust_host;
+  if (!trustHost || !Array.isArray || typeof trustHost !== 'string') {
+    return true;
+  }
+  if (
+    (Array.isArray(trustHost) && !trustHost.includes(window.location.host)) ||
+    (typeof trustHost === 'string' && window.location.host !== trustHost)
+  ) {
+    return false;
+  }
+  return true;
+};

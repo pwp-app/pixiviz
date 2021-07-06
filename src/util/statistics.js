@@ -1,16 +1,6 @@
 /* eslint-disable no-param-reassign */
-export function initBaiduStat(config) {
+export function initBaiduStat() {
   if (process.env.NODE_ENV === 'development') {
-    return;
-  }
-  const trustHost = config?.statistics?.trust_host;
-  if (!trustHost || !Array.isArray || typeof trustHost !== 'string') {
-    return;
-  }
-  if (
-    (Array.isArray(trustHost) && !trustHost.includes(window.location.host)) ||
-    (typeof trustHost === 'string' && window.location.host !== trustHost)
-  ) {
     return;
   }
   const privacyStatistics = window.localStorage.getItem('privacy-statistics');
@@ -25,18 +15,8 @@ export function initBaiduStat(config) {
   }
 }
 
-export function initFrontJs(config) {
+export function initFrontJs() {
   if (process.env.NODE_ENV === 'development') {
-    return;
-  }
-  const trustHost = config?.statistics?.trust_host;
-  if (!trustHost || (!Array.isArray(trustHost) && typeof trustHost !== 'string')) {
-    return;
-  }
-  if (
-    (Array.isArray(trustHost) && !trustHost.includes(window.location.host)) ||
-    (typeof trustHost === 'string' && window.location.host !== trustHost)
-  ) {
     return;
   }
   // check privacy settings

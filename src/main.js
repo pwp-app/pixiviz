@@ -37,9 +37,12 @@ import './registerServiceWorker';
 
 // Import frontjs stat
 import { initBaiduStat, initFrontJs } from './util/statistics';
+import { checkTrustHost } from './util/host';
 
-initBaiduStat(config);
-initFrontJs(config);
+if (checkTrustHost) {
+  initBaiduStat();
+  initFrontJs();
+}
 
 Vue.config.productionTip = false;
 
@@ -165,6 +168,9 @@ const createInstance = () => {
 
 getLoadMap().then(async (loadMap) => {
   createInstance();
+  if (!checkTrustHost(config)) {
+    return;
+  }
   await requestRemoteConfig();
   // compare hash
   const storedHash = window.localStorage.getItem('remote_conf_hash');
