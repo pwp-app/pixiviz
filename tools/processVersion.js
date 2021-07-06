@@ -12,7 +12,7 @@ export const version = '${packageInfo.version}';
 console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
     process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
   }', 'color:#da7a85');
-_hmt.push(['_setCustomVar', 1, 'siteVersion', '${packageInfo.version}', 1]);
+window._hmt && window._hmt.push(['_setCustomVar', 1, 'siteVersion', '${packageInfo.version}', 1]);
 `.trim() + '\n';
 
 try {
