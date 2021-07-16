@@ -39,7 +39,7 @@ import './registerServiceWorker';
 import { initBaiduStat, initFrontJs } from './util/statistics';
 import { checkTrustHost } from './util/host';
 
-if (checkTrustHost) {
+if (checkTrustHost(config)) {
   initBaiduStat();
   initFrontJs();
 }

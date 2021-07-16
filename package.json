@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.23.1",
+  "version": "1.23.2",
   "private": true,
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
@@ -61,12 +61,12 @@
     "brotli-webpack-plugin": "^1.1.0",
     "compression-webpack-plugin": "^6.1.1",
     "cross-env": "^7.0.3",
-    "cypress": "^6.2.1",
+    "cypress": "^6.9.1",
     "f2elint": "^1.2.0",
     "image-webpack-loader": "^7.0.1",
-    "less": "^3.12.2",
+    "less": "^3.13.1",
     "less-loader": "^6.2.0",
-    "qiniu": "^7.3.3",
+    "qiniu": "^7.4.0",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.14"
   },

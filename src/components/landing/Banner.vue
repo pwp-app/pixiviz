@@ -19,7 +19,9 @@
             <span class="indev">（开发中）</span>
           </div>
           <div class="about-my-link">
-            <a href="javascript:;" @click="goHistory" @contextmenu.prevent>浏览历史</a>
+            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent>
+              浏览历史
+            </a>
             <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
           </div>
         </div>
@@ -28,8 +30,17 @@
             <span>设置</span>
           </div>
           <div class="about-settings-link">
-            <a href="javascript:;" @click="openThemeDialog" @contextmenu.prevent>主题</a>
-            <a href="javascript:;" @click="openPrivacyDialog" @contextmenu.prevent>隐私</a>
+            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent>
+              主题
+            </a>
+            <a
+              id="about-privacy"
+              href="javascript:;"
+              @click="openPrivacyDialog"
+              @contextmenu.prevent
+            >
+              隐私
+            </a>
           </div>
         </div>
         <div class="about-copyright">
@@ -54,8 +65,8 @@
         </div>
       </div>
     </div>
-    <ThemeDialog ref="theme" />
-    <PrivacyDialog ref="privacy" />
+    <ThemeDialog id="landing-dialog-theme" ref="theme" />
+    <PrivacyDialog id="landing-dialog-privacy" ref="privacy" />
   </div>
 </template>
 

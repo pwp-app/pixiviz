@@ -1,9 +1,0 @@
-[
-  {
-    "id": 2,
-    "title": "Test",
-    "expires": "2099-12-31 23:59:59",
-    "content": "content test\r\ncontent test",
-    "footer": "footer test"
-  }
-]
