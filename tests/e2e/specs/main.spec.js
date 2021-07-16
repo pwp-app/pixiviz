@@ -3,7 +3,7 @@
 // alias
 const test = it;
 
-describe('Test landing link click', () => {
+describe('Landing page test', () => {
   // tests
   test('Search box behaviour', () => {
     cy.intercept('GET', 'pixiviz/announcement.json', []);
