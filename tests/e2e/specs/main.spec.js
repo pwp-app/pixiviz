@@ -22,10 +22,6 @@ describe('Landing page test', () => {
       .find('.el-input')
       .find('input')
       .should('have.value', 'miku');
-    cy.wait(['@search', '@suggestions'], {
-      timeout: 10000,
-    });
-    cy.get('.search-suggestion-items').should('be.visible');
     cy.get('.search-header-close').click();
     cy.url().should('not.include', 'search/miku');
     cy.wait(300);
@@ -80,10 +76,9 @@ describe('Landing page test', () => {
   });
   test('Banner box behaviour', () => {
     cy.intercept('GET', 'pixiviz/announcement.json', []);
-    cy.clearLocalStorage();
     cy.visit('/');
     cy.get('.banner').dblclick();
-    cy.wait(2000);
+    cy.wait(1500);
     cy.get('.about').should('be.visible');
     cy.get('#about-theme').click();
     cy.wait(300);
@@ -113,7 +108,42 @@ describe('Landing page test', () => {
     cy.clearLocalStorage();
     cy.visit('/');
     cy.wait(['@testReq']);
-    cy.wait(300);
+    cy.wait(500);
     cy.get('.landing-announcement').should('be.visible');
+  });
+  test('Expired annoucement behaviour', () => {
+    // expired
+    cy.clearLocalStorage();
+    cy.intercept('GET', 'pixiviz/announcement.json', {
+      fixture: 'expiredAnnouncement.json',
+    }).as('expiredTestReq');
+    cy.visit('/');
+    cy.wait(['@expiredTestReq']);
+    cy.wait(500);
+    cy.get('.landing-announcement').should('not.be.visible');
+  });
+  test('Multiple announcement behaviour', () => {
+    cy.clearLocalStorage();
+    cy.intercept('GET', 'pixiviz/announcement.json', {
+      fixture: 'multipleAnnouncement.json',
+    }).as('multiAnnoReq');
+    cy.visit('/');
+    cy.wait(['@multiAnnoReq']);
+    cy.wait(500);
+    cy.get('.landing-announcement')
+      .find('.el-dialog__title')
+      .first()
+      .should('have.text', 'Test 1');
+    cy.get('.landing-announcement')
+      .find('.el-dialog__close')
+      .click();
+    cy.wait(100);
+    cy.visit('/');
+    cy.wait(['@multiAnnoReq']);
+    cy.wait(500);
+    cy.get('.landing-announcement')
+      .find('.el-dialog__title')
+      .first()
+      .should('have.text', 'Test 2');
   });
 });

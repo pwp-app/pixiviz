@@ -2,8 +2,8 @@
   {
     "id": 4,
     "title": "Test",
-    "expires": "2001-12-31 23:59:59",
-    "content": "content test\r\ncontent test",
+    "expires": 1009728000000,
+    "content": "expired annoucement test\r\ncontent test",
     "footer": "footer test"
   }
 ]
