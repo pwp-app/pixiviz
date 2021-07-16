@@ -209,6 +209,11 @@ export default {
         this.infoLoading = false;
         return;
       }
+      if (!this.imageId) {
+        this.infoLoading = false;
+        this.loadFailed = true;
+        return;
+      }
       this.axios
         .get(`${this.$config.api_prefix}/illust/detail`, {
           params: {
@@ -272,6 +277,9 @@ export default {
       }
     },
     fetchRelated(state) {
+      if (!this.imageId) {
+        return;
+      }
       this.relatedLoading = true;
       this.axios
         .get(`${this.$config.api_prefix}/illust/related`, {
