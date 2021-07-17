@@ -34,6 +34,8 @@ import RankBox from '../components/landing/RankBox';
 import BannerPlaceholder from '../components/landing/BannerPlaceholder';
 import SearchPlaceholder from '../components/landing/SearchBoxPlaceholder';
 import RankPlaceholder from '../components/landing/RankBoxPlaceholder';
+// utils
+import { checkTrustHost } from '../util/host';
 
 import { version } from '../version';
 
@@ -63,7 +65,9 @@ export default {
     document.title = 'Pixiviz';
   },
   mounted() {
-    this.fetchAnnounce();
+    if (checkTrustHost(this.$config)) {
+      this.fetchAnnounce();
+    }
     this.checkFirstUse();
     this.displayDonate();
   },
@@ -110,16 +114,8 @@ export default {
             return;
           }
           for (const announcement of res.data) {
-            const {
-              id,
-              title,
-              content,
-              footer,
-              start,
-              expires,
-              matchVersion,
-              lastVisitAfter,
-            } = announcement;
+            const { id, title, content, footer, start, expires, matchVersion, lastVisitAfter } =
+              announcement;
             const announceLog = window.localStorage.getItem('announce-read-id');
             if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
               window.FrontJS.addUserData('announceLog', announceLog);
