@@ -106,7 +106,7 @@ export default {
     },
     fetchAnnounce() {
       this.axios
-        .get('https://config.backrunner.top/pixiviz/announcement.json', {
+        .get(this.$config.announcement_feed, {
           withCredentials: false,
         })
         .then((res) => {
