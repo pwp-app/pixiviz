@@ -32,6 +32,9 @@ import router from './router';
 // Import axios
 import axios from './util/axios';
 
+// Import utils
+import { getOgTags } from './util/og';
+
 // Import sw
 import './registerServiceWorker';
 
@@ -106,6 +109,9 @@ Vue.prototype.$bus = bus;
 
 // Set up idb
 Vue.prototype.$idb = idb;
+
+// Set up og tags
+Vue.prototype.$ogTags = getOgTags();
 
 const requestRemoteConfig = async () => {
   let res;
