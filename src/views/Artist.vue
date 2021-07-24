@@ -182,7 +182,7 @@ export default {
       this.resetScrollState();
       // 更新标题
       document.title = `画师${this.id} - Pixiviz`;
-      this.setOgTags();
+      this.setOgTagData();
     },
     // 瀑布流
     infiniteHandler($state) {
@@ -261,7 +261,7 @@ export default {
       this.infoLoaded = true;
       this.artistName = name;
       document.title = `${name} - Pixiviz`;
-      this.setOgTags();
+      this.setOgTagData();
     },
     handleLoadFailed() {
       this.infoLoaded = true;
