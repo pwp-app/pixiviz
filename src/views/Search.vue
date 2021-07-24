@@ -177,10 +177,6 @@ export default {
       window.addEventListener('resize', this.windowResized, false);
       window.addEventListener('scroll', this.handleScroll, false);
     });
-    // check search from
-    if (this.from && this.from.startsWith('pic/')) {
-      this.from = null;
-    }
     // change title
     document.title = `搜索 - ${this.keyword} - Pixiviz`;
     // set og tags
