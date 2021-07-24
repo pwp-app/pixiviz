@@ -62,6 +62,7 @@
       :src="lightBoxSource"
       :isLanding="isLanding"
       :isOverHeight="isOverHeight"
+      :isMobileOverHeight="isMobileOverHeight"
       @loaded="handleLightBoxLoaded"
       @close="onLightBoxClose"
       @download="callDownload"
@@ -295,6 +296,10 @@ export default {
     },
     isOverHeight() {
       return this.imageHeight / (this.imageWidth / this.screenWidth) > this.screenHeight;
+    },
+    // after rotated, image height greater than 100vw
+    isMobileOverHeight() {
+      return this.imageWidth / (this.imageHeight / this.screenHeight) > this.screenHeight;
     },
     imageLoadingText() {
       if (this.mobileMode) {
@@ -809,10 +814,13 @@ export default {
       }
       this.lightBoxShow = true;
       this.$emit('lightbox-open');
+      // disable scrolling
+      document.documentElement.classList.add('no-scrollbar');
     },
     onLightBoxClose() {
       this.lightBoxShow = false;
       this.$emit('lightbox-close');
+      document.documentElement.classList.remove('no-scrollbar');
     },
     handleLightBoxLoaded() {
       if (this.useLarge && this.lightBoxShow) {

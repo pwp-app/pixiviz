@@ -6,7 +6,7 @@
   bottom: 0;
   width: 100vw;
   height: calc(var(--vh, 1vh) * 100);
-  background: rgba(0, 0, 0, 0.625);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +29,7 @@
 .dark {
   .lightbox {
     filter: brightness(0.875);
+    background: lighten(@color-background-dark, 2.5%);
   }
 }
 
@@ -37,7 +38,6 @@
     &-content {
       width: calc(var(--vh, 1vh) * 100);
       transform: rotateZ(90deg);
-      background: lighten(@color-background-dark, 2.5%);
     }
     &-content-landing {
       width: 100vw;
@@ -48,6 +48,11 @@
       width: auto;
       height: calc(var(--vh, 1vh) * 100);
       transform: none;
+    }
+    &-content-mobileoverheight {
+      width: auto;
+      height: 100vw;
+      transform: rotateZ(90deg);
     }
   }
 }
