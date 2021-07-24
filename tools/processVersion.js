@@ -15,6 +15,7 @@ const versionInfo =
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 export const version = '${packageInfo.version}';
+export const buildTime = ${Date.now()};
 console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
     process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
   }\\nBuild time: ${dayjs().tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss')}', 'color:#da7a85');
