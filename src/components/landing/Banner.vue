@@ -57,7 +57,7 @@
             </span>
           </div>
           <div class="about-copyright-item">
-            <span>v {{ version }}</span>
+            <span>v {{ appVer }}</span>
           </div>
           <div class="about-copyright-item" @click="goGitHub">
             <GitHubIcon />
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { version } from '../../version.js';
+import { version as appVer, buildTime as appBuildTime } from '../../version.js';
 import ThemeDialog from './dialogs/ThemeDialog';
 import PrivacyDialog from './dialogs/PrivacyDialog';
 import GitHubIcon from '../icons/github';
@@ -90,14 +90,15 @@ export default {
       titleUp: false,
       aboutShow: false,
       clearMarginBottom: false,
-      version,
+      appVer,
       landingBgId: this.$config.landing_bg_id,
       landingBgName: this.$config.landing_bg_name,
     };
   },
   mounted() {
     if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
-      window.FrontJS.addUserData('appVer', version);
+      window.FrontJS.addUserData('appVer', appVer);
+      window.FrontJS.addUserData('appBuildTime', appBuildTime);
     }
   },
   beforeDestroy() {
