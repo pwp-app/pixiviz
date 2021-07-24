@@ -247,7 +247,7 @@ export default {
       }
     },
     largeSource() {
-      return this.getImageSource(this.image, 'square_medium');
+      return this.getImageSource(this.image, 'large');
     },
     imageSizeStyles() {
       const styles = {
