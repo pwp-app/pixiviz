@@ -480,11 +480,15 @@ export default {
     },
     // set og tags
     setOgTagData() {
+      let source;
+      if (this.$refs.presentation) {
+        source = this.$refs.presentation.getImageSource(this.image, 'large', this.$refs.presentation.getPage(), false, true);
+      }
       setOgTags(getOgTags(), this.image ? {
         ogTitle: `${this.image.title} - Pixiviz`,
         ogDesc: (this.image.caption.length > 50 ? this.image.caption.substr(0, 20) : this.image.caption) || '跨次元链接~，一个简单的二次元图片分享站',
         ogUrl: window.location.href,
-        ogImage: this.$refs.presentation.getImageSource(this.image, 'square_medium'),  
+        ogImage: source || `${process.env.BASE_URL}favicon.png`, 
       } : {
         ogTitle: `图片${this.imageId} - Pixiviz`,
         ogDesc: '跨次元链接~，一个简单的二次元图片分享站',

@@ -603,6 +603,9 @@ export default {
         return o_height / (o_width / this.containerWidth);
       }
     },
+    getPage() {
+      return this.page;
+    },
     getProxyHost(imageId) {
       const hosts = this.$config.download_proxy_host;
       if (typeof hosts !== 'object') {
@@ -620,7 +623,7 @@ export default {
       this.$bus.$emit('save-loadmap');
       return host;
     },
-    getImageSource(image, type, page = this.page, useLoadMap = true) {
+    getImageSource(image, type, page = this.page, useLoadMap = true, usePublicProxy = false) {
       const imageHosts = this.$config.image_proxy_host;
       const downloadHosts = this.$config.download_proxy_host;
       let proxyHost;
@@ -643,7 +646,7 @@ export default {
           }
         }
       }
-      proxyHost = proxyHost || this.getProxyHost(image.id);
+      proxyHost = usePublicProxy ? this.$config.public_proxy : proxyHost || this.getProxyHost(image.id);
       if (image && image.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
