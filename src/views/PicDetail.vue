@@ -485,7 +485,7 @@ export default {
     // set og tags
     setOgTagData() {
       let source;
-      if (this.$refs.presentation) {
+      if (this.$refs.presentation && this.image) {
         source = this.$refs.presentation.getImageSource(this.image, 'square_medium', this.$refs.presentation.getPage(), false, true);
       }
       setOgTags(getOgTags(), this.image ? {
