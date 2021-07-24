@@ -13,12 +13,14 @@ export const getOgTags = () => {
   if (ogTags) {
     return ogTags;
   }
+  const titleEl = document.querySelector('#og-title');
+  titleEl.setAttribute = createProxy(document.querySelector('#meta-name'), titleEl.setAttribute);
   const descEl = document.querySelector('#og-desc');
   descEl.setAttribute = createProxy(document.querySelector('#meta-desc'), descEl.setAttribute);
   const imageEl = document.querySelector('#og-image');
   imageEl.setAttribute = createProxy(document.querySelector('#meta-image'), imageEl.setAttribute);
   ogTags = {
-    ogTitle: document.querySelector('#og-title'),
+    ogTitle: titleEl,
     ogDesc: descEl,
     ogImage: imageEl,
     ogUrl: document.querySelector('#og-url'),
