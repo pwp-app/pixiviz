@@ -3,9 +3,11 @@
 const path = require('path');
 const fs = require('fs');
 const dayjs = require('dayjs');
-const timezone = require("dayjs/plugin/timezone")
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
 const packageInfo = require('../package.json');
 
+dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const versionInfo =
