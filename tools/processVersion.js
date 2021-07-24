@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const dayjs = require('dayjs');
 const packageInfo = require('../package.json');
 
 const versionInfo =
@@ -11,7 +12,7 @@ const versionInfo =
 export const version = '${packageInfo.version}';
 console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
     process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
-  }', 'color:#da7a85');
+  }\\nBuild time: ${dayjs().format('YYYY-MM-DD HH:mm:ss')}', 'color:#da7a85');
 window._hmt && window._hmt.push(['_setCustomVar', 1, 'siteVersion', '${packageInfo.version}', 1]);
 `.trim() + '\n';
 
