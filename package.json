@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.23.2",
+  "version": "1.23.3",
   "private": true,
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
@@ -33,8 +33,8 @@
     "clipboard-polyfill": "^3.0.3",
     "core-js": "^3.15.2",
     "dayjs": "^1.10.6",
-    "hash-wasm": "^4.8.0",
-    "jszip": "^3.6.0",
+    "hash-wasm": "^4.9.0",
+    "jszip": "^3.7.0",
     "level-js": "^6.0.0",
     "levelup": "^5.0.1",
     "qrcode-svg": "^1.1.0",

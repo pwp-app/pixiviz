@@ -78,6 +78,17 @@ import DateSwitcher from '../components/rank/DateSwitcher';
 // Util
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImages } from '../util/filter';
+import { getOgTags, setOgTags } from '../util/og';
+
+const MODE_TO_TEXT = {
+  day: '日排行榜',
+  week: '周排行榜',
+  month: '月排行榜',
+  day_manga: '漫画日排行榜',
+  week_manga: '漫画周排行榜',
+  month_manga: '漫画月排行榜',
+  week_rookie_manga: '新秀周排行榜',
+};
 
 export default {
   name: 'Rank',
@@ -115,16 +126,7 @@ export default {
       return this.dateObject.format('YYYY-MM-DD');
     },
     modeText() {
-      const mode2text = {
-        day: '日排行榜',
-        week: '周排行榜',
-        month: '月排行榜',
-        day_manga: '漫画日排行榜',
-        week_manga: '漫画周排行榜',
-        month_manga: '漫画月排行榜',
-        week_rookie_manga: '新秀周排行榜',
-      };
-      return mode2text[this.mode];
+      return MODE_TO_TEXT[this.mode];
     },
     dateUnit() {
       if (this.mode.includes('day')) {
@@ -165,6 +167,9 @@ export default {
     },
     mode() {
       this.$store.commit('rank/setMode', this.mode);
+      this.$nextTick(() => {
+        this.setOgTagData();
+      });
     },
     /* Watch screen width */
     screenWidth(width) {
@@ -223,6 +228,8 @@ export default {
     });
     // Change title
     document.title = `${this.modeText} - Pixiviz`;
+    // Set og tags
+    this.setOgTagData();
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll, false);
@@ -347,6 +354,16 @@ export default {
     },
     getCardWidth(width) {
       return MobileResponsive.getCardWidth(width);
+    },
+    // og tags
+    setOgTagData() {
+      setOgTags(getOgTags(), {
+        ogTitle: `${this.modeText} - Pixiviz`,
+        ogDesc: `最新二次元插画排行 - ${this.modeText}，跨次元链接`,
+        ogUrl: window.location.href,
+        // eslint-disable-next-line no-undef
+        ogImage: `${process.env.BASE_URL}favicon.png`,  
+      });
     },
   },
 };

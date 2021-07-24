@@ -80,6 +80,7 @@ import Overlay from '../components/pic/Overlay';
 
 // utils
 import { filterImages } from '../util/filter';
+import { getOgTags, setOgTags } from '../util/og';
 
 // icons
 import HomeIcon from '../components/icons/home';
@@ -162,6 +163,7 @@ export default {
     } else {
       document.title = `${this.image.title} - Pixiviz`;
     }
+    this.setOgTagData();
     // float
     this.showFloatTimeout = setTimeout(() => {
       this.showActionFloat();
@@ -246,6 +248,7 @@ export default {
       // change title
       this.$nextTick(() => {
         document.title = `${this.image.title} - Pixiviz`;
+        this.setOgTagData();
         if (this.mobileDownload) {
           this.mobileDownload = false;
           if (this.type === 'ugoira') {
@@ -321,6 +324,8 @@ export default {
       this.relatedImages = [];
       // change title
       document.title = `图片${this.imageId} - Pixiviz`;
+      // set og tags
+      this.setOgTagData();
       // reset var
       this.lastOffset = 0;
       this.closeActionFloat();
@@ -331,6 +336,7 @@ export default {
     },
     handleImageLoaded() {
       this.imageLoaded = true;
+      this.setOgTagData();
     },
     handlePageSizeChanged(size) {
       this.relatedPageSize = size;
@@ -471,6 +477,21 @@ export default {
           // do nothing
           break;
       }
+    },
+    // set og tags
+    setOgTagData() {
+      setOgTags(getOgTags(), this.image ? {
+        ogTitle: `${this.image.title} - Pixiviz`,
+        ogDesc: (this.image.caption.length > 50 ? this.image.caption.substr(0, 20) : this.image.caption) || '跨次元链接~，一个简单的二次元图片分享站',
+        ogUrl: window.location.href,
+        ogImage: this.$refs.presentation.getImageSource(this.image, 'square_medium'),  
+      } : {
+        ogTitle: `图片${this.imageId} - Pixiviz`,
+        ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+        ogUrl: window.location.href,
+        // eslint-disable-next-line no-undef
+        ogImage: `${process.env.BASE_URL}favicon.png`,
+      });
     },
   },
 };

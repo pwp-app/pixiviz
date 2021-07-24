@@ -1,4 +1,5 @@
 {
+  "website_url": "https://pixiviz.pwp.app",
   "image_proxy_host": "pixiv-image.pwp.link",
   "download_proxy_host": "pixiv-image.pwp.link",
   "remote_conf_url": "https://cfs.tigo.pwp.app/pixiviz-prod.json",
@@ -7,5 +8,6 @@
   "donate_url": "https://afdian.net/@backrunner",
   "landing_bg_id": 84165367,
   "landing_bg_name": "木陰",
-  "trust_host": "pixiviz.pwp.app"
+  "trust_host": "pixiviz.pwp.app",
+  "announcement_feed": "https://config.backrunner.top/pixiviz/announcement.json"
 }

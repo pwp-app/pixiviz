@@ -12,6 +12,7 @@
         <i class="el-icon-close" @click="handleBack"></i>
       </div>
       <ArtistDetail
+        ref="detail"
         :artistId="$route.params.id"
         @loaded="handleInfoLoaded"
         @failed="handleLoadFailed"
@@ -52,6 +53,7 @@ import Overlay from '../components/pic/Overlay';
 // Util
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImages } from '../util/filter';
+import { getOgTags, setOgTags } from '../util/og';
 
 export default {
   name: 'Artist',
@@ -135,6 +137,8 @@ export default {
     } else {
       document.title = `画师${this.id || ''} - Pixiviz`;
     }
+    // set og tag
+    this.setOgTagData();
     // 路由数据栈检查
     const storedRoutes = window.localStorage.getItem('pic-routes');
     const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
@@ -178,6 +182,7 @@ export default {
       this.resetScrollState();
       // 更新标题
       document.title = `画师${this.id} - Pixiviz`;
+      this.setOgTags();
     },
     // 瀑布流
     infiniteHandler($state) {
@@ -256,6 +261,7 @@ export default {
       this.infoLoaded = true;
       this.artistName = name;
       document.title = `${name} - Pixiviz`;
+      this.setOgTags();
     },
     handleLoadFailed() {
       this.infoLoaded = true;
@@ -295,6 +301,21 @@ export default {
     },
     getCardWidth(width) {
       return MobileResponsive.getCardWidth(width);
+    },
+    // og tags
+    setOgTagData() {
+      let comment;
+      if (this.$refs.detail) {
+        comment = this.$refs.detail.getComment();
+      }
+      setOgTags(getOgTags(), {
+        ogTitle: this.artistName ? `${this.artistName} - Pixiviz` : `画师${this.id || ''} - Pixiviz`,
+        // eslint-disable-next-line no-nested-ternary
+        ogDesc: comment ? (comment.length > 50 ? comment.substr(0, 50) : comment) : `二次元插画分享，跨次元链接，就在 Pixiviz`,
+        ogUrl: window.location.href,
+        // eslint-disable-next-line no-undef
+        ogImage: `${process.env.BASE_URL}favicon.png`,
+      });
     },
   },
 };
