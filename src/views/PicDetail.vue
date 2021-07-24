@@ -489,7 +489,7 @@ export default {
         source = this.$refs.presentation.getImageSource(this.image, 'square_medium', this.$refs.presentation.getPage(), false, true);
       }
       setOgTags(getOgTags(), this.image ? {
-        ogTitle: `${this.image.title} - Pixiviz`,
+        ogTitle: `${this.image.title} - ${this.image.user.name || 'Pixiviz'}`,
         ogDesc: (this.image.caption.length > 50 ? this.image.caption.substr(0, 20) : this.image.caption) || '跨次元链接~，一个简单的二次元图片分享站',
         ogUrl: window.location.href,
         ogImage: source || `${process.env.BASE_URL}favicon.png`, 
