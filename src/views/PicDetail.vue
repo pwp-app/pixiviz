@@ -192,6 +192,10 @@ export default {
         query: null,
       });
     }
+    // check search from
+    if (this.from && this.from.startsWith('pic/')) {
+      this.from = null;
+    }
   },
   beforeDestroy() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
