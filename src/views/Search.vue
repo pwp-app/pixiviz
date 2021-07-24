@@ -80,6 +80,7 @@ import BackToTop from '../components/common/BackToTop';
 // Util
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImage, filterImages } from '../util/filter';
+import { setOgTags, getOgTags } from '../util/og';
 
 const id_matcher = /^\d{2,8}$/;
 
@@ -182,6 +183,8 @@ export default {
     }
     // change title
     document.title = `搜索 - ${this.keyword} - Pixiviz`;
+    // set og tags
+    this.setOgTagData();
   },
   beforeDestroy() {
     if (this.illustNotice) {
@@ -396,6 +399,8 @@ export default {
       this.checkIfId();
       // change title
       document.title = `${this.keyword} - Pixiviz`;
+      // set og tags
+      this.setOgTagData();
     },
     handleCardClicked(imageId) {
       this.$cookies.set('pic-from', `search/${this.$route.params.keyword}`, '1h');
@@ -496,6 +501,16 @@ export default {
     },
     artistNoticeClose() {
       document.body.removeEventListener('click', this.artistNoticeClick, false);
+    },
+    // set og tags
+    setOgTagData() {
+      setOgTags(getOgTags(), {
+        ogTitle: `${this.keyword} - 搜索`,
+        ogDesc: `二次元插画搜索，跨次元链接，就在 Pixiviz`,
+        ogUrl: window.location.href,
+        // eslint-disable-next-line no-undef
+        ogImage: `${process.env.BASE_URL}favicon.png`,
+      });
     },
   },
 };

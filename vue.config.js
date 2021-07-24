@@ -1,7 +1,12 @@
 /* eslint-disable no-param-reassign */
+const webpack = require('webpack');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+
+const pixivizConf = JSON.parse(fs.readFileSync(path.resolve(__dirname, './src/config.json')));
 
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 
@@ -137,6 +142,11 @@ module.exports = {
   },
   productionSourceMap: false,
   chainWebpack: (config) => {
+    config.plugin('pixiviz-flags').use(webpack.DefinePlugin, [
+      {
+        __ROOT_URL__: JSON.stringify(pixivizConf.website_url),
+      },
+    ]);
     config.module
       .rule('images')
       .use('image-webpack-loader')

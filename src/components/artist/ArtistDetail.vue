@@ -121,6 +121,9 @@ export default {
       // 触发事件
       this.$emit('loaded', this.name);
     },
+    getComment() {
+      return this.comment;
+    },
   },
 };
 </script>

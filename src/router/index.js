@@ -8,6 +8,7 @@ import Search from '../views/Search.vue';
 import Artist from '../views/Artist.vue';
 import History from '../views/History.vue';
 import NotFound from '../views/404.vue';
+import { getOgTags, setOgTags } from '../util/og';
 
 Vue.use(VueRouter);
 
@@ -16,7 +17,17 @@ const routes = [
     path: '/',
     name: 'Landing',
     component: Landing,
-    meta: { keepAlive: false },
+    meta: {
+      keepAlive: false,
+      ogTagsData: {
+        ogTitle: 'Pixiviz',
+        ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+        // eslint-disable-next-line no-undef
+        ogImage: `${process.env.BASE_URL}favicon.png`,
+        // eslint-disable-next-line no-undef
+        ogUrl: __ROOT_URL__,
+      },
+    },
   },
   {
     path: '/rank',
@@ -46,12 +57,30 @@ const routes = [
     path: '/history',
     name: 'History',
     component: History,
-    meta: { keepAlive: true },
+    meta: {
+      keepAlive: true,
+      ogTagsData: {
+        ogTitle: '浏览历史 - Pixiviz',
+        ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+        // eslint-disable-next-line no-undef
+        ogImage: `${process.env.BASE_URL}favicon.png`,
+        // eslint-disable-next-line no-undef
+        ogUrl: `${__ROOT_URL__}/history`,
+      },
+    },
   },
   {
     path: '/404',
     name: 'Page not found',
     component: NotFound,
+    ogTagsData: {
+      ogTitle: 'Not Found - Pixiviz',
+      ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+      // eslint-disable-next-line no-undef
+      ogImage: `${process.env.BASE_URL}favicon.png`,
+      // eslint-disable-next-line no-undef
+      ogUrl: __ROOT_URL__,
+    },
   },
   {
     path: '*',
@@ -65,7 +94,7 @@ const router = new VueRouter({
   routes,
 });
 
-router.afterEach(() => {
+router.afterEach((to) => {
   // check dark mode
   if (window.pixiviz) {
     if (window.pixiviz.darkEnabled && !window.pixiviz.darkPersist) {
@@ -78,6 +107,10 @@ router.afterEach(() => {
         document.documentElement.classList.remove('dark');
       }
     }
+  }
+  // set og tags
+  if (to.meta.ogTagsData) {
+    setOgTags(getOgTags(), to.meta.ogTagsData);
   }
 });
 
