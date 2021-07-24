@@ -5,6 +5,7 @@
         'lightbox-content',
         isLanding ? 'lightbox-content-landing' : null,
         isOverHeight ? 'lightbox-content-overheight' : null,
+        isMobileOverHeight ? 'lightbox-content-mobileoverheight' : null,
       ]"
       :src="src"
       v-context="'context'"
@@ -20,7 +21,7 @@
 <script>
 export default {
   name: 'Pic.LightBox',
-  props: ['src', 'isLanding', 'isOverHeight'],
+  props: ['src', 'isLanding', 'isOverHeight', 'isMobileOverHeight'],
   watch: {
     src: {
       immediate: true,
