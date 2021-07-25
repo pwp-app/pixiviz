@@ -309,12 +309,18 @@ export default {
         comment = this.$refs.detail.getComment();
       }
       setOgTags(getOgTags(), {
-        ogTitle: this.artistName ? `${this.artistName} - Pixiviz` : `画师${this.id || ''} - Pixiviz`,
+        ogTitle: this.artistName
+          ? `${this.artistName} - Pixiviz`
+          : `画师${this.id || ''} - Pixiviz`,
         // eslint-disable-next-line no-nested-ternary
-        ogDesc: comment ? (comment.length > 50 ? comment.substr(0, 50) : comment) : `二次元插画分享，跨次元链接，就在 Pixiviz`,
+        ogDesc: comment
+          ? comment.length > 50
+            ? comment.substr(0, 50)
+            : comment
+          : `二次元插画分享，跨次元链接，就在 Pixiviz`,
         ogUrl: window.location.href,
         // eslint-disable-next-line no-undef
-        ogImage: `${process.env.BASE_URL}favicon.png`,
+        ogImage: `${this.$config.website_url}/favicon.png`,
       });
     },
   },

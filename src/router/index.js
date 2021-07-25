@@ -9,6 +9,7 @@ import Artist from '../views/Artist.vue';
 import History from '../views/History.vue';
 import NotFound from '../views/404.vue';
 import { getOgTags, setOgTags } from '../util/og';
+import config from '../config.json';
 
 Vue.use(VueRouter);
 
@@ -23,7 +24,7 @@ const routes = [
         ogTitle: 'Pixiviz',
         ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
         // eslint-disable-next-line no-undef
-        ogImage: `${process.env.BASE_URL}favicon.png`,
+        ogImage: `${config.website_url}/favicon.png`,
         // eslint-disable-next-line no-undef
         ogUrl: __ROOT_URL__,
       },
@@ -63,7 +64,7 @@ const routes = [
         ogTitle: '浏览历史 - Pixiviz',
         ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
         // eslint-disable-next-line no-undef
-        ogImage: `${process.env.BASE_URL}favicon.png`,
+        ogImage: `${config.website_url}favicon.png`,
         // eslint-disable-next-line no-undef
         ogUrl: `${__ROOT_URL__}/history`,
       },
@@ -77,7 +78,7 @@ const routes = [
       ogTitle: 'Not Found - Pixiviz',
       ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
       // eslint-disable-next-line no-undef
-      ogImage: `${process.env.BASE_URL}favicon.png`,
+      ogImage: `${config.website_url}/favicon.png`,
       // eslint-disable-next-line no-undef
       ogUrl: __ROOT_URL__,
     },

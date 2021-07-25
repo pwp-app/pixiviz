@@ -505,7 +505,7 @@ export default {
         ogDesc: `二次元插画搜索，跨次元链接，就在 Pixiviz`,
         ogUrl: window.location.href,
         // eslint-disable-next-line no-undef
-        ogImage: `${process.env.BASE_URL}favicon.png`,
+        ogImage: `${this.$config.website_url}/favicon.png`,
       });
     },
   },

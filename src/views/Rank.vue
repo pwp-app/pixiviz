@@ -362,7 +362,7 @@ export default {
         ogDesc: `最新二次元插画排行 - ${this.modeText}，跨次元链接`,
         ogUrl: window.location.href,
         // eslint-disable-next-line no-undef
-        ogImage: `${process.env.BASE_URL}favicon.png`,  
+        ogImage: `${this.$config.website_url}/favicon.png`,
       });
     },
   },
