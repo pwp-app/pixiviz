@@ -40,6 +40,15 @@
         }
       }
     }
+    &-icon:active {
+      cursor: pointer;
+      color: lighten(@color-text-primary, 5%);
+      svg {
+        path {
+          fill: lighten(@color-text-primary, 5%);
+        }
+      }
+    }
     .el-icon-setting {
       transform: translateX(2px);
     }
@@ -102,6 +111,15 @@
         svg {
           path {
             fill: lighten(@color-text-primary, 2.5%);
+          }
+        }
+      }
+      &-icon:active {
+        cursor: pointer;
+        color: darken(@color-text-primary, 1.25%);
+        svg {
+          path {
+            fill: darken(@color-text-primary, 1.25%);
           }
         }
       }
