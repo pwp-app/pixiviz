@@ -98,6 +98,9 @@
       background: lighten(@color-primary, 7.5%);
       cursor: pointer;
     }
+    &-item:active {
+      background: lighten(@color-primary, 3.75%);
+    }
     &-item:last-child {
       margin-right: 0;
     }
@@ -194,6 +197,9 @@
       }
       &-item:hover {
         background: lighten(@color-text-primary, 2.5%);
+      }
+      &-item:active {
+        background: darken(@color-text-primary, 3.75%);
       }
     }
   }

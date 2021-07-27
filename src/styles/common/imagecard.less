@@ -112,6 +112,10 @@
   }
 }
 
+.image-card:active {
+  filter: brightness(0.925);
+}
+
 .image-card-fade {
   animation: cardFadeIn 500ms;
 }
@@ -119,6 +123,9 @@
 // dark mode
 .dark {
   .image-card {
+    filter: brightness(0.85);
+  }
+  .image-card:active {
     filter: brightness(0.8);
   }
 }
