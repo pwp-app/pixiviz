@@ -124,6 +124,29 @@
     font-weight: 600;
     user-select: none;
   }
+
+  .search-failed {
+    width: 100%;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: @color-text-primary;
+    font-weight: 600;
+    user-select: none;
+    letter-spacing: 0.05rem;
+    .no-select();
+    .el-button {
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.05rem;
+      border: none;
+    }
+    .el-button:hover {
+      background-color: lighten(@color-primary, 7.5%);
+    }
+    .el-button:active {
+      background-color: lighten(@color-primary, 2.5%);
+    }
+  }
 }
 
 // notify
@@ -172,6 +195,20 @@
       &-item:hover {
         background: lighten(@color-text-primary, 2.5%);
       }
+    }
+  }
+
+  .search-failed {
+    color: darken(@color-text-primary, 2.5%);
+    .el-button {
+      filter: brightness(0.8);
+      background-color: darken(@color-text-primary, 2.5%);
+    }
+    .el-button:hover {
+      background-color: lighten(@color-text-primary, 2.5%);
+    }
+    .el-button:active {
+      background-color: @color-text-primary;
     }
   }
 }
