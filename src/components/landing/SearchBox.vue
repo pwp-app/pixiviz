@@ -2,7 +2,19 @@
   <div :class="['searchbox-wrapper', bannerExpanded ? 'searchbox-hide' : '']" v-show="show">
     <div class="searchbox">
       <div class="searchbox-title">
-        <span>寻找你想看的画作</span>
+        <span
+          >寻找你<el-dropdown @command="handleModeChanged" trigger="click" placement="bottom">
+            <span>{{ searchModeText }}</span>
+            <el-dropdown-menu class="search-dropdown" slot="dropdown">
+              <el-dropdown-item command="pic" v-if="searchMode !== 'pic'">
+                想看的画作
+              </el-dropdown-item>
+              <el-dropdown-item command="user" v-if="searchMode !== 'user'">
+                喜欢的画师
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </span>
       </div>
       <div class="searchbox-input">
         <el-input v-model="search" spellcheck="false" @keyup.enter.native="submitSearch"></el-input>
@@ -22,7 +34,13 @@ export default {
       show: true,
       search: '',
       bannerExpanded: false,
+      searchMode: 'pic',
     };
+  },
+  computed: {
+    searchModeText() {
+      return this.searchMode === 'pic' ? '想看的画作' : '喜欢的画师';
+    },
   },
   watch: {
     '$store.state.landingBanner.expanded': function (expanded) {
@@ -59,6 +77,9 @@ export default {
     },
     handleSearchClick() {
       this.submitSearch();
+    },
+    handleModeChanged(command) {
+      this.searchMode = command;
     },
   },
 };

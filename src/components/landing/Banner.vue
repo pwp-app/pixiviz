@@ -30,17 +30,16 @@
             <span>设置</span>
           </div>
           <div class="about-settings-link">
-            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent>
-              主题
-            </a>
+            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent
+              >主题</a
+            >
             <a
               id="about-privacy"
               href="javascript:;"
               @click="openPrivacyDialog"
               @contextmenu.prevent
+              >隐私</a
             >
-              隐私
-            </a>
           </div>
         </div>
         <div class="about-copyright">
