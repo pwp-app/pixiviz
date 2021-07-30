@@ -9,6 +9,7 @@ const filterImage = (img) => {
 const filterImages = (imgs, dropManga = true) => {
   return imgs.filter((img) => {
     if (
+      img.restrict ||
       img.x_restrict ||
       img.sanity_level >= 4 ||
       (img.type !== 'illust' && dropManga) ||

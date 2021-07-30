@@ -65,7 +65,11 @@ export default {
     },
     position: {
       type: Object,
-      default: () => ({}),
+      default: () => null,
+    },
+    absolute: {
+      type: Boolean,
+      default: true,
     },
   },
   watch: {
@@ -106,6 +110,9 @@ export default {
       }
     },
     positionStyle() {
+      if (!this.absolute) {
+        return null;
+      }
       const top = this.position ? this.position.top : 0;
       const left = this.position ? this.position.left : 0;
       return {

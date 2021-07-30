@@ -5,6 +5,7 @@ import Landing from '../views/Landing.vue';
 import Rank from '../views/Rank.vue';
 import Pic from '../views/PicDetail.vue';
 import Search from '../views/Search.vue';
+import UserSearch from '../views/UserSearch.vue';
 import Artist from '../views/Artist.vue';
 import History from '../views/History.vue';
 import NotFound from '../views/404.vue';
@@ -52,6 +53,12 @@ const routes = [
     path: '/search/:keyword',
     name: 'Search',
     component: Search,
+    meta: { keepAlive: true },
+  },
+  {
+    path: '/usearch/:keyword',
+    name: 'UserSearch',
+    component: UserSearch,
     meta: { keepAlive: true },
   },
   {

@@ -3,7 +3,7 @@
     :class="['search-container', iPadStyle ? 'ipad-only' : null]"
     :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px` } : null"
   >
-    <div class="search-header">
+    <div class="search-responsive search-header">
       <div class="search-header-title">
         <span>搜索</span>
       </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div
-      class="search-suggestion"
+      class="search-responsive search-suggestion"
       ref="suggestions"
       @mouseenter="enterSuggesion"
       @mouseleave="leaveSuggestion"
@@ -64,7 +64,7 @@
       <p>爱国、敬业、诚信、友善</p>
     </div>
     <div class="search-failed" v-if="fetchFailed">
-      <p>看上去搜索数据加载失败了</p>
+      <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
     <infinite-loading
@@ -209,6 +209,7 @@ export default {
     infiniteHandler($state) {
       // 屏蔽了就不发包
       if (this.keywordBlocked || !this.keyword) {
+        $state.complete();
         return;
       }
       this.axios
@@ -251,7 +252,9 @@ export default {
             this.$store.commit('search/setPage', this.page);
             $state.loaded();
           },
-          () => {
+          (err) => {
+            // eslint-disable-next-line no-console
+            console.error('Fetch search data error', err);
             $state.complete();
           },
         );

@@ -1,0 +1,84 @@
+.artist-card {
+  &-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    &__info {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+    &__avatar {
+      .avatar {
+        width: 58px;
+        height: 58px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.175);
+      }
+    }
+    &__name {
+      color: @color-text-primary;
+      font-size: 1.625rem;
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+      margin-left: 1rem;
+    }
+    &__id {
+      font-size: 13px;
+      margin: 10px 0 0 10px;
+    }
+    &__button {
+      display: flex;
+      align-items: center;
+      justify-self: flex-end;
+    }
+  }
+  &-content {
+    margin: 1.25rem 0 2.5rem 0;
+    height: 216px;
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    .image-card-wrapper:first-child {
+      .image-card {
+        margin-left: 2px;
+      }
+    }
+    .image-card-wrapper:last-child {
+      .image-card {
+        margin-right: 0;
+      }
+    }
+  }
+  &-empty {
+    color: @color-text-primary;
+    margin: 1.75rem 0 2.25rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    user-select: none;
+  }
+}
+
+.dark {
+  .artist-card {
+    &-header {
+      color: darken(@color-text-primary, 2.5%);
+      .el-button {
+        filter: brightness(0.8);
+        background-color: darken(@color-text-primary, 2.5%);
+      }
+      .el-button:hover {
+        background-color: lighten(@color-text-primary, 2.5%);
+      }
+      .el-button:active {
+        background-color: @color-text-primary;
+      }
+    }
+    &-empty {
+      color: darken(@color-text-primary, 2.5%);
+    }
+  }
+}

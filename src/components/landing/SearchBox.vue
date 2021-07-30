@@ -72,8 +72,23 @@ export default {
           return;
         }
       }
-      this.$router.push(`/search/${search}`);
-      this.$cookies.set('search-from', '', '1h');
+      if (this.searchMode === 'pic') {
+        this.$router.push({
+          name: 'Search',
+          params: {
+            keyword: this.search,
+          },
+        });
+        this.$cookies.set('search-from', '', '1h');
+      } else if (this.searchMode === 'user') {
+        this.$router.push({
+          name: 'UserSearch',
+          params: {
+            keyword: this.search,
+          },
+        });
+        this.$cookies.set('usearch-from', '', '1h');
+      }
     },
     handleSearchClick() {
       this.submitSearch();

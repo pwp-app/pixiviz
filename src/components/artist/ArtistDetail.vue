@@ -2,7 +2,7 @@
   <div class="artist-detail" v-if="loaded">
     <div class="artist-overview">
       <div class="artist-overview-avatar">
-        <div id="avatar" :style="{ backgroundImage: `url(${this.avatar})` }"></div>
+        <div id="avatar" v-lazy-container :style="{ backgroundImage: `url(${this.avatar})` }"></div>
       </div>
       <div class="artist-overview-content">
         <div class="artist-overview-content-name">
@@ -44,9 +44,12 @@
 </template>
 
 <script>
+import proxy from '../../mixin/proxy';
+
 export default {
   name: 'Artist.ArtistDetail',
   props: ['artistId'],
+  mixins: [proxy],
   data() {
     return {
       artist: null,
@@ -74,13 +77,6 @@ export default {
     },
   },
   methods: {
-    getImageProxyHost() {
-      const hosts = this.$config.image_proxy_host;
-      if (typeof hosts !== 'object') {
-        return hosts;
-      }
-      return Object.keys(hosts)[0];
-    },
     fetchDetail() {
       const stored = this.$store.state.artist.map[this.artistId];
       if (stored) {
