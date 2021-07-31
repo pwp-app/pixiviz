@@ -5,6 +5,7 @@ const state = {
   images: null,
   page: null,
   suggestions: null,
+  mode: 'pic',
 };
 
 const mutations = {
@@ -19,6 +20,9 @@ const mutations = {
   },
   setSuggestions(state, suggestions) {
     state.suggestions = suggestions;
+  },
+  setMode(state, mode) {
+    state.mode = mode;
   },
 };
 

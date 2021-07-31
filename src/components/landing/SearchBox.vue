@@ -34,7 +34,7 @@ export default {
       show: true,
       search: '',
       bannerExpanded: false,
-      searchMode: 'pic',
+      searchMode: this.$store.state.search.mode || 'pic',
     };
   },
   computed: {
@@ -95,6 +95,7 @@ export default {
     },
     handleModeChanged(command) {
       this.searchMode = command;
+      this.$store.commit('search/setMode', this.searchMode);
     },
   },
 };
