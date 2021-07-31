@@ -13,7 +13,7 @@
       </div>
       <ArtistDetail
         ref="detail"
-        :artistId="$route.params.id"
+        :artistId="id"
         @loaded="handleInfoLoaded"
         @failed="handleLoadFailed"
       />
@@ -36,7 +36,7 @@
     </div>
     <Overlay text="画师信息加载失败" v-if="infoLoadFailed" />
     <infinite-loading
-      v-if="infoLoaded && !infoLoadFailed"
+      v-if="!infoLoadFailed"
       :identifier="waterfallIdentifier"
       @infinite="infiniteHandler"
       spinner="spiral"
@@ -83,7 +83,6 @@ export default {
     };
   },
   watch: {
-    '$route.params.id': 'handleIdChanged',
     /* Watch screen width */
     screenWidth(width) {
       if (this.resizeTimer) {
@@ -145,6 +144,7 @@ export default {
     if (routes && routes.length > 0) {
       const prev = routes.pop();
       if (prev.type === 'artist' && prev.from === this.id) {
+        routes.mtime = Date.now();
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       }
     }
@@ -169,25 +169,11 @@ export default {
       }
       return [];
     },
-    handleIdChanged(newId) {
-      if (this.id === newId) {
-        return;
-      }
-      this.id = newId;
-      this.artistName = null;
-      // 更新store
-      this.$store.commit('artist/setId', this.id);
-      // 刷新页面
-      this.refreshWaterfall();
-      this.resetScrollState();
-      // 更新标题
-      document.title = `画师${this.id} - Pixiviz`;
-      this.setOgTagData();
-    },
     // 瀑布流
     infiniteHandler($state) {
-      // 屏蔽了就不发包
-      if (this.keywordBlocked) {
+      // 没有数据不发包
+      if (!this.id) {
+        $state.complete();
         return;
       }
       this.axios
@@ -233,13 +219,6 @@ export default {
           },
         );
     },
-    refreshWaterfall() {
-      // 考虑缓存
-      this.page = this.$store.state.artist.page[this.id] || 1;
-      this.images = this.$store.state.artist.images[this.id] || [];
-      // 刷新无限加载id
-      this.waterfallIdentifier += 1;
-    },
     handleCardClicked(imageId) {
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
@@ -253,6 +232,7 @@ export default {
         type: 'artist',
         from: this.id,
       });
+      routes.mtime = Date.now();
       window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       this.$router.push(`/pic/${imageId}`);
     },
@@ -277,12 +257,17 @@ export default {
       }
       const prev = routes.pop();
       if (prev.type === 'pic') {
+        routes.mtime = Date.now();
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
         const info = window.pixiviz.infoMap[prev.from];
         if (info) {
           this.$store.commit('imageCache/setCache', info);
         }
         this.$router.push(`/pic/${prev.from}`);
+      } else if (prev.type === 'usearch') {
+        routes.mtime = Date.now();
+        window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+        this.$router.push(`/usearch/${prev.keyword}`);
       } else {
         window.localStorage.removeItem('pic-routes');
         this.$router.push('/');
@@ -291,10 +276,6 @@ export default {
     // 窗口事件
     handleScroll() {
       this.$cookies.set('artist-scroll', document.documentElement.scrollTop, '1h');
-    },
-    resetScrollState() {
-      this.scrollTop = 0;
-      this.$cookies.set('artist-scroll', 0, '1h');
     },
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;

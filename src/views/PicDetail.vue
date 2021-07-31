@@ -182,6 +182,7 @@ export default {
     if (routes && routes.length > 0) {
       const prev = routes.pop();
       if (prev.type === 'pic' && prev.from === this.imageId) {
+        routes.mtime = Date.now();
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       }
     }
@@ -387,6 +388,7 @@ export default {
         type: 'pic',
         from: this.imageId,
       });
+      routes.mtime = Date.now();
       window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       this.$router.push(`/artist/${id}`);
     },
@@ -403,6 +405,7 @@ export default {
         this.$router.push(`/${prev.from}`);
         this.$cookies.remove('pic-from');
       } else if (prev.type === 'artist') {
+        routes.mtime = Date.now();
         window.localStorage.setItem('pic-routes', JSON.stringify(routes));
         this.$router.push(`/artist/${prev.from}`);
       } else {

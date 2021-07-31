@@ -2,27 +2,19 @@
 /* eslint-disable no-shadow */
 const state = {
   keyword: null,
-  images: null,
+  artists: null,
   page: null,
-  suggestions: null,
-  mode: 'pic',
 };
 
 const mutations = {
   setKeyword(state, keyword) {
     state.keyword = keyword;
   },
-  setImages(state, images) {
-    state.images = images;
+  setArtists(state, artists) {
+    state.artists = artists;
   },
   setPage(state, page) {
     state.page = page;
-  },
-  setSuggestions(state, suggestions) {
-    state.suggestions = suggestions;
-  },
-  setMode(state, mode) {
-    state.mode = mode;
   },
 };
 

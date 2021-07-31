@@ -3,7 +3,7 @@
     :class="['search-container', iPadStyle ? 'ipad-only' : null]"
     :style="keywordBlocked ? { filter: `blur(${blockedCount / 3}px` } : null"
   >
-    <div class="search-header">
+    <div class="search-responsive search-header">
       <div class="search-header-title">
         <span>搜索</span>
       </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div
-      class="search-suggestion"
+      class="search-responsive search-suggestion"
       ref="suggestions"
       @mouseenter="enterSuggesion"
       @mouseleave="leaveSuggestion"
@@ -64,7 +64,7 @@
       <p>爱国、敬业、诚信、友善</p>
     </div>
     <div class="search-failed" v-if="fetchFailed">
-      <p>看上去搜索数据加载失败了</p>
+      <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
     <infinite-loading
@@ -120,7 +120,6 @@ export default {
       iPadStyle: /iPad/i.test(navigator.userAgent),
       // notification
       illustNotice: null,
-      artistNotice: null,
     };
   },
   watch: {
@@ -191,9 +190,6 @@ export default {
     if (this.illustNotice) {
       this.illustNotice.close();
     }
-    if (this.artistNotice) {
-      this.artistNotice.close();
-    }
     // 清除监听器
     this.leaveSuggestion();
     window.removeEventListener('resize', this.windowResized, false);
@@ -209,6 +205,7 @@ export default {
     infiniteHandler($state) {
       // 屏蔽了就不发包
       if (this.keywordBlocked || !this.keyword) {
+        $state.complete();
         return;
       }
       this.axios
@@ -251,7 +248,9 @@ export default {
             this.$store.commit('search/setPage', this.page);
             $state.loaded();
           },
-          () => {
+          (err) => {
+            // eslint-disable-next-line no-console
+            console.error('Fetch search data error', err);
             $state.complete();
           },
         );
@@ -281,7 +280,6 @@ export default {
       // 检查关键词是不是纯数字
       if (id_matcher.test(this.keyword) && !isNaN(this.keyword)) {
         this.checkIfIllust();
-        this.checkIfArtist();
       }
     },
     checkIfIllust() {
@@ -316,34 +314,6 @@ export default {
           });
         });
     },
-    checkIfArtist() {
-      this.axios
-        .get(`${this.$config.api_prefix}/user/detail`, {
-          params: {
-            id: parseInt(this.keyword, 10),
-          },
-        })
-        .then((res) => {
-          if (!res || !res.data || !res.data.user) {
-            return;
-          }
-          const {
-            data: { user },
-          } = res;
-          document.body.addEventListener('click', this.artistNoticeClick, false);
-          this.artistNotice = this.$notify({
-            title: '您要找的可能是：',
-            position: 'bottom-left',
-            dangerouslyUseHTMLString: true,
-            duration: 5000,
-            onClose: this.artistNoticeClose,
-            message: `
-            <div class="search-notify">
-              <span data-name="search-notify-artist">画师 ${user.name} （ID: ${this.keyword}）</span>
-            </div>`,
-          });
-        });
-    },
     refreshWaterfall() {
       this.page = 1;
       this.images = [];
@@ -364,7 +334,7 @@ export default {
       if (this.keywordInput === this.keyword) {
         return;
       }
-      this.$router.push(`/search/${this.keywordInput}`);
+      this.$router.push(`/search/${encodeURIComponent(this.keywordInput)}`);
       // 清除监听器
       this.leaveSuggestion();
     },
@@ -417,7 +387,11 @@ export default {
       this.setOgTagData();
     },
     handleCardClicked(imageId) {
-      this.$cookies.set('pic-from', `search/${this.$route.params.keyword}`, '1h');
+      this.$cookies.set(
+        'pic-from',
+        `search/${encodeURIComponent(this.$route.params.keyword)}`,
+        '1h',
+      );
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
@@ -426,7 +400,7 @@ export default {
       this.$router.push(`/pic/${imageId}`);
     },
     handleSuggestionClick(word) {
-      this.$router.push(`/search/${word}`);
+      this.$router.push(`/search/${encodeURIComponent(word)}`);
       // 清除监听器
       this.leaveSuggestion();
     },
@@ -492,29 +466,12 @@ export default {
     illustNoticeClick(e) {
       if (e.target.dataset.name && e.target.dataset.name === 'search-notify-illust') {
         // this.keyword此处等同于pic id
-        this.$router.push(`/pic/${this.keyword}`);
+        this.$router.push(`/pic/${encodeURIComponent(this.keyword)}`);
         this.illustNotice.close();
-        if (this.artistNotice) {
-          this.artistNotice.close();
-          this.artistNotice = null;
-        }
       }
     },
     illustNoticeClose() {
       document.body.removeEventListener('click', this.illustNoticeClick, false);
-    },
-    artistNoticeClick(e) {
-      if (e.target.dataset.name && e.target.dataset.name === 'search-notify-artist') {
-        this.$router.push(`/artist/${this.keyword}`);
-        this.artistNotice.close();
-        if (this.illustNotice) {
-          this.illustNotice.close();
-          this.illustNotice = null;
-        }
-      }
-    },
-    artistNoticeClose() {
-      document.body.removeEventListener('click', this.artistNoticeClick, false);
     },
     // set og tags
     setOgTagData() {

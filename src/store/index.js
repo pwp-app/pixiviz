@@ -6,6 +6,7 @@ import darkMode from './modules/darkMode';
 import landingBanner from './modules/landingBanner';
 import rank from './modules/rank';
 import search from './modules/search';
+import userSearch from './modules/userSearch';
 import imageCache from './modules/imageCache';
 import artist from './modules/artist';
 import download from './modules/download';
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     landingBanner,
     rank,
     search,
+    userSearch,
     imageCache,
     artist,
     download,

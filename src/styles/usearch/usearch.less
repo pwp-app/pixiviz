@@ -1,0 +1,22 @@
+.usearch-container {
+  .usearch-responsive {
+    .image-page-width-mixin(3);
+    .image-page-width-responsive-mixin(3, 2, 72px);
+  }
+  .usearch-content {
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .usearch-container {
+    .search-header {
+      margin-bottom: 12px;
+    }
+    .usearch-content {
+      width: 100% !important;
+      padding: 0 24px;
+    }
+  }
+}

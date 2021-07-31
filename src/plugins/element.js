@@ -4,6 +4,9 @@ import {
   Input,
   Loading,
   Popover,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
   Drawer,
   DatePicker,
   Message,
@@ -24,6 +27,9 @@ Vue.use(DatePicker);
 Vue.use(Switch);
 Vue.use(Drawer);
 Vue.use(Dialog);
+Vue.use(Dropdown);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 Vue.use(Form);
 Vue.use(FormItem);
 
