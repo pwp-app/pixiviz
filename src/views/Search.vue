@@ -367,7 +367,7 @@ export default {
       if (this.keywordInput === this.keyword) {
         return;
       }
-      this.$router.push(`/search/${this.keywordInput}`);
+      this.$router.push(`/search/${encodeURIComponent(this.keywordInput)}`);
       // 清除监听器
       this.leaveSuggestion();
     },
@@ -420,7 +420,11 @@ export default {
       this.setOgTagData();
     },
     handleCardClicked(imageId) {
-      this.$cookies.set('pic-from', `search/${this.$route.params.keyword}`, '1h');
+      this.$cookies.set(
+        'pic-from',
+        `search/${encodeURIComponent(this.$route.params.keyword)}`,
+        '1h',
+      );
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
@@ -429,7 +433,7 @@ export default {
       this.$router.push(`/pic/${imageId}`);
     },
     handleSuggestionClick(word) {
-      this.$router.push(`/search/${word}`);
+      this.$router.push(`/search/${encodeURIComponent(word)}`);
       // 清除监听器
       this.leaveSuggestion();
     },
@@ -495,7 +499,7 @@ export default {
     illustNoticeClick(e) {
       if (e.target.dataset.name && e.target.dataset.name === 'search-notify-illust') {
         // this.keyword此处等同于pic id
-        this.$router.push(`/pic/${this.keyword}`);
+        this.$router.push(`/pic/${encodeURIComponent(this.keyword)}`);
         this.illustNotice.close();
         if (this.artistNotice) {
           this.artistNotice.close();
@@ -508,7 +512,7 @@ export default {
     },
     artistNoticeClick(e) {
       if (e.target.dataset.name && e.target.dataset.name === 'search-notify-artist') {
-        this.$router.push(`/artist/${this.keyword}`);
+        this.$router.push(`/artist/${encodeURIComponent(this.keyword)}`);
         this.artistNotice.close();
         if (this.illustNotice) {
           this.illustNotice.close();

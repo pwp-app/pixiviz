@@ -48,6 +48,7 @@
 <script>
 import ArtistCard from '../components/common/ArtistCard.vue';
 import BackToTop from '../components/common/BackToTop.vue';
+import { setOgTags, getOgTags } from '../util/og';
 
 export default {
   components: {
@@ -94,6 +95,8 @@ export default {
     } else {
       this.$cookies.set('usearch-scroll', 0, '1h');
     }
+    // og tags
+    this.setOgTagData();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.windowResized, false);
@@ -115,7 +118,7 @@ export default {
     },
     resetScrollState() {
       this.scrollTop = 0;
-      this.$cookies.set('search-scroll', 0, '1h');
+      this.$cookies.set('usearch-scroll', 0, '1h');
     },
     loadArtistsData($state) {
       if (!this.keyword) {
@@ -172,13 +175,47 @@ export default {
           },
         );
     },
-    handleKeywordChanged() {},
-    submitSearch() {},
+    handleKeywordChanged(keyword) {
+      if (keyword === this.keyword) {
+        return;
+      }
+      // refresh page
+      this.keyword = keyword;
+      this.keywordInput = keyword;
+      this.$store.commit('userSearch/setKeyword', this.keyword);
+      this.$store.commit('userSearch/setArtists', []);
+      this.$store.commit('userSearch/setPage', 1);
+      this.artists = [];
+      this.infiniteId += 1;
+      this.resetScrollState();
+      this.fetchFailed = false;
+      // change title
+      document.title = `${this.keyword} - Pixiviz`;
+      // set og tags
+      this.setOgTagData();
+    },
+    submitSearch() {
+      if (
+        !this.keywordInput ||
+        this.keywordInput.length < 1 ||
+        (this.keywordInput && this.keywordInput.trim().length < 1)
+      ) {
+        this.$message.error('呐，输入画师名称或ID再搜索！！');
+        this.keywordInput = '';
+        return;
+      }
+      this.keywordInput = this.keywordInput.trim();
+      // avoid redundant navigation
+      if (this.keywordInput === this.keyword) {
+        return;
+      }
+      this.$router.push(`/usearch/${encodeURIComponent(this.keywordInput)}`);
+    },
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
     },
     handleScroll() {
-      this.$cookies.set('search-scroll', document.documentElement.scrollTop, '1h');
+      this.$cookies.set('usearch-scroll', document.documentElement.scrollTop, '1h');
     },
     getImageCardWidth(screenWidth) {
       if (screenWidth >= 1024) {
@@ -197,7 +234,7 @@ export default {
       }
     },
     handleCardClicked(imageId) {
-      this.$cookies.set('pic-from', `usearch/${this.keyword}`, '1h');
+      this.$cookies.set('pic-from', `usearch/${encodeURIComponent(this.keyword)}`, '1h');
       // 设置图片缓存
       const info = window.pixiviz.infoMap[imageId];
       if (info) {
@@ -221,6 +258,15 @@ export default {
       routes.mtime = Date.now();
       window.localStorage.setItem('pic-routes', JSON.stringify(routes));
       this.$router.push(`/artist/${artistId}`);
+    },
+    setOgTagData() {
+      setOgTags(getOgTags(), {
+        ogTitle: `${this.keyword} - 搜索`,
+        ogDesc: `二次元画师搜索，跨次元链接，就在 Pixiviz`,
+        ogUrl: window.location.href,
+        // eslint-disable-next-line no-undef
+        ogImage: `${this.$config.website_url}/favicon.png`,
+      });
     },
   },
 };
