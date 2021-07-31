@@ -91,7 +91,6 @@ export default {
       clearMarginBottom: false,
       appVer,
       landingBgId: this.$config.landing_bg_id,
-      landingBgName: this.$config.landing_bg_name,
     };
   },
   mounted() {
