@@ -8,12 +8,12 @@
         <div class="artist-card-header__name">
           <span>{{ name }}</span>
         </div>
-        <div class="artist-card-header__id">
+        <div class="artist-card-header__id mobile-hide">
           <span><span class="no-select">ID: </span>{{ artistId }}</span>
         </div>
       </div>
       <div class="artist-card-header__button">
-        <el-button type="primary" round>进入画师主页</el-button>
+        <el-button type="primary" round @click="handleEntryClicked">进入画师主页</el-button>
       </div>
     </div>
     <div class="artist-card-content" v-if="userIllusts.length">
@@ -22,10 +22,10 @@
         :key="image.id"
         :image="image"
         imageType="square_medium"
-        :cardWidth="200"
+        :cardWidth="cardWidth"
         :absolute="false"
         :position="{
-          height: 200,
+          height: cardWidth,
         }"
         @clicked="handleCardClicked"
       />
@@ -44,6 +44,10 @@ import { filterImages } from '../../util/filter';
 export default {
   props: {
     artist: Object,
+    cardWidth: {
+      type: Number,
+      default: 208,
+    },
   },
   components: {
     ImageCard,

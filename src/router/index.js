@@ -47,7 +47,7 @@ const routes = [
     path: '/artist/:id',
     name: 'Artist',
     component: Artist,
-    meta: { keepAlive: true },
+    meta: { keepAlive: false },
   },
   {
     path: '/search/:keyword',

@@ -1,4 +1,6 @@
 .artist-card {
+  width: 100%;
+  position: relative;
   &-header {
     width: 100%;
     display: flex;
@@ -28,16 +30,18 @@
     &__id {
       font-size: 13px;
       margin: 10px 0 0 10px;
+      color: lighten(@color-primary, 2.5%);
     }
     &__button {
       display: flex;
       align-items: center;
       justify-self: flex-end;
+      margin-left: 12px;
     }
   }
   &-content {
     margin: 1.25rem 0 2.5rem 0;
-    height: 216px;
+    height: max-content;
     display: flex;
     max-width: 100%;
     overflow-x: auto;
@@ -79,6 +83,22 @@
     }
     &-empty {
       color: darken(@color-text-primary, 2.5%);
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .artist-card {
+    &-header {
+      &__avatar {
+        .avatar {
+          width: 52px;
+          height: 52px;
+        }
+      }
+      &__name {
+        font-size: 1.375rem;
+      }
     }
   }
 }

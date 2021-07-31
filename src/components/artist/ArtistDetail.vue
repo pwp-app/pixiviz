@@ -48,7 +48,9 @@ import proxy from '../../mixin/proxy';
 
 export default {
   name: 'Artist.ArtistDetail',
-  props: ['artistId'],
+  props: {
+    artistId: String,
+  },
   mixins: [proxy],
   data() {
     return {
@@ -82,6 +84,9 @@ export default {
       if (stored) {
         this.artist = stored;
         this.afterLoad();
+        return;
+      }
+      if (!this.artistId) {
         return;
       }
       this.axios

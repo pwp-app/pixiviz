@@ -44,7 +44,9 @@ export default {
       window.pixiviz.infoMap = {};
     }
     // 重置图片-画师路由数据
-    window.localStorage.removeItem('pic-routes');
+    if (this.$route.path === '/') {
+      window.localStorage.removeItem('pic-routes');
+    }
     // Safari vh 优化
     if (window.isSafari && !window.isStandAlone) {
       const setVh = () => {

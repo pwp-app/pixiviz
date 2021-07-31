@@ -23,6 +23,7 @@
         v-for="artist in artists"
         :key="artist.user.id"
         :artist="artist"
+        :cardWidth="imageCardWidth"
         @card-clicked="handleCardClicked"
         @entry-clicked="handleEntryClicked"
       />
@@ -62,13 +63,41 @@ export default {
       page: this.$store.state.userSearch.page !== null ? this.$store.state.userSearch.page : 1,
       keyword: this.$route.params.keyword,
       keywordInput: this.$route.params.keyword,
+      imageCardWidth: this.getImageCardWidth(document.documentElement.clientWidth),
+      screenWidth: document.documentElement.clientWidth,
+      scrollTop: 0,
     };
   },
   watch: {
     '$route.params.keyword': 'handleKeywordChanged',
+    screenWidth(width) {
+      this.imageCardWidth = this.getImageCardWidth(width);
+    },
   },
   mounted() {
     this.$store.commit('userSearch/setKeyword', this.keyword);
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.windowResized, false);
+      window.addEventListener('scroll', this.handleScroll, false);
+    });
+    // check scroll state
+    const scrollTop = parseInt(this.$cookies.get('usearch-scroll'), 10);
+    if (this.artists.length > 0) {
+      if (scrollTop) {
+        this.$nextTick(() => {
+          window.scrollTo(0, scrollTop);
+          if (scrollTop > 300) {
+            this.$refs.backToTop && this.$refs.backToTop.display();
+          }
+        });
+      }
+    } else {
+      this.$cookies.set('usearch-scroll', 0, '1h');
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.windowResized, false);
+    window.removeEventListener('scroll', this.handleScroll, false);
   },
   methods: {
     initData() {
@@ -76,6 +105,17 @@ export default {
         return this.$store.state.userSearch.artists || [];
       }
       return [];
+    },
+    fetchNew() {
+      this.fetchFailed = false;
+      this.$nextTick(() => {
+        this.infiniteId += 1;
+        this.resetScrollState();
+      });
+    },
+    resetScrollState() {
+      this.scrollTop = 0;
+      this.$cookies.set('search-scroll', 0, '1h');
     },
     loadArtistsData($state) {
       if (!this.keyword) {
@@ -132,7 +172,23 @@ export default {
           },
         );
     },
+    handleKeywordChanged() {},
     submitSearch() {},
+    windowResized() {
+      this.screenWidth = document.documentElement.clientWidth;
+    },
+    handleScroll() {
+      this.$cookies.set('search-scroll', document.documentElement.scrollTop, '1h');
+    },
+    getImageCardWidth(screenWidth) {
+      if (screenWidth >= 1024) {
+        return 282;
+      } else if (screenWidth >= 768 && screenWidth < 1024) {
+        return 182;
+      } else if (screenWidth < 768) {
+        return 164;
+      }
+    },
     handleBack() {
       if (this.from) {
         this.$router.push(`/${this.from}`);
@@ -140,8 +196,32 @@ export default {
         this.$router.push('/');
       }
     },
-    handleCardClicked() {},
-    handleEntryClicked() {},
+    handleCardClicked(imageId) {
+      this.$cookies.set('pic-from', `usearch/${this.keyword}`, '1h');
+      // 设置图片缓存
+      const info = window.pixiviz.infoMap[imageId];
+      if (info) {
+        this.$store.commit('imageCache/setCache', info);
+      }
+      this.$router.push(`/pic/${imageId}`);
+    },
+    handleEntryClicked(artistId) {
+      const storedRoutes = window.localStorage.getItem('pic-routes');
+      const routes = storedRoutes ? JSON.parse(storedRoutes) || [] : [];
+      if (routes.length < 1) {
+        routes.push({
+          type: 'entry',
+          from: this.from,
+        });
+      }
+      routes.push({
+        type: 'usearch',
+        keyword: this.keyword,
+      });
+      routes.mtime = Date.now();
+      window.localStorage.setItem('pic-routes', JSON.stringify(routes));
+      this.$router.push(`/artist/${artistId}`);
+    },
   },
 };
 </script>
