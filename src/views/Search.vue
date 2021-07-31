@@ -120,7 +120,6 @@ export default {
       iPadStyle: /iPad/i.test(navigator.userAgent),
       // notification
       illustNotice: null,
-      artistNotice: null,
     };
   },
   watch: {
@@ -190,9 +189,6 @@ export default {
   beforeDestroy() {
     if (this.illustNotice) {
       this.illustNotice.close();
-    }
-    if (this.artistNotice) {
-      this.artistNotice.close();
     }
     // 清除监听器
     this.leaveSuggestion();
@@ -284,7 +280,6 @@ export default {
       // 检查关键词是不是纯数字
       if (id_matcher.test(this.keyword) && !isNaN(this.keyword)) {
         this.checkIfIllust();
-        this.checkIfArtist();
       }
     },
     checkIfIllust() {
@@ -315,34 +310,6 @@ export default {
             message: `
             <div class="search-notify">
               <span data-name="search-notify-illust">画作 ${illust.title} （ID: ${this.keyword}）</span>
-            </div>`,
-          });
-        });
-    },
-    checkIfArtist() {
-      this.axios
-        .get(`${this.$config.api_prefix}/user/detail`, {
-          params: {
-            id: parseInt(this.keyword, 10),
-          },
-        })
-        .then((res) => {
-          if (!res || !res.data || !res.data.user) {
-            return;
-          }
-          const {
-            data: { user },
-          } = res;
-          document.body.addEventListener('click', this.artistNoticeClick, false);
-          this.artistNotice = this.$notify({
-            title: '您要找的可能是：',
-            position: 'bottom-left',
-            dangerouslyUseHTMLString: true,
-            duration: 5000,
-            onClose: this.artistNoticeClose,
-            message: `
-            <div class="search-notify">
-              <span data-name="search-notify-artist">画师 ${user.name} （ID: ${this.keyword}）</span>
             </div>`,
           });
         });
@@ -501,27 +468,10 @@ export default {
         // this.keyword此处等同于pic id
         this.$router.push(`/pic/${encodeURIComponent(this.keyword)}`);
         this.illustNotice.close();
-        if (this.artistNotice) {
-          this.artistNotice.close();
-          this.artistNotice = null;
-        }
       }
     },
     illustNoticeClose() {
       document.body.removeEventListener('click', this.illustNoticeClick, false);
-    },
-    artistNoticeClick(e) {
-      if (e.target.dataset.name && e.target.dataset.name === 'search-notify-artist') {
-        this.$router.push(`/artist/${encodeURIComponent(this.keyword)}`);
-        this.artistNotice.close();
-        if (this.illustNotice) {
-          this.illustNotice.close();
-          this.illustNotice = null;
-        }
-      }
-    },
-    artistNoticeClose() {
-      document.body.removeEventListener('click', this.artistNoticeClick, false);
     },
     // set og tags
     setOgTagData() {

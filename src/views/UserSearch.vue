@@ -50,6 +50,8 @@ import ArtistCard from '../components/common/ArtistCard.vue';
 import BackToTop from '../components/common/BackToTop.vue';
 import { setOgTags, getOgTags } from '../util/og';
 
+const id_matcher = /^\d{2,8}$/;
+
 export default {
   components: {
     ArtistCard,
@@ -67,6 +69,7 @@ export default {
       imageCardWidth: this.getImageCardWidth(document.documentElement.clientWidth),
       screenWidth: document.documentElement.clientWidth,
       scrollTop: 0,
+      artistNotice: null,
     };
   },
   watch: {
@@ -81,6 +84,7 @@ export default {
       window.addEventListener('resize', this.windowResized, false);
       window.addEventListener('scroll', this.handleScroll, false);
     });
+    this.checkIfId();
     // check scroll state
     const scrollTop = parseInt(this.$cookies.get('usearch-scroll'), 10);
     if (this.artists.length > 0) {
@@ -101,6 +105,9 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.windowResized, false);
     window.removeEventListener('scroll', this.handleScroll, false);
+    if (this.artistNotice) {
+      this.artistNotice.close();
+    }
   },
   methods: {
     initData() {
@@ -115,6 +122,12 @@ export default {
         this.infiniteId += 1;
         this.resetScrollState();
       });
+    },
+    checkIfId() {
+      // 检查关键词是不是纯数字
+      if (id_matcher.test(this.keyword) && !isNaN(this.keyword)) {
+        this.checkIfArtist();
+      }
     },
     resetScrollState() {
       this.scrollTop = 0;
@@ -189,6 +202,7 @@ export default {
       this.infiniteId += 1;
       this.resetScrollState();
       this.fetchFailed = false;
+      this.checkIfId();
       // change title
       document.title = `${this.keyword} - Pixiviz`;
       // set og tags
@@ -267,6 +281,43 @@ export default {
         // eslint-disable-next-line no-undef
         ogImage: `${this.$config.website_url}/favicon.png`,
       });
+    },
+    checkIfArtist() {
+      this.axios
+        .get(`${this.$config.api_prefix}/user/detail`, {
+          params: {
+            id: parseInt(this.keyword, 10),
+          },
+        })
+        .then((res) => {
+          if (!res || !res.data || !res.data.user) {
+            return;
+          }
+          const {
+            data: { user },
+          } = res;
+          document.body.addEventListener('click', this.artistNoticeClick, false);
+          this.artistNotice = this.$notify({
+            title: '您要找的可能是：',
+            position: 'bottom-left',
+            dangerouslyUseHTMLString: true,
+            duration: 5000,
+            onClose: this.artistNoticeClose,
+            message: `
+            <div class="search-notify">
+              <span data-name="search-notify-artist">画师 ${user.name} （ID: ${this.keyword}）</span>
+            </div>`,
+          });
+        });
+    },
+    artistNoticeClick(e) {
+      if (e.target.dataset.name && e.target.dataset.name === 'search-notify-artist') {
+        this.$router.push(`/artist/${encodeURIComponent(this.keyword)}`);
+        this.artistNotice.close();
+      }
+    },
+    artistNoticeClose() {
+      document.body.removeEventListener('click', this.artistNoticeClick, false);
     },
   },
 };
