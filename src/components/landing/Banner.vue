@@ -19,9 +19,9 @@
             <span class="indev">（开发中）</span>
           </div>
           <div class="about-my-link">
-            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent>
-              浏览历史
-            </a>
+            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent
+              >浏览历史</a
+            >
             <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
           </div>
         </div>
