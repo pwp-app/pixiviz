@@ -36,7 +36,8 @@
     <div class="pic-presentation-info" v-if="image">
       <div class="pic-presentation-info-title">
         <span>{{ image ? image.title : '' }}</span>
-        <i class="el-icon-share" ref="shareIcon"></i>
+        <i class="el-icon-share" ref="shareIcon" v-if="!renderShareOverlay"></i>
+        <i class="el-icon-share" ref="shareIcon" v-else @click="openShareOverlay"></i>
       </div>
       <div class="pic-presentation-info-caption">
         <span v-html="image ? image.caption : ''"></span>
@@ -78,6 +79,12 @@
       <ContextMenuItem name="down">下载</ContextMenuItem>
       <ContextMenuItem name="copy-image" v-if="showCopyImage">复制图片</ContextMenuItem>
     </ContextMenu>
+    <ShareOverlay
+      ref="shareOverlay"
+      v-if="renderShareOverlay"
+      v-show="showShareOverlay"
+      @close="handleShareOverlayClose"
+    />
   </div>
 </template>
 
@@ -85,6 +92,7 @@
 import dayjs from 'dayjs';
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
+import ShareOverlay from '../common/ShareOverlay.vue';
 import Ugoira from '../../util/ugoira';
 import { weightedRandom } from '../../util/random';
 import { getHistoryTop, addUserHistory } from '../../util/history';
@@ -110,6 +118,7 @@ export default {
   components: {
     Paginator,
     LightBox,
+    ShareOverlay,
   },
   data() {
     return {
@@ -153,6 +162,11 @@ export default {
             });
           })
         : null,
+      // env testers
+      isInQQ: navigator.userAgent.includes('QQ/'),
+      isInWechat: navigator.userAgent.includes('MicroMessenger/'),
+      // share overlay
+      showShareOverlay: false,
     };
   },
   beforeCreate() {
@@ -172,21 +186,28 @@ export default {
     // 设定初始大小限制
     this.setLimitWidth(this.screenWidth);
     // use share
-    useSharePopup({
-      key: 'share',
-      platforms: ['qzone', 'weibo', 'twitter'],
-      meta: {
-        title: this.shareTitle,
-        url: window.location.href,
-        desc: this.shareDesc,
-        image: this.shareImage,
-      },
-      ref: this.$refs.shareIcon,
-      trigger: 'hover',
-      placement: 'bottom-end',
-      options: {
-        wechatSharePage: 'https://wechat-share.pwp.space/?url={url}&title={title}',
-      },
+    if (!this.renderShareOverlay) {
+      useSharePopup({
+        key: 'share',
+        platforms: ['qzone', 'weibo', 'twitter'],
+        meta: {
+          title: this.shareTitle,
+          url: window.location.href,
+          desc: this.shareDesc,
+          image: this.shareImage,
+        },
+        ref: this.$refs.shareIcon,
+        trigger: 'hover',
+        placement: 'bottom-end',
+        options: {
+          wechatSharePage: 'https://wechat-share.pwp.space/?url={url}&title={title}',
+        },
+      });
+    }
+    this.$nextTick(() => {
+      if (this.$route.query.wechat_share === '1' && this.isInWechat) {
+        this.openShareOverlay();
+      }
     });
   },
   beforeDestroy() {
@@ -346,6 +367,9 @@ export default {
       return this.image.title
         ? `${this.image.title} - ${this.image.user.name || 'Pixiviz'}`
         : 'Pixiviz';
+    },
+    renderShareOverlay() {
+      return this.isInQQ || this.isInWechat;
     },
   },
   methods: {
@@ -878,6 +902,13 @@ export default {
         return;
       }
       await addUserHistory(image);
+    },
+    // share
+    openShareOverlay() {
+      this.showShareOverlay = true;
+    },
+    handleShareOverlayClose() {
+      this.showShareOverlay = false;
     },
   },
 };

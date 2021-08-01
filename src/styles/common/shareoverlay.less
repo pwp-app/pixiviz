@@ -1,0 +1,35 @@
+.share-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.875);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5000;
+  &-control {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    &__icon {
+      color: @color-text-primary;
+      font-size: 34px;
+      font-weight: 800;
+      position: absolute;
+      right: 0px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+    }
+    &__text {
+      position: absolute;
+      font-size: 18px;
+      letter-spacing: 0.05rem;
+      font-weight: 600;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+      color: @color-text-primary;
+      right: 6px;
+      top: 48px;
+      width: max-content;
+    }
+  }
+}
