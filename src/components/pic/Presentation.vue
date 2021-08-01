@@ -189,7 +189,7 @@ export default {
     if (!this.renderShareOverlay) {
       useSharePopup({
         key: 'share',
-        platforms: ['qzone', 'weibo', 'twitter'],
+        platforms: ['qzone', 'wechat', 'weibo'],
         meta: {
           title: this.shareTitle,
           url: window.location.href,
