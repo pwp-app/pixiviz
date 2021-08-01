@@ -164,6 +164,7 @@ export default {
         : null,
       // env testers
       isInQQ: navigator.userAgent.includes('QQ/'),
+      isInWechat: navigator.userAgent.includes('MicroMessenger/'),
       // share overlay
       showShareOverlay: false,
     };
@@ -204,7 +205,7 @@ export default {
       });
     }
     this.$nextTick(() => {
-      if (this.$route.query.wechat_share) {
+      if (this.$route.query.wechat_share === '1' && this.isInWechat) {
         this.openShareOverlay();
       }
     });
@@ -368,7 +369,7 @@ export default {
         : 'Pixiviz';
     },
     renderShareOverlay() {
-      return this.isInQQ || this.$route.query.wechat_share === '1';
+      return this.isInQQ || this.isInWechat;
     },
   },
   methods: {
