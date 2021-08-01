@@ -501,17 +501,19 @@ export default {
         getOgTags(),
         this.image
           ? {
-              ogTitle: `${this.image.title} - ${this.image.user.name || 'Pixiviz'}`,
+              ogTitle: this.image.title
+                ? `${this.image.title} - ${this.image.user.name || 'Pixiviz'}`
+                : 'Pixiviz',
               ogDesc:
                 (this.image.caption.length > 50
                   ? this.image.caption.substr(0, 20)
-                  : this.image.caption) || '跨次元链接~，一个简单的二次元图片分享站',
+                  : this.image.caption) || '分享自Pixiviz',
               ogUrl: window.location.href,
               ogImage: source || `${this.$config.website_url}/favicon.png`,
             }
           : {
               ogTitle: `图片${this.imageId} - Pixiviz`,
-              ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+              ogDesc: '分享自Pixiviz',
               ogUrl: window.location.href,
               // eslint-disable-next-line no-undef
               ogImage: `${this.$config.website_url}/favicon.png`,

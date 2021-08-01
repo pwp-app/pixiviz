@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import Vue from 'vue';
+import VueCompositionAPI from '@vue/composition-api';
 
 // Import dependencies
 import VueCookies from 'vue-cookies';
@@ -41,6 +42,8 @@ import './registerServiceWorker';
 // Import frontjs stat
 import { initBaiduStat, initFrontJs } from './util/statistics';
 import { checkTrustHost } from './util/host';
+
+Vue.use(VueCompositionAPI);
 
 if (checkTrustHost(config)) {
   initBaiduStat();
