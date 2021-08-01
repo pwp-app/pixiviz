@@ -80,6 +80,9 @@
       <ContextMenuItem name="copy-image" v-if="showCopyImage">复制图片</ContextMenuItem>
     </ContextMenu>
     <ShareOverlay
+      :class="{
+        'share-overlay--wechat': isInWechat,
+      }"
       ref="shareOverlay"
       v-if="renderShareOverlay"
       v-show="showShareOverlay"
@@ -906,6 +909,7 @@ export default {
     // share
     openShareOverlay() {
       this.showShareOverlay = true;
+      document.documentElement.classList.add('no-scrollbar');
     },
     handleShareOverlayClose() {
       this.showShareOverlay = false;
