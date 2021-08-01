@@ -149,17 +149,26 @@
       .pic-tag {
         display: inline-block;
         margin-right: 8px;
-        span {
+        a {
           font-size: 14px;
           color: lighten(@color-text-primary, 5%);
           transition: 100ms ease-in-out;
+          text-decoration: none;
           .no-select();
+        }
+        a:visited {
+          color: lighten(@color-text-primary, 5%);
         }
       }
       .pic-tag:hover {
         cursor: pointer;
-        span {
+        a {
           color: lighten(@color-text-primary, 15%);
+        }
+      }
+      .pic-tag:active {
+        a {
+          color: lighten(@color-text-primary, 7.5%);
         }
       }
       .pic-tag:last-child {
@@ -232,13 +241,21 @@
       }
       &-tags {
         .pic-tag {
-          span {
+          a {
+            color: @color-text-primary;
+          }
+          a:visited {
             color: @color-text-primary;
           }
         }
         .pic-tag:hover {
-          span {
+          a {
             color: lighten(@color-text-primary, 5%);
+          }
+        }
+        .pic-tag:active {
+          a {
+            color: lighten(@color-text-primary, 2.5%);
           }
         }
       }
@@ -374,6 +391,9 @@
       float: left;
       &-title {
         font-size: 22px;
+        span {
+          margin-right: 12px;
+        }
       }
     }
   }
