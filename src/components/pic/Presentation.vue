@@ -21,8 +21,7 @@
       <div style="clear: both"></div>
       <div class="pic-presentation-image-error" v-if="imageLoadError">
         <div class="pic-presentation-image-error-icon">
-          <i class="el-icon-warning-outline" v-if="!hasMQQ" />
-          <i class="el-icon-warning-outline" v-else @click="openQQShare" />
+          <i class="el-icon-warning-outline" />
         </div>
         <div class="pic-presentation-image-error-tip">
           <span>图片加载失败</span>
@@ -173,24 +172,22 @@ export default {
     // 设定初始大小限制
     this.setLimitWidth(this.screenWidth);
     // use share
-    if (!this.hasMQQ) {
-      useSharePopup({
-        key: 'share',
-        platforms: ['qzone', 'weibo', 'twitter'],
-        meta: {
-          title: this.shareTitle,
-          url: window.location.href,
-          desc: this.shareDesc,
-          image: this.shareImage,
-        },
-        ref: this.$refs.shareIcon,
-        trigger: 'hover',
-        placement: 'bottom-end',
-        options: {
-          wechatSharePage: 'https://wechat-share.pwp.space/?url={url}&title={title}',
-        },
-      });
-    }
+    useSharePopup({
+      key: 'share',
+      platforms: ['qzone', 'weibo', 'twitter'],
+      meta: {
+        title: this.shareTitle,
+        url: window.location.href,
+        desc: this.shareDesc,
+        image: this.shareImage,
+      },
+      ref: this.$refs.shareIcon,
+      trigger: 'hover',
+      placement: 'bottom-end',
+      options: {
+        wechatSharePage: 'https://wechat-share.pwp.space/?url={url}&title={title}',
+      },
+    });
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.windowResized, false);
@@ -336,9 +333,6 @@ export default {
       }
     },
     // share
-    hasMQQ() {
-      return !!window.mqq;
-    },
     shareDesc() {
       return this.image.caption ? `${this.image.caption}\n\n分享自Pixiviz` : '分享自 Pixiviz';
     },
@@ -884,16 +878,6 @@ export default {
         return;
       }
       await addUserHistory(image);
-    },
-    // share
-    openQQShare() {
-      window.mqq.invoke('data', 'setShareInfo', {
-        share_url: window.location.href,
-        title: this.shareTitle,
-        desc: this.shareDesc,
-        image_url: this.shareImage,
-      });
-      window.mqq.ui.showShareMenu();
     },
   },
 };

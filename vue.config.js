@@ -183,7 +183,7 @@ module.exports = {
       cacheGroups: {
         basic: {
           name: 'chunk-basic',
-          test: /[\\/]node_modules[\\/](@?vue)|(babel)|(level)|(axios)/,
+          test: /[\\/]node_modules[\\/](@?vue)|(babel)|(level)|(axios)[\\/]/,
           chunks: 'all',
           priority: 5,
           reuseExistingChunk: true,

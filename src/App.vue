@@ -74,6 +74,16 @@ export default {
     // add save loadmap listener
     window.addEventListener('resize', this.fitHiRes);
     window.addEventListener('beforeunload', this.cleanLoadMap);
+    // vconsole
+    if (this.$route.query.debug === '1') {
+      const vconsole = document.createElement('script');
+      vconsole.src = 'https://unpkg.com/vconsole/dist/vconsole.min.js';
+      vconsole.onload = () => {
+        // eslint-disable-next-line no-new
+        new window.VConsole();
+      };
+      document.body.appendChild(vconsole);
+    }
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.fitHiRes);
