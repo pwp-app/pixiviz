@@ -110,10 +110,24 @@
   .pic-presentation-info {
     margin: 24px 0 32px 0;
     width: 100%;
+    position: relative;
     &-title {
+      width: 100%;
+      display: flex;
+      align-items: center;
       font-size: 26px;
       font-weight: 600;
       color: @color-text-primary;
+      span {
+        flex: 1;
+      }
+      i {
+        justify-self: flex-end;
+        cursor: pointer;
+      }
+      i:hover {
+        color: lighten(@color-text-primary, 5%);
+      }
     }
     &-caption {
       margin-top: 18px;
@@ -135,17 +149,26 @@
       .pic-tag {
         display: inline-block;
         margin-right: 8px;
-        span {
+        a {
           font-size: 14px;
           color: lighten(@color-text-primary, 5%);
           transition: 100ms ease-in-out;
+          text-decoration: none;
           .no-select();
+        }
+        a:visited {
+          color: lighten(@color-text-primary, 5%);
         }
       }
       .pic-tag:hover {
         cursor: pointer;
-        span {
+        a {
           color: lighten(@color-text-primary, 15%);
+        }
+      }
+      .pic-tag:active {
+        a {
+          color: lighten(@color-text-primary, 7.5%);
         }
       }
       .pic-tag:last-child {
@@ -209,19 +232,30 @@
     .pic-presentation-info {
       &-title {
         color: darken(@color-text-primary, 2.5%);
+        i:hover {
+          color: lighten(@color-text-primary, 2.5%);
+        }
       }
       &-caption {
         color: darken(@color-text-primary, 2.5%);
       }
       &-tags {
         .pic-tag {
-          span {
+          a {
+            color: @color-text-primary;
+          }
+          a:visited {
             color: @color-text-primary;
           }
         }
         .pic-tag:hover {
-          span {
+          a {
             color: lighten(@color-text-primary, 5%);
+          }
+        }
+        .pic-tag:active {
+          a {
+            color: lighten(@color-text-primary, 2.5%);
           }
         }
       }
@@ -357,7 +391,17 @@
       float: left;
       &-title {
         font-size: 22px;
+        span {
+          margin-right: 12px;
+        }
       }
     }
+  }
+}
+
+// share
+.dark {
+  .vue-share-popup {
+    filter: brightness(0.8);
   }
 }

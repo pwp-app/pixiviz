@@ -21,7 +21,8 @@
       <div style="clear: both"></div>
       <div class="pic-presentation-image-error" v-if="imageLoadError">
         <div class="pic-presentation-image-error-icon">
-          <i class="el-icon-warning-outline" />
+          <i class="el-icon-warning-outline" v-if="!hasMQQ" />
+          <i class="el-icon-warning-outline" v-else @click="openQQShare" />
         </div>
         <div class="pic-presentation-image-error-tip">
           <span>图片加载失败</span>
@@ -36,13 +37,19 @@
     <div class="pic-presentation-info" v-if="image">
       <div class="pic-presentation-info-title">
         <span>{{ image ? image.title : '' }}</span>
+        <i class="el-icon-share" ref="shareIcon"></i>
       </div>
       <div class="pic-presentation-info-caption">
         <span v-html="image ? image.caption : ''"></span>
       </div>
       <div class="pic-presentation-info-tags">
         <div class="pic-tag" v-for="tag in tags" :key="tag.id">
-          <span :data-tag="tag.name" @click="handleTagClicked">#{{ tag.name }}</span>
+          <a
+            :href="`${$config.website_url}/search/${tag.name}`"
+            :data-tag="tag.name"
+            @click="handleTagClicked"
+            >#{{ tag.name }}</a
+          >
         </div>
       </div>
       <div class="pic-presentation-info-stat">
@@ -82,6 +89,7 @@ import LightBox from './LightBox';
 import Ugoira from '../../util/ugoira';
 import { weightedRandom } from '../../util/random';
 import { getHistoryTop, addUserHistory } from '../../util/history';
+import { useSharePopup } from 'vue-share-popup';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -164,6 +172,25 @@ export default {
     window.addEventListener('resize', this.windowResized, false);
     // 设定初始大小限制
     this.setLimitWidth(this.screenWidth);
+    // use share
+    if (!this.hasMQQ) {
+      useSharePopup({
+        key: 'share',
+        platforms: ['qzone', 'weibo', 'twitter'],
+        meta: {
+          title: this.shareTitle,
+          url: window.location.href,
+          desc: this.shareDesc,
+          image: this.shareImage,
+        },
+        ref: this.$refs.shareIcon,
+        trigger: 'hover',
+        placement: 'bottom-end',
+        options: {
+          wechatSharePage: 'https://wechat-share.pwp.space/?url={url}&title={title}',
+        },
+      });
+    }
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.windowResized, false);
@@ -307,6 +334,24 @@ export default {
       } else {
         return null;
       }
+    },
+    // share
+    hasMQQ() {
+      return !!window.mqq;
+    },
+    shareDesc() {
+      return this.image.caption ? `${this.image.caption}\n\n分享自Pixiviz` : '分享自 Pixiviz';
+    },
+    shareImage() {
+      return (
+        this.getImageSource(this.image, 'large', this.getPage(), false, true) ||
+        `${this.$config.website_url}/favicon.png`
+      );
+    },
+    shareTitle() {
+      return this.image.title
+        ? `${this.image.title} - ${this.image.user.name || 'Pixiviz'}`
+        : 'Pixiviz';
     },
   },
   methods: {
@@ -651,7 +696,9 @@ export default {
           }
         }
       }
-      proxyHost = usePublicProxy ? this.$config.public_proxy : proxyHost || this.getProxyHost(image.id);
+      proxyHost = usePublicProxy
+        ? this.$config.public_proxy
+        : proxyHost || this.getProxyHost(image.id);
       if (image && image.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
@@ -837,6 +884,16 @@ export default {
         return;
       }
       await addUserHistory(image);
+    },
+    // share
+    openQQShare() {
+      window.mqq.invoke('data', 'setShareInfo', {
+        share_url: window.location.href,
+        title: this.shareTitle,
+        desc: this.shareDesc,
+        image_url: this.shareImage,
+      });
+      window.mqq.ui.showShareMenu();
     },
   },
 };
