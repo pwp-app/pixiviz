@@ -9,6 +9,7 @@ export function initBaiduStat() {
     (function() {
       const hm = document.createElement('script');
       hm.src = 'https://hm.baidu.com/hm.js?86b00bd26cf7bf64316c0e31c783614b';
+      hm.setAttribute('crossorigin', 'anonymous');
       const s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(hm, s);
     })();
@@ -77,6 +78,7 @@ export function initFrontJs() {
       () => {
         const n = w.document.createElement('script');
         n.src = 'https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js';
+        n.setAttribute('crossorigin', 'anonymous');
         w.document.body.appendChild(n);
       },
       true,
