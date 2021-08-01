@@ -29,7 +29,9 @@
 .dark {
   .lightbox {
     filter: brightness(0.875);
-    background: lighten(@color-background-dark, 2.5%);
+    img {
+      background: lighten(@color-background-dark, 2.5%);
+    }
   }
 }
 
