@@ -39,6 +39,8 @@
 
 [vue-virtual-masonry](https://github.com/backrunner/vue-virtual-masonry)
 
+[vue-share-popup](https://github.com/backrunner/vue-share-popup)
+
 [better-element-ui](https://github.com/backrunner/better-element-ui)
 
 ## 许可
