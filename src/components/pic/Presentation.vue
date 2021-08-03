@@ -203,7 +203,9 @@ export default {
         trigger: 'hover',
         placement: 'bottom-end',
         options: {
-          wechatSharePage: 'https://wechat-share.pwp.space/?url={url}&title={title}',
+          wechatSharePage: `https://wechat-share.pwp.space/?url={url}&title={title}${
+            window.pixiviz.darkMode ? '&dark=1' : ''
+          }`,
         },
       });
     }
