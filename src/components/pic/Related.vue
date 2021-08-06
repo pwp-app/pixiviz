@@ -68,7 +68,7 @@ export default {
         this.$emit('change-page-size', 6);
         return 208;
       } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
-        if (this.orientation === 0) {
+        if (this.orientation.includes('landscape')) {
           this.$emit('change-page-size', 20);
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
@@ -76,7 +76,7 @@ export default {
           return 184;
         }
       } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
-        if (this.orientation === 0 || this.screenWidth < this.screenHeight) {
+        if (this.orientation.includes('landscape') || this.screenWidth < this.screenHeight) {
           this.$emit('change-page-size', 20);
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
@@ -95,7 +95,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.orientation);
     this.$nextTick(() => {
       window.addEventListener('resize', this.windowResized, false);
     });
