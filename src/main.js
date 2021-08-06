@@ -35,6 +35,7 @@ import axios from './util/axios';
 
 // Import utils
 import { getOgTags } from './util/og';
+import { weightedRandom } from './util/random';
 
 // Import sw
 import './registerServiceWorker';
@@ -42,6 +43,9 @@ import './registerServiceWorker';
 // Import frontjs stat
 import { initBaiduStat, initFrontJs } from './util/statistics';
 import { checkTrustHost } from './util/host';
+
+// constants
+const API_PREFIX_STORE_KEY = 'pixiviz-api-prefix';
 
 Vue.use(VueCompositionAPI);
 
@@ -116,6 +120,40 @@ Vue.prototype.$idb = idb;
 // Set up og tags
 Vue.prototype.$ogTags = getOgTags();
 
+const storedApiPrefix = window.localStorage.getItem(API_PREFIX_STORE_KEY);
+
+const defineProxyHosts = (hosts) => {
+  if (typeof hosts === 'object') {
+    const hostArr = Object.keys(hosts);
+    hostArr.forEach((host, index) => {
+      Object.defineProperty(hosts, index, {
+        value: host,
+        enumerable: false,
+        writable: true,
+        configurable: true,
+      });
+    });
+  }
+};
+
+const defineApiPrefix = (conf) => {
+  if (Array.isArray(conf.api_prefix)) {
+    if (storedApiPrefix && conf.api_prefix.includes(storedApiPrefix)) {
+      conf.api_prefix = storedApiPrefix;
+      return;
+    }
+    // choose one randomly
+    const weight = 1.0 / conf.length;
+    const spec = {};
+    conf.api_prefix.forEach((prefix) => {
+      spec[prefix] = weight;
+    });
+    const [prefix] = weightedRandom(spec);
+    conf.api_prefix = prefix;
+    window.localStorage.setItem(API_PREFIX_STORE_KEY, prefix);
+  }
+};
+
 const requestRemoteConfig = async () => {
   let res;
   try {
@@ -125,25 +163,14 @@ const requestRemoteConfig = async () => {
     return;
   }
   Object.assign(config, res.data);
-  const defineProxyHosts = (hosts) => {
-    if (typeof hosts === 'object') {
-      const hostArr = Object.keys(hosts);
-      hostArr.forEach((host, index) => {
-        Object.defineProperty(hosts, index, {
-          value: host,
-          enumerable: false,
-          writable: true,
-          configurable: true,
-        });
-      });
-    }
-  };
   if (typeof config.image_proxy_host === 'object') {
     defineProxyHosts(config.image_proxy_host);
   }
   if (typeof config.download_proxy_host === 'object') {
     defineProxyHosts(config.download_proxy_host);
   }
+  // choose an API prefix
+  defineApiPrefix(config);
 };
 
 const getLoadMap = async () => {

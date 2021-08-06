@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.24.1",
+  "version": "1.24.2",
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
     "build": "node ./tools/processVersion.js && vue-cli-service build",
@@ -28,7 +28,7 @@
     "@pwp-app/better-element-ui": "^2.15.3",
     "@pwp-app/vue-context-menu": "^1.3.1",
     "@pwp-app/vue-lazyload": "^1.3.4",
-    "@vue/composition-api": "^1.0.4",
+    "@vue/composition-api": "^1.0.5",
     "axios": "^0.21.1",
     "clipboard-polyfill": "^3.0.3",
     "core-js": "^3.16.0",

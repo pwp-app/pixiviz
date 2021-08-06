@@ -2,7 +2,10 @@
   <div class="pic-related">
     <div class="pic-related-title">
       <span>相关作品</span>
-      <div class="pic-related-paginator" v-if="orientation !== 0 && oimages.length >= 6">
+      <div
+        class="pic-related-paginator"
+        v-if="orientation.includes('landscape') && oimages.length >= 6"
+      >
         <div
           class="pic-related-paginator-item pic-related-paginator__left"
           v-if="hasPrev"
@@ -31,7 +34,7 @@
       <span>没有相关图片...</span>
     </div>
     <infinite-loading
-      v-if="orientation === 0 && images.length > 0"
+      v-if="orientation.includes('portrait') && images.length > 0"
       :identifier="waterfallIdentifier"
       @infinite="infiniteHandler"
       spinner="spiral"
@@ -65,7 +68,7 @@ export default {
         this.$emit('change-page-size', 6);
         return 208;
       } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
-        if (this.orientation === 0) {
+        if (this.orientation.includes('landscape')) {
           this.$emit('change-page-size', 20);
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
@@ -73,7 +76,7 @@ export default {
           return 184;
         }
       } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
-        if (this.orientation === 0 || this.screenWidth < this.screenHeight) {
+        if (this.orientation.includes('landscape') || this.screenWidth < this.screenHeight) {
           this.$emit('change-page-size', 20);
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
