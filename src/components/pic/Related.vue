@@ -2,7 +2,10 @@
   <div class="pic-related">
     <div class="pic-related-title">
       <span>相关作品</span>
-      <div class="pic-related-paginator" v-if="orientation !== 0 && oimages.length >= 6">
+      <div
+        class="pic-related-paginator"
+        v-if="orientation.includes('landscape') && oimages.length >= 6"
+      >
         <div
           class="pic-related-paginator-item pic-related-paginator__left"
           v-if="hasPrev"
@@ -31,7 +34,7 @@
       <span>没有相关图片...</span>
     </div>
     <infinite-loading
-      v-if="orientation === 0 && images.length > 0"
+      v-if="orientation.includes('portrait') && images.length > 0"
       :identifier="waterfallIdentifier"
       @infinite="infiniteHandler"
       spinner="spiral"
@@ -92,6 +95,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.orientation);
     this.$nextTick(() => {
       window.addEventListener('resize', this.windowResized, false);
     });

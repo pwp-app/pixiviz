@@ -108,8 +108,8 @@ export default {
       pageOffset: 0,
       from: this.$cookies.get('pic-from'),
       // screen
-      screenOrientation: window.orientation,
-      showPart: window.orientation !== 0,
+      screenOrientation: screen.orientation.type,
+      showPart: screen.orientation.type.includes('landscape'),
       // action
       lastOffset: 0,
       actionShow: false,
@@ -204,6 +204,18 @@ export default {
   },
   watch: {
     '$route.params.id': 'handleIdChanged',
+    infoLoading: {
+      handler(newValue) {
+        if (newValue) {
+          if (!document.body.classList.contains('no-scrollbar')) {
+            window.scrollTo(0, 0);
+            document.body.classList.add('no-scrollbar');
+          }
+        } else {
+          document.body.classList.remove('no-scrollbar');
+        }
+      },
+    },
   },
   methods: {
     fetchInfo() {
@@ -363,13 +375,19 @@ export default {
       }
     },
     handleScreenRotate() {
-      if (this.screenOrientation === 0 && window.orientation !== 0) {
+      if (
+        this.screenOrientation.includes('portrait') &&
+        screen.orientation.type.includes('landscape')
+      ) {
         // 切割显示的数组
         this.showPart = true;
-      } else if (this.screenOrientation !== 0 && window.orientation === 0) {
+      } else if (
+        this.screenOrientation.includes('landscape') &&
+        screen.orientation.type.includes('portrait')
+      ) {
         this.showPart = false;
       }
-      this.screenOrientation = window.orientation;
+      this.screenOrientation = screen.orientation.type;
     },
     handleRelatedInfiniteLoad(state) {
       this.realRelatedPage += 1;
