@@ -6,6 +6,9 @@
     <div class="pic-author-info">
       <div class="pic-author-info-avatar" v-lazy:background-image="avatar"></div>
       <a
+        :class="{
+          'pic-author-name--long': isLongName,
+        }"
         :href="this.author ? `/artist/${this.author.id}` : 'javascript:;'"
         @click.prevent="toArtistPage"
       >
@@ -35,6 +38,9 @@ export default {
       } else {
         return '';
       }
+    },
+    isLongName() {
+      return this.authorName && this.authorName.length > 12;
     },
   },
   methods: {

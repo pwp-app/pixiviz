@@ -60,9 +60,9 @@
   &-items {
     display: flex;
     margin-top: 18px;
+    width: 100%;
     .el-button {
       flex: 1;
-      flex-grow: 1;
       border: none;
     }
     .el-button:hover {
@@ -75,6 +75,11 @@
     .el-button.is-disabled {
       background-color: #999 !important;
       border-color: #999 !important;
+    }
+  }
+  &-items--multiple {
+    .el-button {
+      width: calc(50% - 8px);
     }
   }
 }

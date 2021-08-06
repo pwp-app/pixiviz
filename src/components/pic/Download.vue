@@ -7,7 +7,12 @@
       </i>
       <i class="pic-download-title-icon el-icon-setting" @click="openDownloadSettings"></i>
     </div>
-    <div class="pic-download-items">
+    <div
+      :class="{
+        'pic-download-items': true,
+        'pic-download-items--multiple': showDownloadAll,
+      }"
+    >
       <el-button
         type="primary"
         @click="downloadCurrent"
@@ -102,6 +107,8 @@ export default {
         singleFileName: this.$downloadSettings.singleFileName,
         multiFileName: this.$downloadSettings.multiFileName,
       },
+      // mobile
+      isMobile: document.documentElement.clientWidth <= 767,
     };
   },
   created() {
@@ -123,7 +130,11 @@ export default {
     downloadCurrentText() {
       if (!this.image) return '';
       if (!this.loaded && this.$store.state.pic.progress && this.$store.state.pic.progress < 100) {
-        return `大图加载中（${this.$store.state.pic.progress}%）...`;
+        if (this.isMobile) {
+          return '大图加载中';
+        } else {
+          return `大图加载中（${this.$store.state.pic.progress}%）...`;
+        }
       }
       if (this.image.type !== 'ugoira') {
         return this.image.page_count > 1 ? '保存当前' : '点我保存';
