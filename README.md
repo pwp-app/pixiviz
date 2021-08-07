@@ -25,13 +25,33 @@
 
 4. 代理 `pixiviz.pwp.app` 域名到本地服务器上，我们推荐使用 `whistle`。
 
-## 说明
+5. 本地开发环境搭建过程中如遇问题，可先查阅历史 Issue，如无法解决，欢迎开 Issue 咨询
+
+## 项目说明
 
 该项目为技术探索项目，不商业运作，不盈利。
 
 如果你觉得这个项目不错，可以点个 star~
 
-如果你觉得站点有什么可以改进的地方，或者有技术问题想要深入探讨，欢迎开 issue，或者在 discussion 里发帖。
+如果你觉得站点有什么可以改进的地方，或者有技术问题想要深入探讨，欢迎开 Issue，或者在 Discussions 内发帖咨询。
+
+## 分支说明
+
+`master` - 线上版本，主分支
+
+`dev` - 开发分支
+
+`feature/test` - 新增 E2E 测试代码专用
+
+## 参与开发
+
+我们欢迎所有对这个项目有兴趣的**前端开发者**参与项目开发，你可以通过 Pull Request 对这个项目提交任何你想做出的改动，可以是 Feature，也可以是 Bug Fix。
+
+如果你希望长期活跃地参与这个项目的开发，基础门槛是提交至少 5 个 Feature 类型的 PR （或 10 个 pwp.app 范畴内前端项目 PR）。
+
+如果你不知道可以为站点添加什么功能，你或许可以看一眼 Disscusions 内的需求墙，或者可以基于 Cypress 为我们增加一些 E2E 测试代码。
+
+**注意：Pull Request 的目标分支应为 `dev`，目标分支为 `master` 的 PR 将直接 Close。**
 
 ## 相关项目
 
@@ -42,6 +62,8 @@
 [vue-share-popup](https://github.com/backrunner/vue-share-popup)
 
 [better-element-ui](https://github.com/backrunner/better-element-ui)
+
+[tigo](https://github.com/tigojs/tigo)
 
 ## 许可
 
