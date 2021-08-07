@@ -143,7 +143,7 @@ const defineApiPrefix = (conf) => {
       return;
     }
     // choose one randomly
-    const weight = 1.0 / conf.length;
+    const weight = 1.0 / conf.api_prefix.length;
     const spec = {};
     conf.api_prefix.forEach((prefix) => {
       spec[prefix] = weight;
@@ -151,6 +151,8 @@ const defineApiPrefix = (conf) => {
     const [prefix] = weightedRandom(spec);
     conf.api_prefix = prefix;
     window.localStorage.setItem(API_PREFIX_STORE_KEY, prefix);
+  } else {
+    window.localStorage.setItem(API_PREFIX_STORE_KEY, conf.api_prefix);
   }
 };
 
