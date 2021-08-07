@@ -40,12 +40,12 @@ export function initFrontJs() {
       ],
       origin: [
         'pixiviz.pwp.app',
+        'pixiviz-api-us.pwp.link',
         'pixiv-image.pwp.link',
         'pixiv-image-jp.pwp.link',
         'pixiv-image-ru.pwp.link',
         'pixiv-image-lv.pwp.link',
         'cfs.tigo.pwp.app',
-        'config.backrunner.top',
       ],
       FPSThreshold: 6,
     };
