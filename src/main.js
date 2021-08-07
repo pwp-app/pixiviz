@@ -203,6 +203,7 @@ const createInstance = () => {
 // execute
 
 getLoadMap().then(async (loadMap) => {
+  defineApiPrefix(config);
   createInstance();
   if (!checkTrustHost(config)) {
     return;
