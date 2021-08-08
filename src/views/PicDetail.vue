@@ -111,7 +111,7 @@ export default {
       // screen
       screenOrientation:
         screen && screen.orientation ? screen.orientation.type : getScreenOrientationType(),
-      showPart: screen.orientation.type.includes('landscape'),
+      showPart: screen && screen.orientation ? screen.orientation.type.includes('landscape') : getScreenOrientationType().includes('landscape'),
       // action
       lastOffset: 0,
       actionShow: false,
