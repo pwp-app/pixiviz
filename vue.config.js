@@ -183,7 +183,7 @@ module.exports = {
       cacheGroups: {
         basic: {
           name: 'chunk-basic',
-          test: /[\\/]node_modules[\\/](@?vue)|(babel)|(level)|(axios)[\\/]/,
+          test: /[\\/]node_modules[\\/](@?vue)|(babel)|(level)|(axios)|(qs)|(dayjs)[\\/]/,
           chunks: 'all',
           priority: 5,
           reuseExistingChunk: true,
@@ -192,6 +192,14 @@ module.exports = {
         element: {
           name: 'chunk-element',
           test: /[\\/]node_modules[\\/]@pwp-app[\\/]better-element-ui[\\/]/,
+          chunks: 'all',
+          priority: 5,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        core: {
+          name: 'chunk-core',
+          test: /[\\/]node_modules[\\/]core-js[\\/]/,
           chunks: 'all',
           priority: 5,
           reuseExistingChunk: true,
