@@ -35,7 +35,7 @@
     "core-js": "^3.16.0",
     "dayjs": "^1.10.6",
     "hash-wasm": "^4.9.0",
-    "jszip": "^3.7.0",
+    "jszip": "^3.7.1",
     "level-js": "^6.0.0",
     "levelup": "^5.0.1",
     "qrcode-svg": "^1.1.0",
@@ -45,13 +45,13 @@
     "vue-cookies": "^1.7.4",
     "vue-infinite-loading": "^2.4.5",
     "vue-router": "^3.5.2",
-    "vue-share-popup": "^0.3.3",
+    "vue-share-popup": "^0.4.1",
     "vue-touch": "^2.0.0-beta.4",
     "vue2-touch-events": "^3.2.2",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.14.7",
+    "@babel/eslint-parser": "^7.15.0",
     "@gfx/zopfli": "^1.0.15",
     "@vue/cli-plugin-babel": "^4.5.13",
     "@vue/cli-plugin-e2e-cypress": "^4.5.13",
@@ -74,8 +74,9 @@
   },
   "browserslist": [
     "> 1%",
-    "last 1 versions",
-    "last 4 Android versions",
-    "last 3 iOS versions"
+    "last 2 versions",
+    "last 3 Android versions",
+    "last 3 iOS versions",
+    "not IE 11"
   ]
 }
