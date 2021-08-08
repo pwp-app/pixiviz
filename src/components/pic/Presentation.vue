@@ -376,6 +376,9 @@ export default {
       );
     },
     shareTitle() {
+      if (!this.image) {
+        return 'Pixiviz';
+      }
       return this.image.title
         ? `${this.image.title} - ${this.image.user.name || 'Pixiviz'}`
         : 'Pixiviz';
