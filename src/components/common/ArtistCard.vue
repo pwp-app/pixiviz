@@ -41,6 +41,9 @@ import proxy from '../../mixin/proxy';
 import ImageCard from '../../components/common/ImageCard.vue';
 import { filterImages } from '../../util/filter';
 
+const BLANK_IMAGE =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
 export default {
   props: {
     artist: Object,
@@ -55,6 +58,9 @@ export default {
   mixins: [proxy],
   computed: {
     avatar() {
+      if (!this.artist || !this.artist.user) {
+        return BLANK_IMAGE;
+      }
       return this.artist.user.profile_image_urls.medium.replace(
         'i.pximg.net',
         this.getImageProxyHost(),
