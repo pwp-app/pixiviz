@@ -9,6 +9,7 @@ import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
 import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
+import seedrandom from 'seedrandom';
 import { sha256 } from 'hash-wasm';
 
 // Import config
@@ -123,17 +124,30 @@ Vue.prototype.$ogTags = getOgTags();
 const storedApiPrefix = window.localStorage.getItem(API_PREFIX_STORE_KEY);
 
 const defineProxyHosts = (hosts) => {
-  if (typeof hosts === 'object') {
-    const hostArr = Object.keys(hosts);
-    hostArr.forEach((host, index) => {
-      Object.defineProperty(hosts, index, {
-        value: host,
-        enumerable: false,
-        writable: true,
-        configurable: true,
-      });
-    });
+  if (typeof hosts !== 'object') {
+    return;
   }
+  const hostArr = Object.keys(hosts);
+  let hostIdxList = [];
+  hostArr.forEach((host, index) => {
+    Object.defineProperty(hosts, index, {
+      value: host,
+      enumerable: false,
+      writable: true,
+      configurable: true,
+    });
+    const weight = hosts[host] * 100;
+    hostIdxList = hostIdxList.concat(new Array(Math.floor(weight)).fill(index));
+  });
+  // use seedrandom to ensure the sequence
+  const rng = seedrandom('pixiviz');
+  hostIdxList.sort(() => 0.5 - rng.quick());
+  Object.defineProperty(hosts, 'idxList', {
+    value: hostIdxList,
+    enumerable: false,
+    writable: true,
+    configurable: true,
+  });
 };
 
 const defineApiPrefix = (conf) => {
@@ -175,22 +189,6 @@ const requestRemoteConfig = async () => {
   defineApiPrefix(config);
 };
 
-const getLoadMap = async () => {
-  // Set up loadmap
-  let loadMap;
-  try {
-    loadMap = await idb.get('load-map');
-  } catch (err) {
-    console.error('Fetch loadmap error.', err);
-  }
-  const res = loadMap || {};
-  Vue.prototype.$loadMap = res;
-  if (process.env.NODE_ENV === 'development') {
-    console.log('%cImages load map:', 'color:#da7185', res, Object.keys(res).length);
-  }
-  return res;
-};
-
 const createInstance = () => {
   new Vue({
     router,
@@ -204,32 +202,26 @@ const createInstance = () => {
 
 // execute
 
-getLoadMap().then(async (loadMap) => {
+const execute = async () => {
+  // for default
+  defineProxyHosts(config.image_proxy_host);
+  defineProxyHosts(config.download_proxy_host);
   defineApiPrefix(config);
+  // render
   createInstance();
+  // request remote
   if (!checkTrustHost(config)) {
     return;
   }
   await requestRemoteConfig();
-  // compare hash
-  const storedHash = window.localStorage.getItem('remote_conf_hash');
+  // compute hash
   const hash = await sha256(JSON.stringify(config));
   // log
   console.log(`%cConfig hash: ${hash}`, 'color:#da7a85');
   if (process.env.NODE_ENV === 'development') {
     console.log(`%cConfig content: `, 'color:#da7a85', config);
   }
-  if (!storedHash) {
-    // init hash store
-    window.localStorage.setItem('remote_conf_hash', hash);
-    return;
-  }
-  if (hash !== storedHash) {
-    // clear loadmap
-    Object.keys(loadMap).forEach((key) => {
-      loadMap[key] = null;
-      delete loadMap[key];
-    });
-    window.localStorage.setItem('remote_conf_hash', hash);
-  }
-});
+  window.localStorage.setItem('remote_conf_hash', hash);
+};
+
+execute();

@@ -97,7 +97,6 @@ import Paginator from './Pagniator';
 import LightBox from './LightBox';
 import ShareOverlay from '../common/ShareOverlay.vue';
 import Ugoira from '../../util/ugoira';
-import { weightedRandom } from '../../util/random';
 import { getHistoryTop, addUserHistory } from '../../util/history';
 import { useSharePopup } from 'vue-share-popup';
 import { qzone, wechat, weibo } from 'vue-share-popup/platforms';
@@ -299,7 +298,10 @@ export default {
       }
     },
     largeSource() {
-      return this.getImageSource(this.image, 'large');
+      return this.getImageSource({
+        image: this.image,
+        type: 'large',
+      });
     },
     imageSizeStyles() {
       const styles = {
@@ -365,8 +367,12 @@ export default {
     },
     shareImage() {
       return (
-        this.getImageSource(this.image, 'large', this.getPage(), false, true) ||
-        `${this.$config.website_url}/favicon.png`
+        this.getImageSource({
+          image: this.image,
+          type: 'large',
+          page: this.getPage(),
+          usePublicProxy: true,
+        }) || `${this.$config.website_url}/favicon.png`
       );
     },
     shareTitle() {
@@ -686,43 +692,13 @@ export default {
         return hosts;
       }
       // random pick a host
-      const [host, hostIdx] = weightedRandom(hosts);
-      if (!this.$loadMap[imageId]) {
-        this.$loadMap[imageId] = {};
-      }
-      Object.assign(this.$loadMap[imageId], {
-        downloadHostIdx: hostIdx,
-        time: Date.now(),
-      });
-      this.$bus.$emit('save-loadmap');
+      const hash = Number(imageId) % this.$config.download_proxy_host.idxList.length;
+      const hostIdx = this.$config.download_proxy_host.idxList[hash];
+      const host = this.$config.download_proxy_host[hostIdx];
       return host;
     },
-    getImageSource(image, type, page = this.page, useLoadMap = true, usePublicProxy = false) {
-      const imageHosts = this.$config.image_proxy_host;
-      const downloadHosts = this.$config.download_proxy_host;
-      let proxyHost;
-      if (useLoadMap) {
-        const record = this.$loadMap[image.id];
-        if (record) {
-          // check if exists
-          let recordHost;
-          if (type === 'medium' && record.hostIdx) {
-            recordHost = typeof imageHosts === 'object' ? imageHosts[record.hostIdx] : imageHosts;
-          } else if (record.downloadHostIdx) {
-            recordHost =
-              typeof downloadHosts === 'object'
-                ? downloadHosts[record.downloadHostIdx]
-                : downloadHosts;
-          }
-          if (recordHost) {
-            record.time = Date.now();
-            proxyHost = recordHost;
-          }
-        }
-      }
-      proxyHost = usePublicProxy
-        ? this.$config.public_proxy
-        : proxyHost || this.getProxyHost(image.id);
+    getImageSource({ image, type, page = this.page, usePublicProxy = false }) {
+      const proxyHost = usePublicProxy ? this.$config.public_proxy : this.getProxyHost(image.id);
       if (image && image.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
@@ -743,23 +719,7 @@ export default {
       }
     },
     getUgoiraSource(zipUrl) {
-      const hosts = this.$config.image_proxy_host;
-      let proxyHost;
-      if (typeof hosts === 'object') {
-        const record = this.$loadMap[this.image.id];
-        if (record) {
-          // check if exists
-          let recordHost;
-          if (record.downloadHostIdx) {
-            recordHost = typeof hosts === 'object' ? hosts[record.downloadHostIdx] : hosts;
-          }
-          if (recordHost) {
-            record.time = Date.now();
-            proxyHost = recordHost;
-          }
-        }
-      }
-      proxyHost = proxyHost || this.getProxyHost(this.image.id);
+      const proxyHost = this.getProxyHost(this.image.id);
       return zipUrl.replace('i.pximg.net', proxyHost);
     },
     checkFirstLoad(image) {
@@ -771,7 +731,10 @@ export default {
         this.loadingSource = BLANK_IMAGE;
         return;
       }
-      this.loadingSource = this.getImageSource(image, 'medium');
+      this.loadingSource = this.getImageSource({
+        image,
+        type: 'medium',
+      });
     },
     handlePageChanged(toward) {
       const prevPageImgObj = this.imageObjs[this.page];

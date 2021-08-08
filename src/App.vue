@@ -61,7 +61,6 @@ export default {
     // 黑暗模式监听
     this.$bus.$on('dark-mode-enable', this.handleDarkModeEnable);
     this.$bus.$on('dark-mode-disable', this.handleDarkModeDisable);
-    this.$bus.$on('save-loadmap', this.saveLoadMap);
     // 图片懒加载统一handle
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
@@ -71,9 +70,8 @@ export default {
     window.localStorage.setItem('last-visit-time', Date.now());
   },
   mounted() {
-    // add save loadmap listener
+    // add window listener
     window.addEventListener('resize', this.fitHiRes);
-    window.addEventListener('beforeunload', this.cleanLoadMap);
     // vconsole
     if (this.$route.query.debug === '1') {
       const vconsole = document.createElement('script');
@@ -87,7 +85,6 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.fitHiRes);
-    window.removeEventListener('beforeunload', this.cleanLoadMap);
     window.localStorage.setItem('last-visit-time', Date.now());
   },
   computed: {
@@ -96,33 +93,6 @@ export default {
     },
   },
   methods: {
-    clearLoadMapSaveTimeout() {
-      if (this.loadMapSaveTimeout) {
-        clearTimeout(this.loadMapSaveTimeout);
-        this.loadMapSaveTimeout = null;
-      }
-    },
-    async saveLoadMap(immediate = false) {
-      this.clearLoadMapSaveTimeout();
-      if (immediate) {
-        await this.$idb.set('load-map', this.$loadMap);
-      } else {
-        this.loadMapSaveTimeout = setTimeout(async () => {
-          await this.$idb.set('load-map', this.$loadMap);
-        }, 300);
-      }
-    },
-    async cleanLoadMap() {
-      const keys = Object.keys(this.$loadMap);
-      const threeDays = 3 * 24 * 60 * 60 * 1000;
-      keys.forEach((key) => {
-        const item = this.$loadMap[key];
-        if (new Date().valueOf() - item.time > threeDays) {
-          delete this.$loadMap[key];
-        }
-      });
-      await this.saveLoadMap();
-    },
     // 图片加载处理
     imageLoadedHandler(e) {
       this.emitImageCardEvent({ ...e, eventType: 'loaded' });
