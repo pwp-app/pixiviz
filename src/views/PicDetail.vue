@@ -81,6 +81,7 @@ import Overlay from '../components/pic/Overlay';
 // utils
 import { filterImages } from '../util/filter';
 import { getOgTags, setOgTags } from '../util/og';
+import { getScreenOrientationType } from '../util/screen';
 
 // icons
 import HomeIcon from '../components/icons/home';
@@ -108,7 +109,8 @@ export default {
       pageOffset: 0,
       from: this.$cookies.get('pic-from'),
       // screen
-      screenOrientation: screen.orientation.type,
+      screenOrientation:
+        screen && screen.orientation ? screen.orientation.type : getScreenOrientationType(),
       showPart: screen.orientation.type.includes('landscape'),
       // action
       lastOffset: 0,
@@ -170,6 +172,7 @@ export default {
     }, 2000);
     // add event listener
     window.addEventListener('orientationchange', this.handleScreenRotate, false);
+    window.addEventListener('resize', this.handleResize, false);
     window.addEventListener('scroll', this.handleScroll);
     // scroll to top
     window.scrollTo({
@@ -200,6 +203,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('orientationchange', this.handleScreenRotate, false);
+    window.removeEventListener('resize', this.handleResize, false);
     window.removeEventListener('scroll', this.handleScroll);
   },
   watch: {
@@ -375,19 +379,22 @@ export default {
       }
     },
     handleScreenRotate() {
-      if (
-        this.screenOrientation.includes('portrait') &&
-        screen.orientation.type.includes('landscape')
-      ) {
+      const orientationType =
+        screen && screen.orientation ? screen.orientation.type : getScreenOrientationType();
+      if (this.screenOrientation.includes('portrait') && orientationType.includes('landscape')) {
         // 切割显示的数组
         this.showPart = true;
       } else if (
         this.screenOrientation.includes('landscape') &&
-        screen.orientation.type.includes('portrait')
+        orientationType.includes('portrait')
       ) {
         this.showPart = false;
       }
-      this.screenOrientation = screen.orientation.type;
+      this.screenOrientation = orientationType;
+    },
+    handleResize() {
+      // 在窗体宽高出现变化的时候重新获取orientation
+      this.handleScreenRotate();
     },
     handleRelatedInfiniteLoad(state) {
       this.realRelatedPage += 1;
