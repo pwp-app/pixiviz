@@ -46,8 +46,6 @@
 </template>
 
 <script>
-import { weightedRandom } from '@/util/random';
-
 export default {
   name: 'Common.ImageCard',
   props: {
@@ -149,26 +147,10 @@ export default {
       if (typeof hosts !== 'object') {
         return hosts;
       }
-      // check loadMap first
-      const record = this.$loadMap[this.image.id];
-      if (record) {
-        // check if exists
-        const recordHost = hosts[record.hostIdx];
-        if (recordHost) {
-          record.time = Date.now();
-          return recordHost;
-        }
-      }
-      // random pick a host
-      const [host, hostIdx] = weightedRandom(hosts);
-      if (!this.$loadMap[this.image.id]) {
-        this.$loadMap[this.image.id] = {};
-      }
-      Object.assign(this.$loadMap[this.image.id], {
-        hostIdx,
-        time: Date.now(),
-      });
-      this.$bus.$emit('save-loadmap');
+      // use hash to judge image server
+      const hash = Number(this.image.id) % this.$config.image_proxy_host.idxList.length;
+      const hostIdx = this.$config.image_proxy_host.idxList[hash];
+      const host = this.$config.image_proxy_host[hostIdx];
       return host;
     },
     handleClick() {

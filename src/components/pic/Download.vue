@@ -77,7 +77,6 @@
 <script>
 import QRCodeIcon from '../icons/qrcode';
 import DownloadQRCode from './DownloadQRCode';
-import { weightedRandom } from '@/util/random';
 import { downloadFromBlob } from '@/util/download';
 
 export default {
@@ -290,24 +289,9 @@ export default {
       if (typeof hosts !== 'object') {
         return hosts;
       }
-      const record = this.$loadMap[this.image.id];
-      if (record) {
-        // check if exists
-        const recordHost = hosts[record.downloadHostIdx];
-        if (recordHost) {
-          record.time = Date.now();
-          return recordHost;
-        }
-      }
-      // random pick a host
-      const [host, hostIdx] = weightedRandom(hosts);
-      if (!this.$loadMap[this.image.id]) {
-        this.$loadMap[this.image.id] = {};
-      }
-      Object.assign(this.$loadMap[this.image.id], {
-        downloadHostIdx: hostIdx,
-        time: Date.now(),
-      });
+      const hash = Number(this.image.id) % this.$config.download_proxy_host.idxList.length;
+      const hostIdx = this.$config.download_proxy_host.idxList[hash];
+      const host = this.$config.download_proxy_host[hostIdx];
       return host;
     },
     downloadCurrent() {

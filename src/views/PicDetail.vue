@@ -514,13 +514,12 @@ export default {
     setOgTagData() {
       let source;
       if (this.$refs.presentation && this.image) {
-        source = this.$refs.presentation.getImageSource(
-          this.image,
-          'square_medium',
-          this.$refs.presentation.getPage(),
-          false,
-          true,
-        );
+        source = this.$refs.presentation.getImageSource({
+          image: this.image,
+          type: 'square_medium',
+          page: this.$refs.presentation.getPage(),
+          usePublicProxy: true,
+        });
       }
       setOgTags(
         getOgTags(),
