@@ -100,6 +100,7 @@ import Ugoira from '../../util/ugoira';
 import { weightedRandom } from '../../util/random';
 import { getHistoryTop, addUserHistory } from '../../util/history';
 import { useSharePopup } from 'vue-share-popup';
+import { qzone, wechat, weibo } from 'vue-share-popup/platforms';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -192,7 +193,7 @@ export default {
     if (!this.renderShareOverlay) {
       useSharePopup({
         key: 'share',
-        platforms: ['qzone', 'wechat', 'weibo'],
+        platforms: [qzone, wechat, weibo],
         meta: {
           title: this.shareTitle,
           url: window.location.href,
