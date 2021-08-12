@@ -58,10 +58,15 @@
         </div>
       </div>
     </div>
+    <div class="infinite-failed" v-if="loadFailed">
+      <p>看上去数据加载失败了</p>
+      <el-button type="primary" round @click="fetchNew">点我重试</el-button>
+    </div>
     <infinite-loading
       :identifier="waterfallIdentifier"
       @infinite="infiniteHandler"
       spinner="spiral"
+      v-if="!loadFailed"
     ></infinite-loading>
     <BackToTop ref="backToTop" />
   </div>
@@ -117,6 +122,7 @@ export default {
       cardWidth: this.getCardWidth(document.documentElement.clientWidth),
       waterfallResponsive: document.documentElement.clientWidth > 767,
       scrollTop: 0,
+      loadFailed: false,
       // style
       iPadStyle: /iPad/i.test(navigator.userAgent),
     };
@@ -271,8 +277,11 @@ export default {
             this.$store.commit('rank/setPage', this.page);
             $state.loaded();
           },
-          () => {
+          (err) => {
             // 网络错误
+            // eslint-disable-next-line no-console
+            console.error('Failed to fetch rank data.', err);
+            this.loadFailed = true;
             $state.complete();
           },
         );
@@ -291,6 +300,13 @@ export default {
       this.images = [];
       this.waterfallIdentifier += 1;
       this.$forceUpdate();
+    },
+    fetchNew() {
+      this.loadFailed = false;
+      this.$nextTick(() => {
+        this.refreshWaterfall();
+        window.scrollTo(0, 0);
+      });
     },
     initMode() {
       const query = this.$route.query.mode;
