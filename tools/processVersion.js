@@ -3,16 +3,18 @@
 const path = require('path');
 const fs = require('fs');
 const dayjs = require('dayjs');
-const utc = require("dayjs/plugin/utc");
-const timezone = require("dayjs/plugin/timezone");
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
 const packageInfo = require('../package.json');
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const buildTime = dayjs().tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss');
+const buildTime = dayjs()
+  .tz('Asia/Shanghai')
+  .format('YYYY-MM-DD HH:mm:ss');
 const versionInfo =
-`
+  `
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 export const version = '${packageInfo.version}';
@@ -20,7 +22,7 @@ export const buildTime = '${buildTime}';
 console.log('%cPixiviz - v${packageInfo.version}\\nEnvironment - ${
     process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
   }\\nBuild time: ${buildTime}', 'color:#da7a85');
-window._hmt && window._hmt.push(['_setCustomVar', 1, 'siteVersion', '${packageInfo.version} (${buildTime})', 1]);
+window._hmt && window._hmt.push(['_setCustomVar', 1, 'siteVersion', '${packageInfo.version}', 1]);
 `.trim() + '\n';
 
 try {
