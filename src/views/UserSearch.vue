@@ -28,7 +28,7 @@
         @entry-clicked="handleEntryClicked"
       />
     </div>
-    <div class="search-failed" v-if="fetchFailed">
+    <div class="infinite-failed" v-if="fetchFailed">
       <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
