@@ -86,7 +86,7 @@ module.exports = {
         },
         {
           // API缓存，本地资源优先，7天过期，最多3w条
-          urlPattern: /^https:\/\/pixiviz\.pwp\.app\/api\/.*$/,
+          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-us\.pwp\.link\/)).+/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
