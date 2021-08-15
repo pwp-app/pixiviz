@@ -18,28 +18,48 @@
     }
   }
 
-  .artist-header {
-    padding-top: @header-padding-top;
-    margin: 0 auto;
-    .image-page-width-mixin(3);
-    .image-page-width-responsive-mixin(2, 2, 72px);
+  .artist-header-wrapper {
+    width: 100%;
     position: relative;
-    span,
-    i {
-      .no-select();
+    .artist-header {
+      padding: @header-padding-top 0 18px 0;
+      margin: 0 auto;
+      .image-page-width-mixin(3);
+      .image-page-width-responsive-mixin(2, 2, 72px);
+      position: relative;
+      span,
+      i {
+        .no-select();
+      }
+      &-close {
+        position: absolute;
+        right: 0;
+        top: @header-padding-top;
+        transition: 200ms ease-in-out;
+        color: @color-text-primary;
+        font-size: 32px;
+        height: 32px;
+        display: flex;
+        transform: translateX(8px); // 对齐下方内容
+      }
+      &-close:hover {
+        color: lighten(@color-text-primary, 10%);
+        cursor: pointer;
+      }
     }
-    &-close {
+    .artist-profile-bg {
+      width: 100%;
+      height: 100%;
       position: absolute;
-      right: 0;
-      top: @header-padding-top;
-      transition: 200ms ease-in-out;
-      color: @color-text-primary;
-      font-size: 32px;
-      transform: translateX(8px); // 对齐下方内容
-    }
-    &-close:hover {
-      color: lighten(@color-text-primary, 10%);
-      cursor: pointer;
+      top: 0;
+      left: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
+      opacity: 0.25;
+      filter: blur(3.75px);
+      pointer-events: none;
     }
   }
 
@@ -64,12 +84,17 @@
     & > .el-loading-mask {
       background-color: lighten(@color-background-dark, 2.5%) !important;
     }
-    .artist-header {
-      &-close {
-        color: darken(@color-text-primary, 2.5%);
+    .artist-header-wrapper {
+      .artist-header {
+        &-close {
+          color: darken(@color-text-primary, 2.5%);
+        }
+        &-close:hover {
+          color: lighten(@color-text-primary, 2.5%);
+        }
       }
-      &-close:hover {
-        color: lighten(@color-text-primary, 2.5%);
+      .artist-profile-bg {
+        filter: blur(3.75px) brightness(0.875);
       }
     }
   }
@@ -80,20 +105,29 @@
 .artist-ipad-only {
   @media screen and (orientation: landscape) {
     @media (max-width: 1366px) {
-      .artist-header {
-        width: 1176px !important;
-      }
-      .artist-content {
-        .waterfall-wrapper {
-          .waterfall-container {
-            width: 1184px !important;
+      .artist-container {
+        .artist-header-wrapper {
+          .artist-header {
+            width: 1176px !important;
+          }
+        }
+
+        .artist-content {
+          .waterfall-wrapper {
+            .waterfall-container {
+              width: 1184px !important;
+            }
           }
         }
       }
     }
-    @media (max-width: 1024px) {
-      .artist-header {
-        width: 880px !important;
+  }
+  @media (max-width: 1024px) {
+    .artist-container {
+      .artist-header-wrapper {
+        .artist-header {
+          width: 880px !important;
+        }
       }
       .artist-content {
         .waterfall-wrapper {
@@ -106,25 +140,33 @@
   }
   @media screen and (orientation: portrait) {
     @media (max-width: 1024px) {
-      .artist-header {
-        width: 880px !important;
-      }
-      .artist-content {
-        .waterfall-wrapper {
-          .waterfall-container {
-            width: 888px !important;
+      .artist-container {
+        .artist-header-wrapper {
+          .artist-header {
+            width: 880px !important;
+          }
+        }
+        .artist-content {
+          .waterfall-wrapper {
+            .waterfall-container {
+              width: 888px !important;
+            }
           }
         }
       }
     }
     @media (max-width: 768px) {
-      .artist-header {
-        width: 584px !important;
-      }
-      .artist-content {
-        .waterfall-wrapper {
-          .waterfall-container {
-            width: 592px !important;
+      .artist-container {
+        .artist-header-wrapper {
+          .artist-header {
+            width: 584px !important;
+          }
+        }
+        .artist-content {
+          .waterfall-wrapper {
+            .waterfall-container {
+              width: 592px !important;
+            }
           }
         }
       }
@@ -136,16 +178,18 @@
 
 @media (max-width: 767px) {
   .artist-container {
-    .artist-header {
-      width: auto !important;
-      padding: 32px 24px 0 24px;
-      display: flex;
-      align-items: center;
-      &-close {
-        position: absolute;
-        top: 24px;
-        right: 24px;
-        transform: translate(4px, -6px);
+    .artist-header-wrapper {
+      .artist-header {
+        width: auto !important;
+        padding: 22px 24px 0 24px;
+        display: flex;
+        align-items: center;
+        &-close {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          transform: translate(4px, -6px);
+        }
       }
     }
     .artist-content {

@@ -36,8 +36,12 @@
     <div class="pic-presentation-info" v-if="image">
       <div class="pic-presentation-info-title">
         <span>{{ image ? image.title : '' }}</span>
-        <i class="el-icon-share" ref="shareIcon" v-if="!renderShareOverlay"></i>
-        <i class="el-icon-share" ref="shareIcon" v-else @click="openShareOverlay"></i>
+        <i ref="shareIcon" v-if="!renderShareOverlay">
+          <Share />
+        </i>
+        <i ref="shareIcon" v-else @click="openShareOverlay">
+          <Share />
+        </i>
       </div>
       <div class="pic-presentation-info-caption">
         <span v-html="image ? image.caption : ''"></span>
@@ -95,6 +99,7 @@
 import dayjs from 'dayjs';
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
+import Share from '../icons/share.vue';
 import ShareOverlay from '../common/ShareOverlay.vue';
 import Ugoira from '../../util/ugoira';
 import { getHistoryTop, addUserHistory } from '../../util/history';
@@ -122,6 +127,7 @@ export default {
     Paginator,
     LightBox,
     ShareOverlay,
+    Share,
   },
   data() {
     return {

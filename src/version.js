@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-export const version = '1.24.3';
-export const buildTime = '2021-08-14 03:13:59';
-console.log('%cPixiviz - v1.24.3\nEnvironment - prod\nBuild time: 2021-08-14 03:13:59', 'color:#da7a85');
-window._hmt && window._hmt.push(['_setCustomVar', 1, 'siteVersion', '1.24.3', 1]);
+export const version = '1.24.4';
+export const buildTime = '2021-08-15 23:29:50';
+console.log('%cPixiviz - v1.24.4\nEnvironment - prod\nBuild time: 2021-08-15 23:29:50', 'color:#da7a85');
+window._hmt && window._hmt.push(['_setCustomVar', 1, 'siteVersion', '1.24.4', 1]);
