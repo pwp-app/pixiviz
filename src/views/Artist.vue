@@ -7,16 +7,20 @@
     v-loading="!infoLoaded"
     element-loading-text="正在获取画师信息"
   >
-    <div class="artist-header">
-      <div class="artist-header-close">
-        <i class="el-icon-close" @click="handleBack"></i>
+    <div class="artist-header-wrapper">
+      <div class="artist-header">
+        <div class="artist-header-close">
+          <i class="el-icon-close" @click="handleBack"></i>
+        </div>
+        <ArtistDetail
+          ref="detail"
+          :artistId="id"
+          @loaded="handleInfoLoaded"
+          @failed="handleLoadFailed"
+          @setbg="setProfileBg"
+        />
       </div>
-      <ArtistDetail
-        ref="detail"
-        :artistId="id"
-        @loaded="handleInfoLoaded"
-        @failed="handleLoadFailed"
-      />
+      <div class="artist-profile-bg" v-lazy-container :style="artistBgStyle"></div>
     </div>
     <div class="artist-content" v-if="infoLoaded && !infoLoadFailed">
       <div class="waterfall-wrapper">
@@ -67,6 +71,7 @@ export default {
     return {
       page: this.initPage(),
       images: this.initImages(),
+      profileBg: '',
       id: this.$route.params.id,
       artistName: null,
       infoLoaded: false,
@@ -106,6 +111,14 @@ export default {
   computed: {
     mobileWaterfallWidth() {
       return this.cardWidth * 2 + 32;
+    },
+    artistBgStyle() {
+      if (!this.profileBg) {
+        return null;
+      }
+      return {
+        backgroundImage: `url('${this.profileBg}')`,
+      };
     },
   },
   mounted() {
@@ -246,6 +259,9 @@ export default {
     handleLoadFailed() {
       this.infoLoaded = true;
       this.infoLoadFailed = true;
+    },
+    setProfileBg(bg) {
+      this.profileBg = bg;
     },
     // 组件
     handleBack() {

@@ -75,6 +75,8 @@ import ThemeDialog from './dialogs/ThemeDialog';
 import PrivacyDialog from './dialogs/PrivacyDialog';
 import GitHubIcon from '../icons/github';
 
+const GITHUB_URL = 'https://github.com/pwp-app/pixiviz';
+
 export default {
   name: 'Landing.Banner',
   components: {
@@ -174,7 +176,11 @@ export default {
       this.$router.push('/history');
     },
     goGitHub() {
-      window.open('https://github.com/pwp-app/pixiviz');
+      if (window.isSafari) {
+        window.location.href = GITHUB_URL;
+      } else {
+        window.open(GITHUB_URL, '_blank');
+      }
     },
     // temp
     showInDev() {
