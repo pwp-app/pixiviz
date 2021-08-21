@@ -208,7 +208,7 @@ export default {
               $state.complete();
               return;
             }
-            const images = filterImages(response.data.illusts, false);
+            const images = filterImages(response.data.illusts, false, false);
             this.images = this.images.concat(images);
             // 缓存 images
             this.$store.commit('artist/setImages', {

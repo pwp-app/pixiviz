@@ -111,7 +111,10 @@ export default {
       // screen
       screenOrientation:
         screen && screen.orientation ? screen.orientation.type : getScreenOrientationType(),
-      showPart: screen && screen.orientation ? screen.orientation.type.includes('landscape') : getScreenOrientationType().includes('landscape'),
+      showPart:
+        screen && screen.orientation
+          ? screen.orientation.type.includes('landscape')
+          : getScreenOrientationType().includes('landscape'),
       // action
       lastOffset: 0,
       actionShow: false,
@@ -320,7 +323,7 @@ export default {
               if (state) state.complete();
               return;
             }
-            const images = filterImages(response.data.illusts);
+            const images = filterImages(response.data.illusts, false, false);
             this.relatedImages = this.relatedImages.concat(images);
             this.relatedLoading = false;
             if (state) {
