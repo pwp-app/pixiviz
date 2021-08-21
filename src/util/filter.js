@@ -1,3 +1,4 @@
+const blockTags = ['尻', '極上の乳', '漫画素材工坊', '描き方', 'お絵かきTIPS'];
 const mangaTags = ['漫画'];
 
 const filterImage = (img) => {
@@ -6,7 +7,7 @@ const filterImage = (img) => {
   }
 };
 
-const filterImages = (imgs, dropManga = true) => {
+const filterImages = (imgs, dropManga = true, dropTags = true) => {
   return imgs.filter((img) => {
     if (
       img.restrict ||
@@ -18,9 +19,12 @@ const filterImages = (imgs, dropManga = true) => {
       return false;
     }
     if (img.tags && img.tags.length) {
-      if (dropManga) {
+      if (dropTags || dropManga) {
         for (let i = 0; i < img.tags.length; i++) {
-          if (mangaTags.includes(img.tags.name)) {
+          if (dropTags && blockTags.includes(img.tags[i].name)) {
+            return false;
+          }
+          if (dropManga && mangaTags.includes(img.tags[i].name)) {
             return false;
           }
         }

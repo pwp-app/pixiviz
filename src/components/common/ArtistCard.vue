@@ -73,7 +73,7 @@ export default {
       return this.artist.user.id;
     },
     userIllusts() {
-      return filterImages(this.artist.illusts, false).map((item, index) => {
+      return filterImages(this.artist.illusts, false, false).map((item, index) => {
         return {
           ...item,
           index,

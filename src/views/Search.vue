@@ -235,7 +235,7 @@ export default {
               $state.complete();
               return;
             }
-            const images = filterImages(response.data.illusts);
+            const images = filterImages(response.data.illusts, false, true);
             this.images = this.images.concat(images);
             // 缓存 images
             this.$store.commit('search/setImages', this.images);
