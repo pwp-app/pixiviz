@@ -22,7 +22,7 @@ export const defineProxyHosts = (hosts, disabled) => {
     return;
   }
   let hostArr = Object.keys(hosts);
-  if (disabled) {
+  if (disabled && Array.isArray(disabled) && disabled.length) {
     if (disabled.length === hostArr.length) {
       bus.$emit('proxy-not-available');
       return;
@@ -73,9 +73,10 @@ export const defineProxyHosts = (hosts, disabled) => {
 export const defineApiPrefix = (conf, disabled) => {
   if (Array.isArray(conf.api_prefix)) {
     conf.api_prefix_list = conf.api_prefix;
-    const prefixList = disabled
-      ? conf.api_prefix_list.filter((prefix) => !disabled.includes(prefix))
-      : conf.api_prefix_list;
+    const prefixList =
+      disabled && Array.isArray(disabled) && disabled.length
+        ? conf.api_prefix_list.filter((prefix) => !disabled.includes(prefix))
+        : conf.api_prefix_list;
     // if stored and valid, use it.
     if (storedApiPrefix && prefixList.includes(storedApiPrefix)) {
       conf.api_prefix = storedApiPrefix;
@@ -161,9 +162,12 @@ export const checkAPIHostAlive = async (conf, skip) => {
       return;
     }
     // output to console
-    if (disabled && disabled.length) {
+    if (disabled.length) {
       // eslint-disable-next-line no-console
       console.warn('These API hosts have been disabled:', disabled);
+    } else {
+      window.localStorage.removeItem('pixiviz-api-disabled');
+      return;
     }
     // store disabled host for 1 day
     window.localStorage.setItem(
@@ -229,8 +233,17 @@ export const checkProxyHostAlive = async (conf) => {
   }
   const disabled = await getUnavailableProxyHosts(conf);
   if (!disabled || !disabled.length) {
+    window.localStorage.removeItem('pixiviz-proxy-disabled');
     return;
   }
+  // set storage
+  window.localStorage.setItem(
+    'pixiviz-proxy-disabled',
+    JSON.stringify({
+      time: new Date().valueOf(),
+      hosts: disabled,
+    }),
+  );
   // eslint-disable-next-line no-console
   console.warn('These proxy hosts have been disabled:', disabled);
   if (typeof conf.image_proxy_host === 'object') {
