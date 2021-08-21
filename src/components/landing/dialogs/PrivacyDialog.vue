@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import settingsDialog from '../../../mixin/settingDialog';
+
 export default {
   data() {
     return {
@@ -51,16 +53,8 @@ export default {
       screenWidth: document.documentElement.clientWidth,
     };
   },
+  mixins: [settingsDialog],
   computed: {
-    dialogWidth() {
-      if (this.screenWidth <= 320) {
-        return '308px';
-      } else if (this.screenWidth < 768) {
-        return '320px';
-      } else {
-        return '480px';
-      }
-    },
     labelWidth() {
       if (this.screenWidth <= 320) {
         return '108px';
