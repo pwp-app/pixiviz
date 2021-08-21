@@ -9,7 +9,6 @@ import VueLazyload from 'vue-lazyload';
 import Vue2TouchEvents from 'vue2-touch-events';
 import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
-import seedrandom from 'seedrandom';
 import { sha256 } from 'hash-wasm';
 
 // Import config
@@ -36,7 +35,8 @@ import axios from './util/axios';
 
 // Import utils
 import { getOgTags } from './util/og';
-import { weightedRandom } from './util/random';
+import { defineProxyHosts, defineApiPrefix, checkAPIHostAlive } from './util/line';
+import bus from './util/bus';
 
 // Import sw
 import './registerServiceWorker';
@@ -45,8 +45,7 @@ import './registerServiceWorker';
 import { initBaiduStat, initFrontJs } from './util/statistics';
 import { checkTrustHost } from './util/host';
 
-// constants
-const API_PREFIX_STORE_KEY = 'pixiviz-api-prefix';
+const A_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 Vue.use(VueCompositionAPI);
 
@@ -112,7 +111,6 @@ if (downloadSettings) {
 }
 
 // Set up bus
-const bus = new Vue();
 Vue.prototype.$bus = bus;
 
 // Set up idb
@@ -121,59 +119,26 @@ Vue.prototype.$idb = idb;
 // Set up og tags
 Vue.prototype.$ogTags = getOgTags();
 
-const storedApiPrefix = window.localStorage.getItem(API_PREFIX_STORE_KEY);
+// Get api pick storage
 
-const defineProxyHosts = (hosts) => {
-  if (typeof hosts !== 'object') {
-    return;
-  }
-  const hostArr = Object.keys(hosts);
-  let hostIdxList = [];
-  hostArr.forEach((host, index) => {
-    Object.defineProperty(hosts, index, {
-      value: host,
-      enumerable: false,
-      writable: true,
-      configurable: true,
-    });
-    const weight = hosts[host] * 100;
-    hostIdxList = hostIdxList.concat(new Array(Math.floor(weight)).fill(index));
-  });
-  // use seedrandom to ensure the sequence
-  const rng = seedrandom('pixiviz');
-  hostIdxList.sort(() => 0.5 - rng.quick());
-  Object.defineProperty(hosts, 'idxList', {
-    value: hostIdxList,
-    enumerable: false,
-    writable: true,
-    configurable: true,
-  });
-};
-
-const defineApiPrefix = (conf) => {
-  if (Array.isArray(conf.api_prefix)) {
-    if (storedApiPrefix && conf.api_prefix.includes(storedApiPrefix)) {
-      conf.api_prefix = storedApiPrefix;
-      return;
-    }
-    // choose one randomly
-    const weight = 1.0 / conf.api_prefix.length;
-    const spec = {};
-    conf.api_prefix.forEach((prefix) => {
-      spec[prefix] = weight;
-    });
-    const [prefix] = weightedRandom(spec);
-    conf.api_prefix = prefix;
-    window.localStorage.setItem(API_PREFIX_STORE_KEY, prefix);
+let disabledApiHost = window.localStorage.getItem('pixiviz-api-disabled');
+if (disabledApiHost) {
+  const disabledApiHostStore = JSON.parse(disabledApiHost);
+  if (new Date().valueOf() - disabledApiHostStore.time >= A_DAY_IN_MS) {
+    disabledApiHost = [];
   } else {
-    window.localStorage.setItem(API_PREFIX_STORE_KEY, conf.api_prefix);
+    disabledApiHost = disabledApiHost.hosts;
   }
-};
+} else {
+  disabledApiHost = [];
+}
 
 const requestRemoteConfig = async () => {
   let res;
   try {
-    res = await axios.get(config.remote_conf_url);
+    res = await axios.get(config.remote_conf_url, {
+      timeout: 5000,
+    });
   } catch (err) {
     console.error('Failed to fetch remote configuration.', err);
     return;
@@ -186,7 +151,7 @@ const requestRemoteConfig = async () => {
     defineProxyHosts(config.download_proxy_host);
   }
   // choose an API prefix
-  defineApiPrefix(config);
+  defineApiPrefix(config, disabledApiHost);
 };
 
 const createInstance = () => {
@@ -206,7 +171,7 @@ const execute = async () => {
   // for default
   defineProxyHosts(config.image_proxy_host);
   defineProxyHosts(config.download_proxy_host);
-  defineApiPrefix(config);
+  defineApiPrefix(config, disabledApiHost);
   // render
   createInstance();
   // request remote
@@ -214,6 +179,8 @@ const execute = async () => {
     return;
   }
   await requestRemoteConfig();
+  // check api host alive
+  checkAPIHostAlive(config);
   // compute hash
   const hash = await sha256(JSON.stringify(config));
   // log
