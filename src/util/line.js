@@ -5,7 +5,9 @@ import axios from './axios';
 import bus from './bus';
 import { weightedRandom } from './random';
 
-const API_CHECK_PATH = `/rank?mode=day&date=${dayjs().format('YYYY-MM-DD')}`;
+const API_CHECK_PATH = `/rank?mode=day&date=${dayjs()
+  .subtract(2, 'day')
+  .format('YYYY-MM-DD')}&page=1`;
 const IMAGE_CHECK_PATH = '/img-original/img/2007/09/20/19/49/36/10000_p0.jpg';
 const API_PREFIX_STORE_KEY = 'pixiviz-api-prefix';
 
