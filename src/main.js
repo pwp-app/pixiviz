@@ -35,7 +35,12 @@ import axios from './util/axios';
 
 // Import utils
 import { getOgTags } from './util/og';
-import { defineProxyHosts, defineApiPrefix, checkAPIHostAlive } from './util/line';
+import {
+  defineProxyHosts,
+  defineApiPrefix,
+  checkAPIHostAlive,
+  checkProxyHostAlive,
+} from './util/line';
 import bus from './util/bus';
 
 // Import sw
@@ -178,9 +183,18 @@ const execute = async () => {
   if (!checkTrustHost(config)) {
     return;
   }
-  await requestRemoteConfig();
+  try {
+    await requestRemoteConfig();
+  } catch (e) {
+    console.error('Request remote config error.', e);
+  }
   // check api host alive
-  checkAPIHostAlive(config);
+  try {
+    checkAPIHostAlive(config);
+    checkProxyHostAlive(config);
+  } catch (e) {
+    console.error('Smart line check failed.', e);
+  }
   // compute hash
   const hash = await sha256(JSON.stringify(config));
   // log

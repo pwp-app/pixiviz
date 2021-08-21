@@ -6,6 +6,7 @@ import bus from './bus';
 import { weightedRandom } from './random';
 
 const API_CHECK_PATH = `/rank?mode=day&date=${dayjs().format('YYYY-MM-DD')}`;
+const IMAGE_CHECK_PATH = '/img-original/img/2007/09/20/19/49/36/10000_p0.jpg';
 const API_PREFIX_STORE_KEY = 'pixiviz-api-prefix';
 
 const storedApiPrefix = window.localStorage.getItem(API_PREFIX_STORE_KEY);
@@ -16,11 +17,32 @@ const A_DAY_IN_MS = 24 * 60 * 60 * 1000;
  * Define image proxy host data by config
  * @param {string[]>} hosts Image proxy hosts
  */
-export const defineProxyHosts = (hosts) => {
+export const defineProxyHosts = (hosts, disabled) => {
   if (typeof hosts !== 'object') {
     return;
   }
-  const hostArr = Object.keys(hosts);
+  let hostArr = Object.keys(hosts);
+  if (disabled) {
+    if (disabled.length === hostArr.length) {
+      bus.$emit('proxy-not-available');
+      return;
+    }
+    hostArr = hostArr.filter((host) => {
+      if (disabled.includes(host)) {
+        delete hosts[host];
+        return false;
+      }
+      return true;
+    });
+    // recalculate weight
+    let totalWeight = 0;
+    hostArr.forEach((host) => {
+      totalWeight += hosts[host];
+    });
+    hostArr.forEach((host) => {
+      hosts[host] /= totalWeight;
+    });
+  }
   let hostIdxList = [];
   hostArr.forEach((host, index) => {
     Object.defineProperty(hosts, index, {
@@ -96,6 +118,10 @@ export const isAPIAlive = (prefix) => {
   return isHostAlive(`${prefix}${API_CHECK_PATH}`, prefix);
 };
 
+export const isProxyAlive = (host) => {
+  return isHostAlive(`https://${host}${IMAGE_CHECK_PATH}`, host);
+};
+
 export const checkAPIHostAlive = async (conf, skip) => {
   // check user network status
   if (!navigator.onLine) {
@@ -135,9 +161,9 @@ export const checkAPIHostAlive = async (conf, skip) => {
       return;
     }
     // output to console
-    if (process.env.NODE_ENV === 'development') {
+    if (disabled && disabled.length) {
       // eslint-disable-next-line no-console
-      console.error('These API hosts has been disabled:', disabled);
+      console.warn('These API hosts have been disabled:', disabled);
     }
     // store disabled host for 1 day
     window.localStorage.setItem(
@@ -163,5 +189,54 @@ export const checkAPIHostAlive = async (conf, skip) => {
       );
       checkAPIHostAlive(conf, [conf.api_prefix]);
     });
+  }
+};
+
+const getUnavailableProxyHosts = async (conf) => {
+  let hosts = [];
+  const disabled = [];
+  // collect hosts
+  if (typeof conf.image_proxy_host === 'object') {
+    hosts = hosts.concat(Object.keys(conf.image_proxy_host));
+  }
+  if (typeof conf.download_proxy_host === 'object') {
+    hosts = hosts.concat(Object.keys(conf.download_proxy_host));
+  }
+  hosts = Array.from(new Set(hosts));
+  // check alive
+  const checkRes = await Promise.allSettled(hosts.map((host) => isProxyAlive(host)));
+  const alive = checkRes
+    .map((promise) => {
+      if (promise.status === 'fulfilled') {
+        return promise.value;
+      }
+      return null;
+    })
+    .filter((item) => !!item);
+  hosts.forEach((host) => {
+    if (!alive.includes(host)) {
+      disabled.push(host);
+    }
+  });
+  return disabled;
+};
+
+export const checkProxyHostAlive = async (conf) => {
+  if (!navigator.onLine) {
+    // user is not online
+    bus.$emit('user-not-online');
+    return;
+  }
+  const disabled = await getUnavailableProxyHosts(conf);
+  if (!disabled || !disabled.length) {
+    return;
+  }
+  // eslint-disable-next-line no-console
+  console.warn('These proxy hosts have been disabled:', disabled);
+  if (typeof conf.image_proxy_host === 'object') {
+    defineProxyHosts(conf.image_proxy_host, disabled);
+  }
+  if (typeof conf.download_proxy_host === 'object') {
+    defineProxyHosts(conf.download_proxy_host, disabled);
   }
 };
