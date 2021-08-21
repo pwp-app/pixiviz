@@ -128,14 +128,26 @@ Vue.prototype.$ogTags = getOgTags();
 
 let disabledApiHost = window.localStorage.getItem('pixiviz-api-disabled');
 if (disabledApiHost) {
-  const disabledApiHostStore = JSON.parse(disabledApiHost);
-  if (new Date().valueOf() - disabledApiHostStore.time >= A_DAY_IN_MS) {
+  const hostStore = JSON.parse(disabledApiHost);
+  if (new Date().valueOf() - hostStore.time >= A_DAY_IN_MS) {
     disabledApiHost = [];
+    window.localStorage.removeItem('pixiviz-api-disabled');
   } else {
     disabledApiHost = disabledApiHost.hosts;
   }
 } else {
   disabledApiHost = [];
+}
+
+let disabledProxyHost = window.localStorage.getItem('pixiviz-proxy-disabled');
+if (disabledProxyHost) {
+  const hostStore = JSON.parse(disabledProxyHost);
+  if (new Date().valueOf() - hostStore.time >= A_DAY_IN_MS) {
+    disabledProxyHost = [];
+    window.localStorage.removeItem('pixiviz-proxy-disabled');
+  } else {
+    disabledProxyHost = hostStore.hosts;
+  }
 }
 
 const requestRemoteConfig = async () => {
@@ -150,10 +162,10 @@ const requestRemoteConfig = async () => {
   }
   Object.assign(config, res.data);
   if (typeof config.image_proxy_host === 'object') {
-    defineProxyHosts(config.image_proxy_host);
+    defineProxyHosts(config.image_proxy_host, disabledProxyHost);
   }
   if (typeof config.download_proxy_host === 'object') {
-    defineProxyHosts(config.download_proxy_host);
+    defineProxyHosts(config.download_proxy_host, disabledProxyHost);
   }
   // choose an API prefix
   defineApiPrefix(config, disabledApiHost);
@@ -174,8 +186,8 @@ const createInstance = () => {
 
 const execute = async () => {
   // for default
-  defineProxyHosts(config.image_proxy_host);
-  defineProxyHosts(config.download_proxy_host);
+  defineProxyHosts(config.image_proxy_host, disabledProxyHost);
+  defineProxyHosts(config.download_proxy_host, disabledProxyHost);
   defineApiPrefix(config, disabledApiHost);
   // render
   createInstance();
