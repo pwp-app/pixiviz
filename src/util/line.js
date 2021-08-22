@@ -23,14 +23,23 @@ export const defineProxyHosts = (hosts, disabled) => {
   if (typeof hosts !== 'object') {
     return;
   }
-  let hostArr = Object.keys(hosts);
+  let hostArr = hosts.original || Object.keys(hosts);
+  if (!hosts.original) {
+    Object.defineProperty(hosts, 'original', {
+      value: new Array(...hostArr),
+      enumerable: false,
+      writable: true,
+      configurable: true,
+    });
+  }
   if (disabled && Array.isArray(disabled) && disabled.length) {
-    if (disabled.length === hostArr.length) {
+    const actualDisabled = disabled.filter((item) => hostArr.includes(item));
+    if (actualDisabled.length === hostArr.length) {
       bus.$emit('proxy-not-available');
       return;
     }
     hostArr = hostArr.filter((host) => {
-      if (disabled.includes(host)) {
+      if (actualDisabled.includes(host)) {
         delete hosts[host];
         return false;
       }
@@ -209,10 +218,12 @@ const getUnavailableProxyHosts = async (conf) => {
   const disabled = [];
   // collect hosts
   if (typeof conf.image_proxy_host === 'object') {
-    hosts = hosts.concat(Object.keys(conf.image_proxy_host));
+    hosts = hosts.concat(conf.image_proxy_host.original || Object.keys(conf.image_proxy_host));
   }
   if (typeof conf.download_proxy_host === 'object') {
-    hosts = hosts.concat(Object.keys(conf.download_proxy_host));
+    hosts = hosts.concat(
+      conf.download_proxy_host.original || Object.keys(conf.download_proxy_host),
+    );
   }
   hosts = Array.from(new Set(hosts));
   // check alive
