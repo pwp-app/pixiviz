@@ -147,6 +147,12 @@ export default {
       if (typeof hosts !== 'object') {
         return hosts;
       }
+      if (!hosts.idxList) {
+        const hostArr = Object.keys(hosts);
+        if (hostArr && Array.isArray(hostArr) && hostArr.length) {
+          return hostArr[0];
+        }
+      }
       // use hash to judge image server
       const hash = Number(this.image.id) % hosts.idxList.length;
       const hostIdx = hosts.idxList[hash];
