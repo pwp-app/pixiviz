@@ -148,9 +148,9 @@ export default {
         return hosts;
       }
       // use hash to judge image server
-      const hash = Number(this.image.id) % this.$config.image_proxy_host.idxList.length;
-      const hostIdx = this.$config.image_proxy_host.idxList[hash];
-      const host = this.$config.image_proxy_host[hostIdx];
+      const hash = Number(this.image.id) % hosts.idxList.length;
+      const hostIdx = hosts.idxList[hash];
+      const host = hosts[hostIdx];
       return host;
     },
     handleClick() {
