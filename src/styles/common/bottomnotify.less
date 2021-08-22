@@ -1,0 +1,56 @@
+.bottom-notify {
+  width: 100vw;
+  height: 48px;
+  padding: 8px 18px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: @color-background-primary;
+  box-sizing: border-box;
+  box-shadow: -12px 0 16px rgba(0, 0, 0, 0.175);
+  z-index: 100;
+  span {
+    color: @color-text-primary;
+    font-size: 15px;
+    line-height: 32px;
+  }
+}
+
+.bottom-notify--warn {
+  background: #e6a23c !important;
+  span {
+    color: #fefefe !important;
+  }
+}
+
+.dark {
+  .bottom-notify {
+    background: @color-background-dark;
+    box-shadow: -12px 0 16px rgba(255, 255, 255, 0.075);
+    span {
+      color: darken(@color-text-primary, 2.5%);
+    }
+  }
+  .bottom-notify--warn {
+    filter: brightness(0.875);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .bottom-notify {
+    padding: 8px 14px;
+    span {
+      letter-spacing: 0.05rem;
+    }
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .bottom-notify {
+    padding: 8px 12px;
+    span {
+      font-size: 13px;
+      letter-spacing: 0.05rem;
+    }
+  }
+}
