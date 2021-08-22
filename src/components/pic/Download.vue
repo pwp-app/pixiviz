@@ -289,9 +289,9 @@ export default {
       if (typeof hosts !== 'object') {
         return hosts;
       }
-      const hash = Number(this.image.id) % this.$config.download_proxy_host.idxList.length;
-      const hostIdx = this.$config.download_proxy_host.idxList[hash];
-      const host = this.$config.download_proxy_host[hostIdx];
+      const hash = Number(this.image.id) % hosts.idxList.length;
+      const hostIdx = hosts.idxList[hash];
+      const host = hosts[hostIdx];
       return host;
     },
     downloadCurrent() {
