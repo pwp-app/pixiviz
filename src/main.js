@@ -197,6 +197,14 @@ const execute = async () => {
   }
   try {
     await requestRemoteConfig();
+    // compute hash
+    const hash = await sha256(JSON.stringify(config));
+    // log
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`%cConfig hash: ${hash}`, 'color:#da7a85');
+      console.log(`%cConfig content: `, 'color:#da7a85', JSON.stringify(config));
+    }
+    window.localStorage.setItem('remote_conf_hash', hash);
   } catch (e) {
     console.error('Request remote config error.', e);
   }
@@ -207,14 +215,6 @@ const execute = async () => {
   } catch (e) {
     console.error('Smart line check failed.', e);
   }
-  // compute hash
-  const hash = await sha256(JSON.stringify(config));
-  // log
-  console.log(`%cConfig hash: ${hash}`, 'color:#da7a85');
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`%cConfig content: `, 'color:#da7a85', config);
-  }
-  window.localStorage.setItem('remote_conf_hash', hash);
 };
 
 execute();

@@ -701,9 +701,9 @@ export default {
         return hosts;
       }
       // random pick a host
-      const hash = Number(imageId) % this.$config.download_proxy_host.idxList.length;
-      const hostIdx = this.$config.download_proxy_host.idxList[hash];
-      const host = this.$config.download_proxy_host[hostIdx];
+      const hash = Number(imageId) % hosts.idxList.length;
+      const hostIdx = hosts.idxList[hash];
+      const host = hosts[hostIdx];
       return host;
     },
     getImageSource({ image, type, page = this.page, usePublicProxy = false }) {
