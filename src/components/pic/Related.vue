@@ -126,7 +126,10 @@ export default {
       if (info) {
         this.$store.commit('imageCache/setCache', info);
       }
-      this.$router.push(`/pic/${imageId}`);
+      const targetPath = `/pic/${imageId}`;
+      if (this.$route.path !== targetPath) {
+        this.$router.push(targetPath);
+      }
     },
     handleGo(toward) {
       this.$emit('go', toward);

@@ -334,7 +334,10 @@ export default {
       if (this.keywordInput === this.keyword) {
         return;
       }
-      this.$router.push(`/search/${encodeURIComponent(this.keywordInput)}`);
+      const targetPath = `/search/${encodeURIComponent(this.keywordInput)}`;
+      if (this.$route.path !== targetPath) {
+        this.$router.push(targetPath);
+      }
       // 清除监听器
       this.leaveSuggestion();
     },

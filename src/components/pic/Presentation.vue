@@ -713,9 +713,9 @@ export default {
           return BLANK_IMAGE;
         } else {
           let url = BLANK_IMAGE;
-          if (image && image.page_count < 2) {
+          if (image && image.page_count < 2 && image.image_urls) {
             url = image.image_urls[type].replace('i.pximg.net', proxyHost);
-          } else if (image && image.page_count >= 2) {
+          } else if (image && image.page_count >= 2 && image.meta_pages[page - 1]) {
             url = image.meta_pages[page - 1].image_urls[type].replace('i.pximg.net', proxyHost);
           }
           if (window.isSafari) {
