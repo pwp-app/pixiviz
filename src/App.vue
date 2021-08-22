@@ -21,6 +21,7 @@
 <script>
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
+import { bottomNotify } from './util/notify';
 
 export default {
   name: 'app',
@@ -56,6 +57,16 @@ export default {
       window.addEventListener('resize', setVh);
       setVh();
     }
+    // 监听bus事件
+    this.$bus.$on('user-not-online', () => {
+      bottomNotify('warn', '电波讯号中断，请检查您的网络连接', 3000);
+    });
+    this.$bus.$on('api-not-available', () => {
+      bottomNotify('warn', '电波失联，我们暂时无法连接至服务器...', 3000);
+    });
+    this.$bus.$on('proxy-not-available', () => {
+      bottomNotify('warn', '电波失联，我们暂时无法连接至图片服务器...', 3000);
+    });
   },
   created() {
     // 黑暗模式监听
