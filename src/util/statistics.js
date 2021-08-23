@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import { version } from '../version';
+
 export function initBaiduStat() {
   if (process.env.NODE_ENV === 'development') {
     return;
@@ -12,6 +14,7 @@ export function initBaiduStat() {
       const s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(hm, s);
     })();
+    window._hmt.push(['_setCustomVar', 1, 'siteVersion', version, 1]);
   }
 }
 
