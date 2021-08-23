@@ -54,9 +54,13 @@ const A_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 Vue.use(VueCompositionAPI);
 
-if (checkTrustHost(config)) {
-  initBaiduStat();
-  initFrontJs();
+try {
+  if (checkTrustHost(config)) {
+    initBaiduStat();
+    initFrontJs();
+  }
+} catch (err) {
+  console.error('Failed to init statistics script.', err);
 }
 
 Vue.config.productionTip = false;
@@ -126,28 +130,42 @@ Vue.prototype.$ogTags = getOgTags();
 
 // Get api pick storage
 
-let disabledApiHost = window.localStorage.getItem('pixiviz-api-disabled');
-if (disabledApiHost) {
-  const hostStore = JSON.parse(disabledApiHost);
-  if (new Date().valueOf() - hostStore.time >= A_DAY_IN_MS) {
-    disabledApiHost = [];
-    window.localStorage.removeItem('pixiviz-api-disabled');
+let disabledApiHost;
+
+try {
+  window.localStorage.getItem('pixiviz-api-disabled');
+  if (disabledApiHost) {
+    const hostStore = JSON.parse(disabledApiHost);
+    if (new Date().valueOf() - hostStore.time >= A_DAY_IN_MS) {
+      disabledApiHost = [];
+      window.localStorage.removeItem('pixiviz-api-disabled');
+    } else {
+      disabledApiHost = disabledApiHost.hosts;
+    }
   } else {
-    disabledApiHost = disabledApiHost.hosts;
+    disabledApiHost = [];
   }
-} else {
+} catch (err) {
+  console.error('Failed to get disabled api host:', err);
   disabledApiHost = [];
 }
 
-let disabledProxyHost = window.localStorage.getItem('pixiviz-proxy-disabled');
-if (disabledProxyHost) {
-  const hostStore = JSON.parse(disabledProxyHost);
-  if (new Date().valueOf() - hostStore.time >= A_DAY_IN_MS) {
-    disabledProxyHost = [];
-    window.localStorage.removeItem('pixiviz-proxy-disabled');
-  } else {
-    disabledProxyHost = hostStore.hosts;
+let disabledProxyHost;
+
+try {
+  disabledProxyHost = window.localStorage.getItem('pixiviz-proxy-disabled');
+  if (disabledProxyHost) {
+    const hostStore = JSON.parse(disabledProxyHost);
+    if (new Date().valueOf() - hostStore.time >= A_DAY_IN_MS) {
+      disabledProxyHost = [];
+      window.localStorage.removeItem('pixiviz-proxy-disabled');
+    } else {
+      disabledProxyHost = hostStore.hosts;
+    }
   }
+} catch (err) {
+  console.error('Failed to get disabled proxy host:', err);
+  disabledProxyHost = [];
 }
 
 const requestRemoteConfig = async () => {
