@@ -215,6 +215,7 @@ const execute = async () => {
   }
   try {
     await requestRemoteConfig();
+    bus.$emit('remote-config-fetched');
     // compute hash
     const hash = await sha256(JSON.stringify(config));
     // log
