@@ -1,4 +1,13 @@
+let showed = false;
+
+const queue = [];
+
 export const bottomNotify = (type, content, timeout) => {
+  if (showed) {
+    queue.push([type, content, timeout]);
+    return;
+  }
+  showed = true;
   const container = document.createElement('div');
   const text = document.createElement('span');
   container.classList.add('bottom-notify');
@@ -11,14 +20,18 @@ export const bottomNotify = (type, content, timeout) => {
   document.body.appendChild(container);
   if (timeout) {
     setTimeout(() => {
-      const el = document.querySelector(`#bottom-notify-${timestamp}`);
-      if (el) {
-        el.classList.remove('fadeInUp');
-        el.classList.add('fadeOutDown');
+      container.classList.remove('fadeInUp');
+      container.classList.add('fadeOutDown');
+      setTimeout(() => {
+        document.body.removeChild(container);
+        showed = false;
         setTimeout(() => {
-          document.body.removeChild(el);
-        }, 300);
-      }
+          if (queue.length) {
+            const next = queue.shift();
+            bottomNotify.call(null, ...next);
+          }
+        }, 100);
+      }, 300);
     }, timeout + 300);
   }
 };
