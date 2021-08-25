@@ -35,6 +35,8 @@ export const defineProxyHosts = (hosts, disabled) => {
   if (disabled && Array.isArray(disabled) && disabled.length) {
     const actualDisabled = disabled.filter((item) => hostArr.includes(item));
     if (actualDisabled.length === hostArr.length) {
+      // no matter what type of host is, delete cached disabled host
+      window.localStorage.removeItem('pixiviz-proxy-disabled');
       bus.$emit('proxy-not-available');
       return;
     }
@@ -184,6 +186,14 @@ export const checkAPIHostAlive = async (conf, skip) => {
       // eslint-disable-next-line no-console
       console.warn('These API hosts have been disabled:', disabled);
     } else {
+      window.localStorage.setItem(
+        'pixiviz-api-failed',
+        JSON.stringify({
+          pass: true,
+          time: new Date().valueOf(),
+        }),
+      );
+      window.localStorage.removeItem('pixiviz-api-disabled');
       return;
     }
     // store disabled host for 1 day

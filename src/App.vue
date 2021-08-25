@@ -15,6 +15,7 @@
       <DownloadListTag key="downloadList" v-if="showDownloadList" />
     </transition-group>
     <DownloadList />
+    <Maintain :text="maintainText" ref="maintain" />
   </div>
 </template>
 
@@ -22,12 +23,19 @@
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 import { bottomNotify } from './util/notify';
+import Maintain from './components/common/Maintain.vue';
 
 export default {
   name: 'app',
   components: {
     DownloadList,
     DownloadListTag,
+    Maintain,
+  },
+  data() {
+    return {
+      maintainText: '',
+    };
   },
   beforeCreate() {
     // 检测Safari
@@ -69,10 +77,10 @@ export default {
     });
   },
   created() {
-    // 黑暗模式监听
+    // listen darkmode events
     this.$bus.$on('dark-mode-enable', this.handleDarkModeEnable);
     this.$bus.$on('dark-mode-disable', this.handleDarkModeDisable);
-    // 图片懒加载统一handle
+    // handle lazyload imgs
     this.$Lazyload.$on('loaded', this.imageLoadedHandler);
     this.$Lazyload.$on('error', this.imageLoadErrorHandler);
     // rem fit
@@ -81,6 +89,13 @@ export default {
     window.localStorage.setItem('last-visit-time', Date.now());
   },
   mounted() {
+    // listen remote config fetched event
+    this.$bus.$once('remote-config-fetched', () => {
+      this.$nextTick(() => {
+        this.checkMaintain();
+      });
+    });
+    this.checkMaintain();
     // add window listener
     window.addEventListener('resize', this.fitHiRes);
     // vconsole
@@ -104,7 +119,14 @@ export default {
     },
   },
   methods: {
-    // 图片加载处理
+    checkMaintain() {
+      const { maintain } = this.$config;
+      if (this.$config.maintain?.enable) {
+        this.$refs.maintain.show();
+        this.maintainText = maintain.text;
+      }
+    },
+    // image load handlers
     imageLoadedHandler(e) {
       this.emitImageCardEvent({ ...e, eventType: 'loaded' });
     },
@@ -123,14 +145,14 @@ export default {
         this.$bus.$emit(`${type}-${id}-${eventType}`);
       }
     },
-    // 黑暗模式监听
+    // dark mode events
     handleDarkModeEnable() {
       this.$store.commit('darkMode/setEnabled', true);
     },
     handleDarkModeDisable() {
       this.$store.commit('darkMode/setEnabled', false);
     },
-    // 高分屏适配
+    // high resolution screen fit
     fitHiRes() {
       if (window.innerWidth >= 1960 && window.innerHeight >= 1280) {
         if (window.innerWidth <= 2560) {
