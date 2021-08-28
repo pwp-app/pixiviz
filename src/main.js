@@ -172,6 +172,9 @@ const requestRemoteConfig = async () => {
   let res;
   try {
     res = await axios.get(config.remote_conf_url, {
+      params: {
+        t: Date.now(),
+      },
       timeout: 5000,
     });
   } catch (err) {
