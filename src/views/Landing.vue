@@ -106,9 +106,14 @@ export default {
     },
     fetchAnnounce() {
       this.axios
-        .get(this.$config.announcement_feed, {
-          withCredentials: false,
-        })
+        .get(
+          process.env.NODE_ENV === 'development'
+            ? 'https://cfs.tigo.pwp.app/pixiviz-anno-dev.json'
+            : this.$config.announcement_feed,
+          {
+            withCredentials: false,
+          },
+        )
         .then((res) => {
           if (!res.data) {
             return;
