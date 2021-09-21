@@ -2,8 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
+
+dayjs.tz.setDefault('Asia/Shanghai');
 
 const dirPath = path.resolve(__dirname, `../announcement`);
 const output = path.resolve(__dirname, '../announcement.json');

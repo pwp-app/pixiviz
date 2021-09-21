@@ -106,16 +106,29 @@ export default {
     },
     fetchAnnounce() {
       this.axios
-        .get(this.$config.announcement_feed, {
-          withCredentials: false,
-        })
+        .get(
+          process.env.NODE_ENV === 'development'
+            ? 'https://cfs.tigo.pwp.app/pixiviz-anno-dev.json'
+            : this.$config.announcement_feed,
+          {
+            withCredentials: false,
+          },
+        )
         .then((res) => {
           if (!res.data) {
             return;
           }
           for (const announcement of res.data) {
-            const { id, title, content, footer, start, expires, matchVersion, lastVisitAfter } =
-              announcement;
+            const {
+              id,
+              title,
+              content,
+              footer,
+              start,
+              expires,
+              matchVersion,
+              lastVisitAfter,
+            } = announcement;
             const announceLog = window.localStorage.getItem('announce-read-id');
             if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
               window.FrontJS.addUserData('announceLog', announceLog);

@@ -7,7 +7,7 @@
   "api_prefix": ["/api/v1", "https://pixiviz-api-us.pwp.link/v1"],
   "guide_url": "https://io.backrunner.top/2020/07/27/Pixiviz%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97.html",
   "donate_url": "https://afdian.net/@backrunner",
-  "landing_bg_id": 63295289,
+  "landing_bg_id": 92817067,
   "trust_host": "pixiviz.pwp.app",
   "announcement_feed": "https://cfs.tigo.pwp.app/pixiviz-anno-prod.json",
   "maintain": {
