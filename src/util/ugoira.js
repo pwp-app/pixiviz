@@ -93,10 +93,8 @@ class Ugoira {
         !this.lastFrameTime ||
         (this.lastFrameTime && Date.now() - this.lastFrameTime >= prevDelay)
       ) {
-        this.onFrame(this.blobMap[file]);
-        if (window.requestAnimationFrame) {
-          this.lastFrameTime = Date.now();
-        }
+        this.onFrame.call(this, this.blobMap[file]);
+        this.lastFrameTime = Date.now();
       }
       // next frame
       if (this.currentFrame === this.frames.length - 1) {
@@ -104,15 +102,9 @@ class Ugoira {
       } else {
         this.currentFrame += 1;
       }
-      if (window.requestAnimationFrame) {
-        window.requestAnimationFrame(() => {
-          playFrame();
-        });
-      } else {
-        setTimeout(() => {
-          playFrame();
-        }, nextDelay);
-      }
+      setTimeout(() => {
+        playFrame();
+      }, nextDelay);
     };
     this.status = 'playing';
     playFrame();
