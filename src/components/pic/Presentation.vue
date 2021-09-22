@@ -457,7 +457,10 @@ export default {
         this.$store.commit('pic/setUgoiraProgress', this.ugoira.progress);
       }, 200);
       this.ugoira.onFrame = (url) => {
-        this.ugoiraSource = url;
+        window.requestAnimationFrame(() => {
+          this.ugoiraSource = url;
+          this.$forceUpdate();
+        });
       };
       const ret = await this.ugoira.load();
       if (!ret) {
