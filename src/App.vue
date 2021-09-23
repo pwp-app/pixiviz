@@ -137,7 +137,7 @@ export default {
     emitImageCardEvent({ el, src, eventType }) {
       const type = el.getAttribute('data-type');
       if (type === 'card') {
-        const matched = /(\d+)_p/.exec(src);
+        const matched = /(\d+)_[a-z0-9_]+\.jpg$/.exec(src);
         if (!matched || matched.length < 1) return;
         const eventKey = `image-${eventType}-card-${el.getAttribute('data-index')}_${matched[1]}`;
         this.$bus.$emit(eventKey);
