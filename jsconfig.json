@@ -2,7 +2,7 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", ".history", "dist"],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     }
