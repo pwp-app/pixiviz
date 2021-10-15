@@ -14,7 +14,7 @@
             'artist-overview-avatar__pic--has-head': !!headPicSource,
           }"
         >
-          <div v-lazy-container :style="avatarPicStyle">></div>
+          <div v-lazy-container :style="avatarPicStyle"></div>
         </div>
       </div>
       <div class="artist-overview-content">
