@@ -17,10 +17,8 @@
           :artistId="id"
           @loaded="handleInfoLoaded"
           @failed="handleLoadFailed"
-          @setbg="setProfileBg"
         />
       </div>
-      <div class="artist-profile-bg" v-lazy-container :style="artistBgStyle"></div>
     </div>
     <div class="artist-content" v-if="infoLoaded && !infoLoadFailed">
       <div class="waterfall-wrapper">
