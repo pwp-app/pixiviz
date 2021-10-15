@@ -26,6 +26,8 @@
       ref="suggestions"
       @mouseenter="enterSuggesion"
       @mouseleave="leaveSuggestion"
+      @touchstart="suggestionTouchStart"
+      @touchmove="suggestionTouchMove"
       v-if="suggestions.length > 0 && showContent"
     >
       <div class="search-suggestion-items" ref="suggestionItems">
@@ -85,6 +87,8 @@ import BackToTop from '../components/common/BackToTop';
 import MobileResponsive from '../util/MobileResponsive';
 import { filterImage, filterImages } from '../util/filter';
 import { setOgTags, getOgTags } from '../util/og';
+// Mixin
+import suggestionScroll from '../mixin/suggestionScroll';
 
 const id_matcher = /^\d{2,8}$/;
 
@@ -97,6 +101,7 @@ export default {
     Waterfall,
     BackToTop,
   },
+  mixins: [suggestionScroll],
   data() {
     return {
       page: this.$store.state.search.page !== null ? this.$store.state.search.page : 1,
@@ -413,43 +418,6 @@ export default {
       } else {
         this.$router.push('/');
       }
-    },
-    scrollSuggesion(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!this.$refs.suggestionItems) {
-        return;
-      }
-      this.suggestionTranslate += e.deltaY * 2.5;
-      if (this.suggestionTranslate < 0) {
-        this.suggestionTranslate = 0;
-      }
-      if (
-        this.suggestionTranslate >
-        this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth
-      ) {
-        this.suggestionTranslate =
-          this.$refs.suggestionItems.scrollWidth - this.$refs.suggestionItems.clientWidth;
-      }
-      this.$refs.suggestionItems.setAttribute(
-        'style',
-        `transform: translateX(-${this.suggestionTranslate}px)`,
-      );
-    },
-    enterSuggesion() {
-      if (!this.$refs.suggestions) {
-        return;
-      }
-      if (this.$refs.suggestions.scrollWidth > this.$refs.suggestions.clientWidth) {
-        window.addEventListener('mousewheel', this.scrollSuggesion, {
-          passive: false,
-        });
-      }
-    },
-    leaveSuggestion() {
-      window.removeEventListener('mousewheel', this.scrollSuggesion, {
-        passive: false,
-      });
     },
     // 窗口事件
     handleScroll() {

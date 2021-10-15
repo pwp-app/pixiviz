@@ -7,13 +7,43 @@
     flex-direction: column;
     align-items: center;
     &-avatar {
-      #avatar {
-        width: 80px;
-        height: 80px;
+      width: 100%;
+      position: relative;
+      filter: drop-shadow(0 -40px 18px rgba(0, 0, 0, 0.075));
+      &__head-pic {
+        width: 100%;
+        height: 300px;
         background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0 0 24px 24px;
+        z-index: 5;
+      }
+      &__pic {
+        width: 100px;
+        height: 100px;
+        background-size: cover;
+        background-position: center;
         background-repeat: no-repeat;
         border-radius: 50%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.175);
+        margin: 28px auto 0 auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+        transform: translateZ(0px); // composition layer
+        position: relative;
+        & > div {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+      &__pic--has-head {
+        width: 112px;
+        height: 112px;
+        margin-top: -66px;
+        border: 8px solid @color-background-primary;
+        box-shadow: none;
+        margin-bottom: -12px;
       }
     }
     &-content {
@@ -139,7 +169,12 @@
 .dark {
   .artist-overview {
     &-avatar {
-      filter: brightness(0.875);
+      &__head-pic {
+        filter: brightness(0.875);
+      }
+      &__pic {
+        border-color: @color-background-dark;
+      }
     }
     &-content {
       &-name {
@@ -191,20 +226,37 @@
   .artist-detail {
     .artist-overview {
       &-avatar {
-        #avatar {
-          width: 72px;
-          height: 72px;
+        &__head-pic {
+          width: 100%;
+          height: 220px;
+          border-radius: 0;
+        }
+        &__pic {
+          width: 92px;
+          height: 92px;
+          & > div {
+            filter: brightness(0.875);
+          }
+        }
+        &__pic-has-head {
+          margin-top: -46px;
+          margin-bottom: -8px;
         }
       }
       &-content {
+        margin: 0 24px;
         &-name {
-          font-size: 24px;
+          font-size: 22px;
           margin-top: 18px;
         }
         &-other {
           margin: 16px 0 20px 0;
         }
       }
+    }
+    .artist-comment {
+      max-width: calc(100% - 48px);
+      margin: 22px auto 0 auto;
     }
   }
 }

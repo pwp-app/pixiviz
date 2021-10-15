@@ -78,7 +78,7 @@
     overflow-x: hidden;
     padding-bottom: 12px;
     &-items {
-      transition: 200ms ease-in-out transform;
+      transition: 200ms linear transform;
     }
     &-item {
       background: @color-primary;
@@ -278,10 +278,10 @@
         font-size: 28px;
       }
       &-input {
-        width: 52.5vw;
+        flex: 1;
         margin-left: 12px;
         margin-top: 6px;
-        transform: translateY(0px);
+        transform: translateY(-1px);
         input {
           height: 36px !important;
           line-height: 18px !important;
@@ -293,9 +293,7 @@
         }
       }
       &-close {
-        position: absolute;
-        right: 24px;
-        transform: translate(8px, 2px);
+        display: none;
       }
     }
     .search-suggestion {

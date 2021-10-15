@@ -2,7 +2,20 @@
   <div class="artist-detail" v-if="loaded">
     <div class="artist-overview">
       <div class="artist-overview-avatar">
-        <div id="avatar" v-lazy-container :style="{ backgroundImage: `url(${this.avatar})` }"></div>
+        <div
+          class="artist-overview-avatar__head-pic"
+          v-lazy-container
+          :style="avatarHeadPicStyle"
+          v-if="headPicSource"
+        ></div>
+        <div
+          :class="{
+            'artist-overview-avatar__pic': true,
+            'artist-overview-avatar__pic--has-head': !!headPicSource,
+          }"
+        >
+          <div v-lazy-container :style="avatarPicStyle">></div>
+        </div>
       </div>
       <div class="artist-overview-content">
         <div class="artist-overview-content-name">
@@ -92,6 +105,7 @@ export default {
       twitterUrl: '',
       gender: '',
       region: '',
+      headPicSource: null,
       isMobile: document.documentElement.clientWidth <= 767,
     };
   },
@@ -108,6 +122,18 @@ export default {
       } else {
         return '';
       }
+    },
+    avatarHeadPicStyle() {
+      if (!this.headPicSource) {
+        return null;
+      }
+      return { backgroundImage: `url(${this.headPicSource})` };
+    },
+    avatarPicStyle() {
+      if (!this.avatar) {
+        return;
+      }
+      return { backgroundImage: `url(${this.avatar})` };
     },
     formattedRegion() {
       if (!this.region) {
@@ -163,14 +189,11 @@ export default {
       this.region = profile.region;
       // profile img
       if (profile.is_using_custom_profile_image && profile.background_image_url) {
-        this.$emit(
-          'setbg',
-          profile.background_image_url.replace(
-            'i.pximg.net',
-            typeof this.$config.image_proxy_host === 'string'
-              ? this.$config.image_proxy_host
-              : this.$config.image_proxy_host[0],
-          ),
+        this.headPicSource = profile.background_image_url.replace(
+          'i.pximg.net',
+          typeof this.$config.image_proxy_host === 'string'
+            ? this.$config.image_proxy_host
+            : this.$config.image_proxy_host[0],
         );
       }
       const { user } = this.artist;

@@ -6,7 +6,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.125);
     border-radius: 0 0 16px 16px;
     img {
       display: block;
@@ -155,10 +155,14 @@
         display: inline-block;
         margin-right: 8px;
         a {
-          font-size: 14px;
+          font-size: 12px;
           color: lighten(@color-text-primary, 5%);
           transition: 100ms ease-in-out;
           text-decoration: none;
+          background: fade(@color-text-primary, 17.5%);
+          padding: 4px 6px;
+          line-height: 36px;
+          border-radius: 3px;
           .no-select();
         }
         a:visited {
@@ -187,7 +191,8 @@
         margin-right: 8px;
         span,
         i {
-          font-size: 14px;
+          font-size: 13px;
+          font-family: Helvetica Neue;
           color: lighten(@color-text-primary, 5%);
           .no-select();
         }
@@ -202,7 +207,7 @@
     &-time {
       margin-top: 12px;
       span {
-        font-size: 14px;
+        font-size: 13px;
         color: lighten(@color-text-primary, 5%);
         .no-select();
       }
