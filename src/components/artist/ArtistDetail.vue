@@ -24,7 +24,7 @@
         <div class="artist-overview-content-other">
           <ArtistInfoTag
             class="artist-other-clickable"
-            :content="isMobile ? artistId : `ID ${artistId}`"
+            :content="`ID ${artistId}`"
             @click.native="copyLink"
           ></ArtistInfoTag>
           <ArtistInfoTag :content="formattedRegion" v-if="region"></ArtistInfoTag>
