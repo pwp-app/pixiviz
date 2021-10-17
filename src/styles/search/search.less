@@ -197,15 +197,6 @@
   }
 }
 
-/* standalone */
-@media all and (display-mode: fullscreen) {
-  .search-container {
-    .search-header {
-      padding-top: calc(constant(safe-area-inset-top) + 32px);
-    }
-  }
-}
-
 /* iPad */
 .search-ipad-only {
   @media screen and (orientation: landscape) {
@@ -276,6 +267,14 @@
 
 /* Mobile */
 @media (max-width: 767px) {
+  // standalone
+  @media (display-mode: standalone) {
+    .search-container {
+      .search-header {
+        padding-top: calc(constant(safe-area-inset-top) + 32px);
+      }
+    }
+  }
   .search-container {
     .search-header {
       width: auto !important;

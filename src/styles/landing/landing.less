@@ -118,6 +118,11 @@
 
 // mobile
 @media (max-width: 767px) {
+  @media (display-mode: standalone) {
+    .landing-container {
+      padding-top: calc(constant(safe-area-inset-top) + 20px);
+    }
+  }
   .landing-container {
     padding: 20px;
   }

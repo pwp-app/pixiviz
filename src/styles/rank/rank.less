@@ -167,15 +167,6 @@
 @import './modeswitcher.less';
 @import './dateswitcher.less';
 
-/* standalone */
-@media all and (display-mode: fullscreen) {
-  .rank-container {
-    .rank-header {
-      padding-top: calc(constant(safe-area-inset-top) + 32px);
-    }
-  }
-}
-
 /* iPad */
 .rank-ipad-only {
   @media screen and (orientation: landscape) {
@@ -263,6 +254,13 @@
 /* Mobile */
 
 @media (max-width: 767px) {
+  @media (display-mode: standalone) {
+    .rank-container {
+      .rank-header {
+        padding-top: calc(constant(safe-area-inset-top) + 32px);
+      }
+    }
+  }
   .rank-container {
     .rank-header {
       width: auto !important;
