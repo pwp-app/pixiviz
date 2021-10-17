@@ -42,6 +42,7 @@ import {
   checkProxyHostAlive,
 } from './util/line';
 import bus from './util/bus';
+import { registerThemeColorHandler } from './util/darkMode';
 
 // Import sw
 import './registerServiceWorker';
@@ -49,6 +50,9 @@ import './registerServiceWorker';
 // Import frontjs stat
 import { initBaiduStat, initFrontJs } from './util/statistics';
 import { checkTrustHost } from './util/host';
+
+// Register handlers
+registerThemeColorHandler();
 
 const A_DAY_IN_MS = 24 * 60 * 60 * 1000;
 

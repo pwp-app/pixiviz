@@ -76,16 +76,16 @@ export default {
         const hour = now.hour();
         if (!this.themeForm.darkPersist) {
           if (hour < 6 || hour >= 18) {
-            this.addDarkClass();
+            this.enableDarkMode();
+          } else {
+            this.disableDarkMode();
           }
         } else {
-          this.addDarkClass();
+          this.enableDarkMode();
         }
       } else {
-        this.removeDarkClass();
+        this.disableDarkMode();
       }
-      window.pixiviz.darkEnabled = value;
-      window.localStorage.setItem('enable-dark', value);
     },
     themeModeChanged(value) {
       if (value) {
@@ -102,17 +102,11 @@ export default {
       window.pixiviz.darkPersist = value;
       window.localStorage.setItem('dark-persist', value);
     },
-    addDarkClass() {
-      if (!document.documentElement.classList.contains('dark')) {
-        this.$bus.$emit('dark-mode-enable');
-        document.documentElement.classList.add('dark');
-      }
+    enableDarkMode() {
+      this.$bus.$emit('dark-mode-enable');
     },
-    removeDarkClass() {
-      if (document.documentElement.classList.contains('dark')) {
-        this.$bus.$emit('dark-mode-disable');
-        document.documentElement.classList.remove('dark');
-      }
+    disableDarkMode() {
+      this.$bus.$emit('dark-mode-disable');
     },
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
