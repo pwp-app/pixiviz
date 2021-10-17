@@ -109,10 +109,8 @@ router.afterEach((to) => {
       const hour = new Date().getHours();
       if (hour < 6 || hour >= 18) {
         Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-enable');
-        document.documentElement.classList.add('dark');
       } else if (document.documentElement.classList.contains('dark')) {
         Vue.prototype.$bus && Vue.prototype.$bus.$emit('dark-mode-disable');
-        document.documentElement.classList.remove('dark');
       }
     }
   }

@@ -22,8 +22,8 @@
 <script>
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
-import { bottomNotify } from './util/notify';
 import Maintain from './components/common/Maintain.vue';
+import { bottomNotify } from './util/notify';
 
 export default {
   name: 'app',
@@ -38,25 +38,24 @@ export default {
     };
   },
   beforeCreate() {
-    // 检测Safari
+    // test safari
     window.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-    // 检测standalone
+    // test standalone
     if (window.matchMedia('(display-mode: standalone)').matches) {
       window.isStandAlone = true;
     }
-    // 全局构建
     if (!window.pixiviz) {
       window.pixiviz = {};
     }
-    // 设置全局map
+    // set global info map
     if (!window.pixiviz.infoMap) {
       window.pixiviz.infoMap = {};
     }
-    // 重置图片-画师路由数据
+    // reset pic-artist router data
     if (this.$route.path === '/') {
       window.localStorage.removeItem('pic-routes');
     }
-    // Safari vh 优化
+    // Safari vh optimization
     if (window.isSafari && !window.isStandAlone) {
       const setVh = () => {
         const vh = window.innerHeight * 0.01;
@@ -65,7 +64,7 @@ export default {
       window.addEventListener('resize', setVh);
       setVh();
     }
-    // 监听bus事件
+    // listen bus events
     this.$bus.$on('user-not-online', () => {
       bottomNotify('warn', '电波讯号中断，请检查您的网络连接', 3000);
     });
