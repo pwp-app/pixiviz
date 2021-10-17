@@ -204,6 +204,7 @@ export default {
       }
     },
     resetPositionMap() {
+      this.displayImages = [];
       this.positionMap = {};
       this.computePosition();
     },
