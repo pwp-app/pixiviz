@@ -94,6 +94,15 @@
   }
 }
 
+/* standalone */
+@media all and (display-mode: fullscreen) {
+  .history {
+    &-header {
+      padding-top: calc(constant(safe-area-inset-top) + 32px);
+    }
+  }
+}
+
 // mobile
 
 @media (max-width: 1280px) {
