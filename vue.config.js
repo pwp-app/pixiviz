@@ -137,6 +137,25 @@ module.exports = {
             },
           },
         },
+        // 发电头像缓存，最多缓存50个
+        {
+          urlPattern: /^https:\/\/pic1\.afdiancdn\.com\/.*$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'sponsor-avatar',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400,
+              maxEntries: 50,
+            },
+            fetchOptions: {
+              credentials: 'omit',
+              mode: 'cors',
+            },
+          },
+        },
       ],
     },
   },

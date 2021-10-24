@@ -10,6 +10,7 @@
   "landing_bg_id": 92817067,
   "trust_host": "pixiviz.pwp.app",
   "announcement_feed": "https://cfs.tigo.pwp.app/pixiviz-anno-prod.json",
+  "afdian_manage_api": "https://afdian-manage.pwp.app",
   "maintain": {
     "enable": false
   }

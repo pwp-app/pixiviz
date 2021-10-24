@@ -106,13 +106,7 @@ dir.forEach((file) => {
   annoList.push(anno);
 });
 
-let json;
-
-if (process.env.NODE_ENV === 'dev') {
-  json = JSON.stringify(annoList, null, '  ');
-} else {
-  json = JSON.stringify(annoList);
-}
+const json = JSON.stringify(annoList);
 
 if (process.env.NODE_ENV === 'dev') {
   fs.writeFileSync(devOutput, json, { encoding: 'utf-8' });

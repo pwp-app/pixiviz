@@ -1,0 +1,363 @@
+.sponsor-container {
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+  & > .el-loading-mask {
+    .el-loading-spinner {
+      transform: translateY(-50%);
+    }
+    user-select: none;
+    background-color: #fff !important;
+    max-height: 100vh;
+  }
+}
+
+.sponsor {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 24px 0 24px;
+  box-sizing: border-box;
+  &-header {
+    width: 100%;
+    position: relative;
+    user-select: none;
+    &__icon {
+      display: block;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto;
+      path {
+        fill: fade(@color-primary, 95%);
+      }
+    }
+    &__title {
+      font-size: 28px;
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 0.175rem;
+      color: fade(@color-primary, 95%);
+      margin-top: 24px;
+      margin-bottom: 0;
+    }
+  }
+  &-amount {
+    width: 100%;
+    display: flex;
+    padding-top: 32px;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 28px;
+    user-select: none;
+    &-item {
+      width: 218px;
+      margin-right: 12px;
+      &__title {
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 0.125rem;
+        color: fade(@color-primary, 95%);
+        margin-bottom: 12px;
+        text-align: center;
+      }
+      &__num {
+        font-family: Consolas, Helvetica, sans-serif;
+        text-align: center;
+        position: relative;
+        .number {
+          display: block;
+          width: max-content;
+          font-size: 36px;
+          letter-spacing: 0.125rem;
+          color: fade(@color-primary, 95%);
+          margin-right: 4px;
+          position: relative;
+          margin: 0 auto;
+          .unit {
+            display: block;
+            color: fade(@color-primary, 85%);
+            font-size: 12px;
+            letter-spacing: 0.05rem;
+            position: absolute;
+            right: -28px;
+            bottom: 6px;
+          }
+        }
+      }
+    }
+    &-item:last-child {
+      margin-right: 0;
+    }
+  }
+  &-list {
+    width: 100%;
+    box-sizing: border-box;
+    user-select: none;
+    &__top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 660px;
+      width: max-content;
+      margin: 0 auto;
+      .sponsor-top {
+        width: 220px;
+        min-height: 128px;
+        position: relative;
+        margin-bottom: 24px;
+        &__avatar {
+          width: 68px;
+          height: 68px;
+          margin: 0 auto;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          border-radius: 50%;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          margin-bottom: 12px;
+        }
+        &__name {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: calc(100% - 20px);
+          color: fade(@color-primary, 95%);
+          font-size: 20px;
+          letter-spacing: 0.05rem;
+          text-align: center;
+          margin: 0 auto;
+          font-weight: 600;
+        }
+        &__price {
+          font-family: Consolas, Helvetica, sans-serif;
+          text-align: center;
+          position: relative;
+          margin-top: 4px;
+          .number {
+            font-size: 16px;
+            color: fade(@color-primary, 95%);
+            margin-bottom: 4px;
+          }
+          .unit {
+            color: fade(@color-primary, 85%);
+            font-size: 10px;
+            letter-spacing: 0.05rem;
+            margin-left: 2px;
+          }
+        }
+      }
+    }
+    &__top--no-normal {
+      min-height: 438px;
+    }
+    &__normal {
+      width: max-content;
+      max-width: 880px;
+      min-height: 286px;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 auto;
+      padding-top: 8px;
+      align-items: center;
+      justify-content: center;
+      .sponsor-normal {
+        width: 200px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+        margin-right: 20px;
+        &__avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0875);
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+        .sponsor-text {
+          flex: 1;
+          margin-left: 10px;
+        }
+        &__name {
+          font-size: 15px;
+          color: fade(@color-primary, 95%);
+          text-align: left;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          box-sizing: border-box;
+          white-space: nowrap;
+        }
+        &__price {
+          font-family: Consolas, Helvetica, sans-serif;
+          position: relative;
+          box-sizing: border-box;
+          .number {
+            font-size: 12px;
+            color: fade(@color-primary, 95%);
+            margin-bottom: 4px;
+          }
+          .unit {
+            color: fade(@color-primary, 85%);
+            font-size: 10px;
+            letter-spacing: 0.05rem;
+            margin-left: 2px;
+          }
+        }
+      }
+      .sponsor-normal::after {
+        content: '';
+        width: 2px;
+        height: 6px;
+        position: absolute;
+        right: 0;
+        top: 21px;
+        border-radius: 2px;
+        background-color: fade(@color-primary, 40%);
+      }
+    }
+    &__normal--no-top {
+      min-height: 438px;
+    }
+    &__placeholder {
+      height: 438px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: fade(@color-primary, 95);
+      font-size: 14px;
+      letter-spacing: 0.1rem;
+    }
+  }
+  &-footer {
+    width: 100%;
+    position: relative;
+    padding: 22px 0 40px 0;
+    box-sizing: border-box;
+    user-select: none;
+    &__text {
+      font-size: 14px;
+      width: 100%;
+      color: fade(@color-primary, 80%);
+      text-align: center;
+      margin-bottom: 28px;
+      letter-spacing: 0.05rem;
+      p {
+        margin: 0;
+        line-height: 30px;
+      }
+    }
+    &__desc {
+      font-size: 12px;
+      width: 100%;
+      color: fade(@color-primary, 75%);
+      text-align: center;
+      letter-spacing: 0.05rem;
+    }
+    &__op {
+      font-size: 12px;
+      width: 100%;
+      color: fade(@color-primary, 75%);
+      text-align: center;
+      letter-spacing: 0.05rem;
+      span {
+        margin-right: 12px;
+      }
+      span:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.dark {
+  .sponsor-container {
+    & > .el-loading-mask {
+      background-color: lighten(@color-background-dark, 2.5%) !important;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .sponsor {
+    .unit {
+      display: none !important;
+    }
+    &-list {
+      &__top {
+        max-width: 440px;
+      }
+      &__normal {
+        max-width: 660px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .sponsor {
+    &-amount {
+      &-item {
+        width: 172px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .sponsor {
+    &-amount {
+      display: block;
+      padding-top: 20px;
+      padding-bottom: 16px;
+      &-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 8px;
+        &__title {
+          margin-right: 24px;
+          margin-bottom: 0;
+          font-size: 18px;
+        }
+        &__num {
+          .number {
+            font-size: 22px;
+          }
+          .unit {
+            display: block;
+          }
+        }
+      }
+    }
+    &-list {
+      &__top {
+        max-width: 440px;
+      }
+      &__normal {
+        max-width: 440px;
+      }
+    }
+    &-footer {
+      padding-bottom: 56px;
+    }
+  }
+}
+
+@media screen and (max-width: 496px) {
+  .sponsor {
+    &-list {
+      &__top {
+        max-width: 220px;
+      }
+      &__normal {
+        max-width: 220px;
+      }
+    }
+  }
+}
