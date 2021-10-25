@@ -86,7 +86,7 @@ module.exports = {
         },
         {
           // API缓存，本地资源优先，7天过期，最多3w条
-          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-us\.pwp\.link\/)).+/,
+          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-us\.pwp\.link\/)|(afdian-manage\.pwp\.app)).+/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
@@ -130,6 +130,25 @@ module.exports = {
             expiration: {
               maxAgeSeconds: 86400,
               maxEntries: 10,
+            },
+            fetchOptions: {
+              credentials: 'omit',
+              mode: 'cors',
+            },
+          },
+        },
+        // 发电头像缓存，最多缓存50个
+        {
+          urlPattern: /^https:\/\/pic1\.afdiancdn\.com\/.*$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'sponsor-avatar',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400,
+              maxEntries: 50,
             },
             fetchOptions: {
               credentials: 'omit',

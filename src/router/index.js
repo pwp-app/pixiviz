@@ -78,6 +78,22 @@ const routes = [
     },
   },
   {
+    path: '/sponsor',
+    name: 'Sponsor',
+    component: () => import(/* webpackChunkName: "sponsor" */ '../../src/views/Sponsor.vue'),
+    meta: {
+      keepAlive: false,
+      ogTagsData: {
+        ogTitle: '感谢发电 - Pixiviz',
+        ogDesc: '感谢每一位赞助了 Pixiviz 的用户',
+        // eslint-disable-next-line no-undef
+        ogImage: `${config.website_url}favicon.png`,
+        // eslint-disable-next-line no-undef
+        ogUrl: `${__ROOT_URL__}/sponsor`,
+      },
+    },
+  },
+  {
     path: '/404',
     name: 'Page not found',
     component: NotFound,
