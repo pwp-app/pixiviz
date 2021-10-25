@@ -28,7 +28,7 @@
       height: 72px;
       margin: 0 auto;
       path {
-        fill: fade(@color-primary, 95%);
+        fill: fade(@color-text-primary, 95%);
       }
     }
     &__title {
@@ -37,9 +37,22 @@
       width: 100%;
       text-align: center;
       letter-spacing: 0.175rem;
-      color: fade(@color-primary, 95%);
+      color: fade(@color-text-primary, 95%);
       margin-top: 24px;
       margin-bottom: 0;
+    }
+    &__close {
+      position: absolute;
+      top: 0px;
+      right: 8px;
+      transition: 200ms ease-in-out;
+      color: fade(@color-text-primary, 85%);
+      font-size: 36px;
+      display: block;
+    }
+    &__close:hover {
+      cursor: pointer;
+      color: fade(@color-text-primary, 50%);
     }
   }
   &-amount {
@@ -58,7 +71,7 @@
         font-size: 20px;
         font-weight: 600;
         letter-spacing: 0.125rem;
-        color: fade(@color-primary, 95%);
+        color: fade(@color-text-primary, 95%);
         margin-bottom: 12px;
         text-align: center;
       }
@@ -71,13 +84,13 @@
           width: max-content;
           font-size: 36px;
           letter-spacing: 0.125rem;
-          color: fade(@color-primary, 95%);
+          color: fade(@color-text-primary, 95%);
           margin-right: 4px;
           position: relative;
           margin: 0 auto;
           .unit {
             display: block;
-            color: fade(@color-primary, 85%);
+            color: fade(@color-text-primary, 85%);
             font-size: 12px;
             letter-spacing: 0.05rem;
             position: absolute;
@@ -124,7 +137,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           width: calc(100% - 20px);
-          color: fade(@color-primary, 95%);
+          color: fade(@color-text-primary, 95%);
           font-size: 20px;
           letter-spacing: 0.05rem;
           text-align: center;
@@ -138,11 +151,11 @@
           margin-top: 4px;
           .number {
             font-size: 16px;
-            color: fade(@color-primary, 95%);
+            color: fade(@color-text-primary, 95%);
             margin-bottom: 4px;
           }
           .unit {
-            color: fade(@color-primary, 85%);
+            color: fade(@color-text-primary, 85%);
             font-size: 10px;
             letter-spacing: 0.05rem;
             margin-left: 2px;
@@ -185,7 +198,7 @@
         }
         &__name {
           font-size: 15px;
-          color: fade(@color-primary, 95%);
+          color: fade(@color-text-primary, 95%);
           text-align: left;
           text-overflow: ellipsis;
           overflow: hidden;
@@ -198,11 +211,11 @@
           box-sizing: border-box;
           .number {
             font-size: 12px;
-            color: fade(@color-primary, 95%);
+            color: fade(@color-text-primary, 95%);
             margin-bottom: 4px;
           }
           .unit {
-            color: fade(@color-primary, 85%);
+            color: fade(@color-text-primary, 85%);
             font-size: 10px;
             letter-spacing: 0.05rem;
             margin-left: 2px;
@@ -217,7 +230,7 @@
         right: 0;
         top: 21px;
         border-radius: 2px;
-        background-color: fade(@color-primary, 40%);
+        background-color: fade(@color-text-primary, 40%);
       }
     }
     &__normal--no-top {
@@ -228,7 +241,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: fade(@color-primary, 95);
+      color: fade(@color-text-primary, 95);
       font-size: 14px;
       letter-spacing: 0.1rem;
     }
@@ -242,7 +255,7 @@
     &__text {
       font-size: 14px;
       width: 100%;
-      color: fade(@color-primary, 80%);
+      color: fade(@color-text-primary, 80%);
       text-align: center;
       margin-bottom: 28px;
       letter-spacing: 0.05rem;
@@ -254,21 +267,98 @@
     &__desc {
       font-size: 12px;
       width: 100%;
-      color: fade(@color-primary, 75%);
+      color: fade(@color-text-primary, 75%);
       text-align: center;
       letter-spacing: 0.05rem;
     }
     &__op {
       font-size: 12px;
       width: 100%;
-      color: fade(@color-primary, 75%);
+      color: fade(@color-text-primary, 75%);
       text-align: center;
       letter-spacing: 0.05rem;
+      cursor: pointer;
       span {
         margin-right: 12px;
       }
       span:last-of-type {
         margin-right: 0;
+      }
+      span:hover {
+        color: fade(@color-text-primary, 85%);
+      }
+    }
+  }
+}
+
+.dialog-sponsor-desc {
+  .el-dialog__body {
+    pre {
+      font-family: Microsoft Yahei, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      color: fade(@color-text-primary, 95%);
+      line-height: 40px;
+      letter-spacing: 0.025rem;
+    }
+    .dialog-sponsor-desc__footer {
+      text-align: right;
+      margin-top: 12px;
+      letter-spacing: 0.05rem;
+    }
+  }
+}
+
+.dialog-sponsor-all {
+  .el-dialog__body {
+    position: relative;
+    .all-sponsor {
+      display: flex;
+      flex-wrap: wrap;
+      .sponsor-all {
+        width: 33%;
+        height: 54px;
+        padding: 2px 0;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        &__avatar {
+          width: 36px;
+          height: 36px;
+          margin-right: 10px;
+          border-radius: 18px;
+          box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+        &__name {
+          color: fade(@color-text-primary, 95%);
+          font-size: 14px;
+        }
+        &__price {
+          color: fade(@color-text-primary, 75%);
+          .number {
+            font-size: 10px;
+          }
+          .unit {
+            font-size: 10px;
+            margin-left: 2px;
+            color: fade(@color-text-primary, 62.5%);
+          }
+        }
+      }
+    }
+    .all-sponsor__load {
+      width: 100%;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: fade(@color-text-primary, 95%);
+      span {
+        transform: translateY(-50%);
       }
     }
   }
@@ -278,6 +368,14 @@
   .sponsor-container {
     & > .el-loading-mask {
       background-color: lighten(@color-background-dark, 2.5%) !important;
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .dialog-sponsor-all {
+    .el-dialog {
+      width: 90%;
     }
   }
 }
@@ -304,6 +402,11 @@
       &-item {
         width: 172px;
       }
+    }
+  }
+  .dialog-sponsor-desc {
+    .el-dialog {
+      width: 90% !important;
     }
   }
 }
@@ -347,6 +450,15 @@
       padding-bottom: 56px;
     }
   }
+  .dialog-sponsor-all {
+    .el-dialog__body {
+      .all-sponsor {
+        .sponsor-all {
+          width: 50%;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 496px) {
@@ -357,6 +469,18 @@
       }
       &__normal {
         max-width: 220px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 461px) {
+  .dialog-sponsor-all {
+    .el-dialog__body {
+      .all-sponsor {
+        .sponsor-all {
+          width: 100%;
+        }
       }
     }
   }

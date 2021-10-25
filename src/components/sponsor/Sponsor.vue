@@ -4,7 +4,9 @@
     <div class="sponsor-text">
       <div :class="`sponsor-${type}__name`">{{ sponsor.name }}</div>
       <div :class="`sponsor-${type}__price`">
-        <span class="number">{{ sponsor.current_plan_price }}</span
+        <span class="number">{{
+          type === 'all' ? sponsor.all_sum_amount : sponsor.current_plan_price
+        }}</span
         ><span class="unit">kWh</span>
       </div>
     </div>
