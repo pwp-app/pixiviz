@@ -14,6 +14,7 @@
   position: relative;
   border-radius: @image-card-corner;
   box-shadow: @shadow-small;
+  overflow: hidden;
   .el-loading-mask {
     border-radius: @image-card-corner;
     z-index: 1000;
@@ -33,23 +34,24 @@
     filter: brightness(0.875);
   }
   &-title {
-    width: calc(100% - 32px);
-    height: 48px;
-    background: rgba(0, 0, 0, 0.25);
+    width: calc(100% - 24px);
+    height: 36px;
+    background: rgba(0, 0, 0, 0.2);
     position: absolute;
     bottom: 0;
     border-radius: 0 0 @image-card-corner @image-card-corner;
-    padding: 0 16px;
-    font-size: 16px;
+    padding: 0 12px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.025rem;
     color: @color-text-accent;
-    text-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    line-height: 48px;
+    line-height: 36px;
     z-index: 10;
+    font-family: 'Kosugi Maru', -apple-system-font, 'PingFang SC', 'MicroSoft Yahei UI', sans-serif;
     .no-select();
   }
   &-overlay {
@@ -85,18 +87,23 @@
     }
   }
   &-count {
-    background: rgba(0, 0, 0, 0.375);
+    background: rgba(0, 0, 0, 0.2);
     width: max-content;
     position: absolute;
-    top: 12px;
-    right: 12px;
-    border-radius: 8px;
+    top: -10px;
+    right: -8px;
+    border-radius: 12px;
+    width: max-content;
     height: 32px;
+    box-sizing: border-box;
+    padding-left: 8px;
+    padding-right: 16px;
+    padding-bottom: 4px;
     display: flex;
-    padding: 0 6px;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     z-index: 100;
+    font-family: 'Kosugi Maru', -apple-system-font, 'PingFang SC', 'MicroSoft Yahei UI', sans-serif;
     .no-select();
     img {
       width: 18px;
@@ -105,9 +112,10 @@
     }
     span {
       color: @color-text-accent;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      letter-spacing: -0.02em;
+      color: #fafafa;
     }
   }
 }
@@ -134,9 +142,9 @@
 @media (max-width: 767px) {
   .image-card {
     &-title {
-      height: 42px;
-      line-height: 42px;
-      font-size: 14px;
+      height: 26px;
+      line-height: 26px;
+      font-size: 12px;
     }
     &-overlay {
       &-icon {

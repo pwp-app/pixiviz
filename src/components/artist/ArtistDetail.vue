@@ -19,7 +19,7 @@
       </div>
       <div class="artist-overview-content">
         <div class="artist-overview-content-name">
-          <span>{{ name }}</span>
+          <span>{{ name && name.trim() }}</span>
         </div>
         <div class="artist-overview-content-other">
           <ArtistInfoTag

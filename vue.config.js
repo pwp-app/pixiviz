@@ -137,6 +137,25 @@ module.exports = {
             },
           },
         },
+        // gfont缓存，最多缓存50个
+        {
+          urlPattern: /^https:\/\/((fonts\.gstatic\.com)|(fonts\.googleapis\.com))\/.*$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'gfont',
+            cacheableResponse: {
+              statuses: [200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400 * 90,
+              maxEntries: 500,
+            },
+            fetchOptions: {
+              credentials: 'omit',
+              mode: 'cors',
+            },
+          },
+        },
         // 发电头像缓存，最多缓存50个
         {
           urlPattern: /^https:\/\/pic1\.afdiancdn\.com\/.*$/,

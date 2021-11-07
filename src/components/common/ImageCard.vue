@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="image-card-count" v-if="image && image.page_count > 1">
-        <img :src="countIcon" /><span>{{ image ? image.page_count : '' }}</span>
+        <span>{{ image ? image.page_count : '' }}</span>
       </div>
       <div
         ref="image"
@@ -86,7 +86,6 @@ export default {
       loading: false,
       loadError: false,
       block: this.image.x_strict ? true : this.image.sanity_level > 5,
-      countIcon: require('@/assets/images/count.svg'),
     };
   },
   created() {
