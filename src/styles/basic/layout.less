@@ -72,6 +72,16 @@ button:focus {
   font-size: 15px !important;
 }
 
+.vue-share-popup {
+  border-radius: 10px;
+  &__item:first-child {
+    border-radius: 10px 0 0 10px;
+  }
+  &__item:last-child {
+    border-radius: 0 10px 10px 0;
+  }
+}
+
 // dark mode
 .dark {
   background: @color-background-dark;
