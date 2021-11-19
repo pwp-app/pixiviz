@@ -31,7 +31,7 @@ import App from './App.vue';
 import router from './router';
 
 // Import axios
-import axios from './util/axios';
+import axios, { wrapAxios } from './util/axios';
 
 // Import utils
 import { getOgTags } from './util/og';
@@ -56,7 +56,9 @@ registerThemeColorHandler();
 
 const A_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-Vue.use(VueCompositionAPI);
+if (!Vue.__composition_api_installed__) {
+  Vue.use(VueCompositionAPI);
+}
 
 try {
   if (checkTrustHost(config)) {
@@ -72,8 +74,10 @@ Vue.config.productionTip = false;
 // Set up config
 Vue.prototype.$config = config;
 
-Vue.prototype.axios = axios;
-Vue.prototype.$http = axios;
+const axiosIns = wrapAxios(axios, config);
+
+Vue.prototype.axios = axiosIns;
+Vue.prototype.$http = axiosIns;
 
 // Set up lazyload
 Vue.use(VueLazyload, {
