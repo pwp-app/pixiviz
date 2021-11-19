@@ -1,14 +1,24 @@
 /* eslint-disable no-param-reassign */
-import dayjs from 'dayjs';
 import seedrandom from 'seedrandom';
 import axios from './axios';
 import bus from './bus';
 import { weightedRandom } from './random';
 
-const API_CHECK_PATH = `/rank?mode=day&date=${dayjs()
-  .subtract(2, 'day')
-  .format('YYYY-MM-DD')}&page=1`;
-const IMAGE_CHECK_PATH = '/img-original/img/2007/09/20/19/49/36/10000_p0.jpg';
+const IMG_CHECK_IDS = [
+  '93981457',
+  '94162129',
+  '94041956',
+  '93932132',
+  '93882431',
+  '94050687',
+  '93514501',
+  '92391150',
+  '93647682',
+  '75966930',
+];
+
+const API_CHECK_PATH = `/detail?id=${IMG_CHECK_IDS[Date.now() % IMG_CHECK_IDS.length]}`;
+const IMAGE_CHECK_PATH = '/img-original/img/2017/08/14/12/45/09/64407731_p0.png';
 const API_PREFIX_STORE_KEY = 'pixiviz-api-prefix';
 
 const storedApiPrefix = window.localStorage.getItem(API_PREFIX_STORE_KEY);
@@ -110,6 +120,7 @@ export const defineApiPrefix = (conf, disabled) => {
     });
     const [prefix] = weightedRandom(spec);
     conf.api_prefix = prefix;
+    conf.api_prefix_list = prefixList;
     window.localStorage.setItem(API_PREFIX_STORE_KEY, prefix);
   } else {
     window.localStorage.setItem(API_PREFIX_STORE_KEY, conf.api_prefix);
