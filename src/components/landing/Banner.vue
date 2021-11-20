@@ -48,7 +48,7 @@
           </div>
           <div class="about-copyright-item">
             <span>
-              <a href="https://afdian.net/@backrunner" target="_blank">发电通道</a>
+              <a href="https://pixiviz.pwp.app/sponsor" target="_blank">发电名录</a>
               <span class="about-copyright-split">|</span>
               <a href="https://github.com/pwp-app/pixiviz/discussions" target="_blank">交流反馈</a>
               <span class="about-copyright-split">|</span>
