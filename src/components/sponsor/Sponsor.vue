@@ -1,7 +1,7 @@
 <template>
   <div :class="`sponsor-${type}`">
     <div :class="`sponsor-${type}__avatar`" v-lazy-container :style="avatar"></div>
-    <div class="sponsor-text">
+    <div class="sponsor-item-text">
       <div :class="`sponsor-${type}__name`">{{ sponsor.name }}</div>
       <div :class="`sponsor-${type}__price`">
         <span class="number">{{

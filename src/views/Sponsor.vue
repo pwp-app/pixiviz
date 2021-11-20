@@ -184,16 +184,26 @@ export default {
       if (!this.info?.sponsors?.current) {
         return [];
       }
-      return this.info.sponsors?.current.filter((sponsor) => sponsor.current_plan_price >= 50);
+      try {
+        return this.info.sponsors?.current
+          .filter((sponsor) => sponsor.current_plan_price >= 50)
+          .sort((a, b) => parseFloat(b.current_plan_price) - parseFloat(a.current_plan_price));
+      } catch {
+        return [];
+      }
     },
     normalSponsors() {
       if (!this.info?.sponsors?.current) {
         return [];
       }
       const topSponsorIds = this.topSponsors.map((sponsor) => sponsor.user_id);
-      return this.info.sponsors?.current.filter(
-        (sponsor) => !topSponsorIds.includes(sponsor.user_id),
-      );
+      try {
+        return this.info.sponsors?.current
+          .filter((sponsor) => !topSponsorIds.includes(sponsor.user_id))
+          .sort((a, b) => parseFloat(b.current_plan_price) - parseFloat(a.current_plan_price));
+      } catch {
+        return [];
+      }
     },
     lastUpdateTime() {
       if (!this.info) {

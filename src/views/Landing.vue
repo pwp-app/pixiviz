@@ -196,12 +196,12 @@ export default {
       if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
         window.FrontJS.addUserData('lastShowDonate', lastShowDonate);
       }
-      if (lastShowDonate && (new Date().valueOf() - parseInt(lastShowDonate, 10)) / 1000 < 432000) {
+      if (lastShowDonate && (Date.now() - parseInt(lastShowDonate, 10)) / 1000 <= 86400 * 5) {
         return;
       }
-      // 60%的概率展示通知
-      if (Math.random() <= 0.6) {
-        window.localStorage.setItem('last-show-donate', new Date().valueOf());
+      // 75%的概率展示通知
+      if (Math.random() <= 0.75) {
+        window.localStorage.setItem('last-show-donate', Date.now());
         document.body.addEventListener('click', this.donateNoticeClicked, false);
         this.$nextTick(() => {
           this.donateNotice = this.$notify({
@@ -213,7 +213,7 @@ export default {
             onClose: this.donateNoticeClosed,
             message: `
 							<div class="oneline-notice">
-								<span data-name="notice-donate">通过发电帮助我们给服务器续命，维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
+								<span data-name="notice-donate">即刻发电给服务器续命，帮助我们维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电（使用支付宝有优惠哦~）</span></span>
 							</div>`,
           });
         });

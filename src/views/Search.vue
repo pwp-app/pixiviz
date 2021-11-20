@@ -395,6 +395,10 @@ export default {
       this.setOgTagData();
     },
     handleCardClicked(imageId) {
+      const storedSearchFrom = this.$cookie.get('search-from');
+      if (storedSearchFrom === `pic/${imageId}`) {
+        return;
+      }
       this.$cookies.set(
         'pic-from',
         `search/${encodeURIComponent(this.$route.params.keyword)}`,
