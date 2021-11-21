@@ -139,7 +139,7 @@ module.exports = {
         },
         // gfont缓存，最多缓存50个
         {
-          urlPattern: /^https:\/\/((fonts\.gstatic\.com)|(fonts\.googleapis\.com))\/.*$/,
+          urlPattern: /^https:\/\/gfonts\.pwp\.link\/.*$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'gfont',
@@ -185,16 +185,6 @@ module.exports = {
         __ROOT_URL__: JSON.stringify(pixivizConf.website_url),
       },
     ]);
-    config.module
-      .rule('images')
-      .use('image-webpack-loader')
-      .loader('image-webpack-loader')
-      .options({
-        mozjpeg: { progressive: true, quality: 80 },
-        optipng: { enabled: false },
-        pngquant: { quality: [0.7, 0.95], speed: 4 },
-        gifsicle: { interlaced: false },
-      });
     // drop debug lines
     if (process.env.NODE_ENV === 'production') {
       config.optimization.minimizer('terser').tap((args) => {
