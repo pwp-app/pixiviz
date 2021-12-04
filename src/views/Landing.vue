@@ -213,7 +213,7 @@ export default {
             onClose: this.donateNoticeClosed,
             message: `
 							<div class="oneline-notice">
-								<span data-name="notice-donate">即刻发电给服务器续命，帮助我们维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电（使用支付宝有优惠哦~）</span></span>
+								<span data-name="notice-donate">即刻发电给服务器续命，帮助我们维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
 							</div>`,
           });
         });
