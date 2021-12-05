@@ -100,7 +100,7 @@ export default {
     this.resetHeightStore();
     this.resetPositionMap();
     window.addEventListener('resize', this.handleWindowResize);
-    window.addEventListener('scroll', this.handleWindowScroll, {
+    window.addEventListener('scroll', this.handleScroll, {
       passive: true,
     });
   },
@@ -113,7 +113,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleWindowResize);
-    window.removeEventListener('scroll', this.handleWindowScroll);
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     // waterfall container
@@ -327,17 +327,23 @@ export default {
       this.screenHeight = document.documentElement.clientHeight;
       this.containerOffset = this.getContainerOffset();
     },
-    handleWindowScroll() {
-      this.handleScroll(true);
-    },
-    handleScroll(timeout = false) {
-      if (timeout && this.lastScroll && Date.now() - this.lastScroll < 200) {
+    handleScroll() {
+      if (this.scrollTimer) {
+        clearTimeout(this.scrollTimer);
+        this.scrollTimer = null;
+      }
+      this.scrollTimer = setTimeout(() => {
+        this.handleScroll.apply(true);
+      }, 200);
+      if (this.lastScroll && Date.now() - this.lastScroll < 200) {
         return;
       }
       this.lastScroll = Date.now();
       this.containerOffset = this.getContainerOffset();
       this.scrollTop = document.documentElement.scrollTop - this.containerOffset;
       this.setDisplay();
+      clearTimeout(this.scrollTimer);
+      this.scrollTimer = null;
     },
   },
 };
