@@ -328,19 +328,11 @@ export default {
       this.containerOffset = this.getContainerOffset();
     },
     handleWindowScroll() {
-      this.handleScroll();
+      this.handleScroll(true);
     },
     handleScroll(timeout = false) {
       if (timeout && this.lastScroll && Date.now() - this.lastScroll < 200) {
         return;
-      }
-      if (timeout) {
-        if (this.scrollTimer) {
-          clearTimeout(this.scrollTimer);
-        }
-        this.scrollTimer = setTimeout(() => {
-          this.handleScroll.apply(this, [true]);
-        }, 200);
       }
       this.lastScroll = Date.now();
       this.containerOffset = this.getContainerOffset();
