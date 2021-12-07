@@ -130,9 +130,6 @@ export default {
               lastVisitAfter,
             } = announcement;
             const announceLog = window.localStorage.getItem('announce-read-id');
-            if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
-              window.FrontJS.addUserData('announceLog', announceLog);
-            }
             // check conditions
             const started = start ? start <= Date.now() : true;
             const expired = expires ? expires < Date.now() : true;
@@ -193,9 +190,6 @@ export default {
       }
       // 同一个设备5天内只展示一次
       const lastShowDonate = window.localStorage.getItem('last-show-donate');
-      if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
-        window.FrontJS.addUserData('lastShowDonate', lastShowDonate);
-      }
       if (lastShowDonate && (Date.now() - parseInt(lastShowDonate, 10)) / 1000 <= 86400 * 5) {
         return;
       }

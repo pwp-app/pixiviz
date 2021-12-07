@@ -72,7 +72,7 @@ module.exports = {
         },
         // 统计代码缓存
         {
-          urlPattern: /^(https:\/\/hm\.baidu\.com\/hm\.js)|(https:\/\/frontjs-static\.pgyer\.com\/dist\/current\/frontjs\.web\.min\.js)/,
+          urlPattern: /^(https:\/\/hm\.baidu\.com\/hm\.js)|(https:\/\/cdn-go\.cn\/aegis\/aegis-sdk\/latest\/aegis\.min\.js)/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'stat-files',

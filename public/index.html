@@ -43,6 +43,39 @@
         alert('很抱歉，Pixiviz 不支持 Internet Explorer，请使用其他浏览器访问本站。');
       }
     </script>
+    <script src="https://cdn-go.cn/aegis/aegis-sdk/latest/aegis.min.js"></script>
+    <script>
+      (function() {
+        // if (window.location.hostname !== 'pixiviz.pwp.app') {
+        //   return;
+        // }
+        const aegis = new Aegis({
+          id: '3mpyYVMLl749M9Wax5', // 上报 id
+          reportApiSpeed: true,
+          reportAssetSpeed: true,
+          spa: true,
+          reportApiSpeed: true,
+          reportAssetSpeed: true,
+          random: 0.1,
+          delay: 3000,
+          repet: 3,
+          api: {
+            retCodeHandler() {
+              return {
+                isErr: false,
+                code: 0,
+              };
+            },
+          },
+          beforeReport(log) {
+            if (log.msg && log.msg.includes('hm.baidu.com/hm.gif')) {
+              return false;
+            }
+            return log;
+          },
+        });
+      })();
+    </script>
     <script>
       // dark mode enhancement
       (() => {

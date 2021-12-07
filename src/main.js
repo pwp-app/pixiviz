@@ -47,8 +47,7 @@ import { registerThemeColorHandler } from './util/darkMode';
 // Import sw
 import './registerServiceWorker';
 
-// Import frontjs stat
-import { initBaiduStat, initFrontJs } from './util/statistics';
+import { initBaiduStat } from './util/statistics';
 import { checkTrustHost } from './util/host';
 
 // Register handlers
@@ -63,7 +62,6 @@ if (!Vue.__composition_api_installed__) {
 try {
   if (checkTrustHost(config)) {
     initBaiduStat();
-    initFrontJs();
   }
 } catch (err) {
   console.error('Failed to init statistics script.', err);
