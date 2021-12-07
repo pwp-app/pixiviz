@@ -1,7 +1,6 @@
 export const registerThemeColorHandler = () => {
   window.addEventListener('storage', () => {
     const value = window.localStorage.getItem('enable-dark');
-    console.log(value);
     if (value === 'true') {
       !document.documentElement.classList.contains('dark') &&
         document.documentElement.classList.add('dark');

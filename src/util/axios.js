@@ -42,6 +42,9 @@ export const wrapAxios = (axiosIns, pixivizConf) => {
     },
     (err) => {
       const reqConfig = err.config;
+      if (reqConfig.noRetry) {
+        return Promise.reject(err);
+      }
       if (reqConfig.isRetry) {
         return Promise.reject(err);
       }
