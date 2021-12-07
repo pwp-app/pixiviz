@@ -128,6 +128,7 @@ export const defineApiPrefix = (conf, disabled) => {
 };
 
 const isHostAlive = (url, resolveRes) => {
+  console.log('host alive url', url);
   return new Promise((resolve, reject) => {
     axios
       .head(url, {
