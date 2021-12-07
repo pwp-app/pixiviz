@@ -125,6 +125,9 @@ export default {
       }
     },
     getContainerOffset() {
+      if (!this.$refs.container) {
+        return;
+      }
       const bodyRect = document.documentElement.getBoundingClientRect();
       const elRect = this.$refs.container.getBoundingClientRect();
       return elRect.top - bodyRect.top;
