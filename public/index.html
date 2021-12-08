@@ -46,17 +46,17 @@
     <script src="https://cdn-go.cn/aegis/aegis-sdk/latest/aegis.min.js"></script>
     <script>
       (function() {
-        // if (window.location.hostname !== 'pixiviz.pwp.app') {
-        //   return;
-        // }
-        const aegis = new Aegis({
+        if (window.location.hostname !== 'pixiviz.pwp.app') {
+          return;
+        }
+        window.aegis = new Aegis({
           id: '3mpyYVMLl749M9Wax5', // 上报 id
           reportApiSpeed: true,
           reportAssetSpeed: true,
           spa: true,
           reportApiSpeed: true,
           reportAssetSpeed: true,
-          random: 0.1,
+          random: 0.5,
           delay: 3000,
           repet: 3,
           api: {

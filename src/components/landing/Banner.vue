@@ -96,10 +96,11 @@ export default {
     };
   },
   mounted() {
-    if (window.FrontJS && typeof window.FrontJS.addUserData === 'function') {
-      window.FrontJS.addUserData('appVer', appVer);
-      window.FrontJS.addUserData('appBuildTime', appBuildTime);
-    }
+    window.aegis &&
+      window.aegis.setConfig({
+        ext1: appVer,
+        ext2: appBuildTime,
+      });
   },
   beforeDestroy() {
     // reset to false
