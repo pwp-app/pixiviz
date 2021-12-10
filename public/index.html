@@ -71,6 +71,9 @@
             if (log.msg && log.msg.includes('hm.baidu.com/hm.gif')) {
               return false;
             }
+            if (log.msg && log.msg.includes('MyAppGetLink')) {
+              return false;
+            }
             return log;
           },
         });
