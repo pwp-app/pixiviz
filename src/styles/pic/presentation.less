@@ -148,11 +148,29 @@
       font-family: 'Kosugi Maru', -apple-system-font, 'PingFang SC', 'MicroSoft Yahei UI',
         sans-serif;
       a {
+        display: inline-flex;
+        white-space: nowrap;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
         color: @color-text-primary !important;
         transition: 200ms;
+        padding: 0 6px;
+        border-radius: 6px;
+        background-color: fade(@color-primary, 20);
+        font-size: 14px;
+        text-decoration: none;
       }
       a:hover {
-        color: lighten(@color-text-primary, 10%) !important;
+        background-color: fade(@color-primary, 40);
+      }
+      a::before {
+        content: '';
+        display: block;
+        background-image: url('~@/assets/icons/link-inline.svg');
+        width: 18px;
+        height: 18px;
+        margin-right: 4px;
       }
     }
     &-tags {

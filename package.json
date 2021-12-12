@@ -23,7 +23,8 @@
     "upload:proxy": "npm run push:proxy",
     "upload:proxy-dev": "npm run push:proxy-dev",
     "f2elint-scan": "f2elint scan",
-    "f2elint-fix": "f2elint fix"
+    "f2elint-fix": "f2elint fix",
+    "compress-svg": "npx svgo ./src/assets/icons"
   },
   "dependencies": {
     "@better-scroll/core": "^2.4.2",
