@@ -14,7 +14,9 @@
   display: flex;
   .downloadqr {
     width: max-content;
-    margin-bottom: 64px;
+    position: relative;
+    transform: translateY(-15%);
+    filter: drop-shadow(2px 2px 12px rgba(0, 0, 0, 0.25));
     &-code {
       text-align: center;
       svg {
@@ -25,8 +27,9 @@
       color: @color-text-primary;
       text-align: center;
       font-weight: 600;
-      font-size: 28px;
-      margin-top: 36px;
+      font-size: 30px;
+      margin-top: 56px;
+      letter-spacing: 0.125rem;
     }
   }
 }

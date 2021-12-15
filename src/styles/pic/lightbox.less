@@ -15,6 +15,9 @@
     width: 100vw;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.15);
     background: @color-accent;
+    transition: all 200ms ease-in-out;
+    opacity: 0;
+    transform: scaleX(0);
   }
   &-content-landing {
     width: auto;
@@ -23,6 +26,13 @@
   &-content-overheight {
     width: auto;
     height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+.lightbox--anim {
+  .lightbox-content {
+    opacity: 1;
+    transform: scaleX(1);
   }
 }
 
