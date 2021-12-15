@@ -1,5 +1,5 @@
 <template>
-  <div class="lightbox" @click="handleClick">
+  <div :class="['lightbox', { 'lightbox--anim': anim }]" @click="handleClick">
     <img
       :class="[
         'lightbox-content',
@@ -34,6 +34,7 @@ export default {
     return {
       loaded: false,
       supportCopyImage: !!window.ClipboardItem,
+      anim: false,
     };
   },
   computed: {
@@ -41,9 +42,17 @@ export default {
       return this.supportCopyImage && this.loaded;
     },
   },
+  mounted() {
+    setImmediate(() => {
+      this.anim = true;
+    });
+  },
   methods: {
     handleClick() {
-      this.$emit('close');
+      this.anim = false;
+      setTimeout(() => {
+        this.$emit('close');
+      }, 100);
     },
     handleContextClicked(name) {
       if (name === 'down') {

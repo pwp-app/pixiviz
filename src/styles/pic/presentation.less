@@ -158,8 +158,10 @@
         padding: 0 6px;
         border-radius: 6px;
         background-color: fade(@color-primary, 20);
-        font-size: 14px;
+        font-size: 13px;
         text-decoration: none;
+        transform: translateY(2px);
+        margin: 0 4px;
       }
       a:hover {
         background-color: fade(@color-primary, 40);
@@ -168,9 +170,12 @@
         content: '';
         display: block;
         background-image: url('~@/assets/icons/link-inline.svg');
-        width: 18px;
-        height: 18px;
-        margin-right: 4px;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+      }
+      br:last-child {
+        display: none;
       }
     }
     &-tags {

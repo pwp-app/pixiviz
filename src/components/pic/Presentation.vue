@@ -148,6 +148,8 @@ export default {
       imageFirstLoaded: false,
       imageLoading: true,
       imageLoadError: false,
+      imageLoadTooLong: false,
+      imageLoadTimer: null,
       page: 1,
       // lightbox
       lightBoxShow: false,
@@ -241,6 +243,9 @@ export default {
         // init vars
         this.imageLoading = true;
         this.imageLoadError = false;
+        this.imageLoadTooLong = false;
+        clearTimeout(this.imageLoadTimer);
+        this.imageLoadTimer = null;
         this.page = 1;
         this.sizeCache = {};
         this.cancelAllLoad();
@@ -271,6 +276,9 @@ export default {
         this.checkFirstLoad(image);
         // start loading
         this.tryLoad();
+        this.imageLoadTimer = setTimeout(() => {
+          this.imageLoadTooLong = true;
+        }, 5000);
         this.$emit('image-load');
         // set user history
         this.pushUserHistory(image);
@@ -363,9 +371,11 @@ export default {
     imageLoadingText() {
       if (this.mobileMode) {
         return `大图加载中（${this.$store.state.pic.progress}%）`;
-      } else {
-        return null;
       }
+      if (this.imageLoadTooLong) {
+        return '图片体积较大，请耐心等待~';
+      }
+      return null;
     },
     // share
     shareDesc() {
@@ -597,11 +607,15 @@ export default {
       }
       this.$nextTick(() => {
         this.imageLoading = false;
+        clearTimeout(this.imageLoadTimer);
+        this.imageLoadTimer = null;
       });
     },
     onLoadError() {
       this.imageLoading = false;
       this.imageLoadError = true;
+      clearTimeout(this.imageLoadTimer);
+      this.imageLoadTimer = null;
     },
     checkMobileMode() {
       const mobileModeCond_1 = window.matchMedia('(orientation: portrait) and (max-width: 1024px)');
