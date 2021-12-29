@@ -2,45 +2,44 @@
   <div class="rank-mode-switcher">
     <div class="rank-mode-switcher-body">
       <div class="rank-mode-item-row">
-        <!-- <div class="rank-mode-item-tag">
-                    <span>插画</span>
-                </div> -->
         <div
-          :class="['rank-mode-item', mode === 'month' ? 'rank-mode-item-picked' : null]"
-          @click="handleClick('month')"
+          :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'day' }"
+          @click="handleClick('day')"
         >
-          <span>月排行榜</span>
+          <span>日排行榜</span>
         </div>
+
         <div
-          :class="['rank-mode-item', mode === 'week' ? 'rank-mode-item-picked' : null]"
+          :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'week' }"
           @click="handleClick('week')"
         >
           <span>周排行榜</span>
         </div>
         <div
-          :class="['rank-mode-item', mode === 'day' ? 'rank-mode-item-picked' : null]"
-          @click="handleClick('day')"
+          :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'month' }"
+          @click="handleClick('month')"
         >
-          <span>日排行榜</span>
+          <span>月排行榜</span>
+        </div>
+        <div
+          :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'day_male' }"
+          @click="handleClick('day_male')"
+        >
+          <span>男性热榜</span>
+        </div>
+        <div
+          :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'day_female' }"
+          @click="handleClick('day_female')"
+        >
+          <span>女性热榜</span>
+        </div>
+        <div
+          :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'week_rookie' }"
+          @click="handleClick('week_rookie')"
+        >
+          <span>新秀周榜</span>
         </div>
       </div>
-      <!-- <div class="rank-mode-item-row">
-                <div class="rank-mode-item-tag">
-                    <span>漫画</span>
-                </div>
-                <div :class="['rank-mode-item', mode === 'month_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('month_manga')">
-                    <span>月排行榜</span>
-                </div>
-                <div :class="['rank-mode-item', mode === 'week_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('week_manga')">
-                    <span>周排行榜</span>
-                </div>
-                <div :class="['rank-mode-item', mode === 'day_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('day_manga')">
-                    <span>日排行榜</span>
-                </div>
-                <div :class="['rank-mode-item', mode === 'week_rookie_manga' ? 'rank-mode-item-picked' : null]" @click="handleClick('week_rookie_manga')">
-                    <span>新秀周排行榜</span>
-                </div>
-            </div> -->
     </div>
   </div>
 </template>
