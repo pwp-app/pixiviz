@@ -89,10 +89,9 @@ const MODE_TO_TEXT = {
   day: '日排行榜',
   week: '周排行榜',
   month: '月排行榜',
-  day_manga: '漫画日排行榜',
-  week_manga: '漫画周排行榜',
-  month_manga: '漫画月排行榜',
-  week_rookie_manga: '新秀周排行榜',
+  day_male: '男性热榜',
+  day_female: '女性热榜',
+  week_rookie: '新秀周榜',
 };
 
 export default {
@@ -148,16 +147,22 @@ export default {
       if (this.mode.includes('day')) {
         return this.dateObject.format('YYYY-MM-DD');
       } else if (this.mode.includes('week')) {
-        return `${this.dateObject.format('YYYY-MM')} 第 ${
-          Math.floor(this.dateObject.date() / 7) + 1
-        } 周`;
+        return `${this.dateObject.format('YYYY-MM')} 第 ${Math.floor(this.dateObject.date() / 7) +
+          1} 周`;
       } else if (this.mode.includes('month')) {
         return this.dateObject.format('YYYY-MM');
       }
       return this.dateObject.format('YYYY-MM-DD');
     },
     showDateNext() {
-      return (dayjs().startOf('day').unix() - this.dateObject.unix()) / 86400 > 2;
+      return (
+        (dayjs()
+          .startOf('day')
+          .unix() -
+          this.dateObject.unix()) /
+          86400 >
+        2
+      );
     },
     mobileWaterfallWidth() {
       return this.cardWidth * 2 + 32;
@@ -326,6 +331,12 @@ export default {
     handleModeChanged(mode) {
       this.mode = mode || 'day';
       document.title = `${this.modeText} - Pixiviz`;
+      this.$cookies.set('rank-mode', this.mode, '1h');
+      this.$router.replace({
+        query: {
+          mode: this.mode,
+        },
+      });
       this.refreshWaterfall();
     },
     handleBack() {

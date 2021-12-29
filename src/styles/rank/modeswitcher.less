@@ -31,17 +31,15 @@
   }
 }
 .rank-mode-item-picked {
+  background: @color-text-primary;
+  padding: 2px 6px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: default !important;
   span {
-    color: lighten(@color-text-primary, 17.5%);
+    color: @color-background-primary !important;
   }
 }
-.rank-mode-item-picked:hover {
-  cursor: no-drop;
-  span {
-    color: lighten(@color-text-primary, 17.5%);
-  }
-}
-
 // dark mode
 
 .dark {
@@ -57,14 +55,9 @@
     }
   }
   .rank-mode-item-picked {
+    background: darken(@color-text-primary, 2.5%);
     span {
-      color: lighten(@color-text-primary, 3.5%);
-    }
-  }
-  .rank-mode-item-picked:hover {
-    cursor: no-drop;
-    span {
-      color: lighten(@color-text-primary, 3.5%);
+      color: darken(@color-background-dark, 5%) !important;
     }
   }
 }
