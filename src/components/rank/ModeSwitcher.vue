@@ -21,6 +21,8 @@
         >
           <span>月排行榜</span>
         </div>
+      </div>
+      <div class="rank-mode-item-row">
         <div
           :class="{ 'rank-mode-item': true, 'rank-mode-item-picked': mode === 'day_male' }"
           @click="handleClick('day_male')"

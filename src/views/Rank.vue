@@ -1,5 +1,10 @@
 <template>
-  <div :class="['rank-container', iPadStyle ? 'ipad-only' : null]">
+  <div
+    :class="{
+      'rank-container': true,
+      'ipad-only': iPadStyle,
+    }"
+  >
     <div class="rank-header">
       <div class="rank-header-title">
         <span>排行榜</span>
@@ -8,7 +13,7 @@
           <el-popover
             placement="bottom"
             popper-class="rank-category-popover"
-            width="440"
+            width="226s"
             trigger="click"
           >
             <ModeSwitcher :mode="mode" @mode-changed="handleModeChanged" />
