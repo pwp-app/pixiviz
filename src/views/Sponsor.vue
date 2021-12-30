@@ -115,6 +115,19 @@
       </div>
     </el-dialog>
   </div>
+  <div class="sponsor-error" v-else>
+    <div class="sponsor-error-main">
+      <div class="sponsor-error-main__icon">
+        <i class="el-icon-warning-outline"></i>
+      </div>
+      <div class="sponsor-error-main__text">
+        <span>赞助信息加载失败</span>
+      </div>
+      <div class="sponsor-error-main__action">
+        <el-button type="primary" round @click="handleBack">返回主页</el-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

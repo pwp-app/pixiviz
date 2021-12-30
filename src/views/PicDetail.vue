@@ -534,13 +534,13 @@ export default {
               ogDesc:
                 (this.image.caption.length > 50
                   ? this.image.caption.substr(0, 20)
-                  : this.image.caption) || '分享自Pixiviz',
+                  : this.image.caption) || '分享自 Pixiviz',
               ogUrl: window.location.href,
               ogImage: source || `${this.$config.website_url}/favicon.png`,
             }
           : {
               ogTitle: `图片${this.imageId} - Pixiviz`,
-              ogDesc: '分享自Pixiviz',
+              ogDesc: '分享自 Pixiviz',
               ogUrl: window.location.href,
               // eslint-disable-next-line no-undef
               ogImage: `${this.$config.website_url}/favicon.png`,
