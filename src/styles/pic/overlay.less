@@ -6,7 +6,7 @@
   height: 100vh;
   max-width: 100vw;
   max-height: 100vh;
-  z-index: 1200;
+  z-index: 3000;
   background: lighten(@color-primary, 25%);
   display: flex;
   flex-direction: column;
@@ -26,10 +26,11 @@
     }
     .pic-overlay-tip {
       color: @color-text-primary;
-      font-size: 32px;
+      font-size: 2rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
-      margin-bottom: 2.75rem;
+      letter-spacing: 0.1rem;
+      margin: 0 auto 2.75rem auto;
+      text-align: center;
     }
     .pic-overlay-back {
       text-align: center;
@@ -47,6 +48,10 @@
   .pic-overlay {
     &-wrapper {
       margin-bottom: 4.25rem;
+      .pic-overlay-tip {
+        font-size: 1.75rem;
+        letter-spacing: 0.05rem;
+      }
     }
   }
 }

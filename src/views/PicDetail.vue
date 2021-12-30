@@ -54,8 +54,8 @@
         />
       </div>
     </div>
-    <Overlay text="图片无法展示" v-if="block" />
-    <Overlay text="图片信息加载失败" v-if="loadFailed" :showRefresh="true" />
+    <Overlay text="很抱歉，我们不能展示这幅作品" v-if="block" />
+    <Overlay text="您想看的作品似乎走丢了" v-if="loadFailed" :showRefresh="true" />
     <div class="pic-close" @click="handleClose">
       <i class="el-icon-close"></i>
     </div>
