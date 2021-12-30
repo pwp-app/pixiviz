@@ -245,6 +245,7 @@ export default {
           params: {
             id: this.imageId,
           },
+          maxRetryTimes: 3,
         })
         .then(
           (response) => {

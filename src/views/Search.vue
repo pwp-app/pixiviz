@@ -293,7 +293,7 @@ export default {
           params: {
             id: parseInt(this.keyword, 10),
           },
-          noRetry: true,
+          maxRetryTimes: 0,
         })
         .then((res) => {
           if (!res || !res.data || !res.data.illust) {

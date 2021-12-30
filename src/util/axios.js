@@ -34,7 +34,7 @@ const fixConfig = (axiosIns, config) => {
 export const wrapAxios = (axiosIns, pixivizConf) => {
   axiosIns.interceptors.response.use(
     (res) => {
-      if (res.config.isRetry && res.config.url.includes('/v1')) {
+      if (res.config.retryTimes && res.config.url.includes('/v1')) {
         const prefix = `${res.config.url.split('/v1')[0]}/v1`;
         window.localStorage.setItem('pixiviz-api-prefix', prefix);
       }
@@ -42,10 +42,10 @@ export const wrapAxios = (axiosIns, pixivizConf) => {
     },
     (err) => {
       const reqConfig = err.config;
-      if (reqConfig.noRetry) {
+      if (reqConfig.maxRetryTimes === 0) {
         return Promise.reject(err);
       }
-      if (reqConfig.isRetry) {
+      if (reqConfig.retryTimes >= (reqConfig.maxRetryTimes || 2)) {
         return Promise.reject(err);
       }
       const { url } = reqConfig;
@@ -66,7 +66,7 @@ export const wrapAxios = (axiosIns, pixivizConf) => {
       return axios({
         ...fixConfig(axiosIns, reqConfig),
         url: `${nextPrefix}${reqPath}`,
-        isRetry: true,
+        retryTimes: reqConfig.retryTimes ? reqConfig.retryTimes + 1 : 1,
       });
     },
   );
