@@ -54,8 +54,8 @@
         />
       </div>
     </div>
-    <Overlay text="图片无法展示" v-if="block" />
-    <Overlay text="图片信息加载失败" v-if="loadFailed" :showRefresh="true" />
+    <Overlay text="很抱歉，我们不能展示这幅作品" v-if="block" />
+    <Overlay text="您想看的作品似乎走丢了" v-if="loadFailed" :showRefresh="true" />
     <div class="pic-close" @click="handleClose">
       <i class="el-icon-close"></i>
     </div>
@@ -245,6 +245,7 @@ export default {
           params: {
             id: this.imageId,
           },
+          maxRetryTimes: 3,
         })
         .then(
           (response) => {
@@ -534,13 +535,13 @@ export default {
               ogDesc:
                 (this.image.caption.length > 50
                   ? this.image.caption.substr(0, 20)
-                  : this.image.caption) || '分享自Pixiviz',
+                  : this.image.caption) || '分享自 Pixiviz',
               ogUrl: window.location.href,
               ogImage: source || `${this.$config.website_url}/favicon.png`,
             }
           : {
               ogTitle: `图片${this.imageId} - Pixiviz`,
-              ogDesc: '分享自Pixiviz',
+              ogDesc: '分享自 Pixiviz',
               ogUrl: window.location.href,
               // eslint-disable-next-line no-undef
               ogImage: `${this.$config.website_url}/favicon.png`,
