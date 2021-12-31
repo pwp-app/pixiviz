@@ -11,6 +11,10 @@
     <div class="banner">
       <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
         <span>Pixiviz</span>
+        <span
+          style="text-align: center;font-size: 24px;display: block;margin: 8px 0 0 0; color: #fff;"
+          >2022</span
+        >
       </div>
       <div :class="['about', aboutShow ? 'about-show' : '']" v-show="expanded">
         <div class="about-my">

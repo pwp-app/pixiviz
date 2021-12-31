@@ -149,19 +149,18 @@
         sans-serif;
       a {
         display: inline-flex;
-        white-space: nowrap;
-        overflow: hidden;
         align-items: center;
         justify-content: center;
         color: @color-text-primary !important;
         transition: 200ms;
-        padding: 0 6px;
+        padding: 6px;
         border-radius: 6px;
         background-color: fade(@color-primary, 20);
         font-size: 13px;
         text-decoration: none;
         transform: translateY(2px);
         margin: 0 4px;
+        line-height: 16px;
       }
       a:hover {
         background-color: fade(@color-primary, 40);
@@ -169,6 +168,7 @@
       a::before {
         content: '';
         display: block;
+        flex-shrink: 0;
         background-image: url('~@/assets/icons/link-inline.svg');
         width: 16px;
         height: 16px;
@@ -459,6 +459,11 @@
         font-size: 22px;
         span {
           margin-right: 12px;
+        }
+      }
+      &-caption {
+        a {
+          margin: 0;
         }
       }
     }
