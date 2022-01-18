@@ -10,6 +10,7 @@ import Vue2TouchEvents from 'vue2-touch-events';
 import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
 import { sha256 } from 'hash-wasm';
+import Pixland from 'pixland';
 
 // Import config
 import config from './config.json';
@@ -133,6 +134,12 @@ Vue.prototype.$idb = idb;
 
 // Set up og tags
 Vue.prototype.$ogTags = getOgTags();
+
+// Set up pixland
+Vue.prototype.pixland = new Pixland({
+  fileHost: 'pixland.pwp.link',
+  apiHost: 'api.pixland.pwp.link',
+});
 
 // Get api pick storage
 
