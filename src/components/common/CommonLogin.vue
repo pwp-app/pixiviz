@@ -32,7 +32,9 @@
     </el-form>
     <div slot="footer" class="dialog-login-action">
       <el-button type="default" @click="switchMode">{{ switchText }}</el-button>
-      <el-button type="primary" @click="submit">{{ submitText }}</el-button>
+      <el-button type="primary" @click="submit" :loading="submitLoading">{{
+        submitText
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -95,6 +97,8 @@ export default {
           return;
         }
 
+        this.submitLoading = true;
+
         try {
           await this.pixland.login(username, password);
           this.$message.success('登录成功');
@@ -134,6 +138,8 @@ export default {
         this.$message.error('两次输入的密码不一样呢~，请再试一次');
         return;
       }
+
+      this.submitLoading = true;
 
       try {
         await this.pixland.register(username, password, confirmPassword);

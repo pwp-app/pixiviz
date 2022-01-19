@@ -28,12 +28,13 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
   a {
-    transition: 100ms ease;
+    transition: 120ms ease-in-out;
     text-decoration: none;
+    display: inline-block;
   }
   a:hover {
-    color: darken(@color-text-accent, 5%);
-    text-decoration: underline;
+    color: darken(@color-text-accent, 10%);
+    transform: translateY(-2px);
   }
   &-title {
     font-size: 5rem;
