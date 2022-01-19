@@ -1,0 +1,38 @@
+.dialog-login {
+  .el-dialog {
+    width: 640px;
+    .el-dialog__body {
+      padding-top: 0;
+    }
+    .el-form-item {
+      margin-bottom: 8px;
+    }
+  }
+  &-desc {
+    margin-top: 20px;
+    margin-bottom: 0;
+    color: rgba(0, 0, 0, 0.3);
+  }
+  &-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 12px;
+    .el-button {
+      letter-spacing: 0.05rem;
+    }
+  }
+}
+
+.dark {
+  .dialog-login {
+    &-desc {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    &-action {
+      .el-button {
+        filter: brightness(0.875);
+      }
+    }
+  }
+}

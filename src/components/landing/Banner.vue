@@ -74,8 +74,10 @@
 
 <script>
 import { version as appVer, buildTime as appBuildTime } from '../../version.js';
-import ThemeDialog from './dialogs/ThemeDialog';
-import PrivacyDialog from './dialogs/PrivacyDialog';
+import ThemeDialog from './dialogs/ThemeDialog.vue';
+import PrivacyDialog from './dialogs/PrivacyDialog.vue';
+import CommonLogin from '../common/CommonLogin.vue';
+import UserInfo from '../common/UserInfo.vue';
 import GitHubIcon from '../icons/github';
 
 const GITHUB_URL = 'https://github.com/pwp-app/pixiviz';
@@ -86,6 +88,8 @@ export default {
     GitHubIcon,
     ThemeDialog,
     PrivacyDialog,
+    CommonLogin,
+    UserInfo,
   },
   data() {
     return {
