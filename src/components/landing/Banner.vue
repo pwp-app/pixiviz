@@ -23,6 +23,7 @@
               >浏览历史</a
             >
             <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
+            <a href="javascript:;" @click="showAccountDialog" @contextmenu.prevent>帐号</a>
           </div>
         </div>
         <div class="about-settings">
@@ -66,6 +67,8 @@
     </div>
     <ThemeDialog id="landing-dialog-theme" ref="theme" />
     <PrivacyDialog id="landing-dialog-privacy" ref="privacy" />
+    <CommonLogin id="landing-dialog-login" ref="login" />
+    <UserInfo id="landing-dialog-user" ref="user" />
   </div>
 </template>
 
@@ -181,6 +184,13 @@ export default {
         window.location.href = GITHUB_URL;
       } else {
         window.open(GITHUB_URL, '_blank');
+      }
+    },
+    showAccountDialog() {
+      if (!this.pixland.userStorage) {
+        this.$refs.login?.open();
+      } else {
+        this.$refs.user?.open();
       }
     },
     // temp

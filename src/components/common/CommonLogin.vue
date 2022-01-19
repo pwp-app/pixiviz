@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="dialog dialog-login" title="登录 Pixland" :visible.sync="show" append-to-body>
+  <el-dialog class="dialog dialog-login" :title="dialogTitle" :visible.sync="show" append-to-body>
     <el-form
       label-position="left"
       :label-width="labelWidth"
@@ -55,8 +55,11 @@ export default {
     };
   },
   computed: {
+    dialogTitle() {
+      return this.mode === 'login' ? '登录 Pixland' : '注册';
+    },
     submitText() {
-      return this.mode === 'login' ? '登录' : '注册';
+      return this.mode === 'login' ? '登录' : '确定注册';
     },
     switchText() {
       return this.mode === 'login' ? '没有帐号?' : '返回登录';
