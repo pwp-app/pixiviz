@@ -5,7 +5,11 @@
         <el-input v-model="loginForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input type="password" v-model="loginForm.password"></el-input>
+        <el-input
+          type="password"
+          v-model="loginForm.password"
+          @keyup.enter.native="submit"
+        ></el-input>
       </el-form-item>
     </el-form>
     <el-form label-position="left" :model="registerForm" v-else>
@@ -16,7 +20,11 @@
         <el-input type="password" v-model="registerForm.password"></el-input>
       </el-form-item>
       <el-form-item label="确认密码">
-        <el-input type="password" v-model="registerForm.confirmPassword"></el-input>
+        <el-input
+          type="password"
+          v-model="registerForm.confirmPassword"
+          @keyup.enter.native="submit"
+        ></el-input>
       </el-form-item>
       <p class="dialog-login-desc">
         请务必妥善保管好您的密码，一旦密码丢失，您的数据将不可找回！
