@@ -138,7 +138,7 @@ Vue.prototype.$ogTags = getOgTags();
 // Set up pixland
 Vue.prototype.pixland = new Pixland({
   fileHost: 'pixland.pwp.link',
-  apiHost: 'api.pixland.pwp.link',
+  apiHost: 'api-pixland.pwp.app',
 });
 
 // Get api pick storage
