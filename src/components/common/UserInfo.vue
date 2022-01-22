@@ -5,11 +5,16 @@
     :visible.sync="show"
     append-to-body
   >
-    <div class="dialog-user-info">
-      <div class="dialog-user-info__username">当前登录帐号: {{ username }}</div>
-      <div class="dialog-user-info__action">
-        <el-button type="primary" size="small" @click="openTransfer">继承</el-button>
-        <el-button type="primary" size="small" @click="logout">登出</el-button>
+    <div class="dialog-user-base">
+      <label>当前登录帐号</label>
+      <div class="dialog-user-base__inner">
+        <div class="dialog-user-base__username">
+          <div class="username">{{ username }}</div>
+        </div>
+        <div class="dialog-user-base__action">
+          <el-button type="primary" size="small" @click="openTransfer">继承至其他设备</el-button>
+          <el-button type="primary" size="small" @click="logout">登出</el-button>
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -23,9 +28,13 @@ export default {
       username: this.pixland.userStorage?.username || '',
     };
   },
-  open() {
-    this.username = this.pixland.userStorage?.username || '';
-    this.show = true;
+  methods: {
+    open() {
+      this.username = this.pixland.userStorage?.username || '';
+      this.show = true;
+    },
+    openTransfer() {},
+    logout() {},
   },
 };
 </script>
