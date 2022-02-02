@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { logout as pixlandLogout } from '@/util/pixland';
+
 export default {
   data() {
     return {
@@ -34,7 +36,15 @@ export default {
       this.show = true;
     },
     openTransfer() {},
-    logout() {},
+    async logout() {
+      // wait for confirm
+      try {
+        await this.$confirm('您确定要登出当前的帐号吗？尚未同步的数据将会被清除，且无法恢复。', '确认');
+      } catch {
+        return;
+      }
+      pixlandLogout();
+    },
   },
 };
 </script>

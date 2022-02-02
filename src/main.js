@@ -10,7 +10,6 @@ import Vue2TouchEvents from 'vue2-touch-events';
 import VueContextMenu from 'vue-context-menu';
 import InfiniteLoading from 'vue-infinite-loading';
 import { sha256 } from 'hash-wasm';
-import Pixland from 'pixland';
 
 // Import config
 import config from './config.json';
@@ -47,6 +46,9 @@ import { registerThemeColorHandler } from './util/darkMode';
 
 // Import sw
 import './registerServiceWorker';
+
+// Import pixland
+import pixlandIns from './util/pixland';
 
 import { initBaiduStat } from './util/statistics';
 import { checkTrustHost } from './util/host';
@@ -136,10 +138,7 @@ Vue.prototype.$idb = idb;
 Vue.prototype.$ogTags = getOgTags();
 
 // Set up pixland
-Vue.prototype.pixland = new Pixland({
-  fileHost: 'pixland.pwp.link',
-  apiHost: 'api-pixland.pwp.app',
-});
+Vue.prototype.pixland = pixlandIns;
 
 // Get api pick storage
 
