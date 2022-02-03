@@ -17,6 +17,7 @@ const checkHistorySync = async (remoteHistory, picData) => {
   if (!remoteHistory || !picData) {
     return;
   }
+  console.debug('[Pixland] Check history sync...');
   const localHistory = await getUserHistory();
   // History items which should be uploaded to remote
   const readyForRemote = localHistory.filter(item => item._ctime >= lastSyncTime);
@@ -27,6 +28,7 @@ const checkHistorySync = async (remoteHistory, picData) => {
     const picItem = picData[item];
     return picItem ? { ...picItem, id: picId, _ctime: item.t } : null;
   }).filter((item) => !!item);
+  console.debug('[Pixland] History check ready.', readyForLocal, readyForRemote);
   // Merge remote history to local
   mergeUserHistory(readyForLocal);
   // Merge local part to remote data
@@ -50,6 +52,7 @@ const checkHistorySync = async (remoteHistory, picData) => {
       newPicData[item.id] = item;
     }
   });
+  console.debug('[Pixland] Check history sync res', finalRemoteHistory, newPicData);
   return [finalRemoteHistory, newPicData];
 }
 
@@ -57,14 +60,17 @@ export const syncData = async () => {
   if (!pixlandIns) {
     return;
   }
+  console.debug('[Pixland] Start sync data...');
   // #1: Get user data from pixland
   const userData = await pixlandIns.getUserData();
+  console.debug('[Pixland] User data gotten.', userData);
   // #2: Check history sync
   const historyRes = await checkHistorySync(userData.history, userData.picData);
   // #3: Build new user data
   userData.history = historyRes[0];
   userData.picData = historyRes[1];
   // #4: Save to remote
+  console.debug('[Pixland] Start uploading...', userData);
   await pixlandIns.uploadUserData(userData);
   window.localStorage.setItem(LAST_SYNC_KEY, Math.floor(Date.now() / 1e3));
 };
