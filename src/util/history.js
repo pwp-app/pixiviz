@@ -5,12 +5,22 @@ import { filterImages } from './filter';
 const USER_HISTORY_SIZE_LIMIT = 100;
 const USER_HISTORY_DB_KEY = 'user-history';
 
+let broadCastChannel;
+if (window.BroadcastChannel) {
+  broadCastChannel = new BroadcastChannel('pixiviz-history');
+}
+
 let imageMap = {};
 
 let userHistory = null;
 
-export const getUserHistory = async () => {
-  if (userHistory) {
+const notifyUpdated = () => {
+  bus.$emit('history-updated');
+  broadCastChannel?.postMessage('history-updated');
+};
+
+export const getUserHistory = async ({ bypass = false } = {}) => {
+  if (userHistory && !bypass) {
     return userHistory;
   }
   const stored = JSON.parse(await idb.get(USER_HISTORY_DB_KEY));
@@ -57,7 +67,7 @@ export const addUserHistory = async (image) => {
     ...image,
     _ctime: Math.floor(Date.now() / 1e3),
   });
-  bus.$emit('history-updated');
+  notifyUpdated();
   if (userHistory.length > USER_HISTORY_SIZE_LIMIT) {
     const toRemove = userHistory.pop();
     delete imageMap[toRemove.id];
@@ -71,7 +81,7 @@ export const setUserHistory = async (images) => {
   userHistory.forEach((image) => {
     imageMap[image.id] = true;
   });
-  bus.$emit('history-updated');
+  notifyUpdated();
   syncToDisk();
 };
 
@@ -97,7 +107,7 @@ export const mergeUserHistory = async (images) => {
 export const syncToDisk = async ({ emitPixlandEvent = false } = {}) => {
   await idb.set(USER_HISTORY_DB_KEY, JSON.stringify(userHistory));
   if (emitPixlandEvent) {
-    bus.$emit('pixland-start-sync')
+    bus.$emit('pixland-start-sync');
   }
 };
 
@@ -114,6 +124,4 @@ export const clearHistory = async () => {
   setUserHistory([]);
 };
 
-export {
-  USER_HISTORY_SIZE_LIMIT,
-};
+export { USER_HISTORY_SIZE_LIMIT };
