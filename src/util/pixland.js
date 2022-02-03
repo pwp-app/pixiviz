@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { sha256 } from 'hash-wasm';
 import cloneDeep from 'lodash-es/cloneDeep';
 import Pixland from 'pixland';
 import bus from './bus';
@@ -96,13 +97,21 @@ export const syncData = async () => {
   console.debug('[Pixland] Start sync data...');
   // #1: Get user data from pixland
   const userData = await pixlandIns.getUserData();
+  const hash = await sha256(JSON.stringify(userData));
   console.debug('[Pixland] User data gotten.', userData);
   // #2: Check history sync
   const historyRes = await checkHistorySync(userData);
   // #3: Build new user data
   userData.history = historyRes[0];
   userData.picData = historyRes[1];
-  // #4: Save to remote
+  // #4: Hash compare
+  const newHash = await sha256(JSON.stringify(userData));
+  if (newHash === hash) {
+    // No changes
+    console.debug('[Pixland] Hash same, abort uploading...', hash, newHash);
+    return;
+  }
+  // #5: Save to remote
   console.debug('[Pixland] Start uploading...', userData);
   await pixlandIns.uploadUserData(userData);
   window.localStorage.setItem(LAST_SYNC_KEY, Math.floor(Date.now() / 1e3));
