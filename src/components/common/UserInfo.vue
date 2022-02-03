@@ -44,6 +44,8 @@ export default {
         return;
       }
       pixlandLogout();
+      this.show = false;
+      this.$message.success('登出成功');
     },
   },
 };
