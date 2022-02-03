@@ -113,3 +113,7 @@ export const clearHistory = async () => {
   imageMap = {};
   setUserHistory([]);
 };
+
+export {
+  USER_HISTORY_SIZE_LIMIT,
+};
