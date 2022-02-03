@@ -11,12 +11,13 @@ const pixlandIns = new Pixland({
 
 const LAST_SYNC_KEY = 'pixland-last-sync';
 
-const lastSyncTime = parseInt(window.localStorage.getItem(LAST_SYNC_KEY), 10) || -1;
+let lastSyncTime = parseInt(window.localStorage.getItem(LAST_SYNC_KEY), 10) || -1;
 
 const checkHistorySync = async (remoteHistory, picData) => {
   if (!remoteHistory || !picData) {
     return;
   }
+  console.debug('[Pixland] Last sync time', lastSyncTime, new Date(lastSyncTime * 1e3).toString());
   console.debug('[Pixland] Check history sync...');
   const localHistory = await getUserHistory();
   // History items which should be uploaded to remote
@@ -25,10 +26,10 @@ const checkHistorySync = async (remoteHistory, picData) => {
   const notInLocal = remoteHistory.filter(item => item.t >= lastSyncTime);
   const readyForLocal = notInLocal.map((item) => {
     const picId = item.i;
-    const picItem = picData[item];
+    const picItem = picData[picId];
     return picItem ? { ...picItem, id: picId, _ctime: item.t } : null;
   }).filter((item) => !!item);
-  console.debug('[Pixland] History check ready.', readyForLocal, readyForRemote);
+  console.debug('[Pixland] History check ready.', 'Ready for local', readyForLocal, 'Ready for remote', readyForRemote);
   // Merge remote history to local
   mergeUserHistory(readyForLocal);
   // Merge local part to remote data
@@ -82,6 +83,7 @@ export const logout = () => {
   pixlandIns.logout();
   // after logout, clear stored user data in local
   clearHistory();
+  lastSyncTime = -1;
   window.localStorage.removeItem(LAST_SYNC_KEY);
 }
 

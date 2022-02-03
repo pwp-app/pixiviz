@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { syncData } from '@/util/pixland';
+
 const DEFAULT_LOGIN_FORM = {
   username: '',
   password: '',
@@ -103,6 +105,7 @@ export default {
           await this.pixland.login(username, password);
           this.$message.success('登录成功');
           this.show = false;
+          syncData();
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error('[Pixland] Login failed.', err);
