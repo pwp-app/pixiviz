@@ -233,11 +233,8 @@ const execute = async () => {
     bus.$emit('remote-config-fetched');
     // compute hash
     const hash = await sha256(JSON.stringify(config));
-    // log
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`%cConfig hash: ${hash}`, 'color:#da7a85');
-      console.log(`%cConfig content: `, 'color:#da7a85', JSON.stringify(config));
-    }
+    console.debug(`%cConfig hash: ${hash}`, 'color:#da7a85');
+    console.debug(`%cConfig content: `, 'color:#da7a85', JSON.stringify(config));
     window.localStorage.setItem('remote_conf_hash', hash);
   } catch (e) {
     console.error('Request remote config error.', e);

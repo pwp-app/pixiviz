@@ -191,6 +191,7 @@ module.exports = {
         args[0].terserOptions.compress.drop_console = false;
         args[0].terserOptions.compress.warnings = false;
         args[0].terserOptions.compress.drop_debugger = true;
+        args[0].terserOptions.compress.pure_funcs = ['console.debug'];
         return args;
       });
     }
