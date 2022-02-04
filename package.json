@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.25.5",
+  "version": "1.26.0",
   "scripts": {
     "serve": "node ./tools/processVersion.js && vue-cli-service serve",
     "build": "node ./tools/processVersion.js && vue-cli-service build",
@@ -34,14 +34,14 @@
     "@vue/composition-api": "^1.4.5",
     "axios": "^0.24.0",
     "clipboard-polyfill": "^3.0.3",
-    "core-js": "^3.20.3",
+    "core-js": "^3.21.0",
     "dayjs": "^1.10.7",
     "hash-wasm": "^4.9.0",
     "jszip": "^3.7.1",
     "level-js": "^6.1.0",
     "levelup": "^5.1.1",
     "lodash-es": "^4.17.21",
-    "pixland": "file:../pixland-lib",
+    "pixland": "^0.0.3",
     "qrcode-svg": "^1.1.0",
     "qs": "^6.10.3",
     "register-service-worker": "^1.7.2",
@@ -56,7 +56,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.5",
+    "@babel/eslint-parser": "^7.17.0",
     "@gfx/zopfli": "^1.0.15",
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-e2e-cypress": "^4.5.15",
