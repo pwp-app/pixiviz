@@ -12,7 +12,6 @@
           <div class="username">{{ username }}</div>
         </div>
         <div class="dialog-user-base__action">
-          <el-button type="primary" size="small" @click="openTransfer">继承至其他设备</el-button>
           <el-button type="primary" size="small" @click="logout">登出</el-button>
         </div>
       </div>
@@ -35,7 +34,6 @@ export default {
       this.username = this.pixland.userStorage?.username || '';
       this.show = true;
     },
-    openTransfer() {},
     async logout() {
       // wait for confirm
       try {
