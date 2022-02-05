@@ -875,12 +875,12 @@ export default {
       this.lightBoxShow = true;
       this.$emit('lightbox-open');
       // disable scrolling
-      document.body.classList.add('no-scrollbar');
+      document.documentElement.classList.add('no-scrollbar');
     },
     onLightBoxClose() {
       this.lightBoxShow = false;
       this.$emit('lightbox-close');
-      document.body.classList.remove('no-scrollbar');
+      document.documentElement.classList.remove('no-scrollbar');
     },
     handleLightBoxLoaded() {
       if (this.useLarge && this.lightBoxShow) {
@@ -901,7 +901,7 @@ export default {
     // share
     openShareOverlay() {
       this.showShareOverlay = true;
-      document.body.classList.add('no-scrollbar');
+      document.documentElement.classList.add('no-scrollbar');
     },
     handleShareOverlayClose() {
       this.showShareOverlay = false;

@@ -125,8 +125,8 @@ export default {
         if (!this.expanded) {
           this.expanded = true;
           // Hide scrollbar
-          if (!document.body.classList.contains('no-scrollbar')) {
-            document.body.classList.add('no-scrollbar');
+          if (!document.documentElement.classList.contains('no-scrollbar')) {
+            document.documentElement.classList.add('no-scrollbar');
           }
           this.$store.commit('landingBanner/setExpanded', this.expanded);
           this.$emit('expanded', true);
@@ -140,8 +140,8 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-                if (document.body.classList.contains('no-scrollbar')) {
-                  document.body.classList.remove('no-scrollbar');
+                if (document.documentElement.classList.contains('no-scrollbar')) {
+                  document.documentElement.classList.remove('no-scrollbar');
                 }
               }, 500);
             }, 350);
@@ -150,8 +150,8 @@ export default {
           this.aboutShow = false;
           this.clearMarginBottom = false;
           // Hide scrollbar
-          if (!document.body.classList.contains('no-scrollbar')) {
-            document.body.classList.add('no-scrollbar');
+          if (!document.documentElement.classList.contains('no-scrollbar')) {
+            document.documentElement.classList.add('no-scrollbar');
           }
           this.$emit('expanded', false);
           setTimeout(() => {
@@ -162,8 +162,8 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-                if (document.body.classList.contains('no-scrollbar')) {
-                  document.body.classList.remove('no-scrollbar');
+                if (document.documentElement.classList.contains('no-scrollbar')) {
+                  document.documentElement.classList.remove('no-scrollbar');
                 }
               }, 500);
             }, 350);

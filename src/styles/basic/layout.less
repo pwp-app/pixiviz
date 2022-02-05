@@ -43,6 +43,12 @@ body::-webkit-scrollbar-corner {
 
 .no-scrollbar {
   overflow: hidden;
+  body {
+    overflow: hidden;
+  }
+  body::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {

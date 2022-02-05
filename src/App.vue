@@ -128,7 +128,7 @@ export default {
       if (this.$config.maintain?.enable) {
         this.$refs.maintain.show();
         this.maintainText = maintain.text;
-        document.body.classList.add('no-scrollbar');
+        document.documentElement.classList.add('no-scrollbar');
       }
     },
     // image load handlers

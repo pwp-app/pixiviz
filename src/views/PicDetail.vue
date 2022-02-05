@@ -214,12 +214,12 @@ export default {
     infoLoading: {
       handler(newValue) {
         if (newValue) {
-          if (!document.body.classList.contains('no-scrollbar')) {
+          if (!document.documentElement.classList.contains('no-scrollbar')) {
             window.scrollTo(0, 0);
-            document.body.classList.add('no-scrollbar');
+            document.documentElement.classList.add('no-scrollbar');
           }
         } else {
-          document.body.classList.remove('no-scrollbar');
+          document.documentElement.classList.remove('no-scrollbar');
         }
       },
     },
