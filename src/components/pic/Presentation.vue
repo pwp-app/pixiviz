@@ -655,13 +655,13 @@ export default {
         this.limitWidth = 920;
         this.limitHeight = 640;
       } else if (width > 1366 && width <= 1430) {
-        this.limitWidth = 802;
+        this.limitWidth = 766;
         this.limitHeight = 580;
       } else if (width > 1024 && width <= 1366) {
-        this.limitWidth = 740;
+        this.limitWidth = 596;
         this.limitHeight = 540;
       } else if (width <= 1024) {
-        this.limitWidth = 600;
+        this.limitWidth = 582;
         this.limitHeight = 480;
       }
     },

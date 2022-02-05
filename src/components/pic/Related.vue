@@ -73,7 +73,7 @@ export default {
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
           this.$emit('change-page-size', 6);
-          return 184;
+          return 172;
         }
       } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
         if (this.orientation.includes('portrait') || this.screenWidth < this.screenHeight) {
