@@ -3,22 +3,32 @@
   box-shadow: 0 4px 28px rgba(0, 0, 0, 0.2);
   margin-bottom: 10%;
   border: none;
+  padding-bottom: 16px;
   &__header {
     display: flex;
     align-items: center;
     padding: 18px 18px 4px;
     user-select: none;
-    span {
+    .el-message-box__title {
       display: block;
       flex: 1;
-      font-weight: 600;
+      font-weight: bold;
       letter-spacing: 0.05rem;
+      font-size: 15px;
+      color: @color-primary;
     }
-    i {
-      color: @color-primary !important;
-    }
-    i:hover {
-      color: lighten(@color-primary, 10%) !important;
+    .el-message-box__headerbtn {
+      position: initial;
+      top: unset;
+      left: unset;
+      right: unset;
+      bottom: unset;
+      i {
+        color: @color-primary !important;
+      }
+      i:hover {
+        color: lighten(@color-primary, 10%) !important;
+      }
     }
   }
   &__content {
@@ -30,13 +40,15 @@
   .el-message-box {
     background: lighten(@color-background-dark, 5%);
     &__header {
+      .el-message-box__title {
+        color: darken(@color-text-primary, 5%);
+      }
       .el-message-box__headerbtn {
         i:hover {
           color: darken(@color-text-primary, 5%) !important;
         }
       }
     }
-    &__header,
     &__content {
       p,
       span {
@@ -64,5 +76,11 @@
         border-color: darken(@color-text-primary, 8.5%);
       }
     }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .el-message-box {
+    width: 92%;
   }
 }
