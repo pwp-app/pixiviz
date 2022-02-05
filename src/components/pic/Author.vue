@@ -2,6 +2,9 @@
   <div class="pic-author">
     <div class="pic-author-title">
       <span>画师</span>
+      <div class="pic-close mobile-hide" @click="handleClose">
+        <i class="el-icon-close"></i>
+      </div>
     </div>
     <div class="pic-author-info">
       <div class="pic-author-info-avatar" v-lazy:background-image="avatar"></div>
@@ -54,6 +57,9 @@ export default {
     },
     toArtistPage() {
       this.$emit('navigate', this.author.id);
+    },
+    handleClose() {
+      this.$emit('close');
     },
   },
 };

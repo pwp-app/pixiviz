@@ -29,12 +29,11 @@
     }
   }
   .pic-close {
-    position: absolute;
-    right: 30px;
-    top: 22px;
+    display: block;
     font-size: 32px;
     color: @color-text-primary;
     transition: 200ms ease-in-out;
+    transform: translate(6px, 4px);
   }
   .pic-close:hover {
     cursor: pointer;
@@ -163,9 +162,6 @@
         padding-top: 18px;
         width: 320px;
       }
-    }
-    .pic-close {
-      top: 14px;
     }
   }
 }
