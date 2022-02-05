@@ -3,12 +3,18 @@
   height: 15.75rem;
   opacity: 1;
   transition: opacity 500ms ease-in-out, background-color 300ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .searchbox-hide {
   opacity: 0;
 }
 .searchbox {
+  width: 100%;
   padding: 1.625rem 4rem;
+  box-sizing: border-box;
   &-title {
     text-align: center;
     padding: 1rem 0 1.25rem 0;
@@ -124,17 +130,20 @@
 /* Mobile */
 
 @media (max-width: 767px) {
-  .searchbox {
-    padding: 16px 8px 20px 8px;
-    &-title {
-      span {
-        font-size: 1.5rem;
+  .searchbox-wrapper {
+    height: 252px;
+    .searchbox {
+      padding: 16px 8px 20px 8px;
+      &-title {
+        span {
+          font-size: 1.5rem;
+        }
       }
-    }
-    &-input {
-      padding: 6px 20px 16px 20px;
-      .el-input {
-        max-width: 960px;
+      &-input {
+        padding: 6px 20px 16px 20px;
+        .el-input {
+          max-width: 960px;
+        }
       }
     }
   }
