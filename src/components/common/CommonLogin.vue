@@ -175,6 +175,10 @@ export default {
     },
     switchMode() {
       if (this.mode === 'login') {
+        if (this.$config?.pixland?.suspendNewUser) {
+          this.$message.info('新用户注册已暂停~');
+          return;
+        }
         this.mode = 'register';
         return;
       }
