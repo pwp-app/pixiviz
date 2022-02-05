@@ -26,12 +26,16 @@ export default {
   data() {
     return {
       show: false,
-      username: this.pixland.userStorage?.username || '',
+      username: this.pixland?.userStorage?.username || '',
     };
   },
   methods: {
     open() {
-      this.username = this.pixland.userStorage?.username || '';
+      if (!this.pixland) {
+        this.$message.error('Pixland 初始化失败，请刷新页面后再试');
+        return;
+      }
+      this.username = this.pixland?.userStorage?.username || '';
       this.show = true;
     },
     async logout() {

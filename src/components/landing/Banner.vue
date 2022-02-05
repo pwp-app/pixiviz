@@ -191,6 +191,10 @@ export default {
       }
     },
     showAccountDialog() {
+      if (!this.pixland) {
+        this.$message.error('Pixland 初始化失败，请刷新页面后再试');
+        return;
+      }
       if (!this.pixland.userStorage) {
         this.$refs.login?.open();
       } else {

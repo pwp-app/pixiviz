@@ -102,6 +102,10 @@ export default {
         this.submitLoading = true;
 
         try {
+          if (!this.pixland) {
+            this.$message.error('Pixland 初始化失败，请刷新页面后再试');
+            return;
+          }
           await this.pixland.login(username, password);
           this.$message.success('登录成功');
           this.show = false;
@@ -145,6 +149,10 @@ export default {
       this.submitLoading = true;
 
       try {
+        if (!this.pixland) {
+          this.$message.error('Pixland 初始化失败，请刷新页面后再试');
+          return;
+        }
         await this.pixland.register(username, password, confirmPassword);
         this.$message.success('注册成功');
         this.show = false;

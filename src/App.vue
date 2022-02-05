@@ -88,7 +88,7 @@ export default {
     // log visit time
     window.localStorage.setItem('last-visit-time', Date.now());
     // sync user data
-    if (this.pixland.isLogin()) {
+    if (this.pixland?.isLogin()) {
       syncPixlandData();
     }
   },

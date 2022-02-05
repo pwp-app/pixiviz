@@ -62,13 +62,8 @@ if (!Vue.__composition_api_installed__) {
   Vue.use(VueCompositionAPI);
 }
 
-try {
-  if (checkTrustHost(config)) {
-    initBaiduStat();
-  }
-} catch (err) {
-  console.error('Failed to init statistics script.', err);
-}
+// Set up pixland
+Vue.prototype.pixland = pixlandIns;
 
 Vue.config.productionTip = false;
 
@@ -137,9 +132,6 @@ Vue.prototype.$idb = idb;
 // Set up og tags
 Vue.prototype.$ogTags = getOgTags();
 
-// Set up pixland
-Vue.prototype.pixland = pixlandIns;
-
 // Get api pick storage
 
 let disabledApiHost;
@@ -202,6 +194,8 @@ const requestRemoteConfig = async () => {
   }
   // choose an API prefix
   defineApiPrefix(config, disabledApiHost);
+  // add config to window
+  window.pixiviz.config = config;
 };
 
 const createInstance = () => {
@@ -247,5 +241,14 @@ const execute = async () => {
     console.error('Smart line check failed.', e);
   }
 };
+
+// init stat
+try {
+  if (checkTrustHost(config)) {
+    initBaiduStat();
+  }
+} catch (err) {
+  console.error('Failed to init statistics script.', err);
+}
 
 execute();

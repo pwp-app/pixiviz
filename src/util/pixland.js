@@ -11,8 +11,10 @@ const pixlandIns = new Pixland({
 });
 
 const LAST_SYNC_KEY = 'pixland-last-sync';
+const SYNC_TIME_MIN_SPAN = 3; // limit qps
 
 let lastSyncTime = parseInt(window.localStorage.getItem(LAST_SYNC_KEY), 10) || -1;
+let syncTimeout;
 
 const checkHistorySync = async (userData) => {
   const { history: remoteHistory, collection, picData, lastHistoryClear } = userData;
@@ -121,11 +123,25 @@ export const clearRemoteHistory = async () => {
   userData.lastHistoryClear = Math.floor(Date.now() / 1e3);
   console.debug('[Pixland] Start uploading...', userData);
   await pixlandIns.uploadUserData(userData);
-  window.localStorage.setItem(LAST_SYNC_KEY, Math.floor(Date.now() / 1e3));
+  lastSyncTime = Math.floor(Date.now() / 1e3);
+  window.localStorage.setItem(LAST_SYNC_KEY, lastSyncTime);
 }
 
-export const syncData = async () => {
+export const syncData = async ({ immediate = false } = {}) => {
   if (!pixlandIns) {
+    return;
+  }
+  const now = Math.floor(Date.now() / 1e3);
+  const minSpan = window.pixiviz?.config?.syncMinSpan || SYNC_TIME_MIN_SPAN;
+  if ((now - lastSyncTime < minSpan || syncTimeout) && !immediate) {
+    if (syncTimeout) {
+      clearTimeout(syncTimeout);
+    }
+    syncTimeout = setTimeout(() => {
+      syncTimeout = null;
+      syncData();
+    }, SYNC_TIME_MIN_SPAN * 1000);
+    console.debug('[Pixland] Sync delay...', now - lastSyncTime);
     return;
   }
   console.debug('[Pixland] Start sync data...');
@@ -148,7 +164,9 @@ export const syncData = async () => {
   // #5: Save to remote
   console.debug('[Pixland] Start uploading...', userData);
   await pixlandIns.uploadUserData(userData);
-  window.localStorage.setItem(LAST_SYNC_KEY, Math.floor(Date.now() / 1e3));
+  // eslint-disable-next-line require-atomic-updates
+  lastSyncTime = Math.floor(Date.now() / 1e3);
+  window.localStorage.setItem(LAST_SYNC_KEY, lastSyncTime);
 };
 
 export const logout = () => {
@@ -167,6 +185,14 @@ bus.$on('pixland-start-sync', () => {
     return;
   }
   syncData();
+});
+
+window.addEventListener('beforeunload', () => {
+  if (syncTimeout) {
+    clearTimeout(syncTimeout);
+    // try sync data last time
+    syncData({ immediate: true });
+  }
 });
 
 export default pixlandIns;

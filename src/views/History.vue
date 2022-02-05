@@ -179,7 +179,7 @@ export default {
       this.screenWidth = document.documentElement.clientWidth;
     },
     async clearHistory() {
-      const isLogin = this.pixland.isLogin();
+      const isLogin = this.pixland?.isLogin();
       try {
         await this.$confirm(`您确定要清空历史记录吗？被清空的记录将无法恢复${ isLogin ? '（已经同步到云端的记录将被一并清空）' : ''}`, '确认');
       } catch {
