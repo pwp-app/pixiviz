@@ -43,6 +43,7 @@ import Waterfall from '../components/common/Waterfall';
 import BackToTop from '../components/common/BackToTop';
 import MobileResponsive from '../util/MobileResponsive';
 import { clearHistory, getUserHistory } from '../util/history';
+import { clearRemoteHistory } from '@/util/pixland';
 
 let broadCastChannel;
 
@@ -178,13 +179,18 @@ export default {
       this.screenWidth = document.documentElement.clientWidth;
     },
     async clearHistory() {
+      const isLogin = this.pixland.isLogin();
       try {
-        await this.$confirm('您确定要清空历史记录吗？被清空的记录将无法恢复', '确认');
+        await this.$confirm(`您确定要清空历史记录吗？被清空的记录将无法恢复${ isLogin ? '（已经同步到云端的记录将被一并清空）' : ''}`, '确认');
       } catch {
         return;
       }
       clearHistory();
+      if (isLogin) {
+        clearRemoteHistory();
+      }
       this.images = [];
+      this.$forceUpdate();
     },
   },
 };

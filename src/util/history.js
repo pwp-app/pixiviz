@@ -104,6 +104,14 @@ export const mergeUserHistory = async (images) => {
   syncToDisk();
 };
 
+export const removeHistoryBefore = async (time) => {
+  if (!userHistory) {
+    await getUserHistory();
+  }
+  userHistory = userHistory.filter((item) => item._ctime > time);
+  syncToDisk();
+};
+
 export const syncToDisk = async ({ emitPixlandEvent = false } = {}) => {
   await idb.set(USER_HISTORY_DB_KEY, JSON.stringify(userHistory));
   if (emitPixlandEvent) {

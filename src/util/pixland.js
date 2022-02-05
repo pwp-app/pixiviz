@@ -3,7 +3,7 @@ import { sha256 } from 'hash-wasm';
 import cloneDeep from 'lodash-es/cloneDeep';
 import Pixland from 'pixland';
 import bus from './bus';
-import { clearHistory, getUserHistory, mergeUserHistory, USER_HISTORY_SIZE_LIMIT } from './history';
+import { clearHistory, getUserHistory, mergeUserHistory, removeHistoryBefore, USER_HISTORY_SIZE_LIMIT } from './history';
 
 const pixlandIns = new Pixland({
   fileHost: 'pixland.pwp.link',
@@ -15,7 +15,7 @@ const LAST_SYNC_KEY = 'pixland-last-sync';
 let lastSyncTime = parseInt(window.localStorage.getItem(LAST_SYNC_KEY), 10) || -1;
 
 const checkHistorySync = async (userData) => {
-  const { history: remoteHistory, collection, picData } = userData;
+  const { history: remoteHistory, collection, picData, lastHistoryClear } = userData;
   if (!remoteHistory || !picData) {
     return;
   }
@@ -23,9 +23,10 @@ const checkHistorySync = async (userData) => {
   console.debug('[Pixland] Check history sync...');
   const localHistory = await getUserHistory();
   // History items which should be uploaded to remote
-  const readyForRemote = localHistory.filter((item) => item._ctime >= lastSyncTime);
+  const lastClearTime = lastHistoryClear || -1;
+  const readyForRemote = localHistory.filter((item) => item._ctime >= lastSyncTime && item._ctime > lastClearTime);
   // History items which not in the local storage
-  const notInLocal = remoteHistory.filter((item) => item.t >= lastSyncTime);
+  const notInLocal = remoteHistory.filter((item) => item.t >= lastSyncTime && item.t >= lastClearTime);
   const readyForLocal = notInLocal
     .map((item) => {
       const picId = item.i;
@@ -86,9 +87,42 @@ const checkHistorySync = async (userData) => {
       overSize--;
     }
   }
+  if (lastClearTime > 0) {
+    await removeHistoryBefore(lastClearTime);
+  }
   console.debug('[Pixland] Check history sync res', finalRemoteHistory, newPicData);
   return [finalRemoteHistory, newPicData];
 };
+
+export const clearRemoteHistory = async () => {
+  if (!pixlandIns) {
+    return;
+  }
+  console.debug('[Pixland] Starting to clear remote history...');
+  const userData = await pixlandIns.getUserData();
+  if (!Array.isArray(userData.history)) {
+    return;
+  }
+  const collectionIdMap = {};
+  userData.collection.forEach((item) => {
+    collectionIdMap[item.i] = true;
+  });
+  userData.history.forEach((item) => {
+    const picId = item.i;
+    if (!userData.picData[picId]) {
+      return;
+    }
+    if (collectionIdMap[picId]) {
+      return;
+    }
+    delete userData.picData[picId];
+  });
+  userData.history = [];
+  userData.lastHistoryClear = Math.floor(Date.now() / 1e3);
+  console.debug('[Pixland] Start uploading...', userData);
+  await pixlandIns.uploadUserData(userData);
+  window.localStorage.setItem(LAST_SYNC_KEY, Math.floor(Date.now() / 1e3));
+}
 
 export const syncData = async () => {
   if (!pixlandIns) {
