@@ -156,6 +156,7 @@ export default {
         await this.pixland.register(username, password, confirmPassword);
         this.$message.success('注册成功');
         this.show = false;
+        syncData();
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('[Pixland] Register failed.', err);

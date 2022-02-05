@@ -128,7 +128,7 @@ export const clearRemoteHistory = async () => {
 }
 
 export const syncData = async ({ immediate = false } = {}) => {
-  if (!pixlandIns) {
+  if (!pixlandIns?.isLogin()) {
     return;
   }
   const now = Math.floor(Date.now() / 1e3);
