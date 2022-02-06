@@ -17,10 +17,13 @@
   font-size: 17px;
 }
 .rank-mode-item {
-  display: inline-block;
+  display: inline-flex;
   margin-right: 8px;
   font-size: 15px;
-  padding: 2px 6px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  line-height: 26px;
+  height: 26px;
   span {
     transition: 100ms;
   }
@@ -34,14 +37,14 @@
 .rank-mode-item-picked {
   background: @color-text-primary;
   border-radius: 6px;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.08);
   cursor: default !important;
   span {
     color: @color-background-primary !important;
   }
 }
-// dark mode
 
+// dark mode
 .dark {
   .rank-mode-switcher {
     span {
