@@ -153,9 +153,17 @@ export default {
     // dark mode events
     handleDarkModeEnable() {
       this.$store.commit('darkMode/setEnabled', true);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.setAttribute('content', '#161616');
+      }
     },
     handleDarkModeDisable() {
       this.$store.commit('darkMode/setEnabled', false);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.setAttribute('content', '#fafafa');
+      }
     },
     // high resolution screen fit
     fitHiRes() {

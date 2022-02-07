@@ -95,6 +95,10 @@
         if (window.pixiviz.darkPersist || hour < 6 || hour >= 18) {
           document.documentElement.classList.add('dark');
           window.pixiviz.darkMode = true;
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute('content', '#161616');
+          }
         }
       })();
     </script>
