@@ -49,7 +49,7 @@
   .lightbox {
     &-content {
       width: calc(var(--vh, 1vh) * 100);
-      transform: rotateZ(90deg);
+      transform: scaleY(0) rotateZ(90deg);
     }
     &-content-landing {
       width: 100vw;
@@ -64,7 +64,18 @@
     &-content-mobileoverheight {
       width: auto;
       height: 100vw;
-      transform: rotateZ(90deg);
+      transform: scaleY(0) rotateZ(90deg);
+    }
+  }
+  .lightbox--anim {
+    .lightbox-content {
+      opacity: 1;
+      transform: scaleY(1) rotateZ(90deg);
+    }
+    .lightbox-content-mobileoverheight {
+      width: auto;
+      height: 100vw;
+      transform: scaleY(1) rotateZ(90deg);
     }
   }
 }
