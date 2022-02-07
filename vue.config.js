@@ -26,13 +26,10 @@ module.exports = {
   },
   pwa: {
     name: 'Pixiviz',
-    themeColor: '#da7a85',
-    msTileColor: '#da7a85',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black-translucent',
     manifestOptions: {
       start_url: '.',
-      background_color: '#da7a85',
     },
     workboxOptions: {
       skipWaiting: true,
