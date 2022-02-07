@@ -23,6 +23,7 @@
               >浏览历史</a
             >
             <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
+            <a href="javascript:;" @click="showAccountDialog" @contextmenu.prevent>帐号</a>
           </div>
         </div>
         <div class="about-settings">
@@ -66,13 +67,17 @@
     </div>
     <ThemeDialog id="landing-dialog-theme" ref="theme" />
     <PrivacyDialog id="landing-dialog-privacy" ref="privacy" />
+    <CommonLogin id="landing-dialog-login" ref="login" />
+    <UserInfo id="landing-dialog-user" ref="user" />
   </div>
 </template>
 
 <script>
 import { version as appVer, buildTime as appBuildTime } from '../../version.js';
-import ThemeDialog from './dialogs/ThemeDialog';
-import PrivacyDialog from './dialogs/PrivacyDialog';
+import ThemeDialog from './dialogs/ThemeDialog.vue';
+import PrivacyDialog from './dialogs/PrivacyDialog.vue';
+import CommonLogin from '../common/CommonLogin.vue';
+import UserInfo from '../common/UserInfo.vue';
 import GitHubIcon from '../icons/github';
 
 const GITHUB_URL = 'https://github.com/pwp-app/pixiviz';
@@ -83,6 +88,8 @@ export default {
     GitHubIcon,
     ThemeDialog,
     PrivacyDialog,
+    CommonLogin,
+    UserInfo,
   },
   data() {
     return {
@@ -118,8 +125,8 @@ export default {
         if (!this.expanded) {
           this.expanded = true;
           // Hide scrollbar
-          if (!document.body.classList.contains('no-scrollbar')) {
-            document.body.classList.add('no-scrollbar');
+          if (!document.documentElement.classList.contains('no-scrollbar')) {
+            document.documentElement.classList.add('no-scrollbar');
           }
           this.$store.commit('landingBanner/setExpanded', this.expanded);
           this.$emit('expanded', true);
@@ -133,8 +140,8 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-                if (document.body.classList.contains('no-scrollbar')) {
-                  document.body.classList.remove('no-scrollbar');
+                if (document.documentElement.classList.contains('no-scrollbar')) {
+                  document.documentElement.classList.remove('no-scrollbar');
                 }
               }, 500);
             }, 350);
@@ -143,8 +150,8 @@ export default {
           this.aboutShow = false;
           this.clearMarginBottom = false;
           // Hide scrollbar
-          if (!document.body.classList.contains('no-scrollbar')) {
-            document.body.classList.add('no-scrollbar');
+          if (!document.documentElement.classList.contains('no-scrollbar')) {
+            document.documentElement.classList.add('no-scrollbar');
           }
           this.$emit('expanded', false);
           setTimeout(() => {
@@ -155,8 +162,8 @@ export default {
               setTimeout(() => {
                 this.expandLock = false;
                 // Reverse hiding scrollbar
-                if (document.body.classList.contains('no-scrollbar')) {
-                  document.body.classList.remove('no-scrollbar');
+                if (document.documentElement.classList.contains('no-scrollbar')) {
+                  document.documentElement.classList.remove('no-scrollbar');
                 }
               }, 500);
             }, 350);
@@ -181,6 +188,17 @@ export default {
         window.location.href = GITHUB_URL;
       } else {
         window.open(GITHUB_URL, '_blank');
+      }
+    },
+    showAccountDialog() {
+      if (!this.pixland) {
+        this.$message.error('Pixland 初始化失败，请刷新页面后再试');
+        return;
+      }
+      if (!this.pixland.userStorage) {
+        this.$refs.login?.open();
+      } else {
+        this.$refs.user?.open();
       }
     },
     // temp

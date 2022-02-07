@@ -43,6 +43,20 @@ import Waterfall from '../components/common/Waterfall';
 import BackToTop from '../components/common/BackToTop';
 import MobileResponsive from '../util/MobileResponsive';
 import { clearHistory, getUserHistory } from '../util/history';
+import { clearRemoteHistory } from '@/util/pixland';
+
+let broadCastChannel;
+
+function updateMessageHandler(e) {
+  // eslint-disable-next-line no-console
+  console.debug('[History] Cross window broad message', e);
+  if (!e.isTrusted) {
+    return;
+  }
+  setTimeout(() => {
+    this.getImages({ bypass: true });
+  });
+}
 
 export default {
   components: {
@@ -91,6 +105,11 @@ export default {
     },
   },
   async created() {
+    this.$bus.$on('history-updated', this.getImages);
+    if (window.BroadcastChannel) {
+      broadCastChannel = new BroadcastChannel('pixiviz-history');
+      broadCastChannel.onmessage = updateMessageHandler.bind(this);
+    }
     await this.getImages();
   },
   mounted() {
@@ -117,13 +136,29 @@ export default {
     document.title = '历史记录 - Pixiviz';
   },
   beforeDestroy() {
+    this.$bus.$off('history-updated', this.getImages);
+    if (broadCastChannel) {
+      broadCastChannel.close();
+    }
     window.removeEventListener('scroll', this.handleScroll, false);
     window.removeEventListener('resize', this.windowResized, false);
   },
   methods: {
-    async getImages() {
-      const history = await getUserHistory();
+    async getImages({ bypass = false } = {}) {
+      if (this.images.length) {
+        this.images = [];
+        this.$forceUpdate();
+        this.$nextTick(() => {
+          // refresh in next tick
+          this.getImages({ bypass });
+        });
+        return;
+      }
+      const history = await getUserHistory({ bypass });
+      // eslint-disable-next-line no-console
+      console.debug('[History] History storage gotten', history);
       this.images = history || [];
+      this.$forceUpdate();
     },
     handleCardClicked(imageId) {
       this.$cookies.set('pic-from', 'history', '1h');
@@ -144,13 +179,18 @@ export default {
       this.screenWidth = document.documentElement.clientWidth;
     },
     async clearHistory() {
+      const isLogin = this.pixland?.isLogin();
       try {
-        await this.$confirm('您确定要清空历史记录吗？被清空的记录将无法恢复', '确认');
+        await this.$confirm(`您确定要清空历史记录吗？被清空的记录将无法恢复${ isLogin ? '（已经同步到云端的记录将被一并清空）' : ''}`, '确认');
       } catch {
         return;
       }
       clearHistory();
+      if (isLogin) {
+        clearRemoteHistory();
+      }
       this.images = [];
+      this.$forceUpdate();
     },
   },
 };

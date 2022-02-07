@@ -24,6 +24,7 @@ import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 import Maintain from './components/common/Maintain.vue';
 import { bottomNotify } from './util/notify';
+import { syncData as syncPixlandData } from './util/pixland';
 
 export default {
   name: 'app',
@@ -64,6 +65,8 @@ export default {
       window.addEventListener('resize', setVh);
       setVh();
     }
+  },
+  created() {
     // listen bus events
     this.$bus.$on('user-not-online', () => {
       bottomNotify('warn', '电波讯号中断，请检查您的网络连接', 3000);
@@ -74,8 +77,6 @@ export default {
     this.$bus.$on('proxy-not-available', () => {
       bottomNotify('warn', '电波失联，我们暂时无法连接至图片服务器...', 3000);
     });
-  },
-  created() {
     // listen darkmode events
     this.$bus.$on('dark-mode-enable', this.handleDarkModeEnable);
     this.$bus.$on('dark-mode-disable', this.handleDarkModeDisable);
@@ -86,6 +87,10 @@ export default {
     this.fitHiRes();
     // log visit time
     window.localStorage.setItem('last-visit-time', Date.now());
+    // sync user data
+    if (this.pixland?.isLogin()) {
+      syncPixlandData();
+    }
   },
   mounted() {
     // listen remote config fetched event
@@ -123,7 +128,7 @@ export default {
       if (this.$config.maintain?.enable) {
         this.$refs.maintain.show();
         this.maintainText = maintain.text;
-        document.body.classList.add('no-scrollbar');
+        document.documentElement.classList.add('no-scrollbar');
       }
     },
     // image load handlers

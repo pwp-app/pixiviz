@@ -655,13 +655,13 @@ export default {
         this.limitWidth = 920;
         this.limitHeight = 640;
       } else if (width > 1366 && width <= 1430) {
-        this.limitWidth = 802;
+        this.limitWidth = 766;
         this.limitHeight = 580;
       } else if (width > 1024 && width <= 1366) {
-        this.limitWidth = 740;
+        this.limitWidth = 596;
         this.limitHeight = 540;
       } else if (width <= 1024) {
-        this.limitWidth = 600;
+        this.limitWidth = 582;
         this.limitHeight = 480;
       }
     },
@@ -875,12 +875,12 @@ export default {
       this.lightBoxShow = true;
       this.$emit('lightbox-open');
       // disable scrolling
-      document.body.classList.add('no-scrollbar');
+      document.documentElement.classList.add('no-scrollbar');
     },
     onLightBoxClose() {
       this.lightBoxShow = false;
       this.$emit('lightbox-close');
-      document.body.classList.remove('no-scrollbar');
+      document.documentElement.classList.remove('no-scrollbar');
     },
     handleLightBoxLoaded() {
       if (this.useLarge && this.lightBoxShow) {
@@ -901,7 +901,7 @@ export default {
     // share
     openShareOverlay() {
       this.showShareOverlay = true;
-      document.body.classList.add('no-scrollbar');
+      document.documentElement.classList.add('no-scrollbar');
     },
     handleShareOverlayClose() {
       this.showShareOverlay = false;

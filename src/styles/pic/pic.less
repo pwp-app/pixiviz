@@ -13,13 +13,27 @@
       transform: translateY(-47.5%);
     }
   }
+  .pic {
+    height: max-content;
+    margin: 0 auto;
+    display: flex;
+    &-presentation {
+      width: max-content;
+      flex: 0 0 auto;
+    }
+    &-side {
+      padding-top: 24px;
+      width: 432px;
+      margin-left: 48px;
+      flex: 0 0 auto;
+    }
+  }
   .pic-close {
-    position: absolute;
-    right: 30px;
-    top: 22px;
+    display: block;
     font-size: 32px;
     color: @color-text-primary;
     transition: 200ms ease-in-out;
+    transform: translate(6px, 4px);
   }
   .pic-close:hover {
     cursor: pointer;
@@ -40,22 +54,6 @@
 .pic-container-lockscroll {
   max-height: 100vh;
   overflow: hidden !important;
-}
-
-.pic {
-  height: max-content;
-  margin: 0 auto;
-  display: flex;
-  &-presentation {
-    width: max-content;
-    flex: 0 0 auto;
-  }
-  &-side {
-    padding-top: 24px;
-    width: 432px;
-    margin-left: 48px;
-    flex: 0 0 auto;
-  }
 }
 
 // action
@@ -140,32 +138,30 @@
 
 /* Responsive */
 @media (max-width: 1680px) {
-  .pic {
-    &-side {
-      margin-left: 36px;
-    }
-  }
-}
-@media (max-width: 1430px) {
-  .pic {
-    &-side {
-      margin-left: 32px;
+  .pic-container {
+    .pic {
+      &-side {
+        margin-left: 36px;
+      }
     }
   }
 }
 @media (max-width: 1366px) {
-  .pic {
-    &-side {
-      width: 386px;
+  .pic-container {
+    .pic {
+      &-side {
+        width: 360px;
+      }
     }
   }
 }
 @media (max-width: 1024px) {
-  .pic {
-    &-side {
-      padding-top: 18px;
-      margin-left: 24px;
-      width: 320px;
+  .pic-container {
+    .pic {
+      &-side {
+        padding-top: 18px;
+        width: 320px;
+      }
     }
   }
 }
@@ -201,14 +197,14 @@
     .pic-close {
       display: none;
     }
-  }
-  .pic {
-    width: 100%;
-    flex-direction: column;
-    &-side {
-      padding-top: 8px;
-      margin-left: 0;
-      width: auto;
+    .pic {
+      width: 100%;
+      flex-direction: column;
+      &-side {
+        padding-top: 8px;
+        margin-left: 0;
+        width: auto;
+      }
     }
   }
   .pic-action {

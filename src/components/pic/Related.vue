@@ -64,16 +64,16 @@ export default {
       return this.page > 1;
     },
     cardWidth() {
-      if (this.screenWidth > 1366) {
+      if (this.screenWidth >= 1360) {
         this.$emit('change-page-size', 6);
         return 208;
-      } else if (this.screenWidth > 1024 && this.screenWidth <= 1366) {
+      } else if (this.screenWidth > 1024 && this.screenWidth < 1360) {
         if (this.orientation.includes('portrait')) {
           this.$emit('change-page-size', 20);
           return Math.floor((this.screenWidth - 32) / 4) - 16;
         } else {
           this.$emit('change-page-size', 6);
-          return 184;
+          return 172;
         }
       } else if (this.screenWidth > 768 && this.screenWidth <= 1024) {
         if (this.orientation.includes('portrait') || this.screenWidth < this.screenHeight) {

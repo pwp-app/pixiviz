@@ -2,13 +2,16 @@ html {
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
+  overflow-y: overlay;
+  position: relative;
 }
 
 body {
   margin: 0;
   width: 100vw;
   min-height: 100vh;
-  scroll-behavior: smooth;
+  position: relative;
   background: @color-background-primary;
   transition: background-color 200ms ease-in-out;
   font-family: -apple-system-font, Noto Sans SC, 'MicroSoft Yahei', 'Heiti SC', 'Segoe UI', Roboto,
@@ -18,6 +21,7 @@ body {
 @scrollbar-width: 8px;
 
 body::-webkit-scrollbar {
+  display: initial;
   width: @scrollbar-width;
   height: @scrollbar-width;
 }
@@ -28,16 +32,23 @@ body::-webkit-scrollbar-thumb {
   width: @scrollbar-width;
   border-radius: @scrollbar-width;
   background: @color-primary;
+  opacity: 0.75;
 }
 body::-webkit-scrollbar-track {
-  background: @color-background-primary;
+  background: transparent;
 }
 body::-webkit-scrollbar-corner {
-  background: @color-background-primary;
+  background: transparent;
 }
 
 .no-scrollbar {
   overflow: hidden;
+  body {
+    overflow: hidden;
+  }
+  body::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -151,6 +162,7 @@ button:focus {
   }
 }
 
+@import './button.less';
 @import './form.less';
 @import './notification.less';
 @import './dialog.less';

@@ -29,6 +29,11 @@ export default {
   methods: {
     open() {
       this.show = true;
+      // lock scrollbar
+      if (!document.documentElement.classList.contains('no-scrollbar')) {
+        document.documentElement.classList.add('no-scrollbar');
+      }
+      // build url
       let url = window.location.href;
       if (window.location.href.includes('?')) {
         url += '&';
@@ -40,6 +45,9 @@ export default {
     },
     handleWrapperClicked() {
       this.show = false;
+      if (document.documentElement.classList.contains('no-scrollbar')) {
+        document.documentElement.classList.remove('no-scrollbar');
+      }
     },
   },
 };

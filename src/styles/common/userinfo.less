@@ -1,0 +1,49 @@
+.dialog-user {
+  .el-dialog {
+    width: 480px;
+  }
+  &-base {
+    &__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    &__username {
+      font-size: 16px;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &__action {
+      justify-self: flex-end;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .dialog-user {
+    .el-dialog {
+      width: 360px;
+    }
+    &-base {
+      &__username {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .dialog-user {
+    .el-dialog {
+      width: 94%;
+    }
+    &-base {
+      &__username {
+        font-size: 14px;
+      }
+    }
+  }
+}

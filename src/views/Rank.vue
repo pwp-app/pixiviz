@@ -13,7 +13,6 @@
           <el-popover
             placement="bottom"
             popper-class="rank-category-popover"
-            width="226"
             trigger="click"
           >
             <ModeSwitcher :mode="mode" @mode-changed="handleModeChanged" />

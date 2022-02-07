@@ -25,15 +25,16 @@
   a {
     color: @color-text-accent;
     letter-spacing: 0.1em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
   }
   a {
-    transition: 100ms ease;
+    transition: 120ms ease-in-out;
     text-decoration: none;
+    display: inline-block;
   }
   a:hover {
-    color: darken(@color-text-accent, 5%);
-    text-decoration: underline;
+    color: darken(@color-text-accent, 10%);
+    transform: translateY(-2px);
   }
   &-title {
     font-size: 5rem;
@@ -228,11 +229,11 @@
 
 @media (max-width: 767px) {
   .banner-wrapper {
-    height: 600px;
-    max-height: 200px;
+    height: 720px;
+    max-height: 220px;
   }
   .banner-expanded {
-    max-height: 600px;
+    max-height: 720px;
   }
   .banner {
     background: none;
@@ -240,36 +241,36 @@
       font-size: 3rem;
     }
     &-title-up {
-      transform: translateY(-216px);
+      transform: translateY(-272px);
     }
     .about {
-      bottom: 42px;
+      bottom: 56px;
       &-my {
         &-title {
-          font-size: 22px;
+          font-size: 24px;
           line-height: 64px;
           .indev {
-            font-size: 13px;
+            font-size: 14px;
           }
         }
         &-link {
-          font-size: 18px;
+          font-size: 20px;
           line-height: 36px;
         }
       }
       &-settings {
-        margin-top: 18px;
+        margin-top: 42px;
         &-title {
-          font-size: 22px;
+          font-size: 24px;
           line-height: 64px;
         }
         &-link {
-          font-size: 18px;
+          font-size: 20px;
           line-height: 36px;
         }
       }
       &-copyright {
-        margin-top: 64px;
+        margin-top: 122px;
         &-item {
           font-size: 14px;
         }

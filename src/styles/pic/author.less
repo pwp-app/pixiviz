@@ -4,10 +4,17 @@
     color: @color-text-primary;
     font-weight: 600;
     letter-spacing: 0.05em;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
   }
   &-title {
     font-size: 26px;
     height: 34px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    span {
+      flex: 1;
+    }
+    align-items: center;
     .no-select();
   }
   &-info {

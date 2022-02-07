@@ -30,6 +30,7 @@
           :imageId="image ? image.id : null"
           v-show="author"
           @navigate="handleArtistNavigate"
+          @close="handleClose"
         />
         <Download
           ref="download"
@@ -56,9 +57,7 @@
     </div>
     <Overlay text="很抱歉，我们不能展示这幅作品" v-if="block" />
     <Overlay text="您想看的作品似乎走丢了" v-if="loadFailed" :showRefresh="true" />
-    <div class="pic-close" @click="handleClose">
-      <i class="el-icon-close"></i>
-    </div>
+
     <div
       :class="['pic-action', actionShowClass ? 'pic-action-show' : null]"
       v-if="!infoLoading && actionShow"
@@ -214,12 +213,12 @@ export default {
     infoLoading: {
       handler(newValue) {
         if (newValue) {
-          if (!document.body.classList.contains('no-scrollbar')) {
+          if (!document.documentElement.classList.contains('no-scrollbar')) {
             window.scrollTo(0, 0);
-            document.body.classList.add('no-scrollbar');
+            document.documentElement.classList.add('no-scrollbar');
           }
         } else {
-          document.body.classList.remove('no-scrollbar');
+          document.documentElement.classList.remove('no-scrollbar');
         }
       },
     },

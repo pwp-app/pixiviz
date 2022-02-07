@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-export const version = '1.25.5';
-export const buildTime = '2022-01-12 23:18:45';
-console.log('%cPixiviz - v1.25.5\nEnvironment - prod\nBuild time: 2022-01-12 23:18:45', 'color:#da7a85');
+export const version = '1.26.0';
+export const buildTime = '2022-02-05 19:37:48';
+console.log('%cPixiviz - v1.26.0\nEnvironment - prod\nBuild time: 2022-02-05 19:37:48', 'color:#da7a85');

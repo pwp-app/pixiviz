@@ -16,7 +16,7 @@ export default {
   methods: {
     handleOverlayClicked() {
       this.$emit('close');
-      document.body.classList.remove('no-scrollbar');
+      document.documentElement.classList.remove('no-scrollbar');
     },
   },
 };
