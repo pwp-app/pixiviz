@@ -178,7 +178,7 @@ export default {
     },
   },
   watch: {
-    '$store.state.pic.progress': function (value) {
+    '$store.state.pic.progress': function(value) {
       if (this.$store.state.darkMode.enabled) {
         this.downloadCurrentStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
       } else {
@@ -186,7 +186,7 @@ export default {
       }
       this.$forceUpdate();
     },
-    '$store.state.pic.ugoiraProgress': function (value) {
+    '$store.state.pic.ugoiraProgress': function(value) {
       if (this.$store.state.darkMode.enabled) {
         this.downloadUgoiraStyle = `background-image: linear-gradient(to right, #d7707c 0%, #d7707c ${value}%, #999 ${value}%, #999 100%) !important;`;
       } else {
@@ -232,7 +232,7 @@ export default {
           // 闲置超过10秒即销毁
           if (window.pixiviz.downloadIdleSeconds > 10) {
             clearInterval(window.pixiviz.downloadTimer);
-            window.pixivz.downloadTimer = null;
+            window.pixiviz.downloadTimer = null;
           }
         }
       }, 1000);
