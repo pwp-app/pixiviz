@@ -180,6 +180,14 @@ export default {
       }
       return [];
     },
+    getApiPrefix() {
+      if (!this.id) {
+        throw new Error('No artist id.');
+      }
+      const id = parseInt(this.id, 10);
+      const { api_prefix_list: prefixList } = this.$config;
+      return prefixList[id % prefixList.length];
+    },
     // 瀑布流
     infiniteHandler($state) {
       // 没有数据不发包
@@ -188,7 +196,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${this.$config.api_prefix}/user/illusts`, {
+        .get(`${this.getApiPrefix()}/user/illusts`, {
           params: {
             id: this.id,
             page: this.page,

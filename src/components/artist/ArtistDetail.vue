@@ -147,6 +147,14 @@ export default {
     },
   },
   methods: {
+    getApiPrefix() {
+      if (!this.artistId) {
+        throw new Error('No artist id.');
+      }
+      const id = parseInt(this.artistId, 10);
+      const { api_prefix_list: prefixList } = this.$config;
+      return prefixList[id % prefixList.length];
+    },
     fetchDetail() {
       const stored = this.$store.state.artist.map[this.artistId];
       if (stored) {
@@ -158,7 +166,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${this.$config.api_prefix}/user/detail`, {
+        .get(`${this.getApiPrefix()}/user/detail`, {
           params: {
             id: this.artistId,
           },

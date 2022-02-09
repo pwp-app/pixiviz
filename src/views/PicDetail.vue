@@ -224,6 +224,14 @@ export default {
     },
   },
   methods: {
+    getApiPrefix() {
+      if (!this.imageId) {
+        throw new Error('No image id.');
+      }
+      const id = parseInt(this.imageId, 10);
+      const { api_prefix_list: prefixList } = this.$config;
+      return prefixList[id % prefixList.length];
+    },
     fetchInfo() {
       // 检查缓存
       if (this.$store.state.imageCache.image) {
@@ -240,7 +248,7 @@ export default {
         return;
       }
       this.axios
-        .get(`${this.$config.api_prefix}/illust/detail`, {
+        .get(`${this.getApiPrefix()}/illust/detail`, {
           params: {
             id: this.imageId,
           },
@@ -309,7 +317,7 @@ export default {
       }
       this.relatedLoading = true;
       this.axios
-        .get(`${this.$config.api_prefix}/illust/related`, {
+        .get(`${this.getApiPrefix()}/illust/related`, {
           params: {
             id: this.imageId,
             page: this.realRelatedPage,
