@@ -86,7 +86,7 @@ module.exports = {
         },
         {
           // API缓存，本地资源优先，7天过期，最多3w条
-          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-((us)|(hk))\.pwp\.link\/)).+/,
+          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-((us)|(hk)|(rn)|(tc))\.pwp\.link\/)).+/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
@@ -101,7 +101,7 @@ module.exports = {
         },
         {
           // 作者头像缓存，14天过期，最多缓存1000个
-          urlPattern: /^https:\/\/pixiv-image(-((ru)|(jp)))?\.pwp\.link\/user-profile\/.*$/,
+          urlPattern: /^https:\/\/pixiv-image(-((tc)|(jp)|(lv)))?\.pwp\.link\/user-profile\/.*$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'artist-avatar',
@@ -119,8 +119,27 @@ module.exports = {
           },
         },
         {
-          // zip缓存，最多缓存10个，有效期1天
-          urlPattern: /^https:\/\/pixiv-image(-((ru)|(jp)))?\.pwp\.link\/.*\.zip$/,
+          // 小图缓存，最多1000个
+          urlPattern: /^https:\/\/pixiv-image(-((tc)|(jp)|(lv)))?\.pwp\.link\/.+\/img-master\/.*$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'pic-master',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400, // cache for 3h
+              maxEntries: 1000,
+            },
+            fetchOptions: {
+              credentials: 'omit',
+              mode: 'cors',
+            },
+          },
+        },
+        {
+          // zip缓存，最多缓存10个，有效期3天
+          urlPattern: /^https:\/\/pixiv-image(-((tc)|(jp)|(lv)))?\.pwp\.link\/.*\.zip$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'ugoira-zip',
@@ -128,7 +147,7 @@ module.exports = {
               statuses: [0, 200],
             },
             expiration: {
-              maxAgeSeconds: 86400,
+              maxAgeSeconds: 86400 * 3,
               maxEntries: 10,
             },
             fetchOptions: {
