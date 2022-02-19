@@ -1,8 +1,8 @@
 {
   "website_url": "https://pixiviz.pwp.app",
-  "public_proxy": "i.pixiv.cat",
-  "image_proxy_host": "pixiv-image-tc.pwp.link",
-  "download_proxy_host": "pixiv-image-tc.pwp.link",
+  "public_proxy": "i.pixiv.re",
+  "image_proxy_host": "pixiv-image.pwp.link",
+  "download_proxy_host": "pixiv-image.pwp.link",
   "remote_conf_url": "https://cfs.tigo.pwp.app/pixiviz-prod.json",
   "api_prefix": [
     "/api/v1",
