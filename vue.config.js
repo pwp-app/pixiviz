@@ -86,7 +86,7 @@ module.exports = {
         },
         {
           // API缓存，本地资源优先，7天过期，最多3w条
-          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-((us)|(hk)|(rn)|(tc))\.pwp\.link\/)).+/,
+          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-[a-z]{2}\.pwp\.link\/)).+/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
@@ -101,7 +101,7 @@ module.exports = {
         },
         {
           // 作者头像缓存，14天过期，最多缓存1000个
-          urlPattern: /^https:\/\/pixiv-image(-((tc)|(jp)|(lv)))?\.pwp\.link\/user-profile\/.*$/,
+          urlPattern: /^https:\/\/pixiv-image(-[a-z]{2})?\.pwp\.link\/user-profile\/.*$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'artist-avatar',
@@ -120,7 +120,7 @@ module.exports = {
         },
         {
           // 小图缓存，最多1000个
-          urlPattern: /^https:\/\/pixiv-image(-((tc)|(jp)|(lv)))?\.pwp\.link\/.+\/img-master\/.*$/,
+          urlPattern: /^https:\/\/pixiv-image(-[a-z]{2})?\.pwp\.link\/.+\/img-master\/.*$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'pic-master',
@@ -139,7 +139,7 @@ module.exports = {
         },
         {
           // zip缓存，最多缓存10个，有效期3天
-          urlPattern: /^https:\/\/pixiv-image(-((tc)|(jp)|(lv)))?\.pwp\.link\/.*\.zip$/,
+          urlPattern: /^https:\/\/pixiv-image(-[a-z]{2})?\.pwp\.link\/.*\.zip$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'ugoira-zip',
