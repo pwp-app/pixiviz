@@ -176,6 +176,7 @@
       padding-top: 8px;
       align-items: center;
       justify-content: center;
+      box-sizing: border-box;
       .sponsor-normal {
         width: 200px;
         position: relative;
@@ -191,10 +192,14 @@
           background-size: contain;
           background-repeat: no-repeat;
           background-position: center;
+          flex-shrink: 0;
         }
         .sponsor-item-text {
+          max-width: 142px;
           flex: 1;
           margin-left: 10px;
+          padding-right: 10px;
+          box-sizing: border-box;
         }
         &__name {
           font-size: 15px;
@@ -202,7 +207,6 @@
           text-align: left;
           text-overflow: ellipsis;
           overflow: hidden;
-          box-sizing: border-box;
           white-space: nowrap;
         }
         &__price {

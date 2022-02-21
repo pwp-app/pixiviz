@@ -73,7 +73,7 @@
       <div class="sponsor-footer">
         <div class="sponsor-footer__text">
           <p>每一次发电对我们来说都是非常大的帮助~</p>
-          <p>感谢大家的支持 ❤</p>
+          <p>❤ 感谢大家的支持 ❤</p>
         </div>
         <div class="sponsor-footer__desc">
           <p><span class="mobile-hide">数据每小时更新，最后</span>更新于 {{ lastUpdateTime }}</p>
@@ -136,14 +136,16 @@ import Battery from '../components/icons/battery.vue';
 import Overlay from '../components/pic/Overlay';
 import Sponsor from '../components/sponsor/Sponsor.vue';
 import dayjs from 'dayjs';
+import { isEmail } from 'regex-go';
 
 const sponsorDesc = `
-1. 小站为非营利性的网站，所有的发电收入都将完全用于站点的日常维护与运作。
-2. 我们承诺在发电收入可以维持站点常规运作的情况下，不会插入任何广告或付费功能。
-3. 本页面所有数据来源于爱发电，页面内 1 kWh = ￥1。
-4. 爱发电为我们的唯一发电渠道，所有发电款项均有爱发电收集、统计、结算。
-5. 服务的每月固定支出和扩容所需支出均已公布在爱发电，数值均为预估，每月实际支出会与之有所出入。
-6. 由于记账复杂且项目较多，在有限的精力下，我们不会详细公开每一笔的支出项目，请您理解。
+1. Pixiviz 为非营利性的网站，我们承诺获得的发电收入将完全投入到站点的维护与升级。
+2. 我们承诺在发电可以维持站点正常运作的情况下，不会在站内嵌入任何形式的广告或付费功能。
+3. 本页面所有数据来源于爱发电，本页面内 1 kWh = ￥1。
+4. 爱发电为我们的唯一发电渠道，所有发电款项均通过爱发电收集、统计、结算。
+5. 服务的每月固定支出和扩容所需支出均已公布在爱发电，支出数额为预估值，实际支出金额会有些许浮动。
+6. 由于站点支出项目较多且所用服务器付费模式复杂，受限于精力，支出明细将不会公开，请您理解。
+7. 为保护部分发电用户的隐私，我们会隐藏该用户的真实 ID。
 `.trim();
 
 export default {
@@ -199,6 +201,19 @@ export default {
       }
       try {
         return this.info.sponsors?.current
+          .map((item) => {
+            if (isEmail(item.name)) {
+              return {
+                ...item,
+                name: `发电员#${
+                  item.name.length > 6
+                    ? item.name.slice(0, 6)
+                    : item.name.slice(0, item.name.indexOf('@'))
+                }`,
+              };
+            }
+            return item;
+          })
           .filter((sponsor) => sponsor.current_plan_price >= 50)
           .sort((a, b) => parseFloat(b.current_plan_price) - parseFloat(a.current_plan_price));
       } catch {
@@ -212,6 +227,19 @@ export default {
       const topSponsorIds = this.topSponsors.map((sponsor) => sponsor.user_id);
       try {
         return this.info.sponsors?.current
+          .map((item) => {
+            if (isEmail(item.name)) {
+              return {
+                ...item,
+                name: `发电员#${
+                  item.name.length > 6
+                    ? item.name.slice(0, 6)
+                    : item.name.slice(0, item.name.indexOf('@'))
+                }`,
+              };
+            }
+            return item;
+          })
           .filter((sponsor) => !topSponsorIds.includes(sponsor.user_id))
           .sort((a, b) => parseFloat(b.current_plan_price) - parseFloat(a.current_plan_price));
       } catch {
