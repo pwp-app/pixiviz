@@ -34,6 +34,7 @@ import router from './router';
 import axios, { wrapAxios } from './util/axios';
 
 // Import utils
+import { getCachedConfig, setCacheConfig } from './util/config';
 import { getOgTags } from './util/og';
 import {
   defineProxyHosts,
@@ -68,7 +69,8 @@ Vue.prototype.pixland = pixlandIns;
 Vue.config.productionTip = false;
 
 // Set up config
-Vue.prototype.$config = config;
+const cachedConfig = getCachedConfig();
+Vue.prototype.$config = Object.assign(config, cachedConfig);
 
 const axiosIns = wrapAxios(axios, config);
 
@@ -185,7 +187,11 @@ const requestRemoteConfig = async () => {
     console.error('Failed to fetch remote configuration.', err);
     return;
   }
-  Object.assign(config, res.data);
+  const remoteConfig = res?.data;
+  if (remoteConfig) {
+    setCacheConfig(remoteConfig);
+    Object.assign(config, remoteConfig);
+  }
   if (typeof config.image_proxy_host === 'object') {
     defineProxyHosts(config.image_proxy_host, disabledProxyHost);
   }
