@@ -34,7 +34,7 @@ import router from './router';
 import axios, { wrapAxios } from './util/axios';
 
 // Import utils
-import { getCachedConfig, setCachedConfig } from './util/config';
+import { getCachedConfig, setCacheConfig } from './util/config';
 import { getOgTags } from './util/og';
 import {
   defineProxyHosts,
@@ -189,7 +189,7 @@ const requestRemoteConfig = async () => {
   }
   const remoteConfig = res?.data;
   if (remoteConfig) {
-    setCachedConfig(remoteConfig);
+    setCacheConfig(remoteConfig);
     Object.assign(config, remoteConfig);
   }
   if (typeof config.image_proxy_host === 'object') {
