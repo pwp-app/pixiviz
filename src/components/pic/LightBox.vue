@@ -8,13 +8,8 @@
         isMobileOverHeight ? 'lightbox-content-mobileoverheight' : null,
       ]"
       :src="src"
-      v-context="'context'"
       @load="handleOnLoad"
     />
-    <ContextMenu ref="context" :width="128" @item-clicked="handleContextClicked">
-      <ContextMenuItem name="down">下载</ContextMenuItem>
-      <ContextMenuItem name="copy-image" v-if="showCopyImage">复制图片</ContextMenuItem>
-    </ContextMenu>
   </div>
 </template>
 
@@ -33,14 +28,8 @@ export default {
   data() {
     return {
       loaded: false,
-      supportCopyImage: !!window.ClipboardItem,
       anim: false,
     };
-  },
-  computed: {
-    showCopyImage() {
-      return this.supportCopyImage && this.loaded;
-    },
   },
   mounted() {
     setImmediate(() => {
@@ -53,13 +42,6 @@ export default {
       setTimeout(() => {
         this.$emit('close');
       }, 100);
-    },
-    handleContextClicked(name) {
-      if (name === 'down') {
-        this.$emit('download');
-      } else if (name === 'copy-image') {
-        this.$emit('copy');
-      }
     },
     handleOnLoad() {
       this.loaded = true;
