@@ -13,7 +13,9 @@ const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 
 module.exports = {
   devServer: {
-    https: true,
+    server: {
+      type: 'https',
+    },
     allowedHosts: ['pixiviz.pwp.app'],
     proxy: {
       '/api': {
