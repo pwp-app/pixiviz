@@ -45,11 +45,11 @@
   }
 }
 
-@media screen and (orientation: portrait) and (max-width: 768px) {
+@media screen and (orientation: portrait) and (max-width: 767px) {
   .lightbox {
     &-content {
       width: calc(var(--vh, 1vh) * 100);
-      transform: scaleY(0) rotateZ(90deg);
+      transform: scaleX(0);
     }
     &-content-landing {
       width: 100vw;
@@ -64,18 +64,18 @@
     &-content-mobileoverheight {
       width: auto;
       height: 100vw;
-      transform: scaleY(0) rotateZ(90deg);
+      transform: scaleY(0) rotate(90deg);
     }
   }
   .lightbox--anim {
     .lightbox-content {
       opacity: 1;
-      transform: scaleY(1) rotateZ(90deg);
+      transform: scaleX(1);
     }
     .lightbox-content-mobileoverheight {
       width: auto;
       height: 100vw;
-      transform: scaleY(1) rotateZ(90deg);
+      transform: scaleY(1) rotate(90deg);
     }
   }
 }
