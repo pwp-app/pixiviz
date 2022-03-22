@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
+const NodePolyFillPlugin = require('node-polyfill-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
@@ -12,7 +13,9 @@ const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 
 module.exports = {
   devServer: {
-    https: true,
+    server: {
+      type: 'https',
+    },
     allowedHosts: ['pixiviz.pwp.app'],
     proxy: {
       '/api': {
@@ -37,9 +40,9 @@ module.exports = {
     workboxOptions: {
       skipWaiting: true,
       clientsClaim: true,
-      importWorkboxFrom: 'local',
-      importsDirectory: 'js',
-      navigateFallbackBlacklist: [/^\/api\//],
+      // importWorkboxFrom: 'local',
+      // importsDirectory: 'js',
+      // navigateFallbackAllowlist: [/^\/api\//],
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
@@ -204,6 +207,7 @@ module.exports = {
         __ROOT_URL__: JSON.stringify(pixivizConf.website_url),
       },
     ]);
+    config.plugin('node-polyfill').use(NodePolyFillPlugin);
     // drop debug lines
     if (process.env.NODE_ENV === 'production') {
       config.optimization.minimizer('terser').tap((args) => {

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import QRCode from 'qrcode-svg';
+import QRCode from '@backrunner/qrcode-svg';
 
 export default {
   data() {

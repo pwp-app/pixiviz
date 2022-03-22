@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #da7a85;
+      }
+
+      .cls-2 {
+        font-size: 119.99px;
+        filter: url(#filter);
+        text-anchor: middle;
+        fill: #fff;
+        font-family: "Kristen ITC";
+      }
+
+      .cls-3 {
+        font-size: 79.993px;
+      }
+    </style>
+    <filter id="filter" x="59" y="67" width="115" height="119" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dx="3.709" dy="5.936" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood result="flood" flood-opacity="0.09"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect id="圆角矩形_1" data-name="圆角矩形 1" class="cls-1" x="17" y="12" width="223" height="232" rx="48" ry="48"/>
+  <text id="Pi" class="cls-2" x="125.75" y="168.75"><tspan x="125.75">P<tspan class="cls-3">i</tspan></tspan></text>
+</svg>
