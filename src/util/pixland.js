@@ -27,13 +27,13 @@ const checkHistorySync = async (userData) => {
   if (!remoteHistory || !picData) {
     return;
   }
-  console.debug('[Pixland] Last sync time', lastSyncTime, new Date(lastSyncTime * 1e3).toString());
+  console.debug('[Pixland] Last sync time', lastSyncTime, Math.floor(Date.now() / 1e3));
   console.debug('[Pixland] Check history sync...');
   const localHistory = await getUserHistory();
   // History items which should be uploaded to remote
   const lastClearTime = lastHistoryClear || -1;
-  const readyForRemote = localHistory.filter(
-    (item) => item._ctime >= lastSyncTime && item._ctime > lastClearTime,
+  const readyForRemote = (localHistory || []).filter(
+    (item) => item._ctime >= lastSyncTime && item._ctime >= lastClearTime,
   );
   // History items which not in the local storage
   const notInLocal = remoteHistory.filter(
