@@ -3,7 +3,13 @@ import { sha256 } from 'hash-wasm';
 import cloneDeep from 'lodash-es/cloneDeep';
 import Pixland from 'pixland';
 import bus from './bus';
-import { clearHistory, getUserHistory, mergeUserHistory, removeHistoryBefore, USER_HISTORY_SIZE_LIMIT } from './history';
+import {
+  clearHistory,
+  getUserHistory,
+  mergeUserHistory,
+  removeHistoryBefore,
+  USER_HISTORY_SIZE_LIMIT,
+} from './history';
 
 const pixlandIns = new Pixland({
   fileHost: 'pixland.pwp.link',
@@ -26,9 +32,13 @@ const checkHistorySync = async (userData) => {
   const localHistory = await getUserHistory();
   // History items which should be uploaded to remote
   const lastClearTime = lastHistoryClear || -1;
-  const readyForRemote = localHistory.filter((item) => item._ctime >= lastSyncTime && item._ctime > lastClearTime);
+  const readyForRemote = localHistory.filter(
+    (item) => item._ctime >= lastSyncTime && item._ctime > lastClearTime,
+  );
   // History items which not in the local storage
-  const notInLocal = remoteHistory.filter((item) => item.t >= lastSyncTime && item.t >= lastClearTime);
+  const notInLocal = remoteHistory.filter(
+    (item) => item.t >= lastSyncTime && item.t >= lastClearTime,
+  );
   const readyForLocal = notInLocal
     .map((item) => {
       const picId = item.i;
@@ -66,7 +76,7 @@ const checkHistorySync = async (userData) => {
       newPicData[item.id] = item;
     }
   });
-  finalRemoteHistory = finalRemoteHistory.sort((a, b) => a.t - b.t);
+  finalRemoteHistory = finalRemoteHistory.sort((a, b) => b.t - a.t);
   // check remote history size limit
   if (finalRemoteHistory.length > USER_HISTORY_SIZE_LIMIT) {
     let overSize = finalRemoteHistory.length - USER_HISTORY_SIZE_LIMIT;
@@ -125,7 +135,7 @@ export const clearRemoteHistory = async () => {
   await pixlandIns.uploadUserData(userData);
   lastSyncTime = Math.floor(Date.now() / 1e3);
   window.localStorage.setItem(LAST_SYNC_KEY, lastSyncTime);
-}
+};
 
 export const syncData = async ({ immediate = false } = {}) => {
   if (!pixlandIns?.isLogin()) {

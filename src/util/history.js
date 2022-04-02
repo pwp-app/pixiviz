@@ -2,7 +2,7 @@ import idb from './idb';
 import bus from './bus';
 import { filterImages } from './filter';
 
-const USER_HISTORY_SIZE_LIMIT = 100;
+const USER_HISTORY_SIZE_LIMIT = 200;
 const USER_HISTORY_DB_KEY = 'user-history';
 
 let broadCastChannel;
@@ -100,7 +100,8 @@ export const mergeUserHistory = async (images) => {
       userHistory.unshift(image);
     }
   });
-  userHistory.sort((a, b) => b._ctime - a._ctime);
+  // when render, the last one in the array is the first item of masonry
+  userHistory.sort((a, b) => a._ctime - b._ctime);
   syncToDisk();
 };
 

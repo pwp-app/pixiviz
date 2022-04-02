@@ -104,7 +104,7 @@ import ShareOverlay from '../common/ShareOverlay.vue';
 import Ugoira from '../../util/ugoira';
 import { getHistoryTop, addUserHistory } from '../../util/history';
 import { useSharePopup } from 'vue-share-popup';
-import { qzone, wechat, weibo } from 'vue-share-popup/platforms';
+import { qzone, wechat, weibo } from 'vue-share-popup/platforms/index.es';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
