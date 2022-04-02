@@ -17,7 +17,7 @@ const pixlandIns = new Pixland({
 });
 
 const LAST_SYNC_KEY = 'pixland-last-sync';
-const SYNC_TIME_MIN_SPAN = 3; // limit qps
+const SYNC_TIME_MIN_SPAN = 10; // limit qps
 
 let lastSyncTime = parseInt(window.localStorage.getItem(LAST_SYNC_KEY), 10) || -1;
 let syncTimeout;
@@ -150,7 +150,7 @@ export const syncData = async ({ immediate = false } = {}) => {
     syncTimeout = setTimeout(() => {
       syncTimeout = null;
       syncData();
-    }, SYNC_TIME_MIN_SPAN * 1000);
+    }, minSpan * 1000);
     console.debug('[Pixland] Sync delay...', now - lastSyncTime);
     return;
   }
