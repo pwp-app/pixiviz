@@ -46,11 +46,11 @@ export const getUserHistory = async ({ bypass = false } = {}) => {
   userHistory.forEach((image) => {
     imageMap[image.id] = true;
   });
-  return userHistory;
+  return userHistory.sort((a, b) => b._ctime - a._ctime);
 };
 
 export const addUserHistory = async (image) => {
-  if (!userHistory || !Array.isArray(userHistory)) {
+  if (!Array.isArray(userHistory)) {
     // eslint-disable-next-line require-atomic-updates
     userHistory = (await getUserHistory()) || [];
   }
@@ -86,6 +86,10 @@ export const setUserHistory = async (images) => {
 };
 
 export const mergeUserHistory = async (images) => {
+  if (!Array.isArray(userHistory)) {
+    // eslint-disable-next-line require-atomic-updates
+    userHistory = (await getUserHistory()) || [];
+  }
   images.forEach((image) => {
     // check if exists
     if (imageMap[image.id]) {
@@ -100,8 +104,7 @@ export const mergeUserHistory = async (images) => {
       userHistory.unshift(image);
     }
   });
-  // when render, the last one in the array is the first item of masonry
-  userHistory.sort((a, b) => a._ctime - b._ctime);
+  userHistory.sort((a, b) => b._ctime - a._ctime);
   syncToDisk();
 };
 
