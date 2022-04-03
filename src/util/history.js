@@ -24,7 +24,7 @@ export const getUserHistory = async ({ bypass = false } = {}) => {
     return userHistory;
   }
   const stored = JSON.parse(await idb.get(USER_HISTORY_DB_KEY));
-  if (!stored || !Array.isArray(stored)) {
+  if (!Array.isArray(stored)) {
     return null;
   }
   try {
@@ -43,6 +43,7 @@ export const getUserHistory = async ({ bypass = false } = {}) => {
     console.error('Failed to get user history.', err);
     return null;
   }
+  imageMap = {}; // clear image map
   userHistory.forEach((image) => {
     imageMap[image.id] = true;
   });
@@ -72,7 +73,7 @@ export const addUserHistory = async (image) => {
     const toRemove = userHistory.pop();
     delete imageMap[toRemove.id];
   }
-  syncToDisk({ emitPixlandEvent: true });
+  saveToDb({ emitPixlandEvent: true });
 };
 
 export const setUserHistory = async (images) => {
@@ -82,7 +83,7 @@ export const setUserHistory = async (images) => {
     imageMap[image.id] = true;
   });
   notifyUpdated();
-  syncToDisk();
+  saveToDb();
 };
 
 export const mergeUserHistory = async (images) => {
@@ -105,7 +106,7 @@ export const mergeUserHistory = async (images) => {
     }
   });
   userHistory.sort((a, b) => b._ctime - a._ctime);
-  syncToDisk();
+  saveToDb();
 };
 
 export const removeHistoryBefore = async (time) => {
@@ -113,10 +114,10 @@ export const removeHistoryBefore = async (time) => {
     await getUserHistory();
   }
   userHistory = userHistory.filter((item) => item._ctime > time);
-  syncToDisk();
+  saveToDb();
 };
 
-export const syncToDisk = async ({ emitPixlandEvent = false } = {}) => {
+export const saveToDb = async ({ emitPixlandEvent = false } = {}) => {
   await idb.set(USER_HISTORY_DB_KEY, JSON.stringify(userHistory));
   if (emitPixlandEvent) {
     bus.$emit('pixland-start-sync');
