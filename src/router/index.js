@@ -9,7 +9,10 @@ import UserSearch from '../views/UserSearch.vue';
 import Artist from '../views/Artist.vue';
 import History from '../views/History.vue';
 import Collection from '../views/Collection.vue';
+import AntiShare from '../views/AntiShare.vue';
+import Sponsor from '../views/Sponsor.vue';
 import NotFound from '../views/404.vue';
+
 import { getOgTags, setOgTags } from '../util/og';
 import config from '../config.json';
 
@@ -97,7 +100,7 @@ const routes = [
   {
     path: '/sponsor',
     name: 'Sponsor',
-    component: () => import(/* webpackChunkName: "sponsor" */ '../../src/views/Sponsor.vue'),
+    component: Sponsor,
     meta: {
       keepAlive: false,
       ogTagsData: {
@@ -107,6 +110,22 @@ const routes = [
         ogImage: `${config.website_url}favicon.png`,
         // eslint-disable-next-line no-undef
         ogUrl: `${__ROOT_URL__}/sponsor`,
+      },
+    },
+  },
+  {
+    path: '/anti-share',
+    name: 'AntiShare',
+    component: AntiShare,
+    meta: {
+      keepAlive: false,
+      ogTagsData: {
+        ogTitle: 'AntiShare - Pixiviz',
+        ogDesc: '阻止恶意分享',
+        // eslint-disable-next-line no-undef
+        ogImage: `${config.website_url}favicon.png`,
+        // eslint-disable-next-line no-undef
+        ogUrl: `${__ROOT_URL__}/anti-share`,
       },
     },
   },
