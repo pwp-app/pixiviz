@@ -31,6 +31,6 @@ export const getOgTags = () => {
 
 export const setOgTags = (tags, tagData) => {
   Object.keys(tagData).forEach((tagName) => {
-    tags[tagName].setAttribute('content', tagData[tagName]);
+    tags[tagName]?.setAttribute('content', tagData[tagName]);
   });
 };
