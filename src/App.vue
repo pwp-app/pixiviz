@@ -20,15 +20,12 @@
 </template>
 
 <script>
-import { nanoid } from 'nanoid';
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 import Maintain from './components/common/Maintain.vue';
 import { isWeChat } from './util/device';
 import { bottomNotify } from './util/notify';
 import { syncData as syncPixlandData } from './util/pixland';
-
-const ST_PASS_PATH = ['/sponsor', '/404', '/anti-share'];
 
 export default {
   name: 'app',
@@ -101,15 +98,6 @@ export default {
     // sync user data
     if (this.pixland?.isLogin()) {
       syncPixlandData();
-    }
-    // set share token
-    if (!this.$route.query.st && !ST_PASS_PATH.includes(this.$route.path)) {
-      this.$router.replace({
-        path: this.$route.path,
-        query: {
-          st: window.aegis?.bean?.id || nanoid(),
-        },
-      });
     }
   },
   mounted() {

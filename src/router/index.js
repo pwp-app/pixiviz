@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
 import Landing from '../views/Landing.vue';
 import Rank from '../views/Rank.vue';
 import Pic from '../views/PicDetail.vue';
@@ -12,9 +11,22 @@ import Collection from '../views/Collection.vue';
 import AntiShare from '../views/AntiShare.vue';
 import Sponsor from '../views/Sponsor.vue';
 import NotFound from '../views/404.vue';
-
 import { getOgTags, setOgTags } from '../util/og';
 import config from '../config.json';
+import { getShareToken } from '@/util/shareToken';
+
+// suspend redirect error
+const originalPush = VueRouter.prototype.push;
+
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch((err) => {
+    if (VueRouter.isNavigationFailure(err)) {
+      return err;
+    }
+    return Promise.reject(err);
+  });
+};
 
 Vue.use(VueRouter);
 
@@ -127,19 +139,23 @@ const routes = [
         // eslint-disable-next-line no-undef
         ogUrl: `${__ROOT_URL__}/anti-share`,
       },
+      ignoreShareToken: true,
     },
   },
   {
     path: '/404',
     name: 'Page not found',
     component: NotFound,
-    ogTagsData: {
-      ogTitle: 'Not Found - Pixiviz',
-      ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
-      // eslint-disable-next-line no-undef
-      ogImage: `${config.website_url}/favicon.png`,
-      // eslint-disable-next-line no-undef
-      ogUrl: __ROOT_URL__,
+    meta: {
+      ogTagsData: {
+        ogTitle: 'Not Found - Pixiviz',
+        ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+        // eslint-disable-next-line no-undef
+        ogImage: `${config.website_url}/favicon.png`,
+        // eslint-disable-next-line no-undef
+        ogUrl: __ROOT_URL__,
+        ignoreShareToken: true,
+      },
     },
   },
   {
@@ -152,6 +168,20 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (!to.meta?.ignoreShareToken && !to.query.st) {
+    next({
+      path: to.path,
+      query: {
+        ...to.query,
+        st: getShareToken(),
+      },
+    });
+  } else {
+    next();
+  }
 });
 
 router.afterEach((to) => {
