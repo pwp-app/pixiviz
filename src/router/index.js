@@ -172,7 +172,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from);
   // block first enter from wechat without st
   if (to.path === '/' && !from.name && isWeChat() && !from.query.st) {
     return next({
