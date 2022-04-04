@@ -173,7 +173,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // block first enter from wechat without st
-  if (to.path === '/' && !from.name && isWeChat() && !from.query.st) {
+  if (!from.name && isWeChat() && !to.query.st && to.name !== 'AntiShare') {
     return next({
       path: '/anti-share',
     });
