@@ -42,7 +42,7 @@
     "level-js": "^6.1.0",
     "levelup": "^5.1.1",
     "lodash-es": "^4.17.21",
-    "pixland": "^0.0.7",
+    "pixland": "^0.0.9",
     "qrcode-svg": "^1.1.0",
     "qs": "^6.10.3",
     "regex-go": "^0.4.0",

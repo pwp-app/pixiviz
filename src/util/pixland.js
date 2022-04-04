@@ -10,6 +10,28 @@ import {
   removeHistoryBefore,
   USER_HISTORY_SIZE_LIMIT,
 } from './history';
+import { checkTrustHost } from './host';
+
+// bind events before initialize pixland
+
+const checkPixlandGlobal = () => {
+  if (window.pixiviz) {
+    window.pixiviz.pixland = {};
+  } else {
+    window.pixiviz = {};
+    window.pixiviz.pixland = {};
+  }
+};
+
+window.addEventListener('pixland_user-login', () => {
+  checkPixlandGlobal();
+  window.pixiviz.pixland.isLogin = true;
+});
+
+window.addEventListener('pixland_user-logout', () => {
+  checkPixlandGlobal();
+  window.pixiviz.pixland.isLogin = false;
+});
 
 const pixlandIns = new Pixland({
   fileHost: 'pixland.pwp.link',
@@ -191,6 +213,9 @@ export const logout = () => {
 };
 
 bus.$on('pixland-start-sync', () => {
+  if (window.pixiviz.config && !checkTrustHost(window.pixiviz.config)) {
+    return;
+  }
   if (!pixlandIns.isLogin()) {
     return;
   }

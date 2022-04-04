@@ -1,5 +1,6 @@
-const blockTags = ['尻', '極上の乳', '漫画素材工坊', '描き方', 'お絵かきTIPS'];
+const blockTags = ['尻', '極上の乳', '水着', '漫画素材工坊', '描き方', 'お絵かきTIPS'];
 const mangaTags = ['漫画'];
+const blockTitle = ['水着'];
 
 const filterImage = (img) => {
   if (img.x_restrict || img.sanity_level > 4) {
@@ -18,7 +19,14 @@ const filterImages = (imgs, dropManga = true, dropTags = true) => {
     ) {
       return false;
     }
-    if (img.tags && img.tags.length) {
+    const titleBlocked = blockTitle.reduce((res, curr) => {
+      if (res) return res;
+      return res || img.title.includes(curr);
+    });
+    if (!window.pixiviz?.pixland?.isLogin && titleBlocked) {
+      return false;
+    }
+    if (Array.isArray(img.tags) && img.tags.length) {
       if (dropTags || dropManga) {
         for (let i = 0; i < img.tags.length; i++) {
           if (dropTags && blockTags.includes(img.tags[i].name)) {
