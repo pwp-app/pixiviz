@@ -27,6 +27,7 @@
         box-sizing: border-box;
         color: #fff;
         border-radius: 28px;
+        transform: translateY(1px);
       }
     }
     &-close {
@@ -78,9 +79,6 @@
     &-header {
       &-title {
         color: darken(@color-text-primary, 2.5%);
-        &--small {
-          color: darken(@color-text-primary, 2.5%);
-        }
       }
       &-close {
         color: darken(@color-text-primary, 2.5%);
@@ -111,9 +109,6 @@
     &-header {
       &-title {
         font-size: 28px;
-        &--small {
-          font-size: 20px;
-        }
       }
     }
   }
@@ -133,8 +128,12 @@
       padding: 18px 24px 18px 24px;
       &-title {
         font-size: 24px;
-        &--small {
-          display: none;
+        &__left {
+          .count-limit {
+            padding: 4px 12px;
+            font-size: 10px;
+            margin-left: 8px;
+          }
         }
       }
     }

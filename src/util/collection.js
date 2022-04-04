@@ -4,7 +4,7 @@ import { filterImages } from './filter';
 export const COLLECTION_SIZE_LIMIT = 500;
 const COLLECTION_DB_KEY = 'user-collection';
 
-let userCollection = {};
+let userCollection = null;
 let imageMap = {};
 
 export class UserCollectionError extends Error {}
@@ -14,8 +14,15 @@ export const getUserCollection = async ({ bypass = false } = {}) => {
     return userCollection;
   }
   const stored = JSON.parse(await idb.get(COLLECTION_DB_KEY));
-  if (!Array.isArray(stored)) {
-    return null;
+  // eslint-disable-next-line no-console
+  console.debug('[Collection] user collection data gotten', stored);
+  if (!stored) {
+    // eslint-disable-next-line require-atomic-updates
+    userCollection = {};
+    return userCollection;
+  }
+  if (!userCollection) {
+    userCollection = {};
   }
   Object.assign(userCollection, stored);
   // after read db
@@ -108,7 +115,10 @@ export const removeFromCollection = async (category, imageId) => {
   await saveToDb();
 };
 
-export const existedInCollection = (imageId) => {
+export const existedInCollection = async (imageId) => {
+  if (!userCollection) {
+    await getUserCollection({ bypass: true });
+  }
   return Object.keys(userCollection).reduce((res, curr) => {
     return res || !!imageMap[curr]?.[imageId];
   }, false);

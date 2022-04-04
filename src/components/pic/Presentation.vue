@@ -919,13 +919,13 @@ export default {
       this.showShareOverlay = false;
     },
     // collect
-    checkInCollection(image) {
+    async checkInCollection(image) {
       const imageInfo = image || this.image;
       if (!imageInfo?.id) {
         this.inCollection = false;
         return;
       }
-      this.inCollection = existedInCollection(imageInfo.id);
+      this.inCollection = await existedInCollection(imageInfo.id);
     },
     async doCollect() {
       if (!this.image) {
@@ -936,7 +936,7 @@ export default {
       } else {
         await removeFromCollection('default', this.image.id);
       }
-      this.checkInCollection();
+      await this.checkInCollection();
       this.$nextTick(() => {
         this.$forceUpdate();
       });
