@@ -4,6 +4,7 @@
       <div class="collection-header-title">
         <div class="collection-header-title__left">
           <span>收藏夹</span>
+          <span class="small-flag">Beta</span>
           <span class="count-limit">已用栏位 {{ existedCount }}/{{ COLLECTION_SIZE_LIMIT }}</span>
         </div>
 
