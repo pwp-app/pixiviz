@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { getShareToken } from '@/util/shareToken';
+import { isWeChat } from '@/util/device';
 import Landing from '../views/Landing.vue';
 import Rank from '../views/Rank.vue';
 import Pic from '../views/PicDetail.vue';
@@ -13,7 +15,6 @@ import Sponsor from '../views/Sponsor.vue';
 import NotFound from '../views/404.vue';
 import { getOgTags, setOgTags } from '../util/og';
 import config from '../config.json';
-import { getShareToken } from '@/util/shareToken';
 
 // suspend redirect error
 const originalPush = VueRouter.prototype.push;
@@ -171,17 +172,19 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!to.meta?.ignoreShareToken && !to.query.st) {
-    next({
-      path: to.path,
-      query: {
-        ...to.query,
-        st: getShareToken(),
-      },
+  // block first enter from wechat without st
+  if (to.path === '/' && !from.path && isWeChat() && !from.query.st) {
+    return next({
+      path: '/anti-share',
     });
-  } else {
-    next();
   }
+  // if no st, add st
+  if (!to.meta?.ignoreShareToken && !to.query.st) {
+    // eslint-disable-next-line no-param-reassign
+    to.query.st = getShareToken();
+    return next(to);
+  }
+  next();
 });
 
 router.afterEach((to) => {
