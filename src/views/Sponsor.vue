@@ -131,12 +131,12 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
+import { isEmail } from 'regex-go';
 import { checkTrustHost } from '@/util/host';
 import Battery from '../components/icons/battery.vue';
 import Overlay from '../components/pic/Overlay';
 import Sponsor from '../components/sponsor/Sponsor.vue';
-import dayjs from 'dayjs';
-import { isEmail } from 'regex-go';
 
 const sponsorDesc = `
 1. Pixiviz 为非营利性的网站，我们承诺获得的发电收入将完全投入到站点的维护与升级。

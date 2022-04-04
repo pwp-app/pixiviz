@@ -1,7 +1,7 @@
 import idb from './idb';
 import { filterImages } from './filter';
 
-const COLLECTION_SIZE_LIMIT = 500;
+export const COLLECTION_SIZE_LIMIT = 500;
 const COLLECTION_DB_KEY = 'user-collection';
 
 let userCollection = {};
@@ -67,7 +67,7 @@ export const addUserCollection = async (category, image) => {
   saveToDb();
 };
 
-export const setUserCollection = (collection) => {
+export const setUserCollection = async (collection) => {
   userCollection = collection;
   imageMap = {};
   Object.keys(userCollection).forEach((category) => {
@@ -81,10 +81,10 @@ export const setUserCollection = (collection) => {
       imageMap[category][item.id] = true;
     });
   });
-  saveToDb();
+  await saveToDb();
 };
 
-export const setUserCollectByCategory = (category, collection) => {
+export const setUserCollectByCategory = async (category, collection) => {
   if (!Array.isArray(collection)) {
     throw new TypeError('Collection should be an array.');
   }
@@ -93,18 +93,25 @@ export const setUserCollectByCategory = (category, collection) => {
   userCollection[category].forEach((item) => {
     imageMap[category][item.id] = true;
   });
-  saveToDb();
+  await saveToDb();
 };
 
-export const removeFromCollection = (category, imageId) => {
+export const removeFromCollection = async (category, imageId) => {
   if (!Array.isArray(userCollection[category])) {
     throw new UserCollectionError('Category not found.');
   }
   const idx = userCollection[category].findIndex((item) => item.id === imageId);
   if (idx >= 0) {
     userCollection[category].splice(idx, 1);
+    imageMap[category][imageId] = false;
   }
-  saveToDb();
+  await saveToDb();
+};
+
+export const existedInCollection = (imageId) => {
+  return Object.keys(userCollection).reduce((res, curr) => {
+    return res || !!imageMap[curr]?.[imageId];
+  }, false);
 };
 
 export const saveToDb = async () => {

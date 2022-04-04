@@ -16,13 +16,12 @@
         <div class="about-my">
           <div class="about-my-title">
             <span>我的</span>
-            <span class="indev">（开发中）</span>
           </div>
           <div class="about-my-link">
             <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent
               >浏览历史</a
             >
-            <a href="javascript:;" @click="showInDev" @contextmenu.prevent>收藏夹</a>
+            <a href="javascript:;" @click="goCollection" @contextmenu.prevent>收藏夹</a>
             <a href="javascript:;" @click="showAccountDialog" @contextmenu.prevent>帐号</a>
           </div>
         </div>
@@ -73,6 +72,7 @@
 </template>
 
 <script>
+import { checkTrustHost } from '@/util/host';
 import { version as appVer, buildTime as appBuildTime } from '../../version.js';
 import ThemeDialog from './dialogs/ThemeDialog.vue';
 import PrivacyDialog from './dialogs/PrivacyDialog.vue';
@@ -183,6 +183,9 @@ export default {
     goHistory() {
       this.$router.push('/history');
     },
+    goCollection() {
+      this.$router.push('/collection');
+    },
     goGitHub() {
       if (window.isSafari) {
         window.location.href = GITHUB_URL;
@@ -191,6 +194,10 @@ export default {
       }
     },
     showAccountDialog() {
+      if (!checkTrustHost(this.$config)) {
+        this.$message.error('帐号功能暂不开放');
+        return;
+      }
       if (!this.pixland) {
         this.$message.error('Pixland 初始化失败，请刷新页面后再试');
         return;
@@ -200,20 +207,6 @@ export default {
       } else {
         this.$refs.user?.open();
       }
-    },
-    // temp
-    showInDev() {
-      this.$notify({
-        title: '',
-        position: 'top-right',
-        customClass: 'oneline-notice-container',
-        dangerouslyUseHTMLString: true,
-        duration: 2000,
-        message: `
-          <div class="oneline-notice">
-            <span data-name="notice-indev">功能正在开发中，敬请期待</span>
-          </div>`,
-      });
     },
   },
 };

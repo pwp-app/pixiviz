@@ -8,6 +8,7 @@ import Search from '../views/Search.vue';
 import UserSearch from '../views/UserSearch.vue';
 import Artist from '../views/Artist.vue';
 import History from '../views/History.vue';
+import Collection from '../views/Collection.vue';
 import NotFound from '../views/404.vue';
 import { getOgTags, setOgTags } from '../util/og';
 import config from '../config.json';
@@ -74,6 +75,22 @@ const routes = [
         ogImage: `${config.website_url}favicon.png`,
         // eslint-disable-next-line no-undef
         ogUrl: `${__ROOT_URL__}/history`,
+      },
+    },
+  },
+  {
+    path: '/collection',
+    name: 'Collection',
+    component: Collection,
+    meta: {
+      keepAlive: true,
+      ogTagsData: {
+        ogTitle: '收藏夹 - Pixiviz',
+        ogDesc: '跨次元链接~，一个简单的二次元图片分享站',
+        // eslint-disable-next-line no-undef
+        ogImage: `${config.website_url}favicon.png`,
+        // eslint-disable-next-line no-undef
+        ogUrl: `${__ROOT_URL__}/collection`,
       },
     },
   },
