@@ -1,0 +1,59 @@
+.anti-share {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.anti-share-wrapper {
+  margin-bottom: 2.5rem;
+}
+
+.anti-share-title {
+  font-size: 32px;
+  color: @color-text-primary;
+  letter-spacing: 0.05rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.anti-share-footer {
+  margin-top: 5rem;
+  font-size: 14px;
+  text-align: center;
+  color: @color-text-primary;
+}
+
+// dark
+.dark {
+  .anti-share-title {
+    color: darken(@color-text-primary, 2.5%);
+  }
+  .anti-share-button {
+    filter: brightness(0.875);
+  }
+}
+
+@media (max-width: 767px) {
+  .anti-share-wrapper {
+    .anti-share-title {
+      font-size: 24px;
+    }
+  }
+}
+
+@media (max-width: 667px) {
+  .anti-share-wrapper {
+    margin-bottom: 3.75rem;
+  }
+  .anti-share-title {
+    font-size: 28px;
+    margin-bottom: 2rem;
+  }
+}

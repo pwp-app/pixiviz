@@ -41,6 +41,7 @@
     "level-js": "^6.1.0",
     "levelup": "^5.1.1",
     "lodash-es": "^4.17.21",
+    "nanoid": "^3.3.2",
     "pixland": "^0.0.10",
     "qrcode-svg": "^1.1.0",
     "qs": "^6.10.3",

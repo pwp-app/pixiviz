@@ -15,5 +15,13 @@ export function initBaiduStat() {
       s.parentNode.insertBefore(hm, s);
     })();
     window._hmt.push(['_setCustomVar', 1, 'siteVersion', version, 1]);
+    // report st
+    window._hmt.push([
+      '_setCustomVar',
+      2,
+      'st',
+      new URLSearchParams(window.location.search.slice(1) || '').get('st'),
+      1,
+    ]);
   }
 }

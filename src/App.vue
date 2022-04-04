@@ -20,11 +20,15 @@
 </template>
 
 <script>
+import { nanoid } from 'nanoid';
 import DownloadListTag from './components/common/DownloadListTag';
 import DownloadList from './components/common/DownloadList';
 import Maintain from './components/common/Maintain.vue';
+import { isWeChat } from './util/device';
 import { bottomNotify } from './util/notify';
 import { syncData as syncPixlandData } from './util/pixland';
+
+const ST_PASS_PATH = ['/sponsor', '/404', '/anti-share'];
 
 export default {
   name: 'app',
@@ -67,6 +71,13 @@ export default {
     }
   },
   created() {
+    // st check
+    if (!this.$route.query.st && this.$route.path === '/' && isWeChat()) {
+      this.$router.replace({
+        path: '/anti-share',
+      });
+      return;
+    }
     // listen bus events
     this.$bus.$on('user-not-online', () => {
       bottomNotify('warn', '电波讯号中断，请检查您的网络连接', 3000);
@@ -90,6 +101,15 @@ export default {
     // sync user data
     if (this.pixland?.isLogin()) {
       syncPixlandData();
+    }
+    // set share token
+    if (!this.$route.query.st && !ST_PASS_PATH.includes(this.$route.path)) {
+      this.$router.replace({
+        path: this.$route.path,
+        query: {
+          st: window.aegis?.bean?.id || nanoid(),
+        },
+      });
     }
   },
   mounted() {
