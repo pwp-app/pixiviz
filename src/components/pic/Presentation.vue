@@ -111,7 +111,12 @@ import Ugoira from '../../util/ugoira';
 import { getHistoryTop, addUserHistory } from '../../util/history';
 import { useSharePopup } from 'vue-share-popup';
 import { qzone, wechat, weibo } from 'vue-share-popup/platforms/index.es';
-import { addUserCollection, existedInCollection, removeFromCollection } from '@/util/collection';
+import {
+  addUserCollection,
+  existedInCollection,
+  removeFromCollection,
+  UserCollectionError,
+} from '@/util/collection';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -932,7 +937,15 @@ export default {
         return;
       }
       if (!this.inCollection) {
-        await addUserCollection('default', this.image);
+        try {
+          await addUserCollection('default', this.image);
+        } catch (err) {
+          if (err instanceof UserCollectionError && err.message === 'exceeded size limit') {
+            this.$message.error('收藏夹栏位已用光，是时候清理收藏夹了~');
+            return;
+          }
+          throw err;
+        }
       } else {
         await removeFromCollection('default', this.image.id);
       }

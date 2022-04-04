@@ -60,6 +60,7 @@ export default {
       scrollTop: 0,
       images: [],
       existedCount: 0,
+      notFirstUse: window.localStorage.getItem('pixiviz-user-collect-first-entry') === 'true',
       COLLECTION_SIZE_LIMIT,
     };
   },
@@ -120,6 +121,21 @@ export default {
     });
     // modify title
     document.title = '收藏夹 - Pixiviz';
+    // first entry notification
+    if (!this.notFirstUse) {
+      this.$notify({
+        title: '',
+        position: 'top-right',
+        customClass: 'oneline-notice-container',
+        dangerouslyUseHTMLString: true,
+        duration: 10000,
+        message: `
+          <div class="oneline-notice">
+            <span data-name="notice-download">欢迎使用收藏夹，目前您可以在此收藏最多500个作品。收藏夹同步正在开发中，敬请期待~</span>
+          </div>`,
+      });
+      window.localStorage.setItem('pixiviz-user-collect-first-entry', true);
+    }
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll, false);
