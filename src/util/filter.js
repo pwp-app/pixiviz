@@ -22,7 +22,7 @@ const filterImages = (imgs, dropManga = true, dropTags = true) => {
     const titleBlocked = blockTitle.reduce((res, curr) => {
       if (res) return res;
       return res || img.title.includes(curr);
-    });
+    }, false);
     if (!window.pixiviz?.pixland?.isLogin && titleBlocked) {
       return false;
     }
