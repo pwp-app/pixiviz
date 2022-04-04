@@ -36,6 +36,10 @@
     <div class="pic-presentation-info" v-if="image">
       <div class="pic-presentation-info-title">
         <span>{{ image ? image.title : '' }}</span>
+        <i class="icon-star" @click="doCollect">
+          <Star v-if="!inCollection" />
+          <StarFill v-else />
+        </i>
         <i ref="shareIcon" v-if="!renderShareOverlay">
           <Share />
         </i>
@@ -100,11 +104,19 @@ import dayjs from 'dayjs';
 import Paginator from './Pagniator';
 import LightBox from './LightBox';
 import Share from '../icons/share.vue';
+import Star from '../icons/star.vue';
+import StarFill from '../icons/starFill.vue';
 import ShareOverlay from '../common/ShareOverlay.vue';
 import Ugoira from '../../util/ugoira';
 import { getHistoryTop, addUserHistory } from '../../util/history';
 import { useSharePopup } from 'vue-share-popup';
 import { qzone, wechat, weibo } from 'vue-share-popup/platforms/index.es';
+import {
+  addUserCollection,
+  existedInCollection,
+  removeFromCollection,
+  UserCollectionError,
+} from '@/util/collection';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -128,6 +140,8 @@ export default {
     LightBox,
     ShareOverlay,
     Share,
+    Star,
+    StarFill,
   },
   data() {
     return {
@@ -178,6 +192,8 @@ export default {
       isInWechat: navigator.userAgent.includes('MicroMessenger/'),
       // share overlay
       showShareOverlay: false,
+      // collection
+      inCollection: false,
     };
   },
   beforeCreate() {
@@ -274,6 +290,7 @@ export default {
         this.checkMobileMode(screenWidth);
         this.setImageSize(image);
         this.checkFirstLoad(image);
+        this.checkInCollection(image);
         // start loading
         this.tryLoad();
         this.imageLoadTimer = setTimeout(() => {
@@ -905,6 +922,37 @@ export default {
     },
     handleShareOverlayClose() {
       this.showShareOverlay = false;
+    },
+    // collect
+    async checkInCollection(image) {
+      const imageInfo = image || this.image;
+      if (!imageInfo?.id) {
+        this.inCollection = false;
+        return;
+      }
+      this.inCollection = await existedInCollection(imageInfo.id);
+    },
+    async doCollect() {
+      if (!this.image) {
+        return;
+      }
+      if (!this.inCollection) {
+        try {
+          await addUserCollection('default', this.image);
+        } catch (err) {
+          if (err instanceof UserCollectionError && err.message === 'exceeded size limit') {
+            this.$message.error('收藏夹栏位已用光，是时候清理收藏夹了~');
+            return;
+          }
+          throw err;
+        }
+      } else {
+        await removeFromCollection('default', this.image.id);
+      }
+      await this.checkInCollection();
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
     },
   },
 };
