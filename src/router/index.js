@@ -176,6 +176,7 @@ router.beforeEach((to, from, next) => {
   if (!from.name && isWeChat() && !to.query.st && to.name !== 'AntiShare') {
     return next({
       path: '/anti-share',
+      replace: true,
     });
   }
   // if no st, add st
