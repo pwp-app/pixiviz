@@ -171,7 +171,7 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // block first enter from wechat without st
   if (!from.name && isWeChat() && !to.query.st && to.name !== 'AntiShare') {
     return next({
@@ -181,8 +181,8 @@ router.beforeEach((to, from, next) => {
   }
   // if no st, add st
   if (!to.meta?.ignoreShareToken && !to.query.st) {
-    // eslint-disable-next-line no-param-reassign
-    to.query.st = getShareToken();
+    // eslint-disable-next-line
+    to.query.st = await getShareToken();
     return next(to);
   }
   next();
