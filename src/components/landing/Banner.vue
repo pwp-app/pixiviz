@@ -44,7 +44,7 @@
         </div>
         <div class="about-copyright">
           <div class="about-copyright-item">
-            <span>Copyright &copy; 2021 pwp.app.</span>
+            <span>Copyright &copy; 2022 pwp.app.</span>
           </div>
           <div class="about-copyright-item">
             <span>
