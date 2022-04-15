@@ -20,7 +20,8 @@ export default {
   watch: {
     src: {
       immediate: true,
-      handler() {
+      handler(newVal) {
+        this.imageUrl = newVal;
         this.loaded = false;
       },
     },
@@ -29,12 +30,16 @@ export default {
     return {
       loaded: false,
       anim: false,
+      imageUrl: '',
     };
   },
   mounted() {
     setImmediate(() => {
       this.anim = true;
     });
+  },
+  beforeDestroy() {
+    this.imageUrl = '';
   },
   methods: {
     handleClick() {
