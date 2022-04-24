@@ -15,7 +15,7 @@ export const getMaxWeightedHost = (hosts) => {
 
 export const checkTrustHost = (config) => {
   const trustHost = config?.trust_host;
-  if (!trustHost || !Array.isArray || typeof trustHost !== 'string') {
+  if (!trustHost || !Array.isArray(trustHost) || typeof trustHost !== 'string') {
     return true;
   }
   if (

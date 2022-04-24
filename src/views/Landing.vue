@@ -65,11 +65,20 @@ export default {
     document.title = 'Pixiviz';
   },
   mounted() {
-    if (checkTrustHost(this.$config)) {
-      this.fetchAnnounce();
-    }
-    this.checkFirstUse();
-    this.displayDonate();
+    this.$nextTick(() => {
+      if (!checkTrustHost(this.$config)) {
+        return;
+      }
+      if (this.$config?.check_announce) {
+        this.fetchAnnounce();
+      }
+      if (this.$config?.show_guide) {
+        this.checkFirstUse();
+      }
+      if (this.$config?.show_donate) {
+        this.displayDonate();
+      }
+    });
   },
   beforeDestroy() {
     if (this.guideNotice) {
