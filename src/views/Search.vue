@@ -93,7 +93,7 @@ import suggestionScroll from '../mixin/suggestionScroll';
 const id_matcher = /^\d{2,8}$/;
 
 // block words
-const BLOCK_WORDS = [/r-?18/i, /18-?r/i, /^色图$/];
+const BLOCK_WORDS = [/r-?18/i, /18-?r/i, /^黄?色情?图$/, /^ero$/i, /工口/, /エロ/, /巨乳|尻/];
 
 export default {
   name: 'Search',

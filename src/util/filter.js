@@ -2,8 +2,15 @@ const blockTags = ['尻', '極上の乳', '水着', '漫画素材工坊', '描�
 const mangaTags = ['漫画'];
 const blockTitle = ['水着'];
 
+const getFilterLevel = () => {
+  if (window.pixiviz?.pixland?.isLogin) {
+    return 4;
+  }
+  return 3;
+};
+
 const filterImage = (img) => {
-  if (img.x_restrict || img.sanity_level > 4) {
+  if (img.x_restrict || img.sanity_level > getFilterLevel()) {
     return false;
   }
 };
@@ -13,7 +20,7 @@ const filterImages = (imgs, dropManga = true, dropTags = true) => {
     if (
       img.restrict ||
       img.x_restrict ||
-      img.sanity_level >= 4 ||
+      img.sanity_level >= getFilterLevel() ||
       (img.type !== 'illust' && dropManga) ||
       (img.title.includes('漫画') && dropManga)
     ) {
