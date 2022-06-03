@@ -26,6 +26,7 @@ import Maintain from './components/common/Maintain.vue';
 import { isWeChat } from './util/device';
 import { bottomNotify } from './util/notify';
 import { syncData as syncPixlandData } from './util/pixland';
+import { loadGoogleFont } from './util/gfont';
 
 export default {
   name: 'app',
@@ -66,6 +67,8 @@ export default {
       window.addEventListener('resize', setVh);
       setVh();
     }
+    // lazy load the google fonts
+    loadGoogleFont();
   },
   created() {
     // st check
@@ -177,9 +180,9 @@ export default {
     fitHiRes() {
       if (window.innerWidth >= 1960 && window.innerHeight >= 1280) {
         if (window.innerWidth <= 2560) {
-          document.documentElement.style.fontSize = '18px';
+          document.documentElement.style.fontSize = '16.75px';
         } else {
-          document.documentElement.style.fontSize = `${(window.innerWidth / 2330.0) * 16}px`;
+          document.documentElement.style.fontSize = `${(window.innerWidth / 2560) * 16.75}px`;
         }
       }
     },
