@@ -213,10 +213,10 @@ export const logout = () => {
 };
 
 bus.$on('pixland-start-sync', () => {
-  if (window.pixiviz.config && !checkTrustHost(window.pixiviz.config)) {
+  if (window.pixiviz?.config && !checkTrustHost(window.pixiviz.config)) {
     return;
   }
-  if (!pixlandIns.isLogin()) {
+  if (!pixlandIns.isLogin() || window.pixiviz?.config?.pixland?.maintain) {
     return;
   }
   syncData();
@@ -225,9 +225,12 @@ bus.$on('pixland-start-sync', () => {
 window.addEventListener('beforeunload', () => {
   if (syncTimeout) {
     clearTimeout(syncTimeout);
-    // try sync data last time
-    syncData({ immediate: true });
   }
+  // try sync data last time
+  if (!window.pixiviz?.pixland?.isLogin || window.pixiviz?.config?.pixland?.maintain) {
+    return;
+  }
+  syncData({ immediate: true });
 });
 
 export default pixlandIns;

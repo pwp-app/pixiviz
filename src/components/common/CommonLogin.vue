@@ -1,40 +1,45 @@
 <template>
   <el-dialog class="dialog dialog-login" :title="dialogTitle" :visible.sync="show" append-to-body>
-    <el-form label-position="left" :model="loginForm" v-if="mode === 'login'">
-      <el-form-item label="用户名">
-        <el-input v-model="loginForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input
-          type="password"
-          v-model="loginForm.password"
-          @keyup.enter.native="submit"
-        ></el-input>
-      </el-form-item>
-    </el-form>
-    <el-form label-position="left" :model="registerForm" v-else>
-      <el-form-item label="用户名">
-        <el-input v-model="registerForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input type="password" v-model="registerForm.password"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码">
-        <el-input
-          type="password"
-          v-model="registerForm.confirmPassword"
-          @keyup.enter.native="submit"
-        ></el-input>
-      </el-form-item>
-      <p class="dialog-login-desc">
-        请务必妥善保管好您的密码，一旦密码丢失，您的数据将不可找回！
-      </p>
-    </el-form>
-    <div slot="footer" class="dialog-login-action">
-      <el-button type="default" @click="switchMode">{{ switchText }}</el-button>
-      <el-button type="primary" @click="submit" :loading="submitLoading">{{
-        submitText
-      }}</el-button>
+    <template v-if="!underMaintain">
+      <el-form label-position="left" :model="loginForm" v-if="mode === 'login'">
+        <el-form-item label="用户名">
+          <el-input v-model="loginForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            @keyup.enter.native="submit"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <el-form label-position="left" :model="registerForm" v-else>
+        <el-form-item label="用户名">
+          <el-input v-model="registerForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input type="password" v-model="registerForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            type="password"
+            v-model="registerForm.confirmPassword"
+            @keyup.enter.native="submit"
+          ></el-input>
+        </el-form-item>
+        <p class="dialog-login-desc">
+          请务必妥善保管好您的密码，一旦密码丢失，您的数据将不可找回！
+        </p>
+      </el-form>
+      <div slot="footer" class="dialog-login-action">
+        <el-button type="default" @click="switchMode">{{ switchText }}</el-button>
+        <el-button type="primary" @click="submit" :loading="submitLoading">{{
+          submitText
+        }}</el-button>
+      </div>
+    </template>
+    <div class="dialog-login--maintain" v-else>
+      <span>{{ maintainReason }}</span>
     </div>
   </el-dialog>
 </template>
@@ -72,6 +77,12 @@ export default {
     },
     switchText() {
       return this.mode === 'login' ? '没有帐号?' : '返回登录';
+    },
+    underMaintain() {
+      return !!this.$config.pixland?.maintain;
+    },
+    maintainReason() {
+      return this.$config.pixland?.maintainReason || '系统维护中...';
     },
   },
   methods: {
