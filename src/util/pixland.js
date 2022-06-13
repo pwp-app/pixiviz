@@ -34,8 +34,7 @@ window.addEventListener('pixland_user-logout', () => {
 });
 
 const pixlandIns = new Pixland({
-  fileHost: 'pixland.pwp.link',
-  apiHost: 'api-pixland.pwp.app',
+  fileHost: 'worker.pixland.pwp.app',
 });
 
 const LAST_SYNC_KEY = 'pixland-last-sync';
