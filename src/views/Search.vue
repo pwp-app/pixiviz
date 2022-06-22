@@ -65,7 +65,7 @@
       <p>自由、平等、公正、法制</p>
       <p>爱国、敬业、诚信、友善</p>
     </div>
-    <div class="infinite-failed" v-if="loadFailed">
+    <div class="infinite-failed" v-if="showContent && loadFailed">
       <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
