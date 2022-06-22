@@ -65,7 +65,7 @@
       <p>自由、平等、公正、法制</p>
       <p>爱国、敬业、诚信、友善</p>
     </div>
-    <div class="infinite-failed" v-if="fetchFailed">
+    <div class="infinite-failed" v-if="loadFailed">
       <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
@@ -73,7 +73,7 @@
       :identifier="waterfallIdentifier"
       @infinite="infiniteHandler"
       spinner="spiral"
-      v-if="showContent && !fetchFailed"
+      v-if="showContent && !loadFailed"
     ></infinite-loading>
     <BackToTop ref="backToTop" />
   </div>
@@ -114,7 +114,8 @@ export default {
       blockedCount: 0,
       waterfallIdentifier: Math.round(Math.random() * 100),
       from: this.$cookies.get('search-from'),
-      fetchFailed: false,
+      loadFailed: false,
+      cachedState: null,
       // Misc
       screenWidth: document.documentElement.clientWidth,
       cardWidth: this.getCardWidth(document.documentElement.clientWidth),
@@ -213,6 +214,7 @@ export default {
         $state.complete();
         return;
       }
+      this.cachedState = $state;
       this.axios
         .get(`${this.$config.api_prefix}/illust/search`, {
           params: {
@@ -224,7 +226,7 @@ export default {
           (response) => {
             if (response.status === 500) {
               $state.complete();
-              this.fetchFailed = true;
+              this.loadFailed = true;
               return;
             }
             if (!response.data.illusts) {
@@ -257,6 +259,8 @@ export default {
             // eslint-disable-next-line no-console
             console.error('Fetch search data error', err);
             $state.complete();
+            this.loadFailed = true;
+            this.cachedState = null;
           },
         );
     },
@@ -275,11 +279,17 @@ export default {
         });
     },
     fetchNew() {
-      this.fetchFailed = false;
-      this.$nextTick(() => {
-        this.refreshWaterfall();
-        this.resetScrollState();
-      });
+      this.loadFailed = false;
+      if (!this.images) {
+        this.$nextTick(() => {
+          this.refreshWaterfall();
+          this.resetScrollState();
+        });
+      } else {
+        this.$nextTick(() => {
+          this.cachedState?.reset();
+        });
+      }
     },
     checkIfId() {
       // 检查关键词是不是纯数字
@@ -389,7 +399,7 @@ export default {
       this.resetScrollState();
       this.fetchSuggestion();
       this.checkIfId();
-      this.fetchFailed = false;
+      this.loadFailed = false;
       // change title
       document.title = `${this.keyword} - Pixiviz`;
       // set og tags

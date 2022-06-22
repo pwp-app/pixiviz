@@ -28,7 +28,7 @@
         @entry-clicked="handleEntryClicked"
       />
     </div>
-    <div class="infinite-failed" v-if="fetchFailed">
+    <div class="infinite-failed" v-if="loadFailed">
       <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
@@ -36,7 +36,7 @@
       :identifier="infiniteId"
       @infinite="loadArtistsData"
       spinner="spiral"
-      v-if="!fetchFailed"
+      v-if="!loadFailed"
     >
       <span slot="no-results">这里没有数据...</span>
       <span slot="no-more">没有更多结果了...</span>
@@ -62,7 +62,8 @@ export default {
       artists: this.initData(),
       artistIdMap: {},
       infiniteId: 0,
-      fetchFailed: false,
+      loadFailed: false,
+      cachedState: false,
       page: this.$store.state.userSearch.page !== null ? this.$store.state.userSearch.page : 1,
       keyword: this.$route.params.keyword,
       keywordInput: this.$route.params.keyword,
@@ -117,11 +118,17 @@ export default {
       return [];
     },
     fetchNew() {
-      this.fetchFailed = false;
-      this.$nextTick(() => {
-        this.infiniteId += 1;
-        this.resetScrollState();
-      });
+      this.loadFailed = false;
+      if (!this.artists) {
+        this.$nextTick(() => {
+          this.infiniteId += 1;
+          this.resetScrollState();
+        });
+      } else {
+        this.$nextTick(() => {
+          this.cachedState?.reset();
+        });
+      }
     },
     checkIfId() {
       // 检查关键词是不是纯数字
@@ -138,6 +145,7 @@ export default {
         $state.complete();
         return;
       }
+      this.cachedState = $state;
       this.axios
         .get(`${this.$config.api_prefix}/user/search`, {
           params: {
@@ -149,7 +157,7 @@ export default {
           (response) => {
             if (response.status === 500) {
               $state.complete();
-              this.fetchFailed = true;
+              this.loadFailed = true;
               return;
             }
             const { data } = response;
@@ -183,8 +191,10 @@ export default {
           },
           (err) => {
             // eslint-disable-next-line no-console
-            console.error('Fetch search data error', err);
+            console.error('Fetch artists search data error', err);
             $state.complete();
+            this.loadFailed = true;
+            this.cachedState = null;
           },
         );
     },
@@ -201,7 +211,7 @@ export default {
       this.artists = [];
       this.infiniteId += 1;
       this.resetScrollState();
-      this.fetchFailed = false;
+      this.loadFailed = false;
       this.checkIfId();
       // change title
       document.title = `${this.keyword} - Pixiviz`;
