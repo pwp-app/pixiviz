@@ -10,11 +10,7 @@
         <span>排行榜</span>
         <div class="rank-header-title-category">
           <span>{{ modeText }}</span>
-          <el-popover
-            placement="bottom"
-            popper-class="rank-category-popover"
-            trigger="click"
-          >
+          <el-popover placement="bottom" popper-class="rank-category-popover" trigger="click">
             <ModeSwitcher :mode="mode" @mode-changed="handleModeChanged" />
             <i class="el-icon-refresh" slot="reference"></i>
           </el-popover>
@@ -62,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="infinite-failed" v-if="loadFailed">
+    <div class="infinite-failed">
       <p>看上去数据加载失败了</p>
       <el-button type="primary" round @click="fetchNew">点我重试</el-button>
     </div>
@@ -126,6 +122,7 @@ export default {
       waterfallResponsive: document.documentElement.clientWidth > 767,
       scrollTop: 0,
       loadFailed: false,
+      cachedState: null,
       // style
       iPadStyle: /iPad/i.test(navigator.userAgent),
     };
@@ -252,6 +249,7 @@ export default {
   },
   methods: {
     infiniteHandler($state) {
+      this.cachedState = $state;
       this.axios
         .get(`${this.$config.api_prefix}/illust/rank`, {
           params: {
@@ -290,8 +288,9 @@ export default {
             // 网络错误
             // eslint-disable-next-line no-console
             console.error('Failed to fetch rank data.', err);
-            this.loadFailed = true;
             $state.complete();
+            this.loadFailed = true;
+            this.cachedState = null;
           },
         );
     },
@@ -312,10 +311,16 @@ export default {
     },
     fetchNew() {
       this.loadFailed = false;
-      this.$nextTick(() => {
-        this.refreshWaterfall();
-        window.scrollTo(0, 0);
-      });
+      if (!this.images) {
+        this.$nextTick(() => {
+          this.refreshWaterfall();
+          window.scrollTo(0, 0);
+        });
+      } else {
+        this.$nextTick(() => {
+          this.cachedState?.reset();
+        });
+      }
     },
     initMode() {
       const query = this.$route.query.mode;
