@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import Vue from 'vue';
-import VueCompositionAPI from '@vue/composition-api';
 
 // Import dependencies
 import VueCookies from 'vue-cookies';
@@ -58,10 +57,6 @@ import { checkTrustHost } from './util/host';
 registerThemeColorHandler();
 
 const A_DAY_IN_MS = 24 * 60 * 60 * 1000;
-
-if (!Vue.__composition_api_installed__) {
-  Vue.use(VueCompositionAPI);
-}
 
 // Set up pixland
 Vue.prototype.pixland = pixlandIns;
