@@ -201,7 +201,9 @@ const requestRemoteConfig = async () => {
   // choose an API prefix
   defineApiPrefix(config, disabledApiHost);
   // add config to window
-  window.pixiviz.config = config;
+  window.pixiviz.config = config || {};
+  // define a flag
+  window.pixiviz.config.IS_REMOTE_CONFIG = true;
 };
 
 const createInstance = () => {

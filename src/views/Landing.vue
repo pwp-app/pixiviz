@@ -38,6 +38,7 @@ import RankPlaceholder from '../components/landing/RankBoxPlaceholder';
 import { checkTrustHost } from '../util/host';
 
 import { version } from '../version';
+import { waitForRemoteConfig } from '@/util/config';
 
 export default {
   name: 'Landing',
@@ -64,21 +65,23 @@ export default {
   created() {
     document.title = 'Pixiviz';
   },
-  mounted() {
-    this.$nextTick(() => {
-      if (!checkTrustHost(this.$config)) {
-        return;
-      }
-      if (this.$config?.check_announce) {
-        this.fetchAnnounce();
-      }
-      if (this.$config?.show_guide) {
-        this.checkFirstUse();
-      }
-      if (this.$config?.show_donate) {
-        this.displayDonate();
-      }
-    });
+  async mounted() {
+    if (!checkTrustHost(this.$config)) {
+      return;
+    }
+    if (!window.pixiviz?.config?.IS_REMOTE_CONFIG) {
+      // delay for waiting for fetching remote config
+      await waitForRemoteConfig(5);
+    }
+    if (this.$config?.check_announce) {
+      this.fetchAnnounce();
+    }
+    if (this.$config?.show_guide) {
+      this.checkFirstUse();
+    }
+    if (this.$config?.show_donate) {
+      this.displayDonate();
+    }
   },
   beforeDestroy() {
     if (this.guideNotice) {
@@ -113,54 +116,57 @@ export default {
       const recordTime = parseInt(record, 10);
       return recordTime >= timeLimit;
     },
-    fetchAnnounce() {
-      this.axios
-        .get(
+    async fetchAnnounce() {
+      let res;
+      try {
+        res = await this.axios.get(
           process.env.NODE_ENV === 'development'
             ? 'https://cfs.tigo.pwp.app/pixiviz-anno-dev.json'
             : this.$config.announcement_feed,
           {
             withCredentials: false,
           },
-        )
-        .then((res) => {
-          if (!res.data) {
-            return;
-          }
-          for (const announcement of res.data) {
-            const {
-              id,
-              title,
-              content,
-              footer,
-              start,
-              expires,
-              matchVersion,
-              lastVisitAfter,
-            } = announcement;
-            const announceLog = window.localStorage.getItem('announce-read-id');
-            // check conditions
-            const started = start ? start <= Date.now() : true;
-            const expired = expires ? expires < Date.now() : true;
-            const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
-            const visitAfter = lastVisitAfter ? this.checkLastVisitTime(lastVisitAfter) : true;
-            if (
-              (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
-              !started ||
-              expired ||
-              !versionMatched ||
-              !visitAfter
-            ) {
-              continue;
-            }
-            this.announceId = id;
-            this.announceTitle = title;
-            this.announceContent = content;
-            this.announceFooter = footer;
-            this.showAnnounce = true;
-            break;
-          }
-        });
+        );
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Fetch remote announcement failed', err);
+      }
+      if (!res.data) {
+        return;
+      }
+      for (const announcement of res.data) {
+        const {
+          id,
+          title,
+          content,
+          footer,
+          start,
+          expires,
+          matchVersion,
+          lastVisitAfter,
+        } = announcement;
+        const announceLog = window.localStorage.getItem('announce-read-id');
+        // check conditions
+        const started = start ? start <= Date.now() : true;
+        const expired = expires ? expires < Date.now() : true;
+        const versionMatched = matchVersion ? this.checkVersionMatch(matchVersion) : true;
+        const visitAfter = lastVisitAfter ? this.checkLastVisitTime(lastVisitAfter) : true;
+        if (
+          (announceLog && parseInt(announceLog, 10) >= parseInt(id, 10)) ||
+          !started ||
+          expired ||
+          !versionMatched ||
+          !visitAfter
+        ) {
+          continue;
+        }
+        this.announceId = id;
+        this.announceTitle = title;
+        this.announceContent = content;
+        this.announceFooter = footer;
+        this.showAnnounce = true;
+        break;
+      }
     },
     handleAnnounceClose(done) {
       window.localStorage.setItem('announce-read-id', this.announceId);
