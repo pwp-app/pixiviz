@@ -32,8 +32,7 @@
     </el-form>
     <div class="dialog-privacy__tip">
       <span>
-        您的数据可能会由百度统计、腾讯云 RUM 与 Cloudflare
-        收集，这些数据均为匿名数据，有利于我们更好地运营、改进站点。
+        您的数据可能会被 Cloudflare 收集，<br />这些数据均为匿名数据，有利于我们更好地运营、改进站点。
       </span>
     </div>
   </el-dialog>
