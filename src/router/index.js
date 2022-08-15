@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { getShareToken } from '@/util/shareToken';
+import { ShareTokenFactory } from 'share-token';
 import { isWeChat } from '@/util/device';
 import Landing from '../views/Landing.vue';
 import Rank from '../views/Rank.vue';
@@ -18,6 +18,10 @@ import config from '../config.json';
 
 // suspend redirect error
 const originalPush = VueRouter.prototype.push;
+
+const shareTokenFactory = new ShareTokenFactory({
+  dbName: 'share-token_pixiviz',
+});
 
 VueRouter.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
@@ -182,7 +186,7 @@ router.beforeEach(async (to, from, next) => {
   // if no st, add st
   if (!to.meta?.ignoreShareToken && !to.query.st) {
     // eslint-disable-next-line
-    to.query.st = await getShareToken();
+    to.query.st = await shareTokenFactory.getToken();
     return next(to);
   }
   next();

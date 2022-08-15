@@ -73,7 +73,7 @@
 
 <script>
 import { checkTrustHost } from '@/util/host';
-import { version as appVer, buildTime as appBuildTime } from '../../version.js';
+import { version as appVer } from '../../version.js';
 import ThemeDialog from './dialogs/ThemeDialog.vue';
 import PrivacyDialog from './dialogs/PrivacyDialog.vue';
 import CommonLogin from '../common/CommonLogin.vue';
@@ -101,13 +101,6 @@ export default {
       appVer,
       landingBgId: this.$config.landing_bg_id,
     };
-  },
-  mounted() {
-    window.aegis &&
-      window.aegis.setConfig({
-        ext1: appVer,
-        ext2: appBuildTime,
-      });
   },
   beforeDestroy() {
     // reset to false
