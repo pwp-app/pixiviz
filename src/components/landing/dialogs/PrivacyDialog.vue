@@ -18,21 +18,10 @@
         >
         </el-switch>
       </el-form-item>
-      <el-form-item label="收集遥测数据">
-        <el-switch
-          v-model="privacyForm.remote"
-          active-color="#E3A7A1"
-          inactive-color="#3e3e3e"
-          active-text="允许"
-          inactive-text="禁止"
-          @change="remoteChanged"
-        >
-        </el-switch>
-      </el-form-item>
     </el-form>
     <div class="dialog-privacy__tip">
       <span>
-        您的数据可能会被 Cloudflare 收集，<br />这些数据均为匿名数据，有利于我们更好地运营、改进站点。
+        您的数据可能会被 百度统计 与 Cloudflare 收集，<br />这些数据均为匿名数据，有利于我们更好地运营、改进站点。
       </span>
     </div>
   </el-dialog>
@@ -66,8 +55,6 @@ export default {
     window.addEventListener('resize', this.windowResized);
     const privateStats = window.localStorage.getItem('privacy-statistic');
     this.privacyForm.statistic = privateStats !== 'false';
-    const privacyRemote = window.localStorage.getItem('privacy-remote');
-    this.privacyForm.remote = privacyRemote !== 'false';
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.windowResized);
@@ -81,9 +68,6 @@ export default {
     },
     statChanged(value) {
       window.localStorage.setItem('privacy-statistic', value);
-    },
-    remoteChanged(value) {
-      window.localStorage.setItem('privacy-remote', value);
     },
   },
 };
