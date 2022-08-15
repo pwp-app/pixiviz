@@ -38,3 +38,20 @@ export const getCachedConfig = () => {
     return null;
   }
 };
+
+export const waitForRemoteConfig = (maxSecs) => {
+  let sec = 0;
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (window.pixiviz?.config?.IS_REMOTE_CONFIG) {
+        clearInterval(interval);
+        resolve();
+      }
+      sec += 0.1;
+      if (sec >= maxSecs) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
+};

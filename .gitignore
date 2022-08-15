@@ -30,3 +30,4 @@ announcement*.json
 proxy-config.*
 .tigo-cfs.json
 config-prod.json
+version.js
