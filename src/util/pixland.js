@@ -197,7 +197,7 @@ const checkCollectionSync = async (userData) => {
   // init vars
   remoteCollection = remoteCollection || {};
   picData = picData || {};
-  // get user collection data from local
+  // get user collection data from local (here we fetched the data in the memory, because some changes might not be written to the idb)
   const localCollection = (await getUserCollection()) || {};
   // generate cloned copy for next operations
   const newPicData = cloneDeep(picData);
@@ -222,7 +222,18 @@ const checkCollectionSync = async (userData) => {
   }
   // no local collection data, but has remote, download all
   if (!Object.keys(localCollection).length && Object.keys(remoteCollection).length) {
-    // TODO: add all remote data to local
+    // just add all remote collection data to the local
+    const readyForLocal = {};
+    Object.keys(remoteCollection).forEach((categoryName) => {
+      const category = remoteCollection[categoryName];
+      readyForLocal[categoryName] = category.map((item) => ({
+        ...picData[item.i],
+        id: item.i,
+        _ctime: item.t,
+        _otime: item.o,
+      }));
+    });
+    setUserCollection(readyForLocal);
     return [remoteCollection, picData];
   }
   // get id map of remote collection data

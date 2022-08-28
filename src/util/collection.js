@@ -72,7 +72,7 @@ export const addUserCollection = async (category, image) => {
     ...image,
     _ctime: Math.floor(Date.now() / 1e3),
   });
-  saveToDb();
+  await saveToDb();
 };
 
 export const setUserCollection = async (collection) => {
