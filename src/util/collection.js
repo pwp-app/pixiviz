@@ -9,6 +9,7 @@ let imageMap = {};
 
 export class UserCollectionError extends Error {}
 
+// get user collection from idb (collection is actually a big json)
 export const getUserCollection = async ({ bypass = false } = {}) => {
   if (userCollection && !bypass) {
     return userCollection;
@@ -109,6 +110,7 @@ export const removeFromCollection = async (category, imageId) => {
   }
   const idx = userCollection[category].findIndex((item) => item.id === imageId);
   if (idx >= 0) {
+    // delete logically for sync
     userCollection[category].splice(idx, 1);
     imageMap[category][imageId] = false;
   }
