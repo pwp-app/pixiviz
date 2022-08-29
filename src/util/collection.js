@@ -80,7 +80,7 @@ export const setUserCollection = async (collection) => {
   imageMap = {};
   Object.keys(userCollection).forEach((category) => {
     userCollection[category] = Array.isArray(userCollection[category])
-      ? userCollection[category]
+      ? userCollection[category].filter((item) => !!item)
       : [];
     userCollection[category].forEach((item) => {
       if (!imageMap[category]) {

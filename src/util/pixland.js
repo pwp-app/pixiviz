@@ -43,6 +43,7 @@ const SYNC_TIME_MIN_SPAN = 10; // limit qps
 
 let lastSyncTime = parseInt(window.localStorage.getItem(LAST_SYNC_KEY), 10) || -1;
 let syncTimeout;
+let processingSync = false;
 
 /**
  * Checking whether user history should be synchronized to the server
@@ -166,16 +167,17 @@ export const clearRemoteHistory = async () => {
 const getPicIdMapByCollection = (collection) => {
   const idMap = {};
   const indexMap = {};
-  collection.forEach((categoryName) => {
+  Object.keys(collection).forEach((categoryName) => {
     const category = collection[categoryName];
     category.forEach((pic, index) => {
-      if (!idMap[pic.id]) {
-        idMap[pic.id] = true;
+      const picId = pic.id || pic.i;
+      if (!idMap[picId]) {
+        idMap[picId] = true;
       }
       if (!indexMap[categoryName]) {
         indexMap[categoryName] = {};
       }
-      indexMap[categoryName][pic.id] = index;
+      indexMap[categoryName][picId] = index;
     });
   });
   return [idMap, indexMap];
@@ -197,8 +199,22 @@ const checkCollectionSync = async (userData) => {
   // init vars
   remoteCollection = remoteCollection || {};
   picData = picData || {};
+  if (
+    typeof remoteCollection !== 'object' ||
+    (typeof remoteCollection === 'object' && !Object.keys(remoteCollection).length)
+  ) {
+    remoteCollection = {};
+  }
+  console.debug('[pixland]', 'remote collection ->', remoteCollection);
   // get user collection data from local (here we fetched the data in the memory, because some changes might not be written to the idb)
-  const localCollection = (await getUserCollection()) || {};
+  let localCollection = (await getUserCollection()) || {};
+  if (
+    typeof localCollection !== 'object' ||
+    (typeof localCollection === 'object' && !Object.keys(localCollection).length)
+  ) {
+    localCollection = {};
+  }
+  console.debug('[pixland]', 'local collection ->', localCollection);
   // generate cloned copy for next operations
   const newPicData = cloneDeep(picData);
   // no remote collection data, but has local, upload all
@@ -211,14 +227,24 @@ const checkCollectionSync = async (userData) => {
         }
       });
     });
+    const readyForRemote = {};
+    Object.keys(localCollection).forEach((categoryName) => {
+      readyForRemote[categoryName] = localCollection[categoryName].map((pic) => {
+        newPicData[pic.id] = pic;
+        return {
+          i: pic.id,
+          t: Math.floor(Date.now() / 1e3),
+          o: pic._ctime || Math.floor(Date.now() / 1e3),
+        };
+      });
+    });
     // for data saving, data structure of remote collection is quite different from the local
-    return [
-      localCollection.map((item) => ({
-        i: item.id,
-        t: item._ctime,
-      })),
+    console.debug(
+      '[pixland] write all local collection data to remote.',
+      readyForRemote,
       newPicData,
-    ];
+    );
+    return [readyForRemote, newPicData];
   }
   // no local collection data, but has remote, download all
   if (!Object.keys(localCollection).length && Object.keys(remoteCollection).length) {
@@ -234,11 +260,13 @@ const checkCollectionSync = async (userData) => {
       }));
     });
     setUserCollection(readyForLocal);
+    console.debug('[pixland] write all local collection data to local.', readyForLocal, newPicData);
     return [remoteCollection, picData];
   }
   // get id map of remote collection data
   const [localPicIdMap, localPicIndexMap] = getPicIdMapByCollection(localCollection);
   const [remotePicIdMap, remotePicIndexMap] = getPicIdMapByCollection(remoteCollection);
+  console.debug(localPicIdMap, remotePicIdMap);
   const historyPicIdMap = getPicIdMapByHistory(history);
   // data which should be merged / deleted to local
   const shouldBeMergedToLocal = {};
@@ -256,12 +284,12 @@ const checkCollectionSync = async (userData) => {
       shouldBeMergedToRemote[categoryName] = [];
     }
     category.forEach((pic) => {
-      if (pic._ctime >= lastSyncTime) {
+      if (pic._ctime >= lastSyncTime && !remotePicIdMap[pic.id]) {
         // if pic present in local but not in remote,
         // and its create time after last sync time,
         // it should be added to remote
         shouldBeMergedToRemote[categoryName].push(pic);
-      } else if (!remotePicIdMap[pic.id]) {
+      } else if (pic._ctime < lastSyncTime && !remotePicIdMap[pic.id]) {
         // if pic present in local but not in remote,
         // and its create time before the last sync time,
         // it should be removed from local
@@ -279,21 +307,50 @@ const checkCollectionSync = async (userData) => {
       shouldBeRemovedFromRemote[categoryName] = [];
     }
     category.forEach((pic) => {
-      if (pic.t >= lastSyncTime) {
+      if (pic.t >= lastSyncTime && !localPicIdMap[pic.i]) {
         // if pic present in remote and not in local when its create time after the last sync time
         // it should be added to local
         shouldBeMergedToLocal[categoryName].push(pic);
-      } else if (!localPicIdMap[pic.i]) {
+      } else if (pic.t < lastSyncTime && !localPicIdMap[pic.i]) {
         // if pic present in remote and not in local when its create time before the last sync time
         // it should be removed frome the remote
         shouldBeRemovedFromRemote[categoryName].push(pic);
       }
     });
   });
+  console.debug('[pixland]', 'collection that should be merged to local', shouldBeMergedToLocal);
+  console.debug(
+    '[pixland]',
+    'collection that should be removed from local',
+    shouldBeRemovedFromLocal,
+  );
+  console.debug('[pixland]', 'collection that should be merged to remote', shouldBeMergedToRemote);
+  console.debug(
+    '[pixland]',
+    'collection that should be removed from remote',
+    shouldBeRemovedFromRemote,
+  );
   // after scan, merge and remove the data for both sides
   // create a copy for uploading and local saving
   const readyForLocal = cloneDeep(localCollection);
   const readyForRemote = cloneDeep(remoteCollection);
+  // remove what should be removed for local
+  Object.keys(shouldBeRemovedFromLocal).forEach((categoryName) => {
+    const category = shouldBeRemovedFromLocal[categoryName];
+    if (Array.isArray(category) && category.length) {
+      category.forEach((pic) => {
+        const index = localPicIndexMap[categoryName]?.[pic.id];
+        if (typeof index === 'undefined') {
+          // prevent crashing
+          return;
+        }
+        // if using splice here, the index map will be incorrect
+        readyForLocal[categoryName][index] = null;
+      });
+      // at last, filter the null items
+      readyForLocal[categoryName] = readyForLocal[categoryName].filter((item) => !!item);
+    }
+  });
   // merge things to local
   Object.keys(shouldBeMergedToLocal).forEach((categoryName) => {
     const category = shouldBeMergedToLocal[categoryName];
@@ -309,7 +366,7 @@ const checkCollectionSync = async (userData) => {
     }
     // for safe, do a duplicate filter
     const idMap = {};
-    readyForLocal[categoryName].filter((item) => {
+    readyForLocal[categoryName] = readyForLocal[categoryName].filter((item) => {
       if (!idMap[item.id]) {
         idMap[item.id] = true;
         return true;
@@ -317,42 +374,9 @@ const checkCollectionSync = async (userData) => {
       return false;
     });
   });
-  // remove what should be removed for local
-  Object.keys(shouldBeRemovedFromLocal).forEach((categoryName) => {
-    const category = shouldBeRemovedFromLocal[categoryName];
-    if (Array.isArray(category) && category.length) {
-      category.forEach((pic) => {
-        const index = localPicIndexMap[categoryName]?.[pic.id];
-        if (typeof index === 'undefined') {
-          // prevent crashing
-          return;
-        }
-        // if using splice here, the index map will be incorrect
-        readyForLocal[categoryName][index] = null;
-      });
-      // at last, filter the null items
-      readyForLocal[categoryName].filter((item) => !!item);
-    }
-  });
+  console.debug('[pixland]', 'ready for local collection ->', readyForLocal);
   // save things to local
   setUserCollection(readyForLocal);
-  // merge things to remote
-  Object.keys(shouldBeMergedToRemote).forEach((categoryName) => {
-    const category = shouldBeMergedToRemote[categoryName];
-    category.forEach((item) => {
-      // item here is the full pic data, it should be transformed into the simplified structure
-      newPicData[item] = cloneDeep(item);
-      const now = Math.floor(Date.now() / 1e3);
-      readyForRemote[categoryName] = readyForRemote[categoryName].concat(
-        category.map((pic) => ({
-          i: pic.id,
-          // use current time as t to let it can be synced to other clients
-          t: now,
-          o: item._ctime, // original create time, useful for sorting
-        })),
-      );
-    });
-  });
   // remove things form remote
   Object.keys(shouldBeRemovedFromRemote).forEach((categoryName) => {
     const category = shouldBeRemovedFromRemote[categoryName];
@@ -368,6 +392,34 @@ const checkCollectionSync = async (userData) => {
     });
     readyForRemote[categoryName] = readyForRemote[categoryName].filter((item) => !!item);
   });
+  // merge things to remote
+  Object.keys(shouldBeMergedToRemote).forEach((categoryName) => {
+    const category = shouldBeMergedToRemote[categoryName];
+    category.forEach((item) => {
+      // item here is the full pic data, it should be transformed into the simplified structure
+      newPicData[item.id] = cloneDeep(item);
+      const now = Math.floor(Date.now() / 1e3);
+      if (!readyForRemote[categoryName]) {
+        readyForRemote[categoryName] = [];
+      }
+      readyForRemote[categoryName].push({
+        i: item.id,
+        // use current time as t to let it can be synced to other clients
+        t: now,
+        o: item._ctime, // original create time, useful for sorting
+      });
+    });
+    // for safe, do a duplicate filter
+    const idMap = {};
+    readyForRemote[categoryName] = readyForRemote[categoryName].filter((item) => {
+      if (!idMap[item.i]) {
+        idMap[item.i] = true;
+        return true;
+      }
+      return false;
+    });
+  });
+  console.debug('[pixland]', 'ready for remote collection ->', readyForRemote, newPicData);
   // return the built data
   return [readyForRemote, newPicData];
 };
@@ -377,49 +429,65 @@ export const syncData = async ({ immediate = false } = {}) => {
   if (!pixlandIns?.isLogin()) {
     return;
   }
+
   // check minimum sync time
   const now = Math.floor(Date.now() / 1e3);
   const minSpan = window.pixiviz?.config?.syncMinSpan || SYNC_TIME_MIN_SPAN;
-  if ((now - lastSyncTime < minSpan || syncTimeout) && !immediate) {
-    if (syncTimeout) {
-      clearTimeout(syncTimeout);
+  if (!immediate) {
+    if (now - lastSyncTime < minSpan || syncTimeout || processingSync) {
+      if (syncTimeout) {
+        clearTimeout(syncTimeout);
+        syncTimeout = null;
+      }
+      syncTimeout = setTimeout(() => {
+        syncTimeout = null;
+        syncData();
+      }, minSpan * 1000);
+      console.debug('[Pixland] Sync delay...', now - lastSyncTime);
+      return;
     }
-    syncTimeout = setTimeout(() => {
-      syncTimeout = null;
-      syncData();
-    }, minSpan * 1000);
-    console.debug('[Pixland] Sync delay...', now - lastSyncTime);
-    return;
+  } else if (syncTimeout) {
+    clearTimeout(syncTimeout);
+    syncTimeout = null;
   }
-  // #0: Output logs for debugging
-  console.debug('[Pixland] Start sync data...');
-  console.debug('[Pixland] Last sync time', lastSyncTime, Math.floor(Date.now() / 1e3));
-  // #1: Get user data from pixland
-  const userData = await pixlandIns.getUserData();
-  const hash = await sha256(JSON.stringify(userData));
-  console.debug('[Pixland] User data gotten.', userData);
-  // #2: Check history sync
-  const historyRes = await checkHistorySync(userData);
-  // #3: Build new user data
-  userData.history = historyRes[0];
-  userData.picData = historyRes[1];
-  // #4: Check collection sync
-  const collectionRes = checkCollectionSync(userData);
-  userData.collection = collectionRes[0];
-  userData.picData = collectionRes[1];
-  // #5: Hash compare
-  const newHash = await sha256(JSON.stringify(userData));
-  if (newHash === hash) {
-    // No changes
-    console.debug('[Pixland] Hash same, abort uploading...', hash, newHash);
-    return;
+  try {
+    processingSync = true;
+    // #0: Output logs for debugging
+    console.debug('[Pixland] Start sync data...');
+    console.debug('[Pixland] Last sync time', lastSyncTime, Math.floor(Date.now() / 1e3));
+    // #1: Get user data from pixland
+    const userData = await pixlandIns.getUserData();
+    console.debug('[Pixland] User data gotten.', userData);
+    const hash = await sha256(JSON.stringify(userData));
+    console.debug('[Pixland] User data hashed.', hash);
+    // #2: Check history sync
+    const historyRes = await checkHistorySync(userData);
+    // #3: Build new user data
+    userData.history = historyRes[0];
+    userData.picData = historyRes[1];
+    // #4: Check collection sync
+    const collectionRes = await checkCollectionSync(userData);
+    userData.collection = collectionRes[0];
+    userData.picData = collectionRes[1];
+    // #5: Hash compare
+    const newHash = await sha256(JSON.stringify(userData));
+    if (newHash === hash) {
+      // No changes
+      console.debug('[Pixland] Hash same, abort uploading...', hash, newHash);
+      return;
+    }
+    // #5: Save to remote
+    console.debug('[Pixland] Start uploading...', userData);
+    await pixlandIns.uploadUserData(userData);
+    // eslint-disable-next-line require-atomic-updates
+    lastSyncTime = Math.floor(Date.now() / 1e3);
+    window.localStorage.setItem(LAST_SYNC_KEY, lastSyncTime);
+  } catch (err) {
+    console.error('[pixland] sync failed', err);
+  } finally {
+    // eslint-disable-next-line require-atomic-updates
+    processingSync = false;
   }
-  // #5: Save to remote
-  console.debug('[Pixland] Start uploading...', userData);
-  await pixlandIns.uploadUserData(userData);
-  // eslint-disable-next-line require-atomic-updates
-  lastSyncTime = Math.floor(Date.now() / 1e3);
-  window.localStorage.setItem(LAST_SYNC_KEY, lastSyncTime);
 };
 
 export const logout = () => {
