@@ -2,7 +2,11 @@
   <div class="image-card-wrapper" :style="positionStyle">
     <a
       :href="loadError || block || !image ? 'javascript:;' : `/pic/${image.id}`"
-      :class="['image-card', loadError || block ? 'image-card-status-error' : '']"
+      :class="{
+        'image-card': true,
+        'image-card-status-error': loadError || block,
+        'image-card--more': moreMenuVisible,
+      }"
       :style="{ width: cardWidth + 'px', height: loadHeight + 'px' }"
       @click.prevent="handleClick"
     >
@@ -29,6 +33,23 @@
       <div class="image-card-count" v-if="image && image.page_count > 1">
         <span>{{ image ? image.page_count : '' }}</span>
       </div>
+      <el-dropdown
+        v-if="isCollection"
+        trigger="hover"
+        placement="bottom"
+        @click.native.stop
+        @command="handleMoreCommand"
+        @visible-change="handleMenuVisibleChanged"
+      >
+        <div class="image-card-more">
+          <IconMore class="image-card-more__icon" />
+        </div>
+        <el-dropdown-menu class="image-card-dropdown" slot="dropdown">
+          <el-dropdown-item command="remove">
+            取消收藏
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <div
         ref="image"
         class="image-card-image"
@@ -46,6 +67,8 @@
 </template>
 
 <script>
+import IconMore from '../icons/more';
+
 export default {
   name: 'Common.ImageCard',
   props: {
@@ -69,6 +92,13 @@ export default {
       type: Boolean,
       default: true,
     },
+    isCollection: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  components: {
+    IconMore,
   },
   watch: {
     image: {
@@ -86,6 +116,7 @@ export default {
       loading: false,
       loadError: false,
       block: this.image.x_strict ? true : this.image.sanity_level > 5,
+      moreMenuVisible: false,
     };
   },
   created() {
@@ -172,6 +203,17 @@ export default {
       this.loading = false;
       this.loadError = true;
       this.$forceUpdate();
+    },
+    handleMoreCommand(command) {
+      // eslint-disable-next-line default-case
+      switch (command) {
+        case 'remove':
+          this.$emit('remove', this.image.id);
+          break;
+      }
+    },
+    handleMenuVisibleChanged(visibility) {
+      this.moreMenuVisible = visibility;
     },
   },
 };

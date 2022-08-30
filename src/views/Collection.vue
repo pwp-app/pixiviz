@@ -4,7 +4,6 @@
       <div class="collection-header-title">
         <div class="collection-header-title__left">
           <span>收藏夹</span>
-          <span class="small-flag">Beta</span>
           <span class="count-limit">已用栏位 {{ existedCount }}/{{ COLLECTION_SIZE_LIMIT }}</span>
         </div>
 
@@ -23,18 +22,25 @@
       </div>
       <div class="waterfall-wrapper" v-else>
         <Waterfall
+          ref="waterfall"
+          imageType="medium"
           :class="{
             'waterfall-responsive': waterfallResponsive,
           }"
           :key="`${waterfallResponsive}_${waterfallKey}`"
-          ref="waterfall"
           :images="images"
-          @card-clicked="handleCardClicked"
           :cardWidth="cardWidth"
-          imageType="medium"
           :style="waterfallResponsive ? null : { width: `${mobileWaterfallWidth}px` }"
+          :isCollection="true"
+          @card-clicked="handleCardClicked"
+          @card-removed="handleCardRemoved"
         />
-        <p class="waterfall-end">没有更多记录了</p>
+        <p class="waterfall-end">
+          <template v-if="existedCount < COLLECTION_SIZE_LIMIT"
+            >没有更多收藏了，快去找一些你喜欢的画作吧~</template
+          >
+          <template v-else>收藏夹看起来装不下更多画作了，先整理一下吧~</template>
+        </p>
       </div>
     </div>
     <BackToTop ref="backToTop" />
@@ -45,7 +51,8 @@
 import Waterfall from '../components/common/Waterfall';
 import BackToTop from '../components/common/BackToTop';
 import MobileResponsive from '../util/MobileResponsive';
-import { getUserCollection, COLLECTION_SIZE_LIMIT } from '../util/collection';
+import { getUserCollection, COLLECTION_SIZE_LIMIT, removeFromCollection } from '../util/collection';
+import { syncData } from '../util/pixland';
 
 export default {
   components: {
@@ -62,6 +69,7 @@ export default {
       images: [],
       existedCount: 0,
       notFirstUse: window.localStorage.getItem('pixiviz-user-collect-first-entry') === 'true',
+      currentCategory: 'default',
       COLLECTION_SIZE_LIMIT,
     };
   },
@@ -162,7 +170,7 @@ export default {
           }
           return res + collection[curr].length;
         }, 0) || 0;
-      this.images = collection.default || [];
+      this.images = collection[this.currentCategory] || [];
       this.$forceUpdate();
     },
     handleCardClicked(imageId) {
@@ -173,6 +181,20 @@ export default {
         this.$store.commit('imageCache/setCache', info);
       }
       this.$router.push(`/pic/${imageId}`);
+    },
+    handleCardRemoved(imageId) {
+      // remove from local db
+      removeFromCollection(this.currentCategory, imageId);
+      // update component local images
+      const localIdx = this.images.findIndex((item) => item.id === imageId);
+      if (localIdx >= 0) {
+        this.images.splice(localIdx, 1);
+      }
+      this.$message.success('已取消收藏该作品');
+      this.waterfallKey += 1;
+      this.$forceUpdate();
+      // trigger sync
+      syncData({ immediate: true });
     },
     handleBack() {
       this.$router.push('/');
