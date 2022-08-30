@@ -473,6 +473,9 @@ export const syncData = async ({ immediate = false } = {}) => {
     const newHash = await sha256(JSON.stringify(userData));
     if (newHash === hash) {
       // No changes
+      // eslint-disable-next-line require-atomic-updates
+      lastSyncTime = Math.floor(Date.now() / 1e3);
+      window.localStorage.setItem(LAST_SYNC_KEY, lastSyncTime);
       console.debug('[Pixland] Hash same, abort uploading...', hash, newHash);
       return;
     }

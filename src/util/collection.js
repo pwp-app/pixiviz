@@ -31,18 +31,33 @@ export const getUserCollection = async ({ bypass = false } = {}) => {
     if (!Array.isArray(userCollection[category])) {
       return;
     }
-    userCollection[category] = filterImages(userCollection[category], false, false).map((item) => {
+    userCollection[category] = userCollection[category].map((item) => {
       if (!item._ctime) {
         return {
           ...item,
           _ctime: Math.floor(Date.now() / 1e3),
         };
       }
+      if (`${item._ctime}`.length >= 13) {
+        // value safety ensurance
+        // eslint-disable-next-line no-param-reassign
+        item._ctime = Math.floor(Date.now() / 1e3);
+      }
       imageMap[category] = imageMap[category] || {};
       imageMap[category][item.id] = true;
       return item;
     });
-    userCollection[category].sort((a, b) => b._ctime - a._ctime);
+    userCollection[category] = filterImages(
+      userCollection[category]
+        .sort((a, b) => {
+          const timeOfA = a._otime || a._ctime;
+          const timeOfB = b._otime || b._ctime;
+          return timeOfB - timeOfA;
+        })
+        .filter((item) => !!item.image_urls),
+      false,
+      false,
+    );
   });
   return userCollection;
 };
