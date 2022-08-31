@@ -1,0 +1,76 @@
+@keyframes sync-rotate {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes sync-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes sync-completed {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.sync-status {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  line-height: 28px;
+  transform: translateY(2px);
+  margin-left: 12px;
+  .sync-status__icon {
+    width: 20px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    path {
+      fill: @color-primary;
+    }
+  }
+  .sync-status__icon-sync {
+    animation: sync-rotate linear 0.85s infinite;
+  }
+  .sync-status__text {
+    color: @color-primary;
+    font-size: 14px;
+    letter-spacing: 0.025rem;
+    margin-left: 6px;
+  }
+}
+
+.sync-status--syncing {
+  animation: sync-blink ease-in-out 1s infinite;
+}
+
+.sync-status--completed {
+  .sync-status__text {
+    animation-name: sync-completed;
+    animation-timing-function: ease;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    animation-delay: 2.5s;
+    animation-iteration-count: 1;
+  }
+}
+
+.sync-status--error {
+  cursor: pointer;
+}
