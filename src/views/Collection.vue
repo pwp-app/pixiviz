@@ -6,21 +6,26 @@
           <span>收藏夹</span>
           <span class="count-limit">已用栏位 {{ existedCount }}/{{ COLLECTION_SIZE_LIMIT }}</span>
         </div>
-
         <div class="collection-header-close">
           <i class="el-icon-close" @click="handleBack"></i>
         </div>
       </div>
     </div>
     <div class="collection-body">
-      <div class="collection-body-empty" v-if="showEmpty">
+      <div class="collection-body-empty" v-if="showEmpty && !collectionLoading">
         <span>
           <span>您尚未收藏任何作品</span>
           <span class="mobile-hide">，</span>
           <span>快去浏览你喜欢的作品吧~</span>
         </span>
       </div>
-      <div class="waterfall-wrapper" v-else>
+      <div class="collection-body-empty collection-body-loading-wrapper" v-if="collectionLoading">
+        <span>稍等一下喵，正在寻找收藏夹的数据~</span>
+        <div class="collection-body-loading">
+          <i class="loading-spiral" spinner="spiral"></i>
+        </div>
+      </div>
+      <div class="waterfall-wrapper" v-if="!showEmpty && !collectionLoading">
         <Waterfall
           ref="waterfall"
           imageType="medium"
@@ -70,6 +75,7 @@ export default {
       existedCount: 0,
       notFirstUse: window.localStorage.getItem('pixiviz-user-collect-first-entry') === 'true',
       currentCategory: 'default',
+      collectionLoading: false,
       COLLECTION_SIZE_LIMIT,
     };
   },
@@ -106,7 +112,15 @@ export default {
     },
   },
   async created() {
-    await this.getImages();
+    this.collectionLoading = true;
+    try {
+      await this.getImages();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    } finally {
+      this.collectionLoading = false;
+    }
   },
   mounted() {
     // do scroll
