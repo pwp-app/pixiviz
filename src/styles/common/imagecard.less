@@ -15,6 +15,7 @@
   border-radius: @image-card-corner;
   box-shadow: @shadow-small;
   overflow: hidden;
+  transition: filter 50ms ease;
   .el-loading-mask {
     border-radius: @image-card-corner;
     z-index: 1000;
@@ -28,10 +29,6 @@
     transition: filter 200ms ease-in-out;
     position: relative;
     z-index: 10;
-  }
-  &-image:hover {
-    cursor: pointer;
-    filter: brightness(0.875);
   }
   &-title {
     width: calc(100% - 24px);
@@ -88,7 +85,6 @@
   }
   &-count {
     background: rgba(0, 0, 0, 0.4);
-    width: max-content;
     position: absolute;
     top: -10px;
     right: -8px;
@@ -118,6 +114,38 @@
       color: #fafafa;
     }
   }
+  .el-dropdown {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    width: max-content;
+    height: max-content;
+  }
+  &-more {
+    width: max-content;
+    height: max-content;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-top: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    opacity: 0;
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.6)) drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.2));
+    .no-select();
+  }
+}
+
+.image-card:hover {
+  cursor: pointer;
+  .image-card-image {
+    filter: brightness(0.875);
+  }
+  .image-card-more {
+    opacity: 1;
+  }
 }
 
 .image-card:active {
@@ -128,13 +156,32 @@
   animation: cardFadeIn 500ms;
 }
 
+.image-card--more {
+  cursor: pointer;
+  .image-card-image {
+    filter: brightness(0.875);
+  }
+  .image-card-more {
+    opacity: 1;
+  }
+}
+
+.image-card-dropdown {
+  transform: translateY(-8px);
+  border-radius: 8px;
+  .el-dropdown-menu__item {
+    line-height: 36px;
+    font-size: 13px;
+  }
+}
+
 // dark mode
 .dark {
   .image-card {
-    filter: brightness(0.85);
+    filter: brightness(0.9);
   }
   .image-card:active {
-    filter: brightness(0.8);
+    filter: brightness(0.825);
   }
 }
 

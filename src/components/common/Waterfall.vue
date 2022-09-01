@@ -14,7 +14,9 @@
       :cardWidth="cardWidth"
       :imageType="imageType"
       :position="positionMap[item.index]"
+      :isCollection="isCollection"
       @clicked="handleCardClicked"
+      @remove="handleCardRemoved"
     />
   </div>
 </template>
@@ -50,6 +52,10 @@ export default {
     rowsPerSection: {
       type: Number,
       default: 3,
+    },
+    isCollection: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
@@ -323,6 +329,9 @@ export default {
     // card event
     handleCardClicked(imageId) {
       this.$emit('card-clicked', imageId);
+    },
+    handleCardRemoved(imageId) {
+      this.$emit('card-removed', imageId);
     },
     // window event handler
     handleWindowResize() {

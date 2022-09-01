@@ -17,6 +17,9 @@ const filterImage = (img) => {
 
 const filterImages = (imgs, dropManga = true, dropTags = true) => {
   return imgs.filter((img) => {
+    if (!img) {
+      return false;
+    }
     if (
       img.restrict ||
       img.x_restrict ||

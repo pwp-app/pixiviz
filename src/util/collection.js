@@ -9,6 +9,7 @@ let imageMap = {};
 
 export class UserCollectionError extends Error {}
 
+// get user collection from idb (collection is actually a big json)
 export const getUserCollection = async ({ bypass = false } = {}) => {
   if (userCollection && !bypass) {
     return userCollection;
@@ -30,18 +31,33 @@ export const getUserCollection = async ({ bypass = false } = {}) => {
     if (!Array.isArray(userCollection[category])) {
       return;
     }
-    userCollection[category] = filterImages(userCollection[category], false, false).map((item) => {
+    userCollection[category] = userCollection[category].map((item) => {
       if (!item._ctime) {
         return {
           ...item,
           _ctime: Math.floor(Date.now() / 1e3),
         };
       }
+      if (`${item._ctime}`.length >= 13) {
+        // value safety ensurance
+        // eslint-disable-next-line no-param-reassign
+        item._ctime = Math.floor(Date.now() / 1e3);
+      }
       imageMap[category] = imageMap[category] || {};
       imageMap[category][item.id] = true;
       return item;
     });
-    userCollection[category].sort((a, b) => b._ctime - a._ctime);
+    userCollection[category] = filterImages(
+      userCollection[category]
+        .sort((a, b) => {
+          const timeOfA = a._otime || a._ctime;
+          const timeOfB = b._otime || b._ctime;
+          return timeOfB - timeOfA;
+        })
+        .filter((item) => !!item.image_urls),
+      false,
+      false,
+    );
   });
   return userCollection;
 };
@@ -71,7 +87,7 @@ export const addUserCollection = async (category, image) => {
     ...image,
     _ctime: Math.floor(Date.now() / 1e3),
   });
-  saveToDb();
+  await saveToDb();
 };
 
 export const setUserCollection = async (collection) => {
@@ -79,7 +95,7 @@ export const setUserCollection = async (collection) => {
   imageMap = {};
   Object.keys(userCollection).forEach((category) => {
     userCollection[category] = Array.isArray(userCollection[category])
-      ? userCollection[category]
+      ? userCollection[category].filter((item) => !!item)
       : [];
     userCollection[category].forEach((item) => {
       if (!imageMap[category]) {
@@ -109,6 +125,7 @@ export const removeFromCollection = async (category, imageId) => {
   }
   const idx = userCollection[category].findIndex((item) => item.id === imageId);
   if (idx >= 0) {
+    // delete logically for sync
     userCollection[category].splice(idx, 1);
     imageMap[category][imageId] = false;
   }

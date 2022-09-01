@@ -117,6 +117,7 @@ import {
   removeFromCollection,
   UserCollectionError,
 } from '@/util/collection';
+import { syncData } from '@/util/pixland';
 
 const LARGE_SIZE_LIMIT = 3 * 1024 * 1024;
 const BLANK_IMAGE =
@@ -952,6 +953,8 @@ export default {
       await this.checkInCollection();
       this.$nextTick(() => {
         this.$forceUpdate();
+        // trigger pixland sync (because this is a user active behavior, it should be synced to the remote immediately)
+        syncData({ immediate: true });
       });
     },
   },

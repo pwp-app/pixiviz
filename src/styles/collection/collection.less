@@ -1,3 +1,12 @@
+@keyframes collection-loading-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .collection {
   &-header {
     padding: 32px 0 24px 0;
@@ -60,6 +69,22 @@
       margin-top: 48px;
       color: @color-text-primary;
       user-select: none;
+    }
+    &-loading-wrapper {
+      margin-top: 36px;
+    }
+    &-loading {
+      margin-top: 24px;
+      .loading-spiral {
+        display: inline-block;
+        margin: 5px 0;
+        width: 28px;
+        height: 28px;
+        font-size: 28px;
+        line-height: 28px;
+        border-radius: 50%;
+        animation: collection-loading-rotate linear 0.85s infinite;
+      }
     }
     .waterfall-wrapper {
       .waterfall-wrapper-mixin(6);
