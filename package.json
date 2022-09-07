@@ -52,7 +52,7 @@
     "vue": "^2.7.10",
     "vue-cookies": "^1.8.1",
     "vue-infinite-loading": "^2.4.5",
-    "vue-router": "^3.6.4",
+    "vue-router": "^3.6.5",
     "vue-share-popup": "^0.4.3",
     "vue-touch": "^2.0.0-beta.4",
     "vue2-touch-events": "^3.2.2",
