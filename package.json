@@ -3,7 +3,7 @@
   "version": "1.29.1",
   "scripts": {
     "serve": "node ./tools/sensitiveWordsGen.js && vue-cli-service serve",
-    "build": "node ./tools/sensitiveWordsGen.js && node ./tools/processVersion.js && vue-cli-service build",
+    "build": "node ./tools/processVersion.js && vue-cli-service build",
     "test:e2e": "vue-cli-service test:e2e",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "dev": "npm run serve",
