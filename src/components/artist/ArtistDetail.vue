@@ -69,13 +69,16 @@
 </template>
 
 <script>
+import * as clipboard from 'clipboard-polyfill';
+import { getSensitiveWords } from '@/util/sensitiveWords';
 import proxy from '../../mixin/proxy';
 import Website from '../icons/website.vue';
 import Twitter from '../icons/twitter.vue';
 import Male from '../icons/male.vue';
 import Female from '../icons/female.vue';
 import ArtistInfoTag from './ArtistInfoTag.vue';
-import * as clipboard from 'clipboard-polyfill';
+
+const sensitiveWords = getSensitiveWords();
 
 const regionTester = /\s?\((.+)\)/;
 
@@ -206,10 +209,20 @@ export default {
       }
       const { user } = this.artist;
       this.name = user.name;
-      this.comment = user.comment;
+      this.comment = this.checkComment(user.comment || '') ? user.comment : '';
       this.loaded = true;
       // 触发事件
       this.$emit('loaded', this.name);
+    },
+    checkComment(comment) {
+      if (!comment) {
+        return true;
+      }
+      const checkRes = sensitiveWords.reduce((res, curr) => {
+        if (res) return res;
+        return checkRes || comment.includes(curr);
+      }, false);
+      return !checkRes;
     },
     getComment() {
       return this.comment;

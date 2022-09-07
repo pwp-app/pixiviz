@@ -61,9 +61,7 @@
       <p>别搜了，这里真的没有色图...</p>
     </div>
     <div class="search-content search-content-blocked" v-if="sensitiveBlocked">
-      <p>富强、民主、文明、和谐</p>
-      <p>自由、平等、公正、法制</p>
-      <p>爱国、敬业、诚信、友善</p>
+      <p>找不到任何匹配的结果，请换一个搜索关键词试试吧~</p>
     </div>
     <div class="infinite-failed" v-if="showContent && loadFailed">
       <p>看上去数据加载失败了</p>
@@ -85,15 +83,17 @@ import Waterfall from '../components/common/Waterfall';
 import BackToTop from '../components/common/BackToTop';
 // Util
 import MobileResponsive from '../util/MobileResponsive';
-import { filterImage, filterImages } from '../util/filter';
+import { imagePassCheck, filterImages } from '../util/filter';
 import { setOgTags, getOgTags } from '../util/og';
 // Mixin
 import suggestionScroll from '../mixin/suggestionScroll';
+import { getSensitiveWords } from '../util/sensitiveWords';
 
 const id_matcher = /^\d{2,8}$/;
 
 // block words
 const BLOCK_WORDS = [/r-?18/i, /18-?r/i, /^黄?色情?图$/, /^ero$/i, /工口/, /エロ/, /巨乳|尻/];
+const sensitiveWords = getSensitiveWords();
 
 export default {
   name: 'Search',
@@ -273,10 +273,19 @@ export default {
         })
         .then((res) => {
           if (res.data && Array.isArray(res.data)) {
-            this.suggestions = res.data.filter((item) => item !== this.keyword);
+            this.suggestions = res.data.filter(
+              (item) => item !== this.keyword && this.checkSuggestion(item),
+            );
             this.$store.commit('search/setSuggestions', this.suggestions);
           }
         });
+    },
+    checkSuggestion(item) {
+      const sensitiveCheckRes = sensitiveWords.reduce((res, curr) => {
+        if (res) return res;
+        return res || item.includes(curr);
+      }, false);
+      return !sensitiveCheckRes;
     },
     fetchNew() {
       this.loadFailed = false;
@@ -312,7 +321,7 @@ export default {
           const {
             data: { illust },
           } = res;
-          if (!filterImage(illust)) {
+          if (!imagePassCheck(illust)) {
             return;
           }
           // bind event to search notify
@@ -358,7 +367,7 @@ export default {
       this.leaveSuggestion();
     },
     checkBlocked() {
-      // 检查屏蔽
+      // check keyword blocked
       let flag_blocked = false;
       this.blockedCountTime = parseInt(window.localStorage.getItem('blocked_count_time'), 10);
       if (new Date().valueOf() - this.blockedCountTime > 180000) {
@@ -381,6 +390,14 @@ export default {
         }
       }
       this.keywordBlocked = flag_blocked;
+      // check sensitive words blocked
+      const sensitiveCheckRes = sensitiveWords.reduce((res, curr) => {
+        if (res) return res;
+        return res || this.keyword.includes(curr);
+      }, false);
+      if (sensitiveCheckRes) {
+        this.sensitiveBlocked = true;
+      }
     },
     handleKeywordChanged(keyword) {
       if (keyword === this.keyword) {

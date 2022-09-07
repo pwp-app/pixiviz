@@ -1,9 +1,9 @@
 {
   "name": "pixiviz",
-  "version": "1.29.0",
+  "version": "1.29.1",
   "scripts": {
-    "serve": "node ./tools/processVersion.js && vue-cli-service serve",
-    "build": "node ./tools/processVersion.js && vue-cli-service build",
+    "serve": "node ./tools/sensitiveWordsGen.js && vue-cli-service serve",
+    "build": "node ./tools/sensitiveWordsGen.js && node ./tools/processVersion.js && vue-cli-service build",
     "test:e2e": "vue-cli-service test:e2e",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "dev": "npm run serve",
@@ -12,6 +12,7 @@
     "gen:anno-dev": "cross-env NODE_ENV=dev node ./tools/announcementGen.js",
     "gen:proxy": "node ./tools/proxyConfigGen.js",
     "gen:ver": "node ./tools/processVersion.js",
+    "gen:sensitive": "node ./tools/sensitiveWordsGen.js",
     "push:anno": "tigo cfs deploy pixiviz-anno-prod",
     "push:anno-dev": "tigo cfs deploy pixiviz-anno-dev",
     "push:proxy": "cross-env NODE_ENV=prod node ./tools/proxyConfigUpload.js",

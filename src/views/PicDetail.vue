@@ -78,7 +78,7 @@ import Related from '../components/pic/Related';
 import Overlay from '../components/pic/Overlay';
 
 // utils
-import { filterImages } from '../util/filter';
+import { imagePassCheck, filterImages } from '../util/filter';
 import { getOgTags, setOgTags } from '../util/og';
 import { getScreenOrientationType } from '../util/screen';
 
@@ -272,8 +272,10 @@ export default {
         );
     },
     afterLoad() {
-      if (parseInt(this.image.x_restrict, 10) === 1 || this.image.sanity_level > 5) {
+      // check block
+      if (!imagePassCheck(this.image)) {
         this.block = true;
+        return;
       }
       // fetch related
       this.fetchRelated();

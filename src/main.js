@@ -52,6 +52,9 @@ import pixlandIns from './util/pixland';
 
 import { initBaiduStat } from './util/statistics';
 import { checkTrustHost } from './util/host';
+import { getSensitiveWords } from './util/sensitiveWords';
+
+Vue.prototype.$sensitiveWords = getSensitiveWords();
 
 // Register handlers
 registerThemeColorHandler();
