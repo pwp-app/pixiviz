@@ -1,4 +1,15 @@
-const blockTags = ['尻', '極上の乳', '水着', '漫画素材工坊', '描き方', 'お絵かきTIPS'];
+import { getSensitiveWords } from './sensitiveWords';
+
+const sensitiveWords = getSensitiveWords();
+const blockTags = [
+  '尻',
+  '極上の乳',
+  '水着',
+  '漫画素材工坊',
+  '描き方',
+  'お絵かきTIPS',
+  ...sensitiveWords,
+];
 const mangaTags = ['漫画'];
 const blockTitle = ['水着'];
 
@@ -9,17 +20,35 @@ const getFilterLevel = () => {
   return 3;
 };
 
-const filterImage = (img) => {
+export const imagePassCheck = (img) => {
   if (img.x_restrict || img.sanity_level > getFilterLevel()) {
     return false;
   }
+  if (img.caption) {
+    const captionBlocked = sensitiveWords.reduce((res, curr) => {
+      if (res) return res;
+      return res || img.caption.includes(curr);
+    }, false);
+    if (captionBlocked) {
+      return false;
+    }
+  }
+  const titleSensitive = sensitiveWords.reduce((res, curr) => {
+    if (res) return res;
+    return res || img.title.includes(curr);
+  }, false);
+  if (titleSensitive) {
+    return false;
+  }
+  return true;
 };
 
-const filterImages = (imgs, dropManga = true, dropTags = true) => {
+export const filterImages = (imgs, dropManga = true, dropTags = true) => {
   return imgs.filter((img) => {
     if (!img) {
       return false;
     }
+    // filter restricted content
     if (
       img.restrict ||
       img.x_restrict ||
@@ -29,6 +58,14 @@ const filterImages = (imgs, dropManga = true, dropTags = true) => {
     ) {
       return false;
     }
+    // filter title
+    const titleSensitive = sensitiveWords.reduce((res, curr) => {
+      if (res) return res;
+      return res || img.title.includes(curr);
+    }, false);
+    if (titleSensitive) {
+      return false;
+    }
     const titleBlocked = blockTitle.reduce((res, curr) => {
       if (res) return res;
       return res || img.title.includes(curr);
@@ -36,6 +73,7 @@ const filterImages = (imgs, dropManga = true, dropTags = true) => {
     if (!window.pixiviz?.pixland?.isLogin && titleBlocked) {
       return false;
     }
+    // filter tags
     if (Array.isArray(img.tags) && img.tags.length) {
       if (dropTags || dropManga) {
         for (let i = 0; i < img.tags.length; i++) {
@@ -52,5 +90,3 @@ const filterImages = (imgs, dropManga = true, dropTags = true) => {
     return true;
   });
 };
-
-export { filterImage, filterImages };
