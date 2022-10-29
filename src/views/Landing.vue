@@ -194,7 +194,7 @@ export default {
           onClose: this.guideNoticeClosed,
           message: `
           <div class="oneline-notice">
-            <span data-name="notice-firstuse">第一次使用 Pixiviz？你可能需要<span class="notice-link" data-name="link-guide">食用指南</span></span>
+            <span data-name="notice-firstuse">第一次来到 Pixiviz？你可能需要<span class="notice-link" data-name="link-guide">食用指南</span></span>
           </div>`,
         });
       });
@@ -222,7 +222,7 @@ export default {
             onClose: this.donateNoticeClosed,
             message: `
 							<div class="oneline-notice">
-								<span data-name="notice-donate">即刻发电给服务器续命，帮助我们维持无广告运营~ -&gt; <span class="notice-link" data-name="link-donate">点我发电</span></span>
+								<span data-name="notice-donate">有了大家的发电，服务姬就能健康地活下去了，广告什么的才不上呢！ -&gt; <span class="notice-link" data-name="link-donate">点这里即刻投喂服务姬</span></span>
 							</div>`,
           });
         });
