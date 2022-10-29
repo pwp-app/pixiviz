@@ -62,7 +62,7 @@
     "@babel/eslint-parser": "^7.19.1",
     "@gfx/zopfli": "^1.0.15",
     "@vue/cli-plugin-babel": "^4.5.19",
-    "@vue/cli-plugin-e2e-cypress": "^4.5.19",
+    "@vue/cli-plugin-e2e-cypress": "^5.0.8",
     "@vue/cli-plugin-pwa": "^4.5.19",
     "@vue/cli-plugin-router": "^4.5.19",
     "@vue/cli-plugin-vuex": "^4.5.19",
