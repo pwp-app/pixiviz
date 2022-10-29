@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
+const JinDanWebpackPlugin = require('jindan-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
@@ -268,6 +269,26 @@ module.exports = {
       // compress
       return {
         plugins: [
+          // new JinDanWebpackPlugin({
+          //   path: './js/jindan.js',
+          //   options: {
+          //     remote: {
+          //       endpoints: ['https://cfs.tigo.pwp.app/jindan.json'],
+          //       async: false,
+          //     },
+          //     appInfo: {
+          //       version: '1.29.1',
+          //     },
+          //     fallback: {
+          //       resource: {
+          //         domains: ['pixiviz.xyz'],
+          //       },
+          //       endpoint: {
+          //         domains: ['public.tigo.pwp.app'],
+          //       },
+          //     },
+          //   },
+          // }),
           new CompressionWebpackPlugin({
             algorithm(input, compressionOptions, callback) {
               return zopfli.gzip(input, compressionOptions, callback);
