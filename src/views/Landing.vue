@@ -12,6 +12,9 @@
         <RankBox class="landing-card" />
       </div>
     </div>
+    <div class="landing-footer">
+      <span>Proudly using <a href="https://cloudflare.com" target="_blank">Cloudflare</a></span>
+    </div>
     <el-dialog
       :title="announceTitle"
       :visible.sync="showAnnounce"

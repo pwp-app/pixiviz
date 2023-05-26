@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
-const JinDanWebpackPlugin = require('jindan-webpack-plugin');
+// const JinDanWebpackPlugin = require('jindan-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
