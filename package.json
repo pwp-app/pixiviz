@@ -34,8 +34,8 @@
     "@pwp-app/vue-lazyload": "^1.3.4",
     "axios": "^0.24.0",
     "clipboard-polyfill": "^3.0.3",
-    "core-js": "^3.30.2",
-    "dayjs": "^1.11.7",
+    "core-js": "^3.31.1",
+    "dayjs": "^1.11.9",
     "hash-wasm": "^4.9.0",
     "jszip": "^3.10.1",
     "level-js": "^6.1.0",
@@ -59,7 +59,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.21.8",
+    "@babel/eslint-parser": "^7.22.7",
     "@vue/cli-plugin-babel": "^4.5.19",
     "@vue/cli-plugin-e2e-cypress": "^4.5.19",
     "@vue/cli-plugin-pwa": "^4.5.19",
@@ -73,7 +73,7 @@
     "cypress": "^6.9.1",
     "f2elint": "^1.2.3",
     "html-webpack-plugin": "^4.5.2",
-    "jindan-webpack-plugin": "^0.2.1-f2",
+    "jindan-webpack-plugin": "^0.2.1-f3",
     "less": "^3.13.1",
     "less-loader": "^6.2.0",
     "qiniu": "^7.8.0",
