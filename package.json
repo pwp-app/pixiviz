@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.29.1",
+  "version": "1.29.2",
   "scripts": {
     "serve": "node ./tools/sensitiveWordsGen.js && vue-cli-service serve",
     "build": "node ./tools/sensitiveWordsGen.js && node ./tools/processVersion.js && vue-cli-service build",
@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.7",
+    "@gfx/zopfli": "^1.0.15",
     "@vue/cli-plugin-babel": "^4.5.19",
     "@vue/cli-plugin-e2e-cypress": "^4.5.19",
     "@vue/cli-plugin-pwa": "^4.5.19",
@@ -73,7 +74,7 @@
     "cypress": "^6.9.1",
     "f2elint": "^1.2.3",
     "html-webpack-plugin": "^4.5.2",
-    "jindan-webpack-plugin": "^0.2.1-f3",
+    "jindan-webpack-plugin": "^0.2.6",
     "less": "^3.13.1",
     "less-loader": "^6.2.0",
     "qiniu": "^7.8.0",
