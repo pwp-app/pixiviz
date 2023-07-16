@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
 const BrotliPlugin = require('brotli-webpack-plugin');
-// const JinDanWebpackPlugin = require('jindan-webpack-plugin');
+const JinDanWebpackPlugin = require('jindan-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
@@ -45,7 +45,7 @@ module.exports = {
       runtimeCaching: [
         {
           // 静态文件缓存，网络资源优先，7天过期
-          urlPattern: /^https:\/\/pixiviz\.pwp\.app(\/.*\.(html|js|css))?$/,
+          urlPattern: /^https:\/\/pixiviz\.((pwp\.app)|(xyz))(\/.*\.(html|js|css))?$/,
           handler: 'NetworkFirst',
           options: {
             cacheName: 'static-files',
@@ -55,12 +55,12 @@ module.exports = {
             expiration: {
               maxAgeSeconds: 86400 * 7,
             },
-            networkTimeoutSeconds: 10,
+            networkTimeoutSeconds: 60,
           },
         },
         {
           // 静态图片缓存，本地资源优先，3天过期
-          urlPattern: /^https:\/\/pixiviz\.pwp\.app(\/.*\.(jpg|jpeg|png|webp|svg))?$/,
+          urlPattern: /^https:\/\/pixiviz\.((pwp\.app)|(xyz))(\/.*\.(jpg|jpeg|png|webp|svg))?$/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'static-imgs',
@@ -72,23 +72,9 @@ module.exports = {
             },
           },
         },
-        // 统计代码缓存
-        {
-          urlPattern: /^(https:\/\/hm\.baidu\.com\/hm\.js)|(https:\/\/cdn-go\.cn\/aegis\/aegis-sdk\/latest\/aegis\.min\.js)/,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'stat-files',
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-            expiration: {
-              maxAgeSeconds: 86400 * 3,
-            },
-          },
-        },
         {
           // API缓存，本地资源优先，7天过期，最多3w条
-          urlPattern: /^https:\/\/((pixiviz\.pwp\.app\/api\/)|(pixiviz-api-[a-z]{2}\.pwp\.link\/)).+/,
+          urlPattern: /^https:\/\/(pixiviz-api-[a-z]{2}\.pwp\.link\/).+/,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-return',
@@ -269,26 +255,24 @@ module.exports = {
       // compress
       return {
         plugins: [
-          // new JinDanWebpackPlugin({
-          //   path: './js/jindan.js',
-          //   options: {
-          //     remote: {
-          //       endpoints: ['https://cfs.tigo.pwp.app/jindan.json'],
-          //       async: false,
-          //     },
-          //     appInfo: {
-          //       version: '1.29.1',
-          //     },
-          //     fallback: {
-          //       resource: {
-          //         domains: ['pixiviz.xyz'],
-          //       },
-          //       endpoint: {
-          //         domains: ['public.tigo.pwp.app'],
-          //       },
-          //     },
-          //   },
-          // }),
+          new JinDanWebpackPlugin({
+            path: './js/jindan.js',
+            options: {
+              remote: {
+                endpoints: ['https://cfs.tigo.pwp.app/jindan.json'],
+                async: true,
+              },
+              appInfo: {
+                version: '1.29.1',
+              },
+              fallback: {
+                resource: {
+                  domains: ['pixiviz.xyz'],
+                },
+                endpoint: ['https://public.tigo.pwp.app'],
+              },
+            },
+          }),
           new CompressionWebpackPlugin({
             algorithm(input, compressionOptions, callback) {
               return zopfli.gzip(input, compressionOptions, callback);

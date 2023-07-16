@@ -4,7 +4,7 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: '',
   withCredentials: false,
-  timeout: 10 * 1000,
+  timeout: 60 * 1000,
   headers: {
     post: {
       'Content-Type': 'appliation/x-www-form-urlencoded',
