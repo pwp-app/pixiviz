@@ -11,6 +11,7 @@ import imageCache from './modules/imageCache';
 import artist from './modules/artist';
 import download from './modules/download';
 import pic from './modules/pic';
+import loadController from './modules/loadController';
 
 Vue.use(Vuex);
 
@@ -25,5 +26,6 @@ export default new Vuex.Store({
     artist,
     download,
     pic,
+    loadController,
   },
 });

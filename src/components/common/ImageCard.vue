@@ -202,6 +202,7 @@ export default {
     errorHandler() {
       this.loading = false;
       this.loadError = true;
+      this.$store.commit('loadController/setImageLoadFailed', this.getHost());
       this.$forceUpdate();
     },
     handleMoreCommand(command) {
