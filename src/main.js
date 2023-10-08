@@ -1,3 +1,4 @@
+/* eslint-disable require-atomic-updates */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import Vue from 'vue';
@@ -51,7 +52,6 @@ import './registerServiceWorker';
 // Import pixland
 import pixlandIns from './util/pixland';
 
-import { initBaiduStat } from './util/statistics';
 import { checkTrustHost } from './util/host';
 import { getSensitiveWords } from './util/sensitiveWords';
 
@@ -177,6 +177,8 @@ try {
   disabledProxyHost = [];
 }
 
+window.pixiviz.config.disabledProxyHost = disabledProxyHost;
+
 const requestRemoteConfig = async () => {
   let res;
   try {
@@ -208,6 +210,21 @@ const requestRemoteConfig = async () => {
   // define a flag
   window.pixiviz.config.IS_REMOTE_CONFIG = true;
 };
+
+bus.$on('update-disabled-proxy-hosts', (disabledHosts) => {
+  if (typeof window.pixiviz?.config?.image_proxy_host === 'object') {
+    defineProxyHosts(window.pixiviz.config.image_proxy_host, [
+      ...disabledProxyHost,
+      ...disabledHosts,
+    ]);
+  }
+  if (typeof window.pixiviz?.config?.download_proxy_host === 'object') {
+    defineProxyHosts(window.pixiviz.config.download_proxy_host, [
+      ...disabledProxyHost,
+      ...disabledHosts,
+    ]);
+  }
+});
 
 const createInstance = () => {
   new Vue({
@@ -246,20 +263,16 @@ const execute = async () => {
   }
   // check api host alive
   try {
-    checkAPIHostAlive(config);
-    checkProxyHostAlive(config);
+    // eslint-disable-next-line no-unused-vars
+    const [_, newDisabledProxyHosts] = await Promise.all([
+      checkAPIHostAlive(config),
+      checkProxyHostAlive(config),
+    ]);
+    disabledProxyHost = newDisabledProxyHosts;
+    window.pixiviz.config.disabledProxyHost = newDisabledProxyHosts;
   } catch (e) {
     console.error('Smart line check failed.', e);
   }
 };
-
-// init stat
-try {
-  if (checkTrustHost(config)) {
-    initBaiduStat();
-  }
-} catch (err) {
-  console.error('Failed to init statistics script.', err);
-}
 
 execute();

@@ -291,4 +291,5 @@ export const checkProxyHostAlive = async (conf) => {
   if (typeof conf.download_proxy_host === 'object') {
     defineProxyHosts(conf.download_proxy_host, disabled);
   }
+  return disabled;
 };
