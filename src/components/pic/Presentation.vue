@@ -1,22 +1,10 @@
 <template>
   <div class="pic-presentation-image-wrapper" :style="{ width: imageWidth + 'px' }">
-    <div
-      v-loading="imageLoading"
-      :element-loading-text="imageLoadingText"
-      :class="{
-        'pic-presentation-image': true,
-        'pic-presentation-image__firstload': imageFirstLoad,
-      }"
-      :style="imageSizeStyles"
-    >
-      <img
-        ref="image"
-        :src="loadingSource"
-        :style="imageSizeStyles"
-        @click="openLightBox"
-        v-context="'context'"
-        v-if="!isUgoira || !ugoiraLoaded"
-      />
+    <div v-loading="imageLoading" :element-loading-text="imageLoadingText" :class="{
+      'pic-presentation-image': true,
+      'pic-presentation-image__firstload': imageFirstLoad,
+    }" :style="imageSizeStyles">
+      <img ref="image" :src="loadingSource" :style="imageSizeStyles" @click="openLightBox" v-context="'context'" v-if="!isUgoira || !ugoiraLoaded" />
       <img ref="image" :src="ugoiraSource" :style="imageSizeStyles" v-else />
       <div style="clear: both"></div>
       <div class="pic-presentation-image-error" v-if="imageLoadError">
@@ -28,11 +16,7 @@
         </div>
       </div>
     </div>
-    <Paginator
-      :page="page"
-      :pageCount="image ? image.page_count : 0"
-      @page-turn="handlePageChanged"
-    />
+    <Paginator :page="page" :pageCount="image ? image.page_count : 0" @page-turn="handlePageChanged" />
     <div class="pic-presentation-info" v-if="image">
       <div class="pic-presentation-info-title">
         <span>{{ image ? image.title : '' }}</span>
@@ -52,12 +36,7 @@
       </div>
       <div class="pic-presentation-info-tags">
         <div class="pic-tag" v-for="tag in tags" :key="tag.id">
-          <a
-            :href="`${$config.website_url}/search/${tag.name}`"
-            :data-tag="tag.name"
-            @click="handleTagClicked"
-            >#{{ tag.name }}</a
-          >
+          <a :href="`${$config.website_url}/search/${tag.name}`" :data-tag="tag.name" @click="handleTagClicked">#{{ tag.name }}</a>
         </div>
       </div>
       <div class="pic-presentation-info-stat">
@@ -72,30 +51,15 @@
         <span>{{ createTime }}</span>
       </div>
     </div>
-    <LightBox
-      v-if="lightBoxShow"
-      :src="lightBoxSource"
-      :isLanding="isLanding"
-      :isOverHeight="isOverHeight"
-      :isMobileOverHeight="isMobileOverHeight"
-      @loaded="handleLightBoxLoaded"
-      @close="onLightBoxClose"
-      @download="callDownload"
-      @copy="copyImage"
-    />
+    <LightBox v-if="lightBoxShow" :src="lightBoxSource" :isLanding="isLanding" :isOverHeight="isOverHeight" :isMobileOverHeight="isMobileOverHeight" @loaded="handleLightBoxLoaded"
+      @close="onLightBoxClose" @download="callDownload" @copy="copyImage" />
     <ContextMenu ref="context" :width="128" @item-clicked="handleContextClicked">
       <ContextMenuItem name="down">下载</ContextMenuItem>
       <ContextMenuItem name="copy-image" v-if="showCopyImage">复制图片</ContextMenuItem>
     </ContextMenu>
-    <ShareOverlay
-      :class="{
-        'share-overlay--wechat': isInWechat,
-      }"
-      ref="shareOverlay"
-      v-if="renderShareOverlay"
-      v-show="showShareOverlay"
-      @close="handleShareOverlayClose"
-    />
+    <ShareOverlay :class="{
+      'share-overlay--wechat': isInWechat,
+    }" ref="shareOverlay" v-if="renderShareOverlay" v-show="showShareOverlay" @close="handleShareOverlayClose" />
   </div>
 </template>
 
@@ -110,7 +74,7 @@ import ShareOverlay from '../common/ShareOverlay.vue';
 import Ugoira from '../../util/ugoira';
 import { getHistoryTop, addUserHistory } from '../../util/history';
 import { useSharePopup } from 'vue-share-popup';
-import { qzone, wechat, weibo } from 'vue-share-popup/platforms/index.es';
+import { qzone, weibo } from 'vue-share-popup/platforms/index.es';
 import {
   addUserCollection,
   existedInCollection,
@@ -177,16 +141,16 @@ export default {
       ugoiraLoaded: false,
       ugoiraObserver: window.IntersectionObserver
         ? new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && this.ugoira && this.ugoira.status === 'stopped') {
-                this.ugoira.play();
-                return;
-              }
-              if (!entry.isIntersecting && this.ugoira && this.ugoira.status === 'playing') {
-                this.ugoira.stop();
-              }
-            });
-          })
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && this.ugoira && this.ugoira.status === 'stopped') {
+              this.ugoira.play();
+              return;
+            }
+            if (!entry.isIntersecting && this.ugoira && this.ugoira.status === 'playing') {
+              this.ugoira.stop();
+            }
+          });
+        })
         : null,
       // env testers
       isInQQ: navigator.userAgent.includes('QQ/'),
@@ -217,7 +181,7 @@ export default {
     if (!this.renderShareOverlay) {
       useSharePopup({
         key: 'share',
-        platforms: [qzone, wechat, weibo],
+        platforms: [qzone, weibo],
         meta: {
           title: this.shareTitle,
           url: window.location.href,
@@ -228,9 +192,8 @@ export default {
         trigger: 'hover',
         placement: 'bottom-end',
         options: {
-          wechatSharePage: `https://wechat-share.pwp.space/?url={url}&title={title}${
-            window.pixiviz.darkMode ? '&dark=1' : ''
-          }`,
+          wechatSharePage: `https://wechat-share.pwp.space/?url={url}&title={title}${window.pixiviz.darkMode ? '&dark=1' : ''
+            }`,
         },
       });
     }

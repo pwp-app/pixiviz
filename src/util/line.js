@@ -131,7 +131,7 @@ const isHostAlive = (url, resolveRes) => {
   return new Promise((resolve, reject) => {
     axios
       .head(url, {
-        timeout: 5000,
+        timeout: 10 * 1000,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -246,7 +246,7 @@ const getUnavailableProxyHosts = async (conf) => {
       conf.download_proxy_host.original || Object.keys(conf.download_proxy_host),
     );
   }
-  hosts = Array.from(new Set(hosts));
+  hosts = [...new Set(hosts)];
   // check alive
   const checkRes = await Promise.allSettled(hosts.map((host) => isProxyAlive(host)));
   const alive = checkRes
@@ -262,7 +262,7 @@ const getUnavailableProxyHosts = async (conf) => {
       disabled.push(host);
     }
   });
-  return disabled;
+  return [...new Set(disabled)];
 };
 
 export const checkProxyHostAlive = async (conf) => {
