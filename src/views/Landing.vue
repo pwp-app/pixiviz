@@ -12,13 +12,7 @@
         <RankBox class="landing-card" />
       </div>
     </div>
-    <el-dialog
-      :title="announceTitle"
-      :visible.sync="showAnnounce"
-      :before-close="handleAnnounceClose"
-      class="landing-announcement"
-      top="8.5vh"
-    >
+    <el-dialog :title="announceTitle" :visible.sync="showAnnounce" :before-close="handleAnnounceClose" class="landing-announcement" top="8.5vh">
       <pre v-html="announceContent"></pre>
       <pre class="announce-footer">{{ announceFooter }}</pre>
     </el-dialog>
@@ -209,7 +203,7 @@ export default {
         return;
       }
       // 75%的概率展示通知
-      if (Math.random() <= 0.75) {
+      if (Math.random() <= 0.875) {
         window.localStorage.setItem('last-show-donate', Date.now());
         document.body.addEventListener('click', this.donateNoticeClicked, false);
         this.$nextTick(() => {
@@ -222,7 +216,7 @@ export default {
             onClose: this.donateNoticeClosed,
             message: `
 							<div class="oneline-notice">
-								<span data-name="notice-donate">有了大家的发电，服务姬就能健康地活下去了，广告什么的才不上呢！ -&gt; <span class="notice-link" data-name="link-donate">点这里即刻投喂服务姬</span></span>
+								<span data-name="notice-donate">持续为服务器发电，可以让我们持续无广告运营下去 -&gt; <span class="notice-link" data-name="link-donate">点这里立刻投喂服务姬</span></span>
 							</div>`,
           });
         });

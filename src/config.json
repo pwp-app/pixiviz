@@ -7,7 +7,7 @@
   "api_prefix": ["https://pixiviz-api-tc.pwp.link/v1", "https://pixiviz-api-rn.pwp.link/v1"],
   "guide_url": "https://blog.pwp.space/article/Pixiviz%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97.md",
   "donate_url": "https://afdian.net/@backrunner",
-  "landing_bg_id": 94067980,
+  "landing_bg_id": 61919630,
   "trust_host": ["pixiviz.pwp.app", "pixiviz.xyz"],
   "announcement_feed": "https://cfs.tigo.pwp.app/pixiviz-anno-prod.json",
   "afdian_manage_api": "https://afdian-manage.pwp.app",

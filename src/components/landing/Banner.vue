@@ -1,13 +1,12 @@
 <template>
-  <div
-    :class="[
-      'banner-wrapper',
-      expanded ? 'banner-expanded' : '',
-      clearMarginBottom ? 'clear-margin-bottom' : '',
-    ]"
-    @dblclick="handleDblClick"
-    v-touch:doubletap="handleDoubleTap"
-  >
+  <div :class="[
+    'banner-wrapper',
+    {
+      'banner-animating': animating,
+      'banner-expanded': expanded,
+      'clear-margin-bottom': clearMarginBottom,
+    }
+  ]" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap">
     <div class="banner">
       <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
         <span>Pixiviz</span>
@@ -18,9 +17,7 @@
             <span>我的</span>
           </div>
           <div class="about-my-link">
-            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent
-              >浏览历史</a
-            >
+            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent>浏览历史</a>
             <a href="javascript:;" @click="goCollection" @contextmenu.prevent>收藏夹</a>
             <a href="javascript:;" @click="showAccountDialog" @contextmenu.prevent>帐号</a>
           </div>
@@ -30,29 +27,21 @@
             <span>设置</span>
           </div>
           <div class="about-settings-link">
-            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent
-              >主题</a
-            >
-            <a
-              id="about-privacy"
-              href="javascript:;"
-              @click="openPrivacyDialog"
-              @contextmenu.prevent
-              >隐私</a
-            >
+            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent>主题</a>
+            <a id="about-privacy" href="javascript:;" @click="openPrivacyDialog" @contextmenu.prevent>隐私</a>
           </div>
         </div>
         <div class="about-copyright">
           <div class="about-copyright-item">
-            <span>Copyright &copy; 2022 pwp.app.</span>
+            <span>Copyright &copy; 2023-2024 pwp.app</span>
           </div>
           <div class="about-copyright-item">
             <span>
-              <a href="https://pixiviz.pwp.app/sponsor" target="_blank">发电名录</a>
+              <a href="https://pixiviz.xyz/sponsor" target="_blank">发电名录</a>
               <span class="about-copyright-split">|</span>
               <a href="https://github.com/pwp-app/pixiviz/discussions" target="_blank">交流反馈</a>
               <span class="about-copyright-split">|</span>
-              <a :href="`https://pixiviz.pwp.app/pic/${landingBgId}`" target="_blank">主页背景</a>
+              <a :href="`https://pixiviz.xyz/pic/${landingBgId}`" target="_blank">主页背景</a>
             </span>
           </div>
           <div class="about-copyright-item">
@@ -93,6 +82,7 @@ export default {
   },
   data() {
     return {
+      animating: false,
       expanded: false,
       expandLock: false,
       titleUp: false,
@@ -108,11 +98,7 @@ export default {
     this.$store.commit('landingBanner/setExpanded', false);
   },
   methods: {
-    handleDblClick(e) {
-      if (e.target.getAttribute('class') && e.target.getAttribute('class').includes('el-switch')) {
-        return;
-      }
-      // Banner Anim
+    performAnim() {
       if (!this.expandLock) {
         this.expandLock = true;
         if (!this.expanded) {
@@ -163,6 +149,20 @@ export default {
           }, 350);
         }
       }
+    },
+    handleDblClick(e) {
+      if (e.target.getAttribute('class') && e.target.getAttribute('class').includes('el-switch')) {
+        return;
+      }
+      this.animating = true;
+      setTimeout(() => {
+        this.animating = false;
+      }, 1300)
+      // Banner Anim
+      this.$forceUpdate();
+      setTimeout(() => {
+        this.performAnim();
+      });
     },
     handleDoubleTap() {
       this.handleDblClick();

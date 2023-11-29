@@ -1,6 +1,7 @@
 .landing-container {
   padding: 1.85rem 4rem;
   position: relative;
+
   .landing {
     width: 100%;
     margin: 0 auto;
@@ -12,34 +13,46 @@
     background-position: top center;
     background-repeat: no-repeat;
     background-size: 87.5rem auto;
-    transition: background-color 0.5s ease-in-out, background-size 0.5s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
     filter: brightness(0.98);
+
     .landing-card {
       margin-bottom: 1.5rem;
       border-radius: 38px;
     }
+
     &-content {
       width: 100%;
       border-radius: 36px;
       background: white;
       mix-blend-mode: screen;
+
       .landing-card {
         background: black;
         mix-blend-mode: normal;
       }
+
       .landing-card:last-child {
         margin-bottom: 0;
       }
     }
+
     &-real-content {
       position: absolute;
       width: 100%;
       top: 0;
       left: 0%;
+
       .landing-card {
         background: transparent;
         box-shadow: @shadow-medium;
       }
+
+      .landing-card:hover {
+        backdrop-filter: blur(5px);
+        overflow: hidden;
+      }
+
       .landing-card:last-child {
         margin-bottom: 0;
       }
@@ -49,8 +62,10 @@
 
 .landing-announcement {
   user-select: none;
+
   .el-dialog {
     width: 57.5vw;
+
     &__body {
       pre {
         font-family: -apple-system-font, Noto Sans SC, 'MicroSoft Yahei', 'Heiti SC', 'Segoe UI',
@@ -100,7 +115,7 @@
     padding: 3.5rem 8rem;
     .landing {
       max-width: 98rem;
-      background-size: 125rem auto;
+      background-size: 102rem auto;
     }
   }
 }

@@ -1,23 +1,9 @@
 <template>
-  <div
-    class="waterfall-container"
-    ref="container"
-    :style="{
-      height: `${maxHeight || 0}px`,
-    }"
-  >
-    <ImageCard
-      class="waterfall-item"
-      v-for="item in displayImages"
-      :key="item.index"
-      :image="item"
-      :cardWidth="cardWidth"
-      :imageType="imageType"
-      :position="positionMap[item.index]"
-      :isCollection="isCollection"
-      @clicked="handleCardClicked"
-      @remove="handleCardRemoved"
-    />
+  <div class="waterfall-container" ref="container" :style="{
+    height: `${maxHeight || 0}px`,
+  }">
+    <ImageCard class="waterfall-item" v-for="item in displayImages" :key="item.index" :image="item" :cardWidth="cardWidth" :imageType="imageType" :position="positionMap[item.index]"
+      :isCollection="isCollection" @clicked="handleCardClicked" @remove="handleCardRemoved" />
   </div>
 </template>
 
@@ -27,7 +13,7 @@ import ImageCard from './ImageCard';
 // 组分割大小
 const GROUP_SIZE = 500;
 // 瀑布流可视区额外距离
-const ADDITIONAL_DISTANCE = 1000;
+const ADDITIONAL_DISTANCE = 2000;
 
 export default {
   name: 'Common.Waterfall',

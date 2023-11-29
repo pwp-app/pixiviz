@@ -39,4 +39,4 @@ jobs:
           # Zone is required by both authentication methods
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-          PURGE_URLS: '["https://pixiviz.pwp.app/index.html", "https://pixiviz.pwp.app/service-worker.js"]'
+          PURGE_URLS: '["https://pixiviz.xyz/index.html", "https://pixiviz.xyz/service-worker.js"]'

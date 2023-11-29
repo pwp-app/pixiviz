@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       show: false,
-      url: 'https://pixiviz.pwp.app/',
+      url: 'https://pixiviz.xyz/',
     };
   },
   computed: {

@@ -1,6 +1,6 @@
 {
   "name": "pixiviz",
-  "version": "1.30.0",
+  "version": "1.31.0",
   "scripts": {
     "serve": "node ./tools/sensitiveWordsGen.js && vue-cli-service serve",
     "build": "node ./tools/processVersion.js && set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
