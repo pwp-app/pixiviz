@@ -1,7 +1,8 @@
 export const getMaxWeightedHost = (hosts) => {
   const weightHostMap = {};
   const weights = [];
-  Object.keys(hosts).forEach((host) => {
+  const keys = Object.keys(hosts);
+  keys.forEach((host) => {
     const weight = hosts[host];
     weights.push(weight);
     if (!weightHostMap[weight]) {
@@ -10,7 +11,7 @@ export const getMaxWeightedHost = (hosts) => {
     weightHostMap[weight].push(host);
   });
   const maxWeight = Math.max(...weights);
-  return weightHostMap[maxWeight][0];
+  return weightHostMap[maxWeight][0] || hosts[keys[0]];
 };
 
 export const checkTrustHost = (config) => {

@@ -705,15 +705,15 @@ export default {
       return host;
     },
     getImageSource({ image, type, page = this.page, usePublicProxy = false }) {
-      const proxyHost = usePublicProxy ? this.$config.public_proxy : this.getProxyHost(image.id);
-      if (image && image.meta_single_page) {
+      const proxyHost = (usePublicProxy ? this.$config.public_proxy : this.getProxyHost(image.id)) || this.$config.image_proxy_host;
+      if (image?.meta_single_page) {
         if (this.block) {
           return BLANK_IMAGE;
         } else {
           let url = BLANK_IMAGE;
-          if (image && image.page_count < 2 && image.image_urls) {
+          if (image?.page_count < 2 && image.image_urls) {
             url = image.image_urls[type].replace('i.pximg.net', proxyHost);
-          } else if (image && image.page_count >= 2 && image.meta_pages[page - 1]) {
+          } else if (image?.page_count >= 2 && image.meta_pages[page - 1]) {
             url = image.meta_pages[page - 1].image_urls[type].replace('i.pximg.net', proxyHost);
           }
           if (window.isSafari) {
