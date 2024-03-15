@@ -2,6 +2,7 @@
   min-height: 100vh;
   position: relative;
   background: transparent;
+
   & > .el-loading-mask {
     .el-loading-spinner {
       transform: translateY(-50%);
@@ -18,10 +19,12 @@
   margin: 0 auto;
   padding: 36px 24px 0 24px;
   box-sizing: border-box;
+
   &-header {
     width: 100%;
     position: relative;
     user-select: none;
+
     &__icon {
       display: block;
       width: 72px;
@@ -31,6 +34,7 @@
         fill: fade(@color-text-primary, 95%);
       }
     }
+
     &__title {
       font-size: 28px;
       font-weight: 600;
@@ -41,6 +45,7 @@
       margin-top: 24px;
       margin-bottom: 0;
     }
+
     &__close {
       position: absolute;
       top: -8px;
@@ -50,11 +55,13 @@
       font-size: 36px;
       display: block;
     }
+
     &__close:hover {
       cursor: pointer;
       color: fade(@color-text-primary, 50%);
     }
   }
+
   &-amount {
     width: 100%;
     display: flex;
@@ -64,9 +71,11 @@
     align-items: center;
     padding-bottom: 28px;
     user-select: none;
+
     &-item {
       width: 218px;
       margin-right: 12px;
+
       &__title {
         font-size: 20px;
         font-weight: 600;
@@ -75,10 +84,12 @@
         margin-bottom: 12px;
         text-align: center;
       }
+
       &__num {
         font-family: Consolas, Helvetica, sans-serif;
         text-align: center;
         position: relative;
+
         .number {
           display: block;
           width: max-content;
@@ -88,6 +99,7 @@
           margin-right: 4px;
           position: relative;
           margin: 0 auto;
+
           .unit {
             display: block;
             color: fade(@color-text-primary, 85%);
@@ -100,10 +112,12 @@
         }
       }
     }
+
     &-item:last-child {
       margin-right: 0;
     }
   }
+
   &-list {
     width: 100%;
     box-sizing: border-box;
@@ -116,11 +130,13 @@
       max-width: 660px;
       width: max-content;
       margin: 0 auto;
+
       .sponsor-top {
         width: 220px;
         min-height: 128px;
         position: relative;
         margin-bottom: 24px;
+
         &__avatar {
           width: 68px;
           height: 68px;
@@ -132,6 +148,7 @@
           background-position: center;
           margin-bottom: 12px;
         }
+
         &__name {
           white-space: nowrap;
           overflow: hidden;
@@ -144,16 +161,19 @@
           margin: 0 auto;
           font-weight: 600;
         }
+
         &__price {
           font-family: Consolas, Helvetica, sans-serif;
           text-align: center;
           position: relative;
           margin-top: 4px;
+
           .number {
             font-size: 16px;
             color: fade(@color-text-primary, 95%);
             margin-bottom: 4px;
           }
+
           .unit {
             color: fade(@color-text-primary, 85%);
             font-size: 10px;
@@ -163,9 +183,11 @@
         }
       }
     }
+
     &__top--no-normal {
       min-height: 438px;
     }
+
     &__normal {
       width: max-content;
       max-width: 880px;
@@ -184,6 +206,7 @@
         align-items: center;
         margin-bottom: 24px;
         margin-right: 20px;
+
         &__avatar {
           width: 48px;
           height: 48px;
@@ -194,6 +217,7 @@
           background-position: center;
           flex-shrink: 0;
         }
+
         .sponsor-item-text {
           max-width: 142px;
           flex: 1;
@@ -201,6 +225,7 @@
           padding-right: 10px;
           box-sizing: border-box;
         }
+
         &__name {
           font-size: 15px;
           color: fade(@color-text-primary, 95%);
@@ -209,15 +234,18 @@
           overflow: hidden;
           white-space: nowrap;
         }
+
         &__price {
           font-family: Consolas, Helvetica, sans-serif;
           position: relative;
           box-sizing: border-box;
+
           .number {
             font-size: 12px;
             color: fade(@color-text-primary, 95%);
             margin-bottom: 4px;
           }
+
           .unit {
             color: fade(@color-text-primary, 85%);
             font-size: 10px;
@@ -226,6 +254,7 @@
           }
         }
       }
+
       .sponsor-normal::after {
         content: '';
         width: 2px;
@@ -237,9 +266,11 @@
         background-color: fade(@color-text-primary, 40%);
       }
     }
+
     &__normal--no-top {
       min-height: 438px;
     }
+
     &__placeholder {
       height: 438px;
       display: flex;
@@ -250,12 +281,14 @@
       letter-spacing: 0.1rem;
     }
   }
+
   &-footer {
     width: 100%;
     position: relative;
     padding: 22px 0 40px 0;
     box-sizing: border-box;
     user-select: none;
+
     &__text {
       font-size: 14px;
       width: 100%;
@@ -263,11 +296,13 @@
       text-align: center;
       margin-bottom: 28px;
       letter-spacing: 0.05rem;
+
       p {
         margin: 0;
         line-height: 30px;
       }
     }
+
     &__desc {
       font-size: 12px;
       width: 100%;
@@ -275,6 +310,7 @@
       text-align: center;
       letter-spacing: 0.05rem;
     }
+
     &__op {
       font-size: 12px;
       width: 100%;
@@ -282,12 +318,15 @@
       text-align: center;
       letter-spacing: 0.05rem;
       cursor: pointer;
+
       span {
         margin-right: 12px;
       }
+
       span:last-of-type {
         margin-right: 0;
       }
+
       span:hover {
         color: fade(@color-text-primary, 85%);
       }
@@ -298,14 +337,26 @@
 .dialog-sponsor-desc {
   .el-dialog__body {
     pre {
-      font-family: --apple-system-font, 'Noto Sans SC', Microsoft Yahei, -apple-system,
-        BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-        'Helvetica Neue', sans-serif;
+      font-family:
+        --apple-system-font,
+        'Noto Sans SC',
+        Microsoft Yahei,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        'Open Sans',
+        'Helvetica Neue',
+        sans-serif;
       font-size: 14px;
       color: fade(@color-text-primary, 95%) !important;
       line-height: 40px;
       letter-spacing: 0.025rem;
     }
+
     .dialog-sponsor-desc__footer {
       text-align: right;
       margin-top: 12px;
@@ -327,9 +378,11 @@
   justify-content: center;
   user-select: none;
   position: relative;
+
   .sponsor-error-main {
     position: relative;
     transform: translateY(-37.5%);
+
     &__icon {
       display: flex;
       align-items: center;
@@ -338,6 +391,7 @@
       color: @color-text-primary;
       font-size: 54px;
     }
+
     &__text {
       color: @color-text-primary;
       font-size: 32px;
@@ -346,6 +400,7 @@
       text-align: center;
       margin-bottom: 36px;
     }
+
     &__action {
       text-align: center;
     }
@@ -355,9 +410,11 @@
 .dialog-sponsor-all {
   .el-dialog__body {
     position: relative;
+
     .all-sponsor {
       display: flex;
       flex-wrap: wrap;
+
       .sponsor-all {
         width: 33%;
         height: 54px;
@@ -365,6 +422,7 @@
         display: flex;
         align-items: center;
         box-sizing: border-box;
+
         &__avatar {
           width: 36px;
           height: 36px;
@@ -375,10 +433,12 @@
           background-position: center;
           background-repeat: no-repeat;
         }
+
         &__name {
           color: fade(@color-text-primary, 95%);
           font-size: 14px;
         }
+
         &__price {
           color: fade(@color-text-primary, 75%);
           .number {
@@ -393,6 +453,7 @@
         }
       }
     }
+
     .all-sponsor__load {
       width: 100%;
       min-height: 320px;
@@ -426,9 +487,6 @@
 
 @media screen and (max-width: 1024px) {
   .sponsor {
-    .unit {
-      display: none !important;
-    }
     &-list {
       &__top {
         max-width: 440px;
@@ -461,27 +519,34 @@
       display: block;
       padding-top: 20px;
       padding-bottom: 16px;
+
       &-item {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
         margin-bottom: 8px;
+
         &__title {
           margin-right: 24px;
           margin-bottom: 0;
           font-size: 18px;
         }
+
         &__num {
           .number {
             font-size: 22px;
-          }
-          .unit {
-            display: block;
+
+            .unit {
+              display: block;
+              right: -28px;
+              bottom: 2.5px;
+            }
           }
         }
       }
     }
+
     &-list {
       &__top {
         max-width: 440px;
@@ -494,6 +559,7 @@
       padding-bottom: 56px;
     }
   }
+
   .dialog-sponsor-all {
     .el-dialog__body {
       .all-sponsor {

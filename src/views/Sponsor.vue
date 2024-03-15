@@ -8,7 +8,7 @@
     <div class="sponsor" v-if="!loading">
       <div class="sponsor-header">
         <Battery class="sponsor-header__icon" />
-        <p class="sponsor-header__title">感谢发电</p>
+        <p class="sponsor-header__title">感谢支持</p>
         <i class="el-icon-close sponsor-header__close" @click="handleBack"></i>
       </div>
       <div class="sponsor-amount">
@@ -17,7 +17,7 @@
             上月发电
           </div>
           <div class="sponsor-amount-item__num">
-            <span class="number">{{ lastMonthAmount }}<span class="unit">kWh</span></span>
+            <span class="number">{{ lastMonthAmount || 0}}<span class="unit">kWh</span></span>
           </div>
         </div>
         <div class="sponsor-amount-item">
@@ -25,7 +25,7 @@
             本月发电
           </div>
           <div class="sponsor-amount-item__num">
-            <span class="number">{{ currentMonthAmount }} <span class="unit">kWh</span></span>
+            <span class="number">{{ currentMonthAmount || 0 }} <span class="unit">kWh</span></span>
           </div>
         </div>
         <div class="sponsor-amount-item">
@@ -33,7 +33,7 @@
             总发电量
           </div>
           <div class="sponsor-amount-item__num">
-            <span class="number">{{ totalAmount }}<span class="unit">kWh</span></span>
+            <span class="number">{{ totalAmount || 0 }}<span class="unit">kWh</span></span>
           </div>
         </div>
       </div>
@@ -140,12 +140,10 @@ import Sponsor from '../components/sponsor/Sponsor.vue';
 
 const sponsorDesc = `
 1. Pixiviz 为非营利性的网站，我们承诺获得的发电收入将完全投入到站点的维护与升级。
-2. 我们承诺在发电可以维持站点正常运作的情况下，不会在站内嵌入任何形式的广告或付费功能。
-3. 本页面所有数据来源于爱发电，本页面内 1 kWh = ￥1。
-4. 爱发电为我们的唯一发电渠道，所有发电款项均通过爱发电收集、统计、结算。
-5. 服务的每月固定支出和扩容所需支出均已公布在爱发电，支出数额为预估值，实际支出金额会有些许浮动。
-6. 由于站点支出项目较多且所用服务器付费模式复杂，受限于精力，支出明细将不会公开，请您理解。
-7. 为保护部分发电用户的隐私，我们会隐藏该用户的真实 ID。
+2. Pixiviz 没有任何商业化的计划，我们的服务将不会收取您任何的费用，发电均为自愿捐赠行为。
+3. 本页面所有数据来源于爱发电，爱发电为我们的唯一发电渠道，所有发电款项均通过爱发电收集、统计。
+4. 由于站点支出项目较多且所用服务器付费模式复杂，受限于精力，支出明细将不会公开，请您理解。
+5. 为保护部分发电用户的隐私，我们会隐藏该用户的真实 ID。
 `.trim();
 
 export default {
