@@ -58,7 +58,7 @@
       </div>
     </div>
     <div class="search-content search-content-blocked" v-if="keywordBlocked">
-      <p>别搜了，这里真的没有色图...</p>
+      <p>别搜了，这里真的没有你想要的东西...</p>
     </div>
     <div class="search-content search-content-blocked" v-if="sensitiveBlocked">
       <p>找不到任何匹配的结果，请换一个搜索关键词试试吧~</p>
