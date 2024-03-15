@@ -1,27 +1,18 @@
 <template>
   <el-dialog
     class="dialog dialog-privacy"
-    title="隐私设置"
+    title="隐私说明"
     :width="dialogWidth"
     :visible.sync="show"
     append-to-body
   >
-    <el-form label-position="left" :label-width="labelWidth" :model="privacyForm">
-      <el-form-item label="收集统计数据">
-        <el-switch
-          v-model="privacyForm.statistic"
-          active-color="#E3A7A1"
-          inactive-color="#3e3e3e"
-          active-text="允许"
-          inactive-text="禁止"
-          @change="statChanged"
-        >
-        </el-switch>
-      </el-form-item>
-    </el-form>
     <div class="dialog-privacy__tip">
       <span>
-        您的数据可能会被 百度统计 与 Cloudflare 收集，<br />这些数据均为匿名数据，有利于我们更好地运营、改进站点。
+        您的数据可能会被 Cloudflare 收集，这些数据均为匿名数据，主要用于访问分析和安全审查。
+        <br><br>
+        您的同步数据全程使用 https 进行传输，通过端到端加密保证数据安全性。
+        <br><br>
+        您是唯一有权访问该同步数据的人，您的数据不会以任何方式泄露给任何人，您的密码是访问数据的唯一凭证。
       </span>
     </div>
   </el-dialog>
@@ -34,10 +25,6 @@ export default {
   data() {
     return {
       show: false,
-      privacyForm: {
-        statistic: true,
-        remote: true,
-      },
       screenWidth: document.documentElement.clientWidth,
     };
   },
@@ -53,8 +40,6 @@ export default {
   },
   created() {
     window.addEventListener('resize', this.windowResized);
-    const privateStats = window.localStorage.getItem('privacy-statistic');
-    this.privacyForm.statistic = privateStats !== 'false';
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.windowResized);
@@ -66,9 +51,6 @@ export default {
     windowResized() {
       this.screenWidth = document.documentElement.clientWidth;
     },
-    statChanged(value) {
-      window.localStorage.setItem('privacy-statistic', value);
-    },
   },
 };
 </script>
@@ -76,8 +58,8 @@ export default {
 <style lang="less">
 .dialog-privacy {
   &__tip {
-    margin-top: 24px;
     user-select: none;
+
     span {
       word-break: normal;
     }

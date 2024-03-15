@@ -28,18 +28,17 @@
           </div>
           <div class="about-settings-link">
             <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent>主题</a>
-            <a id="about-privacy" href="javascript:;" @click="openPrivacyDialog" @contextmenu.prevent>隐私</a>
           </div>
         </div>
         <div class="about-copyright">
           <div class="about-copyright-item">
-            <span>Copyright &copy; 2023-2024 pwp.app</span>
+            <span>Copyright &copy; 2024 pixiviz.xyz</span>
           </div>
           <div class="about-copyright-item">
             <span>
               <a href="https://pixiviz.xyz/sponsor" target="_blank">发电名录</a>
               <span class="about-copyright-split">|</span>
-              <a href="https://github.com/pwp-app/pixiviz/discussions" target="_blank">交流反馈</a>
+              <a href="javascript:;" @click="openPrivacyDialog">隐私说明</a>
               <span class="about-copyright-split">|</span>
               <a :href="`https://pixiviz.xyz/pic/${landingBgId}`" target="_blank">主页背景</a>
             </span>
