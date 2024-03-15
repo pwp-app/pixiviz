@@ -91,6 +91,10 @@ export default {
       }
     },
     handleSearchClick() {
+      if (this.$config.search_disabled) {
+        this.$message.info('搜索功能已暂停使用');
+        return;
+      }
       this.submitSearch();
     },
     handleModeChanged(command) {

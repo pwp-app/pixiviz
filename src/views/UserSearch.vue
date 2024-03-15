@@ -79,6 +79,11 @@ export default {
       this.imageCardWidth = this.getImageCardWidth(width);
     },
   },
+  created() {
+    if (this.$config.search_disabled) {
+      this.$router.replace('/404');
+    }
+  },
   mounted() {
     this.$store.commit('userSearch/setKeyword', this.keyword);
     this.$nextTick(() => {

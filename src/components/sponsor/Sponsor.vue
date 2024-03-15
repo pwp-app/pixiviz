@@ -28,5 +28,10 @@ export default {
       return `background-image: url(${this.sponsor.avatar}?imageView2/1/w/140/h/140);`;
     },
   },
+  created() {
+    if (!this.$config.show_sponsor) {
+      this.$router.replace('/404');
+    }
+  }
 };
 </script>

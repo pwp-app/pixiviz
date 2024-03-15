@@ -36,8 +36,10 @@
           </div>
           <div class="about-copyright-item">
             <span>
-              <a href="https://pixiviz.xyz/sponsor" target="_blank">发电名录</a>
-              <span class="about-copyright-split">|</span>
+              <template v-if="showSponsor">
+                <a href="https://pixiviz.xyz/sponsor" target="_blank">发电名录</a>
+                <span class="about-copyright-split">|</span>
+              </template>
               <a href="javascript:;" @click="openPrivacyDialog">隐私说明</a>
               <span class="about-copyright-split">|</span>
               <a :href="`https://pixiviz.xyz/pic/${landingBgId}`" target="_blank">主页背景</a>
@@ -46,9 +48,11 @@
           <div class="about-copyright-item">
             <span>v {{ appVer }}</span>
           </div>
-          <div class="about-copyright-item" @click="goGitHub">
-            <GitHubIcon />
-          </div>
+          <template v-if="showGithub">
+            <div class="about-copyright-item" @click="goGitHub">
+              <GitHubIcon />
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -78,6 +82,14 @@ export default {
     PrivacyDialog,
     CommonLogin,
     UserInfo,
+  },
+  computed: {
+    showGithub() {
+      return !!this.$config.show_github;
+    },
+    showSponsor() {
+      return !!this.$config.show_sponsor;
+    },
   },
   data() {
     return {

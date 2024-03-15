@@ -1,7 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import { ShareTokenFactory } from 'share-token';
-// import { isWeChat } from '@/util/device';
+
+import { isMqq, isWeChat } from '@/util/device';
+
+import config from '../config.json';
+
 import Landing from '../views/Landing.vue';
 import Rank from '../views/Rank.vue';
 import Pic from '../views/PicDetail.vue';
@@ -13,15 +16,11 @@ import Collection from '../views/Collection.vue';
 import AntiShare from '../views/AntiShare.vue';
 import Sponsor from '../views/Sponsor.vue';
 import NotFound from '../views/404.vue';
+
 import { getOgTags, setOgTags } from '../util/og';
-import config from '../config.json';
 
 // suspend redirect error
 const originalPush = VueRouter.prototype.push;
-
-// const shareTokenFactory = new ShareTokenFactory({
-//   dbName: 'share-token_pixiviz',
-// });
 
 VueRouter.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
@@ -175,22 +174,16 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   // block first enter from wechat without st
-//   if (!from.name && isWeChat() && !to.query.st && to.name !== 'AntiShare') {
-//     return next({
-//       path: '/anti-share',
-//       replace: true,
-//     });
-//   }
-//   // if no st, add st
-//   if (!to.meta?.ignoreShareToken && !to.query.st) {
-//     // eslint-disable-next-line
-//     to.query.st = await shareTokenFactory.getToken();
-//     return next(to);
-//   }
-//   next();
-// });
+router.beforeEach(async (to, from, next) => {
+  // block first enter from wechat without st
+  if ((isWeChat() || isMqq()) && window.pixiviz?.config?.anti_share) {
+    return next({
+      path: '/anti-share',
+      replace: true,
+    });
+  }
+  next();
+});
 
 router.afterEach((to) => {
   // check dark mode

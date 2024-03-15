@@ -158,6 +158,11 @@ export default {
       return this.cardWidth * 2 + 32;
     },
   },
+  created() {
+    if (this.$config.search_disabled) {
+      this.$router.replace('/404');
+    }
+  },
   mounted() {
     // 检查屏蔽
     this.checkBlocked();
@@ -188,7 +193,7 @@ export default {
       window.addEventListener('scroll', this.handleScroll, false);
     });
     // change title
-    document.title = `搜索 - ${this.keyword} - Pixiviz`;
+    document.title = `搜索 - Pixiviz`;
     // set og tags
     this.setOgTagData();
   },
