@@ -1,12 +1,16 @@
 <template>
-  <div :class="[
-    'banner-wrapper',
-    {
-      'banner-animating': animating,
-      'banner-expanded': expanded,
-      'clear-margin-bottom': clearMarginBottom,
-    }
-  ]" @dblclick="handleDblClick" v-touch:doubletap="handleDoubleTap">
+  <div
+    :class="[
+      'banner-wrapper',
+      {
+        'banner-animating': animating,
+        'banner-expanded': expanded,
+        'clear-margin-bottom': clearMarginBottom,
+      },
+    ]"
+    @dblclick="handleDblClick"
+    v-touch:doubletap="handleDoubleTap"
+  >
     <div class="banner">
       <div :class="['banner-title', titleUp ? 'banner-title-up' : '']">
         <span>Pixiviz</span>
@@ -17,7 +21,9 @@
             <span>我的</span>
           </div>
           <div class="about-my-link">
-            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent>浏览历史</a>
+            <a id="about-history" href="javascript:;" @click="goHistory" @contextmenu.prevent
+              >浏览历史</a
+            >
             <a href="javascript:;" @click="goCollection" @contextmenu.prevent>收藏夹</a>
             <a href="javascript:;" @click="showAccountDialog" @contextmenu.prevent>帐号</a>
           </div>
@@ -27,12 +33,14 @@
             <span>设置</span>
           </div>
           <div class="about-settings-link">
-            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent>主题</a>
+            <a id="about-theme" href="javascript:;" @click="openThemeDialog" @contextmenu.prevent
+              >主题</a
+            >
           </div>
         </div>
         <div class="about-copyright">
           <div class="about-copyright-item">
-            <span>Copyright &copy; 2024 pixiviz.xyz</span>
+            <span>&copy; 2025 pixiviz.xyz</span>
           </div>
           <div class="about-copyright-item">
             <span>
@@ -168,7 +176,7 @@ export default {
       this.animating = true;
       setTimeout(() => {
         this.animating = false;
-      }, 1300)
+      }, 1300);
       // Banner Anim
       this.$forceUpdate();
       setTimeout(() => {

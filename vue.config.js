@@ -50,7 +50,7 @@ module.exports = {
           options: {
             cacheName: 'static-files',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400 * 7,
@@ -65,7 +65,7 @@ module.exports = {
           options: {
             cacheName: 'static-imgs',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400 * 3,
@@ -79,7 +79,7 @@ module.exports = {
           options: {
             cacheName: 'api-return',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400 * 7,
@@ -94,7 +94,7 @@ module.exports = {
           options: {
             cacheName: 'artist-avatar',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400 * 30,
@@ -113,7 +113,7 @@ module.exports = {
           options: {
             cacheName: 'pic-master',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400, // cache for 3h
@@ -132,7 +132,7 @@ module.exports = {
           options: {
             cacheName: 'ugoira-zip',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400 * 3,
@@ -170,7 +170,26 @@ module.exports = {
           options: {
             cacheName: 'sponsor-avatar',
             cacheableResponse: {
-              statuses: [0, 200],
+              statuses: [200],
+            },
+            expiration: {
+              maxAgeSeconds: 86400,
+              maxEntries: 50,
+            },
+            fetchOptions: {
+              credentials: 'omit',
+              mode: 'cors',
+            },
+          },
+        },
+        // 分析JS缓存
+        {
+          urlPattern: /^https:\/\/analytics\.alkinum\.io\/.*$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'analytics',
+            cacheableResponse: {
+              statuses: [200],
             },
             expiration: {
               maxAgeSeconds: 86400,
@@ -263,7 +282,7 @@ module.exports = {
                 async: true,
               },
               appInfo: {
-                version: '1.29.1',
+                version: '1.32.0',
               },
               fallback: {
                 resource: {

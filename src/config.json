@@ -11,10 +11,11 @@
   "trust_host": ["pixiviz.pwp.app", "pixiviz.xyz"],
   "announcement_feed": "https://cfs.tigo.pwp.app/pixiviz-anno-prod.json",
   "afdian_manage_api": "https://afdian-manage.pwp.app",
-  "show_github": false,
+  "show_github": true,
   "show_guide": false,
   "show_donate": false,
   "show_sponsor": false,
+  "show_tos": true,
   "check_announce": true,
   "maintain": {
     "enable": false
